@@ -22,7 +22,7 @@ public class TransactionDonaterMailSpecProvider implements SpecProvider<Transact
 
             for (String param : params) {
                 String pattern = "%" + param.toLowerCase() + "%";
-                Expression<String> mailToLowerCase = criteriaBuilder.lower(root.get("donator").get("mail"));
+                Expression<String> mailToLowerCase = criteriaBuilder.lower(root.get("donator").get("email"));
                 predicate = criteriaBuilder
                        .and(predicate, criteriaBuilder.like(mailToLowerCase, pattern));
             }
