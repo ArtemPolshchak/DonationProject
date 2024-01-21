@@ -1,0 +1,18 @@
+
+<!--<button class="btn btn-sm btn-outline-primary me-2" (click)="accordion.expandAll()">Expand all</button>-->
+<!--<button class="btn btn-sm btn-outline-primary me-2" (click)="accordion.collapseAll()">Collapse all</button>-->
+
+<div ngbAccordion *ngFor="let item of items" #accordion="ngbAccordion">
+  <div class="item" ngbAccordionItem="{{item}}">
+    <h2 ngbAccordionHeader>
+      <button ngbAccordionButton>{{item}}</button>
+    </h2>
+    <div ngbAccordionCollapse>
+      <div ngbAccordionBody>
+        <ng-template>
+          {{item}}
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
