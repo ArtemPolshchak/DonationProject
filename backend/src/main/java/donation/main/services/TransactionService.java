@@ -9,7 +9,6 @@ import donation.main.entity.ServerEntity;
 import donation.main.entity.TransactionEntity;
 import donation.main.enumeration.TransactionState;
 import donation.main.mapper.CreateTransactionFormMapper;
-import donation.main.repositories.ServerRepository;
 import donation.main.repositories.TransactionRepository;
 import donation.main.repositories.spec.SpecificationBuilder;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
-import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +49,7 @@ public class TransactionService {
         try {
             donatorEntity = donatorService.findByMail(formDto.donatorEmail());
         } catch (NoSuchElementException e) {
-            donatorEntity = donatorService.createDonator(new CreateDotatorDto(formDto.donatorEmail(), BigDecimal.ZERO));
+            donatorEntity = donatorService.createDonator(new CreateDotatorDto(formDto.donatorEmail()));
         }
 
         BigDecimal personalBonus = serverById.getDonatorsBonuses().get(donatorEntity);
@@ -81,10 +78,7 @@ public class TransactionService {
         // entity.setCreatedByUser("securityContextUser")
         entity.setServer(serverById);
         entity.setTotalAmount(totalAmount);
-//        entity.setDateCreated(LocalDateTime.now());
-//        entity.setState(TransactionState.IN_PROGRESS);
 
         return transactionRepository.save(entity);
     }
-
 }
