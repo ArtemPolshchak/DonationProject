@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface DonatorRepository extends JpaRepository<DonatorEntity, Long> {
 
-    Optional<DonatorEntity> findByMail(String email);
+    Optional<DonatorEntity> findByEmail(String email);
 
-    Page<DonatorEntity> findByMailContainingIgnoreCase(String mail, Pageable pageable);
+    Page<DonatorEntity> findByEmailContainingIgnoreCase(String email, Pageable pageable);
 }
