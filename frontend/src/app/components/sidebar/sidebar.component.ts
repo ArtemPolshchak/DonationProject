@@ -17,5 +17,5 @@ import {NgbNavModule} from "@ng-bootstrap/ng-bootstrap";
   styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent {
-  menuItems: string[] = ['dashboard', 'transactions', 'donators', 'settings'];
+  menuItems: string[] = ['dashboard', 'transactions', 'donators', 'settings', 'servers'];
 }

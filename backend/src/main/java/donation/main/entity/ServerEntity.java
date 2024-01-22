@@ -22,7 +22,10 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "servers")
@@ -49,10 +52,11 @@ public class ServerEntity {
     private Map<DonatorEntity, BigDecimal> donatorsBonuses = new HashMap<>();
 
     @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ServerBonusSettingsEntity> serverBonusSettings = new HashSet<>();
+    private SortedSet<ServerBonusSettingsEntity> serverBonusSettings = new TreeSet<>();
 
     public void refreshBonuses(Set<ServerBonusSettingsEntity> set) {
         serverBonusSettings.clear();
         serverBonusSettings.addAll(set);
     }
+
 }

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.NoSuchElementException;
+import java.util.SortedSet;
 
 @Service
 @RequiredArgsConstructor
@@ -54,23 +55,28 @@ public class TransactionService {
         }
 
         BigDecimal personalBonus = serverById.getDonatorsBonuses().get(donatorEntity);
-
+        BigDecimal totalBonus;
         if (personalBonus == null) {
             personalBonus = BigDecimal.ZERO;
         }
 
-        BigDecimal serverBonus = serverById.getServerBonusSettings().stream()
-                .filter(a -> formDto.contributionAmount().compareTo(a.getFromAmount()) > 0
-                        && formDto.contributionAmount().compareTo(a.getToAmount()) <= 0)
-                .map(ServerBonusSettingsEntity::getBonusPercentage)
-                .findFirst()
-                .orElse(BigDecimal.ZERO);
+        SortedSet<ServerBonusSettingsEntity> serverBonusSettings = serverById.getServerBonusSettings();
+        ServerBonusSettingsEntity last = serverBonusSettings.last();
 
-        BigDecimal totalBonus = personalBonus.add(serverBonus);
-        BigDecimal totalAmount;
+        if (last.getToAmount().compareTo(formDto.contributionAmount()) <= 0) {
+            totalBonus = last.getBonusPercentage();
+        } else {
+            BigDecimal serverBonus = serverById.getServerBonusSettings().stream()
+                    .filter(a -> (formDto.contributionAmount().compareTo(a.getFromAmount()) > 0
+                            && formDto.contributionAmount().compareTo(a.getToAmount()) <= 0))
+                    .map(ServerBonusSettingsEntity::getBonusPercentage)
+                    .findFirst()
+                    .orElse(BigDecimal.ZERO);
+            totalBonus = personalBonus.add(serverBonus);
+        }
 
-        totalAmount = !totalBonus.equals(BigDecimal.ZERO)
-                ? totalBonus.multiply(formDto.contributionAmount())
+        BigDecimal totalAmount = !totalBonus.equals(BigDecimal.ZERO)
+                ? returnResult(formDto.contributionAmount(), totalBonus)
                 : formDto.contributionAmount();
 
         TransactionEntity entity = transactionMapper.toEntity(formDto);
@@ -82,4 +88,11 @@ public class TransactionService {
 
         return transactionRepository.save(entity);
     }
+
+    private BigDecimal returnResult(BigDecimal contributionAmount, BigDecimal totalBonus) {
+
+        return contributionAmount.multiply(BigDecimal.ONE.add(totalBonus.divide(BigDecimal.valueOf(100.0))));
+
+    }
+
 }

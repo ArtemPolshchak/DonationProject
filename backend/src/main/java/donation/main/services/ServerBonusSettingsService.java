@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,21 +28,17 @@ public class ServerBonusSettingsService {
         return serverBonusSettingsRepository.findAll();
     }
 
-    public Set<ServerBonusSettingsEntity> createAll(List<CreateServerBonusesDto> serverBonusesDtos, Long serverId) {
+    public Set<ServerBonusSettingsEntity> replaceAll(List<CreateServerBonusesDto> serverBonusesDtos, Long serverId) {
         ServerEntity serverById = serverRepository.findById(serverId).orElseThrow(NoSuchElementException::new);
 
-       // deleteBonuses(serverById.getServerBonusSettings());
-
-        Set<ServerBonusSettingsEntity> settingsEntities = serverBonusesDtos.stream()
-                .map(settingsMapper::toEntity).peek(b -> b.setServer(serverById)).collect(Collectors.toSet());
+        SortedSet<ServerBonusSettingsEntity> settingsEntities = serverBonusesDtos.stream()
+                .map(settingsMapper::toEntity)
+                .peek(b -> b.setServer(serverById))
+                .collect(Collectors.toCollection(TreeSet::new));
 
         serverById.refreshBonuses(settingsEntities);
 
         return serverRepository.save(serverById).getServerBonusSettings();
 
-    }
-
-    private void deleteBonuses(Set<ServerBonusSettingsEntity> serverBonuses) {
-        serverBonusSettingsRepository.deleteAll(serverBonuses);
     }
 }
