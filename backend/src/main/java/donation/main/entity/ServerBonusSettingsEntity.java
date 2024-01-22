@@ -9,9 +9,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import org.apache.commons.lang3.builder.ToStringExclude;
-
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -41,7 +38,6 @@ public class ServerBonusSettingsEntity implements Comparable<ServerBonusSettings
         return Integer.compare(this.toAmount.compareTo(o.getToAmount()), 0);
     }
 
-
 //    @Override
 //    public boolean equals(Object o) {
 //        if (this == o) {
@@ -59,11 +55,14 @@ public class ServerBonusSettingsEntity implements Comparable<ServerBonusSettings
 //        return Objects.hash(id);
 //    }
 
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ServerBonusSettingsEntity that = (ServerBonusSettingsEntity) o;
         return Objects.equals(id, that.id);
     }

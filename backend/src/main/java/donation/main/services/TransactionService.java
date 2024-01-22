@@ -60,7 +60,6 @@ public class TransactionService {
             personalBonus = BigDecimal.ZERO;
         }
 
-
         SortedSet<ServerBonusSettingsEntity> serverBonusSettings = serverById.getServerBonusSettings();
         ServerBonusSettingsEntity last = serverBonusSettings.last();
 
@@ -75,7 +74,6 @@ public class TransactionService {
                     .orElse(BigDecimal.ZERO);
             totalBonus = personalBonus.add(serverBonus);
         }
-
 
         BigDecimal totalAmount = !totalBonus.equals(BigDecimal.ZERO)
                 ? returnResult(formDto.contributionAmount(), totalBonus)
