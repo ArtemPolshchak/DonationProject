@@ -18,12 +18,15 @@ import {Transaction} from "../../common/transaction";
 })
 export class DashboardComponent implements OnInit {
     transactions: Transaction[] = [];
+    pageNumber: number = 0;
+    pageSize: number = 10;
+    state: string[] = ["IN_PROGRESS"];
 
     constructor(private transactionService: TransactionService) {
     }
 
     ngOnInit(): void {
-        this.transactionService.getAll()
+        this.transactionService.getAll(this.pageNumber, this.pageSize, this.state)
             .subscribe(data => {
                 this.transactions = data.content
                 console.log(this.transactions)

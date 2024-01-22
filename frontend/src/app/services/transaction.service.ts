@@ -11,8 +11,9 @@ export class TransactionService {
     constructor(private httpClient: HttpClient) {
     }
 
-    public getAll() {
-        const url: string = "http://localhost:5000/api/transactions"
+    public getAll(pageNumber?: number, pageSize?: number, state?: string[]) {
+        const url: string = `http://localhost:5000/api/transactions/search?state=${state}&page=${pageNumber}&pageSize=${pageSize}`
+        console.log(url)
         return this.httpClient.get<GetTransactionResponse>(url).pipe(
             map(response => response));
     }
