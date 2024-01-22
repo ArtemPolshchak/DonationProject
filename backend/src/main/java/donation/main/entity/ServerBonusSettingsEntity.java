@@ -14,12 +14,13 @@ import org.apache.commons.lang3.builder.ToStringExclude;
 
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @Table(name = "server_bonus_settings")
 @Getter
 @Setter
-public class ServerBonusSettingsEntity {
+public class ServerBonusSettingsEntity implements Comparable<ServerBonusSettingsEntity> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +35,12 @@ public class ServerBonusSettingsEntity {
     @JsonIgnoreProperties("serverBonusSettings")
     @ManyToOne
     private ServerEntity server;
+
+    @Override
+    public int compareTo(ServerBonusSettingsEntity o) {
+        return Integer.compare(this.toAmount.compareTo(o.getToAmount()), 0);
+    }
+
 
 //    @Override
 //    public boolean equals(Object o) {
@@ -52,4 +59,17 @@ public class ServerBonusSettingsEntity {
 //        return Objects.hash(id);
 //    }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ServerBonusSettingsEntity that = (ServerBonusSettingsEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
