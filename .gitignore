@@ -6,6 +6,7 @@ HELP.md
 backend/target/
 frontend/target/
 delivery/target/
+target/
 backend/logs/
 logs/
 

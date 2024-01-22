@@ -2,15 +2,24 @@
 <!--<button class="btn btn-sm btn-outline-primary me-2" (click)="accordion.expandAll()">Expand all</button>-->
 <!--<button class="btn btn-sm btn-outline-primary me-2" (click)="accordion.collapseAll()">Collapse all</button>-->
 
-<div ngbAccordion *ngFor="let item of items" #accordion="ngbAccordion">
-  <div class="item" ngbAccordionItem="{{item}}">
+<div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
+  <div class="item" ngbAccordionItem="{{transaction.id}}">
     <h2 ngbAccordionHeader>
-      <button ngbAccordionButton>{{item}}</button>
+      <button ngbAccordionButton>
+        {{transaction.dateCreated | date: 'dd MMMM yyyy'}} \\
+        {{transaction.donatorEmail}} \\
+        {{transaction.contributionAmount | currency: 'USD'}}
+      </button>
+<!--      <div ngbAccordionToggle>-->
+<!--        <div>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</div>-->
+<!--        <div>{{transaction.donatorEmail}}</div>-->
+<!--        <div>{{transaction.contributionAmount | currency: 'USD'}}</div>-->
+<!--      </div>-->
     </h2>
     <div ngbAccordionCollapse>
       <div ngbAccordionBody>
         <ng-template>
-          {{item}}
+          {{transaction.toString()}}
         </ng-template>
       </div>
     </div>

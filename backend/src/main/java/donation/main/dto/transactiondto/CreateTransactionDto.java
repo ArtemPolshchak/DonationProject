@@ -2,7 +2,7 @@ package donation.main.dto.transactiondto;
 
 import java.math.BigDecimal;
 
-public record CreateTransactionFormDto(
+public record CreateTransactionDto(
         String donatorEmail,
         BigDecimal contributionAmount,
         String imageUrl,

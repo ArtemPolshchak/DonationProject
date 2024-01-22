@@ -1,6 +1,7 @@
 package donation.main.controllers;
 
-import donation.main.dto.transactiondto.CreateTransactionFormDto;
+import donation.main.dto.transactiondto.CreateTransactionDto;
+import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
 import donation.main.entity.TransactionEntity;
 import donation.main.services.TransactionService;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,9 +24,9 @@ public class TransactionController {
 
     private final TransactionService service;
 
-    @GetMapping("/")
-    public ResponseEntity<Page<TransactionEntity>> getAllTransactions(Pageable page) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.readAll(page));
+    @GetMapping()
+    public ResponseEntity<Page<TransactionResponseDto>> getAll(Pageable page) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getAll(page));
     }
 
 //    @GetMapping("/search")
@@ -38,7 +40,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<TransactionEntity> create(@RequestBody CreateTransactionFormDto formDto) {
+    public ResponseEntity<TransactionEntity> create(@RequestBody CreateTransactionDto formDto) {
         return ResponseEntity.status(HttpStatus.OK).body(service.create(formDto));
     }
 }

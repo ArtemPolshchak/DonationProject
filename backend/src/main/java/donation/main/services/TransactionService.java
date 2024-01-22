@@ -1,14 +1,15 @@
 package donation.main.services;
 
 import donation.main.dto.donatorsdto.CreateDotatorDto;
-import donation.main.dto.transactiondto.CreateTransactionFormDto;
+import donation.main.dto.transactiondto.CreateTransactionDto;
+import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
 import donation.main.entity.DonatorEntity;
 import donation.main.entity.ServerBonusSettingsEntity;
 import donation.main.entity.ServerEntity;
 import donation.main.entity.TransactionEntity;
 import donation.main.enumeration.TransactionState;
-import donation.main.mapper.CreateTransactionFormMapper;
+import donation.main.mapper.TransactionMapper;
 import donation.main.repositories.TransactionRepository;
 import donation.main.repositories.spec.SpecificationBuilder;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,12 @@ import java.util.NoSuchElementException;
 public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final SpecificationBuilder<TransactionEntity> specificationBuilder;
-    private final CreateTransactionFormMapper createTransactionFormMapper;
+    private final TransactionMapper transactionMapper;
     private final DonatorService donatorService;
     private final ServerService serverService;
 
-    public Page<TransactionEntity> readAll(Pageable pageable) {
-        return transactionRepository.findAll(pageable);
+    public Page<TransactionResponseDto> getAll(Pageable pageable) {
+        return transactionRepository.findAll(pageable).map(transactionMapper::toDto);
     }
 
     public Page<TransactionEntity> findAllByState(TransactionState state, Pageable pageable) {
@@ -42,7 +43,7 @@ public class TransactionService {
         return transactionRepository.findAll(spec, pageable);
     }
 
-    public TransactionEntity create(CreateTransactionFormDto formDto) {
+    public TransactionEntity create(CreateTransactionDto formDto) {
         ServerEntity serverById = serverService.findById(formDto.serverId());
 
         DonatorEntity donatorEntity;
@@ -72,7 +73,7 @@ public class TransactionService {
                 ? totalBonus.multiply(formDto.contributionAmount())
                 : formDto.contributionAmount();
 
-        TransactionEntity entity = createTransactionFormMapper.toEntity(formDto);
+        TransactionEntity entity = transactionMapper.toEntity(formDto);
         entity.setDonator(donatorEntity);
         //todo set user from security context
         // entity.setCreatedByUser("securityContextUser")
