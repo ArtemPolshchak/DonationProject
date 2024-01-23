@@ -19,19 +19,19 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        entityManagerFactoryRef = "mainEntityManagerFactory",
-        transactionManagerRef = "mainTransactionManager",
+        entityManagerFactoryRef = "persistentEntityManagerFactory",
+        transactionManagerRef = "persistentTransactionManager",
         basePackages = {"donation.main.repository"}
 )
-public class MainDataSourceConfig {
+public class PersistentDataSourceConfig {
 
     @Primary
-    @Bean(name = "mainDataSource")
+    @Bean(name = "persistentDataSource")
     public DataSource accountDataSource(
-            @Value("${spring.main.datasource.url}") String url,
-            @Value("${spring.main.datasource.username}") String username,
-            @Value("${spring.main.datasource.password}") String password,
-            @Value("${spring.main.datasource.driverClassName}") String driverClassName
+            @Value("${spring.persistent.datasource.url}") String url,
+            @Value("${spring.persistent.datasource.username}") String username,
+            @Value("${spring.persistent.datasource.password}") String password,
+            @Value("${spring.persistent.datasource.driverClassName}") String driverClassName
     ) {
         return DataSourceBuilder
                 .create()
@@ -43,20 +43,20 @@ public class MainDataSourceConfig {
     }
 
     @Primary
-    @Bean(name = "mainEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean mainEntityManagerFactory(
+    @Bean(name = "persistentEntityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean persistentEntityManagerFactory(
             EntityManagerFactoryBuilder builder,
-            @Qualifier("mainDataSource") DataSource mainDataSource
+            @Qualifier("persistentDataSource") DataSource persistentDataSource
     ) {
         return builder
-                .dataSource(mainDataSource)
+                .dataSource(persistentDataSource)
                 .packages("donation.main.entity")
                 .build();
     }
 
     @Bean(name = "persistentTransactionManager")
     public PlatformTransactionManager mainTransactionManager(
-            @Qualifier("mainEntityManagerFactory")EntityManagerFactory mainEntityManagerFactory) {
-        return new JpaTransactionManager(mainEntityManagerFactory);
+            @Qualifier("persistentEntityManagerFactory")EntityManagerFactory persistentEntityManagerFactory) {
+        return new JpaTransactionManager(persistentEntityManagerFactory);
     }
 }
