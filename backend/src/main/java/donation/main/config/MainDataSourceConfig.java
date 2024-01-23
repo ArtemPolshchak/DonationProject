@@ -54,7 +54,7 @@ public class MainDataSourceConfig {
                 .build();
     }
 
-    @Bean(name = "persistentTransactionManager")
+    @Bean(name = "mainTransactionManager")
     public PlatformTransactionManager mainTransactionManager(
             @Qualifier("mainEntityManagerFactory")EntityManagerFactory mainEntityManagerFactory) {
         return new JpaTransactionManager(mainEntityManagerFactory);
