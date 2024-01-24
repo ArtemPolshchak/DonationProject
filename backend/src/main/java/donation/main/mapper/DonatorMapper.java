@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class)
-public interface CreateDonatorMapper {
+public interface DonatorMapper {
     DonatorEntity toEntity(CreateDotatorDto dotatorDto);
 
     DonatorEntity toEntity(CreateDonatorBonusOnServer dotatorDto);

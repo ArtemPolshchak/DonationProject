@@ -1,4 +1,4 @@
-insert into servers (db_password, db_user_name, server_name, server_url)
+insert into servers (server_password, server_user_name, server_name, server_url)
 values ('password', 'userName', 'server1', 'serverurl'),
        ('password', 'userName', 'server2', 'serverurl'),
        ('password', 'userName', 'server3', 'serverurl'),

@@ -1,13 +1,12 @@
 package donation.main.service;
 
-
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
 import donation.main.dto.serverdto.CreateServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
 import donation.main.entity.DonatorEntity;
 import donation.main.entity.ServerEntity;
-import donation.main.mapper.CreateDonatorMapper;
-import donation.main.mapper.CreateServerMapper;
+import donation.main.mapper.DonatorMapper;
+import donation.main.mapper.ServerMapper;
 import donation.main.repository.DonatorRepository;
 import donation.main.repository.ServerRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +19,9 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class ServerService {
     private final ServerRepository serverRepository;
-    private final CreateServerMapper createServerMapper;
+    private final ServerMapper serverMapper;
     private final DonatorRepository donatorRepository;
-    private final DonatorService donatorService;
-    private final CreateDonatorMapper donatorMapper;
+    private final DonatorMapper donatorMapper;
 
     public Iterable<ServerEntity> readAll() {
         return serverRepository.findAll();
@@ -34,7 +32,7 @@ public class ServerService {
     }
 
     public ServerEntity createServer(CreateServerDto serverDto) {
-        return serverRepository.save(createServerMapper.toEntity(serverDto));
+        return serverRepository.save(serverMapper.toEntity(serverDto));
     }
 
     public ServerEntity findById(Long id) {
@@ -52,5 +50,4 @@ public class ServerService {
 
         return serverRepository.save(serverById);
     }
-
 }
