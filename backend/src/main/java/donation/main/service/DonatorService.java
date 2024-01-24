@@ -2,7 +2,7 @@ package donation.main.service;
 
 import donation.main.dto.donatorsdto.CreateDotatorDto;
 import donation.main.entity.DonatorEntity;
-import donation.main.mapper.CreateDonatorMapper;
+import donation.main.mapper.DonatorMapper;
 import donation.main.repository.DonatorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class DonatorService {
     private final DonatorRepository donatorRepository;
-    private final CreateDonatorMapper donatorMapper;
+    private final DonatorMapper donatorMapper;
 
     public Iterable<DonatorEntity> readAll() {
         return donatorRepository.findAll();

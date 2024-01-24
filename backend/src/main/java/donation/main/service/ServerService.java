@@ -6,7 +6,7 @@ import donation.main.dto.serverdto.CreateServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
 import donation.main.entity.DonatorEntity;
 import donation.main.entity.ServerEntity;
-import donation.main.mapper.CreateDonatorMapper;
+import donation.main.mapper.DonatorMapper;
 import donation.main.mapper.CreateServerMapper;
 import donation.main.repository.DonatorRepository;
 import donation.main.repository.ServerRepository;
@@ -22,8 +22,7 @@ public class ServerService {
     private final ServerRepository serverRepository;
     private final CreateServerMapper createServerMapper;
     private final DonatorRepository donatorRepository;
-    private final DonatorService donatorService;
-    private final CreateDonatorMapper donatorMapper;
+    private final DonatorMapper donatorMapper;
 
     public Iterable<ServerEntity> readAll() {
         return serverRepository.findAll();
