@@ -22,9 +22,10 @@ public class DonatorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(name = "email", unique = true)
     private String email;
 
+    @Column(name = "total_donations")
     private BigDecimal totalDonations = BigDecimal.ZERO;
 
 }

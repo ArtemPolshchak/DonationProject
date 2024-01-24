@@ -1,10 +1,12 @@
 package donation.main.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -23,37 +25,24 @@ public class ServerBonusSettingsEntity implements Comparable<ServerBonusSettings
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "bonus_percentage")
+    private BigDecimal bonusPercentage;
+
+    @Column(name = "from_amount")
     private BigDecimal fromAmount;
 
+    @Column(name = "to_amount")
     private BigDecimal toAmount;
-
-    private BigDecimal bonusPercentage;
 
     @JsonIgnoreProperties("serverBonusSettings")
     @ManyToOne
+    @JoinColumn(name = "server_id")
     private ServerEntity server;
 
     @Override
     public int compareTo(ServerBonusSettingsEntity o) {
         return Integer.compare(this.toAmount.compareTo(o.getToAmount()), 0);
     }
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) {
-//            return true;
-//        }
-//        if (o == null || getClass() != o.getClass()) {
-//            return false;
-//        }
-//        ServerBonusSettingsEntity that = (ServerBonusSettingsEntity) o;
-//        return Objects.equals(id, that.id);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id);
-//    }
 
     @Override
     public boolean equals(Object o) {

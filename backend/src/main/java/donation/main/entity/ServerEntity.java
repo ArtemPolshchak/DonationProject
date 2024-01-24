@@ -1,6 +1,5 @@
 package donation.main.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -15,14 +14,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import org.apache.commons.lang3.builder.ToStringExclude;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -37,18 +32,22 @@ public class ServerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    String serverName;
+    @Column(name = "server_name")
+    private String serverName;
 
-    String serverUrl;
+    @Column(name = "server_password")
+    private String serverPassword;
 
-    String dbUserName;
+    @Column(name = "server_url")
+    private String serverUrl;
 
-    String dbPassword;
+    @Column(name = "server_user_name")
+    private String serverUserName;
 
     @ElementCollection
     @CollectionTable(name = "servers_donators_bonuses", joinColumns = @JoinColumn(name = "server_id", referencedColumnName = "id"))
     @MapKeyJoinColumn(name = "donator_id", referencedColumnName = "id")
-    @Column(name = "bonus")
+    @Column(name = "donators_bonuses")
     private Map<DonatorEntity, BigDecimal> donatorsBonuses = new HashMap<>();
 
     @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)

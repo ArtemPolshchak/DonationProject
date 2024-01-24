@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -30,34 +31,44 @@ public class TransactionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    private DonatorEntity donator;
+    @Column(name = "comment")
+    private String comment;
 
-    @Column(nullable = false)
-    private LocalDateTime dateCreated = LocalDateTime.now();
+    @Column(name = "contribution_amount")
+    private BigDecimal contributionAmount;
 
+    @Column(name = "date_approved")
     private LocalDateTime dateApproved;
 
+    @Column(name = "date_created", nullable = false)
+    private LocalDateTime dateCreated = LocalDateTime.now();
+
+    @Column(name = "image")
     private String imageUrl;
-
-    //todo set user from security context
-    @ManyToOne(cascade = CascadeType.MERGE)
-    private UserEntity createdByUser;
-
-    //todo set user from security context
-    @ManyToOne(cascade = CascadeType.MERGE)
-    private UserEntity approvedByUser;
 
     @Column(name = "state", nullable = false)
     @Enumerated(EnumType.STRING)
     private TransactionState state = TransactionState.IN_PROGRESS;
 
-    @ManyToOne
-    private ServerEntity server;
-
-    private BigDecimal contributionAmount;
-
+    @Column(name = "total_amount")
     private BigDecimal totalAmount;
 
-    private String comment;
+    //todo set user from security context
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "approved_by_admin_id")
+    private UserEntity approvedByUser;
+
+    //todo set user from security context
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "create_by_moderator_id")
+    private UserEntity createdByUser;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "donator_id")
+    private DonatorEntity donator;
+
+    @ManyToOne
+    @JoinColumn(name = "server_id")
+    private ServerEntity server;
+
 }
