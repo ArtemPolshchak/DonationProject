@@ -1,10 +1,13 @@
 package donation.main.controller;
 
+import donation.main.exception.EmailNotFoundException;
 import donation.main.exception.ErrorResponse;
+import donation.main.exception.ServerNotFoundException;
 import donation.main.exception.TransactionBadRequestException;
 import donation.main.exception.TransactionNotFoundException;
 import donation.main.exception.UnauthorizedActionException;
 import donation.main.exception.UserNotFoundException;
+import donation.main.exception.UserWithDataExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -67,6 +70,20 @@ public class ExceptionHandlingControllerAdvice {
     @ExceptionHandler(UnauthorizedActionException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     Map<String, String> handleUnauthorizedActionException(UnauthorizedActionException exception) {
+        return Map.of(MESSAGE, exception.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(EmailNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    Map<String, String> handleEmailNotFoundException(EmailNotFoundException exception) {
+        return Map.of(MESSAGE, exception.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(UserWithDataExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    Map<String, String> handleUserWithDataExistsException(UserWithDataExistsException exception) {
         return Map.of(MESSAGE, exception.getMessage());
     }
 }

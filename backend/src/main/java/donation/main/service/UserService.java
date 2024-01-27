@@ -3,6 +3,7 @@ package donation.main.service;
 import donation.main.entity.UserEntity;
 import donation.main.enumeration.Role;
 import donation.main.exception.UserNotFoundException;
+import donation.main.exception.UserWithDataExistsException;
 import donation.main.mapper.UserMapper;
 import donation.main.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,6 @@ import java.util.NoSuchElementException;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final MessageSource messageSource;
 
     public UserEntity save(UserEntity entity) {
         return userRepository.save(entity);
@@ -26,11 +26,11 @@ public class UserService {
 
     public UserEntity createUser(UserEntity user) {
         if (userRepository.existsByUsername(user.getUsername())) {
-            throw new NoSuchElementException("Пользователь с таким именем уже существует");
+            throw new UserWithDataExistsException("User with the name already exists:", user.getUsername());
         }
 
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new NoSuchElementException("Пользователь с таким email уже существует");
+            throw new UserWithDataExistsException("User with the email already exists:", user.getEmail());
         }
 
         return save(user);
@@ -38,7 +38,7 @@ public class UserService {
 
     public UserEntity getByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new NoSuchElementException("Пользователь не найден"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
     public UserDetailsService userDetailsService() {
