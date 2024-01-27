@@ -5,6 +5,7 @@ import donation.main.dto.serverdto.CreateServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
 import donation.main.entity.DonatorEntity;
 import donation.main.entity.ServerEntity;
+import donation.main.exception.ServerNotFoundException;
 import donation.main.mapper.DonatorMapper;
 import donation.main.mapper.ServerMapper;
 import donation.main.repository.DonatorRepository;
@@ -36,15 +37,18 @@ public class ServerService {
     }
 
     public ServerEntity findById(Long id) {
-        return serverRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        return serverRepository.findById(id)
+                .orElseThrow(() -> new ServerNotFoundException("Server not found by Id=", id));
     }
 
     public ServerEntity createDonatorsBonusOnServer(CreateDonatorBonusOnServer dto) {
 
         //todo here should be connect to server with gamers
-        DonatorEntity donator = donatorRepository.findByEmail(dto.email()).orElseGet(() -> donatorRepository.save(donatorMapper.toEntity(dto)));
+        DonatorEntity donator = donatorRepository.findByEmail(dto.email())
+                .orElseGet(() -> donatorRepository.save(donatorMapper.toEntity(dto)));
 
-        ServerEntity serverById = serverRepository.findById(dto.serverId()).orElseThrow(NoSuchElementException::new);
+        ServerEntity serverById = serverRepository.findById(dto.serverId())
+                .orElseThrow(() -> new ServerNotFoundException("Server not found", dto.serverId()));
 
         serverById.getDonatorsBonuses().put(donator, dto.personalBonus());
 

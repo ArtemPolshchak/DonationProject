@@ -3,6 +3,8 @@ package donation.main.service;
 import donation.main.dto.serverbonusdto.CreateServerBonusesDto;
 import donation.main.entity.ServerBonusSettingsEntity;
 import donation.main.entity.ServerEntity;
+import donation.main.exception.EmailNotFoundException;
+import donation.main.exception.ServerNotFoundException;
 import donation.main.mapper.ServerBonusSettingsMapper;
 import donation.main.repository.ServerBonusSettingsRepository;
 import donation.main.repository.ServerRepository;
@@ -29,7 +31,8 @@ public class ServerBonusSettingsService {
     }
 
     public Set<ServerBonusSettingsEntity> replaceAll(List<CreateServerBonusesDto> serverBonusesDtos, Long serverId) {
-        ServerEntity serverById = serverRepository.findById(serverId).orElseThrow(NoSuchElementException::new);
+        ServerEntity serverById = serverRepository.findById(serverId).orElseThrow(() -> new ServerNotFoundException(
+                "Server not found", serverId));
 
         SortedSet<ServerBonusSettingsEntity> settingsEntities = serverBonusesDtos.stream()
                 .map(settingsMapper::toEntity)
