@@ -1,6 +1,6 @@
 package donation.main.controller;
 
-import donation.main.dto.userdto.CreateUserDto;
+import donation.main.dto.userdto.SignUpRequestDto;
 import donation.main.entity.UserEntity;
 import donation.main.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserEntity> createPerson(@RequestBody CreateUserDto userDto) {
+    public ResponseEntity<UserEntity> createPerson(@RequestBody SignUpRequestDto userDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createUser(userDto));
     }
 }
