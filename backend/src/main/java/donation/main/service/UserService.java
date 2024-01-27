@@ -2,9 +2,11 @@ package donation.main.service;
 
 import donation.main.entity.UserEntity;
 import donation.main.enumeration.Role;
+import donation.main.exception.UserNotFoundException;
 import donation.main.mapper.UserMapper;
 import donation.main.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.NoSuchElementException;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final MessageSource messageSource;
 
     public UserEntity save(UserEntity entity) {
         return userRepository.save(entity);
@@ -71,7 +74,8 @@ public class UserService {
     }
 
     public UserEntity getById(Long id) {
-        return userRepository.findById(id).orElseThrow();
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(
+                "User with the id not found"));
     }
 
     public void deleteUser(Long id) {
