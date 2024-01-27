@@ -13,20 +13,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AuthController {
 
         private final AuthenticationService authenticationService;
 
         @Operation(summary = "Registration new user")
-        @PostMapping("/sign-up")
+        @PostMapping("/register")
         public JwtAuthenticationResponseDto signUp(@RequestBody @Valid SignUpRequestDto request) {
             return authenticationService.signUp(request);
         }
 
         @Operation(summary = "Authorisation user")
-        @PostMapping("/sign-in")
+        @PostMapping("/auth")
         public JwtAuthenticationResponseDto signIn(@RequestBody @Valid SignInRequestDto request) {
             return authenticationService.signIn(request);
         }

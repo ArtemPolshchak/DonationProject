@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,7 @@ public class DonatorController {
 
     @Operation(summary = "get all donators")
     @GetMapping("/")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Iterable<DonatorEntity>> getAllDonators() {
         return ResponseEntity.status(HttpStatus.OK).body(donatorService.readAll());
     }

@@ -54,6 +54,18 @@ public class UserService {
         save(user);
     }
 
+    public void setUserRole(Long userId, Role newRole) {
+        UserEntity user = getById(userId);
+        user.setRole(newRole);
+        save(user);
+    }
+
+    public void removeUserRole(Long userId) {
+        UserEntity user = getById(userId);
+            user.setRole(Role.GUEST);
+            save(user);
+    }
+
     public Iterable<UserEntity> readAll() {
         return userRepository.findAll();
     }
