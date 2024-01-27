@@ -17,35 +17,35 @@ public class OpenApi30Config {
     @Value("${api.description}")
     private String description;
 
-    @Bean
-    public OpenAPI customOpenApi() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("REST API")
-                        .description(description)
-                        .termsOfService("http://restapi.com")
-                        .version(version)
-
-                );
-    }
-
 //    @Bean
-//    public OpenAPI customizeOpenApi() {
-//        final String securitySchemeName = "Bearer Authentication";
+//    public OpenAPI customOpenApi() {
 //        return new OpenAPI()
 //                .info(new Info()
-//                        .title("DonationProject App API")
+//                        .title("REST API")
+//                        .description(description)
+//                        .termsOfService("http://restapi.com")
 //                        .version(version)
-//                        .description(description))
-//                .addSecurityItem(new SecurityRequirement()
-//                        .addList(securitySchemeName))
-//                .components(new Components()
-//                        .addSecuritySchemes(securitySchemeName, new SecurityScheme()
-//                                .name(securitySchemeName)
-//                                .type(SecurityScheme.Type.HTTP)
-//                                .scheme("bearer")
-//                                .bearerFormat("JWT"))
+//
 //                );
 //    }
+
+    @Bean
+    public OpenAPI customizeOpenApi() {
+        final String securitySchemeName = "Bearer Authentication";
+        return new OpenAPI()
+                .info(new Info()
+                        .title("DonationProject App API")
+                        .version(version)
+                        .description(description))
+                .addSecurityItem(new SecurityRequirement()
+                        .addList(securitySchemeName))
+                .components(new Components()
+                        .addSecuritySchemes(securitySchemeName, new SecurityScheme()
+                                .name(securitySchemeName)
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT"))
+                );
+    }
 }
 

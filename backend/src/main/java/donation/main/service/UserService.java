@@ -1,10 +1,12 @@
 package donation.main.service;
 
-import donation.main.dto.userdto.SignUpRequestDto;
 import donation.main.entity.UserEntity;
+import donation.main.enumeration.Role;
 import donation.main.mapper.UserMapper;
 import donation.main.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
@@ -14,22 +16,21 @@ import java.util.NoSuchElementException;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
 
     public UserEntity save(UserEntity entity) {
         return userRepository.save(entity);
     }
 
-    public UserEntity createUser(SignUpRequestDto user) {
-        if(userRepository.existsByUsername(user.username())) {
+    public UserEntity createUser(UserEntity user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
             throw new NoSuchElementException("Пользователь с таким именем уже существует");
         }
 
-        if(userRepository.existsByEmail(user.email())) {
+        if (userRepository.existsByEmail(user.getEmail())) {
             throw new NoSuchElementException("Пользователь с таким email уже существует");
         }
 
-        return userRepository.save(userMapper.toEntity(user));
+        return save(user);
     }
 
     public UserEntity getByUsername(String username) {
@@ -37,28 +38,21 @@ public class UserService {
                 .orElseThrow(() -> new NoSuchElementException("Пользователь не найден"));
     }
 
+    public UserDetailsService userDetailsService() {
+        return this::getByUsername;
+    }
 
-//    public UserDetailsService userDetailsService() {
-//        return this::getByUsername;
-//    }
+    public UserEntity getCurrentUser() {
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return getByUsername(username);
+    }
 
-//    public User getCurrentUser() {
-//        var username = SecurityContextHolder.getContext().getAuthentication().getName();
-//        return getByUsername(username);
-//    }
-
-//    /**
-//     * Выдача прав администратора текущему пользователю
-//     * <p>
-//     * Нужен для демонстрации
-//     */
-//    @Deprecated
-//    public void getAdmin() {
-//        var user = getCurrentUser();
-//        user.setRole(Role.ROLE_ADMIN);
-//        save(user);
-//    }
-
+    @Deprecated
+    public void getAdmin() {
+        var user = getCurrentUser();
+        user.setRole(Role.ADMIN);
+        save(user);
+    }
 
     public Iterable<UserEntity> readAll() {
         return userRepository.findAll();

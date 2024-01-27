@@ -3,6 +3,7 @@ package donation.main.controller;
 import donation.main.dto.donatorsdto.CreateDotatorDto;
 import donation.main.entity.DonatorEntity;
 import donation.main.service.DonatorService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,16 +23,19 @@ public class DonatorController {
 
     private final DonatorService donatorService;
 
+    @Operation(summary = "get all donators")
     @GetMapping("/")
-    public ResponseEntity<Iterable<DonatorEntity>> getAllPersons() {
+    public ResponseEntity<Iterable<DonatorEntity>> getAllDonators() {
         return ResponseEntity.status(HttpStatus.OK).body(donatorService.readAll());
     }
 
+    @Operation(summary = "find donator by donators email")
     @GetMapping("/search")
     public ResponseEntity<Page<DonatorEntity>> searchDonatorByMail(@RequestParam String mail, Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(donatorService.findByMailPaginated(mail, pageable));
     }
 
+    @Operation(summary = "create new donator")
     @PostMapping
     public ResponseEntity<DonatorEntity> createDonator(@RequestBody CreateDotatorDto dotatorDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(donatorService.createDonator(dotatorDto));
