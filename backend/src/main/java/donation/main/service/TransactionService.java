@@ -4,6 +4,7 @@ import donation.main.dto.donatorsdto.CreateDotatorDto;
 import donation.main.dto.transactiondto.CreateTransactionDto;
 import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
+import donation.main.dto.transactiondto.UpdateTransactionDto;
 import donation.main.entity.DonatorEntity;
 import donation.main.entity.ServerBonusSettingsEntity;
 import donation.main.entity.ServerEntity;
@@ -44,6 +45,10 @@ public class TransactionService {
         return transactionRepository.findAll(spec, pageable);
     }
 
+//    public TransactionEntity update(UpdateTransactionDto transactionDto) {
+//
+//    }
+
     public TransactionEntity create(CreateTransactionDto formDto) {
         ServerEntity serverById = serverService.findById(formDto.serverId());
 
@@ -76,7 +81,7 @@ public class TransactionService {
         }
 
         BigDecimal totalAmount = !totalBonus.equals(BigDecimal.ZERO)
-                ? returnResult(formDto.contributionAmount(), totalBonus)
+                ? countResult(formDto.contributionAmount(), totalBonus)
                 : formDto.contributionAmount();
 
         TransactionEntity entity = transactionMapper.toEntity(formDto);
@@ -89,10 +94,8 @@ public class TransactionService {
         return transactionRepository.save(entity);
     }
 
-    private BigDecimal returnResult(BigDecimal contributionAmount, BigDecimal totalBonus) {
-
+    private BigDecimal countResult(BigDecimal contributionAmount, BigDecimal totalBonus) {
         return contributionAmount.multiply(BigDecimal.ONE.add(totalBonus.divide(BigDecimal.valueOf(100.0))));
-
     }
 
 }
