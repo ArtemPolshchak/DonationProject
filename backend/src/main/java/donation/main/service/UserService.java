@@ -4,15 +4,11 @@ import donation.main.entity.UserEntity;
 import donation.main.enumeration.Role;
 import donation.main.exception.UserNotFoundException;
 import donation.main.exception.UserWithDataExistsException;
-import donation.main.mapper.UserMapper;
 import donation.main.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor

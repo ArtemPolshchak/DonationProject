@@ -2,7 +2,6 @@ package donation.main.controller;
 
 import donation.main.exception.EmailNotFoundException;
 import donation.main.exception.ErrorResponse;
-import donation.main.exception.ServerNotFoundException;
 import donation.main.exception.TransactionBadRequestException;
 import donation.main.exception.TransactionNotFoundException;
 import donation.main.exception.UnauthorizedActionException;
