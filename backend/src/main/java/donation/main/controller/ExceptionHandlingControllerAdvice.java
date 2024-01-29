@@ -85,4 +85,10 @@ public class ExceptionHandlingControllerAdvice {
     Map<String, String> handleUserWithDataExistsException(UserWithDataExistsException exception) {
         return Map.of(MESSAGE, exception.getMessage());
     }
+
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public Map<String, String> handleAccessDeniedException(org.springframework.security.access.AccessDeniedException ex) {
+        return Map.of(MESSAGE, "Доступ заборонено");
+    }
 }
