@@ -33,6 +33,14 @@ public class DonatorService {
         return donatorRepository.save(donatorMapper.toEntity(dotatorDto));
     }
 
+    public DonatorEntity getDonatorEntityOrCreate(String donatorEmail) {
+        try {
+            return findByMail(donatorEmail);
+        } catch (EmailNotFoundException e) {
+            return createDonator(new CreateDotatorDto(donatorEmail));
+        }
+    }
+
     public boolean existsByEmail(String email) {
         return donatorRepository.existsByEmail(email);
     }

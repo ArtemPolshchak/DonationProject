@@ -1,6 +1,5 @@
 package donation.main.service;
 
-import donation.main.dto.donatorsdto.CreateDotatorDto;
 import donation.main.dto.transactiondto.CreateTransactionDto;
 import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
@@ -56,65 +55,137 @@ public class TransactionService {
     }
 
     public TransactionEntity create(CreateTransactionDto formDto) {
+        validateDonatorEmail(formDto.donatorEmail());
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ServerEntity serverById = serverService.findById(formDto.serverId());
-        DonatorEntity donatorEntity;
+        DonatorEntity donatorEntity = donatorService.getDonatorEntityOrCreate(formDto.donatorEmail());
+        BigDecimal personalBonus = serverById.getDonatorsBonuses().getOrDefault(donatorEntity, BigDecimal.ZERO);
 
+        BigDecimal totalBonus = calculateTotalBonus(formDto, serverById, personalBonus);
+        BigDecimal totalAmount = getTotalAmount(formDto.contributionAmount(), totalBonus);
 
+        TransactionEntity entity = createTransactionEntity(formDto, donatorEntity, serverById, totalAmount);
+        addModerCreatedTransaction(authentication, entity);
 
-        if (!externalDonatorService.existsByEmail(formDto.donatorEmail())) {
-            throw new EmailNotFoundException("Donator with the email does`nt exists:", formDto.donatorEmail());
+        return transactionRepository.save(entity);
+    }
+
+    private void validateDonatorEmail(String donatorEmail) {
+        if (!externalDonatorService.existsByEmail(donatorEmail)) {
+            throw new EmailNotFoundException("Donator with the email does not exist:", donatorEmail);
         }
+    }
 
-        try {
-            donatorEntity = donatorService.findByMail(formDto.donatorEmail());
-        } catch (EmailNotFoundException e) {
-            donatorEntity = donatorService.createDonator(new CreateDotatorDto(formDto.donatorEmail()));
-        }
-
-        BigDecimal personalBonus = serverById.getDonatorsBonuses().get(donatorEntity);
-        BigDecimal totalBonus;
-        if (personalBonus == null) {
-            personalBonus = BigDecimal.ZERO;
-        }
-
+    private BigDecimal calculateTotalBonus(CreateTransactionDto formDto, ServerEntity serverById, BigDecimal personalBonus) {
         SortedSet<ServerBonusSettingsEntity> serverBonusSettings = serverById.getServerBonusSettings();
         ServerBonusSettingsEntity last = serverBonusSettings.last();
 
         if (last.getToAmount().compareTo(formDto.contributionAmount()) <= 0) {
-            totalBonus = last.getBonusPercentage();
+            return last.getBonusPercentage();
         } else {
-            BigDecimal serverBonus = serverById.getServerBonusSettings().stream()
-                    .filter(a -> (formDto.contributionAmount().compareTo(a.getFromAmount()) > 0
-                            && formDto.contributionAmount().compareTo(a.getToAmount()) <= 0))
-                    .map(ServerBonusSettingsEntity::getBonusPercentage)
-                    .findFirst()
-                    .orElse(BigDecimal.ZERO);
-            totalBonus = personalBonus.add(serverBonus);
+            BigDecimal serverBonus = getServerBonus(formDto, serverById);
+            return personalBonus.add(serverBonus);
         }
+    }
 
-        BigDecimal totalAmount = !totalBonus.equals(BigDecimal.ZERO)
-                ? countResult(formDto.contributionAmount(), totalBonus)
-                : formDto.contributionAmount();
-
+    private TransactionEntity createTransactionEntity(CreateTransactionDto formDto, DonatorEntity donatorEntity,
+                                                      ServerEntity serverById, BigDecimal totalAmount) {
         TransactionEntity entity = transactionMapper.toEntity(formDto);
         entity.setDonator(donatorEntity);
-
-        if (authentication != null && authentication.getPrincipal() instanceof UserEntity user) {
-            entity.setCreatedByUser(user);
-        } else {
-            throw new UserNotFoundException("Unable to retrieve user information from Security Context.");
-        }
-
         entity.setServer(serverById);
         entity.setTotalAmount(totalAmount);
+        return entity;
+    }
 
-        return transactionRepository.save(entity);
+    private BigDecimal getTotalAmount(BigDecimal incomingAmount, BigDecimal totalBonus) {
+        return totalBonus.equals(BigDecimal.ZERO)
+                ? incomingAmount
+                : countResult(incomingAmount, totalBonus);
+    }
 
+    private BigDecimal getServerBonus(CreateTransactionDto formDto, ServerEntity serverById) {
+        return serverById.getServerBonusSettings().stream()
+                .filter(a -> (formDto.contributionAmount().compareTo(a.getFromAmount()) > 0
+                        && formDto.contributionAmount().compareTo(a.getToAmount()) <= 0))
+                .map(ServerBonusSettingsEntity::getBonusPercentage)
+                .findFirst()
+                .orElse(BigDecimal.ZERO);
     }
 
     private BigDecimal countResult(BigDecimal contributionAmount, BigDecimal totalBonus) {
         return contributionAmount.multiply(BigDecimal.ONE.add(totalBonus.divide(BigDecimal.valueOf(100.0))));
     }
+
+    private void addModerCreatedTransaction(Authentication authentication, TransactionEntity entity) {
+        if (authentication != null && authentication.getPrincipal() instanceof UserEntity user) {
+            entity.setCreatedByUser(user);
+        } else {
+            throw new UserNotFoundException("Unable to retrieve user information from Security Context.");
+        }
+    }
+
+    //    public TransactionEntity create(CreateTransactionDto formDto) {
+//
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        ServerEntity serverById = serverService.findById(formDto.serverId());
+//        DonatorEntity donatorEntity;
+//        BigDecimal totalBonus;
+//
+//        if (!externalDonatorService.existsByEmail(formDto.donatorEmail())) {
+//            throw new EmailNotFoundException("Donator with the email does`nt exists:", formDto.donatorEmail());
+//        }
+//        try {
+//            donatorEntity = donatorService.findByMail(formDto.donatorEmail());
+//        } catch (EmailNotFoundException e) {
+//            donatorEntity = donatorService.createDonator(new CreateDotatorDto(formDto.donatorEmail()));
+//        }
+//
+//        BigDecimal personalBonus = serverById.getDonatorsBonuses().getOrDefault(donatorEntity, BigDecimal.ZERO);
+//
+//        if (personalBonus == null) {
+//            personalBonus = BigDecimal.ZERO;
+//        }
+//
+//        SortedSet<ServerBonusSettingsEntity> serverBonusSettings = serverById.getServerBonusSettings();
+//        ServerBonusSettingsEntity last = serverBonusSettings.last();
+//
+//        if (last.getToAmount().compareTo(formDto.contributionAmount()) <= 0) {
+//            totalBonus = last.getBonusPercentage();
+//        } else {
+//            BigDecimal serverBonus = serverById.getServerBonusSettings().stream()
+//                    .filter(a -> (formDto.contributionAmount().compareTo(a.getFromAmount()) > 0
+//                            && formDto.contributionAmount().compareTo(a.getToAmount()) <= 0))
+//                    .map(ServerBonusSettingsEntity::getBonusPercentage)
+//                    .findFirst()
+//                    .orElse(BigDecimal.ZERO);
+//            totalBonus = personalBonus.add(serverBonus);
+//        }
+//
+//        BigDecimal totalAmount = !totalBonus.equals(BigDecimal.ZERO)
+//                ? countResult(formDto.contributionAmount(), totalBonus)
+//                : formDto.contributionAmount();
+//
+//        TransactionEntity entity = transactionMapper.toEntity(formDto);
+//        entity.setDonator(donatorEntity);
+//
+//        if (authentication != null && authentication.getPrincipal() instanceof UserEntity user) {
+//            entity.setCreatedByUser(user);
+//        } else {
+//            throw new UserNotFoundException("Unable to retrieve user information from Security Context.");
+//        }
+//
+//        entity.setServer(serverById);
+//        entity.setTotalAmount(totalAmount);
+//
+//        return transactionRepository.save(entity);
+//
+//    }
+//
+//    private BigDecimal countResult(BigDecimal contributionAmount, BigDecimal totalBonus) {
+//        return contributionAmount.multiply(BigDecimal.ONE.add(totalBonus.divide(BigDecimal.valueOf(100.0))));
+//    }
+
+    //================================================================================================
 
 }
