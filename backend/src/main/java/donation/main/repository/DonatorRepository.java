@@ -11,5 +11,7 @@ public interface DonatorRepository extends JpaRepository<DonatorEntity, Long> {
 
     Optional<DonatorEntity> findByEmail(String email);
 
+    boolean existsByEmail(String email);
+
     Page<DonatorEntity> findByEmailContainingIgnoreCase(String email, Pageable pageable);
 }

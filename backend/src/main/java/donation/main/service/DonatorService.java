@@ -32,4 +32,8 @@ public class DonatorService {
     public DonatorEntity createDonator(CreateDotatorDto dotatorDto) {
         return donatorRepository.save(donatorMapper.toEntity(dotatorDto));
     }
+
+    public boolean existsByEmail(String email) {
+        return donatorRepository.existsByEmail(email);
+    }
 }

@@ -9,7 +9,11 @@ import donation.main.entity.DonatorEntity;
 import donation.main.entity.ServerBonusSettingsEntity;
 import donation.main.entity.ServerEntity;
 import donation.main.entity.TransactionEntity;
+import donation.main.entity.UserEntity;
 import donation.main.enumeration.TransactionState;
+import donation.main.exception.EmailNotFoundException;
+import donation.main.exception.UserNotFoundException;
+import donation.main.externaldb.service.ExternalDonatorService;
 import donation.main.mapper.TransactionMapper;
 import donation.main.repository.TransactionRepository;
 import donation.main.repository.spec.SpecificationBuilder;
@@ -17,10 +21,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.NoSuchElementException;
 import java.util.SortedSet;
 
 @Service
@@ -31,6 +36,7 @@ public class TransactionService {
     private final TransactionMapper transactionMapper;
     private final DonatorService donatorService;
     private final ServerService serverService;
+    private final ExternalDonatorService externalDonatorService;
 
     public Page<TransactionResponseDto> getAll(Pageable pageable) {
         return transactionRepository.findAll(pageable).map(transactionMapper::toDto);
@@ -45,17 +51,24 @@ public class TransactionService {
         return transactionRepository.findAll(spec, pageable);
     }
 
-//    public TransactionEntity update(UpdateTransactionDto transactionDto) {
-//
-//    }
+    public TransactionEntity update(UpdateTransactionDto transactionDto) {
+        return null;
+    }
 
     public TransactionEntity create(CreateTransactionDto formDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ServerEntity serverById = serverService.findById(formDto.serverId());
-
         DonatorEntity donatorEntity;
+
+
+
+        if (!externalDonatorService.existsByEmail(formDto.donatorEmail())) {
+            throw new EmailNotFoundException("Donator with the email does`nt exists:", formDto.donatorEmail());
+        }
+
         try {
             donatorEntity = donatorService.findByMail(formDto.donatorEmail());
-        } catch (NoSuchElementException e) {
+        } catch (EmailNotFoundException e) {
             donatorEntity = donatorService.createDonator(new CreateDotatorDto(formDto.donatorEmail()));
         }
 
@@ -86,12 +99,18 @@ public class TransactionService {
 
         TransactionEntity entity = transactionMapper.toEntity(formDto);
         entity.setDonator(donatorEntity);
-        //todo set user from security context
-        // entity.setCreatedByUser("securityContextUser")
+
+        if (authentication != null && authentication.getPrincipal() instanceof UserEntity user) {
+            entity.setCreatedByUser(user);
+        } else {
+            throw new UserNotFoundException("Unable to retrieve user information from Security Context.");
+        }
+
         entity.setServer(serverById);
         entity.setTotalAmount(totalAmount);
 
         return transactionRepository.save(entity);
+
     }
 
     private BigDecimal countResult(BigDecimal contributionAmount, BigDecimal totalBonus) {
