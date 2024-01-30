@@ -3,16 +3,13 @@ package donation.main.service;
 import donation.main.dto.serverbonusdto.CreateServerBonusesDto;
 import donation.main.entity.ServerBonusSettingsEntity;
 import donation.main.entity.ServerEntity;
-import donation.main.exception.EmailNotFoundException;
 import donation.main.exception.ServerNotFoundException;
 import donation.main.mapper.ServerBonusSettingsMapper;
 import donation.main.repository.ServerBonusSettingsRepository;
 import donation.main.repository.ServerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;

@@ -34,12 +34,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(service.getById(id));
     }
 
+    @Operation(summary = "change role for user")
     @PutMapping("/{id}/setRole")
     public ResponseEntity<String> setUserRole(@PathVariable Long id, @RequestParam Role newRole) {
         service.setUserRole(id, newRole);
         return ResponseEntity.status(HttpStatus.OK).body("Роль користувача оновлено");
     }
 
+    @Operation(summary = "delete role and setup it on GUEST")
     @PutMapping("/{id}/removeRole")
     public ResponseEntity<String> removeUserRole(@PathVariable Long id) {
         service.removeUserRole(id);

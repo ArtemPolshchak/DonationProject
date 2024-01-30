@@ -3,15 +3,12 @@ package donation.main.service;
 import donation.main.dto.donatorsdto.CreateDotatorDto;
 import donation.main.entity.DonatorEntity;
 import donation.main.exception.EmailNotFoundException;
-import donation.main.exception.UserNotFoundException;
 import donation.main.mapper.DonatorMapper;
 import donation.main.repository.DonatorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -34,5 +31,17 @@ public class DonatorService {
 
     public DonatorEntity createDonator(CreateDotatorDto dotatorDto) {
         return donatorRepository.save(donatorMapper.toEntity(dotatorDto));
+    }
+
+    public DonatorEntity getDonatorEntityOrCreate(String donatorEmail) {
+        try {
+            return findByMail(donatorEmail);
+        } catch (EmailNotFoundException e) {
+            return createDonator(new CreateDotatorDto(donatorEmail));
+        }
+    }
+
+    public boolean existsByEmail(String email) {
+        return donatorRepository.existsByEmail(email);
     }
 }

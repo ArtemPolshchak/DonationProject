@@ -1,6 +1,5 @@
 package donation.main.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import donation.main.enumeration.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -33,14 +33,18 @@ public class UserEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", unique = true, nullable = false)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.UUID)
+//    private UUID id;
+
+    @Column(name = "username", columnDefinition = "VARCHAR(50)", unique = true, nullable = false)
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", columnDefinition = "VARCHAR(100)", nullable = false)
     /*@JsonIgnore*/
     private String password;
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "email", columnDefinition = "VARCHAR(100)", unique = true, nullable = false)
     private String email;
 
     @Enumerated(EnumType.STRING)
