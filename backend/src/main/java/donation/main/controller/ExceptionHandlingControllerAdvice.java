@@ -1,7 +1,9 @@
 package donation.main.controller;
 
+import donation.main.exception.AccessForbiddenException;
 import donation.main.exception.EmailNotFoundException;
 import donation.main.exception.ErrorResponse;
+import donation.main.exception.InvalidTransactionState;
 import donation.main.exception.TransactionBadRequestException;
 import donation.main.exception.TransactionNotFoundException;
 import donation.main.exception.UnauthorizedActionException;
@@ -90,5 +92,19 @@ public class ExceptionHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public Map<String, String> handleAccessDeniedException(org.springframework.security.access.AccessDeniedException ex) {
         return Map.of(MESSAGE, "Доступ заборонено");
+    }
+
+    @ResponseBody
+    @ExceptionHandler(InvalidTransactionState.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    Map<String, String> handleUserWithDataExistsException(InvalidTransactionState exception) {
+        return Map.of(MESSAGE, exception.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(AccessForbiddenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    Map<String, String> handleUserWithDataExistsException(AccessForbiddenException exception) {
+        return Map.of(MESSAGE, exception.getMessage());
     }
 }

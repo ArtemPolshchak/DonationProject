@@ -1,4 +1,11 @@
 package donation.main.dto.transactiondto;
 
-public record UpdateTransactionDto() {
+import java.math.BigDecimal;
+
+public record UpdateTransactionDto(
+        BigDecimal contributionAmount,
+        String imageUrl,
+        String comment,
+        Long serverId
+) {
 }
