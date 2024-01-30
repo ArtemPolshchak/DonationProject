@@ -95,11 +95,25 @@ public class TransactionService {
             throw new InvalidTransactionState("This state cannot be set up, check state", newState);
         }
         existingTransactionEntity.setState(newState);
+
+        countDonatorsTotalDonation(newState, existingTransactionEntity);
+
         existingTransactionEntity.setDateApproved(LocalDateTime.now());
         if (approveTransactionByUser(authentication)) {
             existingTransactionEntity.setApprovedByUser(userService.getCurrentUser());
         }
         return save(existingTransactionEntity);
+    }
+
+    private void countDonatorsTotalDonation(TransactionState newState, TransactionEntity existingTransactionEntity) {
+        if (newState == TransactionState.COMPLETED) {
+            BigDecimal amount = existingTransactionEntity
+                    .getDonator()
+                    .getTotalDonations()
+                    .add(existingTransactionEntity
+                            .getContributionAmount());
+            existingTransactionEntity.getDonator().setTotalDonations(amount);
+        }
     }
 
     public TransactionEntity create(CreateTransactionDto transactionDto) {
