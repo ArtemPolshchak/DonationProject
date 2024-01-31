@@ -27,8 +27,8 @@ public class DonatorController {
     @Operation(summary = "get all donators")
     @GetMapping("/")
     //@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Iterable<DonatorEntity>> getAllDonators() {
-        return ResponseEntity.status(HttpStatus.OK).body(donatorService.readAll());
+    public ResponseEntity<Page<DonatorEntity>> getAllDonators(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(donatorService.findAllBy(pageable));
     }
 
     @Operation(summary = "find donator by donators email")

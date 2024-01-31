@@ -3,6 +3,7 @@ package donation.main.service;
 import donation.main.dto.donatorsdto.CreateDotatorDto;
 import donation.main.entity.DonatorEntity;
 import donation.main.exception.EmailNotFoundException;
+import donation.main.exception.UserNotFoundException;
 import donation.main.mapper.DonatorMapper;
 import donation.main.repository.DonatorRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +17,18 @@ public class DonatorService {
     private final DonatorRepository donatorRepository;
     private final DonatorMapper donatorMapper;
 
-    public Iterable<DonatorEntity> readAll() {
-        return donatorRepository.findAll();
+    public Page<DonatorEntity> findAllBy(Pageable pageable) {
+        return donatorRepository.findAllBy(pageable);
     }
 
     public DonatorEntity findByMail(String email) {
-        return donatorRepository.findByEmail(email).orElseThrow(() -> new EmailNotFoundException(
-                "Email not found", email));
+        return donatorRepository.findByEmail(email)
+                .orElseThrow(() -> new EmailNotFoundException("Email not found", email));
+    }
+
+    public DonatorEntity findById(Long id) {
+        return donatorRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Cannot find current Donator"));
     }
 
     public Page<DonatorEntity> findByMailPaginated(String mail, Pageable pageable) {

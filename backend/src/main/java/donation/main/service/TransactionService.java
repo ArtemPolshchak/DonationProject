@@ -30,7 +30,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,8 +50,12 @@ public class TransactionService {
         return transactionRepository.findAll(pageable).map(transactionMapper::toDto);
     }
 
-    public Page<TransactionEntity> findAllByState(TransactionState state, Pageable pageable) {
-        return transactionRepository.findAllByState(state, pageable);
+    public Page<TransactionResponseDto> findAllTransactionsByDonatorId(Long donatorId, Pageable pageable) {
+        return transactionRepository.findAllByDonatorId(donatorId,  pageable).map(transactionMapper::toDto);
+    }
+
+    public Page<TransactionResponseDto> findAllByState(TransactionState state, Pageable pageable) {
+        return transactionRepository.findAllByState(state, pageable).map(transactionMapper::toDto);
     }
 
     public TransactionEntity findById(Long transactionId) {

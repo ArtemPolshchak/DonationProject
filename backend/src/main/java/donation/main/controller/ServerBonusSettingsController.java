@@ -5,6 +5,7 @@ import donation.main.entity.ServerBonusSettingsEntity;
 import donation.main.service.ServerBonusSettingsService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +27,8 @@ public class ServerBonusSettingsController {
 
     @Operation(summary = "get all bonuses from  servers")
     @GetMapping("/")
-    public ResponseEntity<Iterable<ServerBonusSettingsEntity>> getAllServerBonuses() {
-        return ResponseEntity.status(HttpStatus.OK).body(serverBonusSettingsService.readAll());
+    public ResponseEntity<Iterable<ServerBonusSettingsEntity>> getAllServerBonuses(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(serverBonusSettingsService.readAll(pageable));
     }
 
     @Operation(summary = "create new bonuses if null otherwise recreate bonuses")

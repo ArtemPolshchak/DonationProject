@@ -1,6 +1,7 @@
 package donation.main.service;
 
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
+import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
 import donation.main.dto.serverdto.CreateServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
 import donation.main.entity.DonatorEntity;
@@ -13,6 +14,7 @@ import donation.main.repository.ServerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -22,6 +24,7 @@ public class ServerService {
     private final ServerMapper serverMapper;
     private final DonatorRepository donatorRepository;
     private final DonatorMapper donatorMapper;
+    private final DonatorService donatorService;
 
     public Iterable<ServerEntity> readAll() {
         return serverRepository.findAll();
@@ -46,11 +49,20 @@ public class ServerService {
         DonatorEntity donator = donatorRepository.findByEmail(dto.email())
                 .orElseGet(() -> donatorRepository.save(donatorMapper.toEntity(dto)));
 
-        ServerEntity serverById = serverRepository.findById(dto.serverId())
-                .orElseThrow(() -> new ServerNotFoundException("Server not found", dto.serverId()));
+        ServerEntity server = findById(dto.serverId());
 
-        serverById.getDonatorsBonuses().put(donator, dto.personalBonus());
+        server.getDonatorsBonuses().put(donator, dto.personalBonus());
 
-        return serverRepository.save(serverById);
+        return serverRepository.save(server);
+    }
+
+    public ServerEntity updateDonatorsBonusOnserver(UpdateDonatorsBonusOnServer dto) {
+        DonatorEntity donator = donatorService.findById(dto.donatorId());
+        ServerEntity server = findById(dto.serverId());
+        BigDecimal donatorsBonus = dto.personalBonus();
+
+        server.getDonatorsBonuses().put(donator, donatorsBonus);
+        return serverRepository.save(server);
+
     }
 }

@@ -8,6 +8,8 @@ import donation.main.mapper.ServerBonusSettingsMapper;
 import donation.main.repository.ServerBonusSettingsRepository;
 import donation.main.repository.ServerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
@@ -23,8 +25,8 @@ public class ServerBonusSettingsService {
     private final ServerBonusSettingsMapper settingsMapper;
     private final ServerRepository serverRepository;
 
-    public Iterable<ServerBonusSettingsEntity> readAll() {
-        return serverBonusSettingsRepository.findAll();
+    public Page<ServerBonusSettingsEntity> readAll(Pageable pageable) {
+        return serverBonusSettingsRepository.findAllBy(pageable);
     }
 
     public Set<ServerBonusSettingsEntity> replaceAll(List<CreateServerBonusesDto> serverBonusesDtos, Long serverId) {
