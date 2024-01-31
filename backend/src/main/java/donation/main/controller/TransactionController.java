@@ -54,9 +54,7 @@ public class TransactionController {
 
     @Operation(summary = "update an existing transaction")
     @PutMapping("/{transactionId}")
-    public ResponseEntity<TransactionEntity> updateTransaction(
-            @PathVariable Long transactionId,
-            @RequestBody UpdateTransactionDto transactionDto
+    public ResponseEntity<TransactionEntity> updateTransaction(@PathVariable Long transactionId, @RequestBody UpdateTransactionDto transactionDto
     ) {
         TransactionEntity updateTransaction = service.updateTransaction(transactionId, transactionDto);
         return ResponseEntity.status(HttpStatus.OK).body(updateTransaction);
@@ -64,8 +62,7 @@ public class TransactionController {
 
     @Operation(summary = "setup currens TransactionState to new one state")
     @PutMapping("/state/{transactionId}")
-    public ResponseEntity<TransactionEntity> updateTransactionState(
-            @PathVariable Long transactionId, @RequestParam TransactionState state
+    public ResponseEntity<TransactionEntity> updateTransactionState(@PathVariable Long transactionId, @RequestParam TransactionState state
     ) {
         TransactionEntity updateTransactionState = service.updateTransactionState(transactionId, state);
         return ResponseEntity.status(HttpStatus.OK).body(updateTransactionState);
