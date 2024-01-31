@@ -5,6 +5,7 @@ import donation.main.enumeration.Role;
 import donation.main.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +24,8 @@ public class UserController {
 
     @Operation(summary = "get all users")
     @GetMapping("/")
-    public ResponseEntity<Iterable<UserEntity>> getAllUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(service.readAll());
+    public ResponseEntity<Iterable<UserEntity>> getAllUsers(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.findAllByPage(pageable));
     }
 
     @Operation(summary = "get user by Id")

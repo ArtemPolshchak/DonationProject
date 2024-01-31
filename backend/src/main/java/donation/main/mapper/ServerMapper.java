@@ -1,6 +1,7 @@
 package donation.main.mapper;
 
 import donation.main.config.MapperConfig;
+import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
 import donation.main.dto.serverdto.CreateServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
 import donation.main.entity.ServerEntity;
@@ -15,6 +16,8 @@ public interface ServerMapper {
     CreateServerDto toCreateDto(ServerEntity serverEntity);
 
     ServerEntity update(@MappingTarget ServerEntity entity, CreateServerDto serverDto);
+
+    ServerEntity updateDonatorsBonus(@MappingTarget ServerEntity entity, UpdateDonatorsBonusOnServer donatorDto);
 
     ServerEntity toEntity(ServerIdNameDto serverIdNameDto);
 
