@@ -5,8 +5,8 @@ export class Transaction {
     dateCreated!: Date;
     dateApproved?: Date;
     imageUrl!: string;
-    createdByUserId!: number
-    approvedByUserId?: number
+    createdByUserId!: number;
+    approvedByUserId?: number;
     state!: string;
     contributionAmount!: number;
     totalAmount!: number;
