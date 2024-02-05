@@ -8,6 +8,8 @@ import donation.main.entity.ServerEntity;
 import donation.main.service.ServerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,8 +38,8 @@ public class ServerController {
 
     @Operation(summary = "get all servers by names")
     @GetMapping("/server-names")
-    public ResponseEntity<List<ServerIdNameDto>> getAllServerNames() {
-        return ResponseEntity.status(HttpStatus.OK).body(service.getAllServersNames());
+    public ResponseEntity<Page<ServerIdNameDto>> getAllServerNames(Pageable page) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.getAllServersNames(page));
     }
 
     @Operation(summary = "create new server")

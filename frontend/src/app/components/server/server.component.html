@@ -1,0 +1,31 @@
+
+<body>
+<div>
+    <h1>Dashboard</h1>
+    <div class="section">
+        <h2>Donations</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Сервера</th>
+                <th>Имя Сервера</th>
+                <th>Бонусы игроков</th>
+                <th>Бонусы сервера</th>
+
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr *ngFor="let donator of servers">
+                <td> {{ donator.serverName }}</td>
+                <td>Бонусы игроков</td>
+                <td>Бонусы сервера</td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Add more sections here -->
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+</body>

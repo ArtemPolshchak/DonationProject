@@ -12,6 +12,8 @@ import donation.main.mapper.ServerMapper;
 import donation.main.repository.DonatorRepository;
 import donation.main.repository.ServerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -30,8 +32,8 @@ public class ServerService {
         return serverRepository.findAll();
     }
 
-    public List<ServerIdNameDto> getAllServersNames() {
-        return serverRepository.getAllByServerNameAndId();
+    public Page<ServerIdNameDto> getAllServersNames(Pageable pageable) {
+        return serverRepository.getAllByServerNameAndId(pageable);
     }
 
     public ServerEntity createServer(CreateServerDto serverDto) {
