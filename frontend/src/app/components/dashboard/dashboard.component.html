@@ -6,10 +6,11 @@
   <div class="item" ngbAccordionItem="{{transaction.id}}">
     <h2 ngbAccordionHeader>
       <button ngbAccordionButton>
-        <button>Button</button>
-        {{transaction.dateCreated | date: 'dd MMMM yyyy'}} \\
-        {{transaction.donatorEmail}} \\
-        {{transaction.contributionAmount | currency: 'USD'}}
+        <button> </button>
+       [ Дата создания {{transaction.dateCreated | date: 'dd MMMM yyyy'}}]
+       [ Айди сервера {{transaction.serverId}}]
+       [ Почта донатора {{transaction.donatorEmail}}]
+       [ Общая сумма Доната {{transaction.contributionAmount | currency: 'USD'}}]
       </button>
 <!--      <div ngbAccordionToggle>-->
 <!--        <div>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</div>-->
@@ -20,6 +21,10 @@
     <div ngbAccordionCollapse>
       <div ngbAccordionBody>
         <ng-template>
+          {{transaction.createdByUserId}}
+          {{transaction.imageUrl}}
+          {{transaction.contributionAmount}}
+          {{transaction.totalAmount}}
           {{transaction.state}}
         </ng-template>
       </div>

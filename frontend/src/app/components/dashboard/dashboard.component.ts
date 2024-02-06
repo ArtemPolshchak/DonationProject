@@ -17,10 +17,10 @@ import {Transaction} from "../../common/transaction";
     styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
+    state: string[] = ["IN_PROGRESS"];
     transactions: Transaction[] = [];
     pageNumber: number = 0;
     pageSize: number = 10;
-    state: string[] = ["IN_PROGRESS"];
 
     constructor(private transactionService: TransactionService) {
     }
@@ -32,4 +32,7 @@ export class DashboardComponent implements OnInit {
                 console.log(this.transactions)
             })
     }
+
+
+
 }
