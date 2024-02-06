@@ -6,8 +6,8 @@
     <div class="item" ngbAccordionItem="{{transaction.id}}">
         <h2 ngbAccordionHeader>
             <button ngbAccordionButton>
-                {{transaction.dateCreated | date: 'dd MMMM yyyy'}} \\
-                {{transaction.donatorEmail}} \\
+                {{transaction.dateCreated | date: 'dd MMMM yyyy'}}
+                {{transaction.donatorEmail}}
                 {{transaction.contributionAmount | currency: 'USD'}}
             </button>
             <!--      <div ngbAccordionToggle>-->
