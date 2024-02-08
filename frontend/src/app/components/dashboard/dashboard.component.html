@@ -8,10 +8,12 @@
       <button ngbAccordionButton>
         <button> </button>
        [ Дата создания {{transaction.dateCreated | date: 'dd MMMM yyyy'}}]
-       [ Айди сервера {{transaction.serverId}}]
+       [ Айди сервера {{ transaction.serverName}}]
        [ Почта донатора {{transaction.donatorEmail}}]
-       [ Общая сумма Доната {{transaction.contributionAmount | currency: 'USD'}}]
+       [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]
       </button>
+      <button (click)="confirmTransaction(transaction.id)">Підтвердити</button>
+      <button (click)="rejectTransaction(transaction.id)">Відхилити</button>
 <!--      <div ngbAccordionToggle>-->
 <!--        <div>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</div>-->
 <!--        <div>{{transaction.donatorEmail}}</div>-->
@@ -21,11 +23,12 @@
     <div ngbAccordionCollapse>
       <div ngbAccordionBody>
         <ng-template>
-          {{transaction.createdByUserId}}
-          {{transaction.imageUrl}}
-          {{transaction.contributionAmount}}
-          {{transaction.totalAmount}}
-          {{transaction.state}}
+          [Кто создал {{transaction.createdBy}}]
+          [Картинка {{transaction.imageUrl}}]
+          [сумма зачисления  {{transaction.contributionAmount}}]
+          [Общая сумма доната  {{transaction.totalAmount}}]
+          [Состояние заявки {{transaction.state}}]
+          [Комментарий {{transaction.comment}}]
         </ng-template>
       </div>
     </div>

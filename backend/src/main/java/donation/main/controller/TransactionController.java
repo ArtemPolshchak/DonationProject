@@ -56,7 +56,7 @@ public class TransactionController {
 
     @Operation(summary = "search transaction")
     @GetMapping("/search")
-    public ResponseEntity<Page<TransactionEntity>> search(TransactionSpecDto specDto, Pageable page) {
+    public ResponseEntity<Page<TransactionResponseDto>> search(TransactionSpecDto specDto, Pageable page) {
         return ResponseEntity.status(HttpStatus.OK).body(transactionService.search(specDto, page));
     }
 

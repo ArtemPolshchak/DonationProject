@@ -7,7 +7,7 @@ import donation.main.enumeration.TransactionState;
 public record TransactionResponseDto(
         Long id,
         String donatorEmail,
-        Long serverId,
+        String serverName,
         String dateCreated,
         String dateApproved,
         String imageUrl,

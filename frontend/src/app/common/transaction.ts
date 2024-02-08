@@ -1,12 +1,12 @@
 export class Transaction {
     id!: number;
     donatorEmail!: string;
-    serverId!: number;
+    serverName!: string;
     dateCreated!: Date;
     dateApproved?: Date;
     imageUrl!: string;
-    createdByUserId!: number;
-    approvedByUserId?: number;
+    createdBy!: string;
+    approvedBy?: number;
     state!: string;
     contributionAmount!: number;
     totalAmount!: number;

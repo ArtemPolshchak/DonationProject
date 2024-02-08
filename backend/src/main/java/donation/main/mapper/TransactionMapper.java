@@ -13,7 +13,7 @@ public interface TransactionMapper {
 
     TransactionEntity toEntity(CreateTransactionDto dto);
 
-    @Mapping(source = "server.id", target = "serverId")
+    @Mapping(source = "server.serverName", target = "serverName")
     @Mapping(source = "donator.email", target = "donatorEmail")
     @Mapping(source = "createdByUser.email", target = "createdBy")
     @Mapping(source = "approvedByUser.email", target = "approvedBy")
