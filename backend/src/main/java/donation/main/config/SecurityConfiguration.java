@@ -47,15 +47,15 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 // Своего рода отключение CORS (разрешение запросов со всех доменов)
-                .cors(cors -> cors.configurationSource(request -> {
-                    var corsConfiguration = new CorsConfiguration();
-                    corsConfiguration.setAllowedOriginPatterns(List.of("*"));
-                    corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                    corsConfiguration.setAllowedHeaders(List.of("*"));
-                    corsConfiguration.setAllowCredentials(true);
-                    return corsConfiguration;
-                }))
-//                .cors(AbstractHttpConfigurer::disable)
+//                .cors(cors -> cors.configurationSource(request -> {
+//                    var corsConfiguration = new CorsConfiguration();
+//                    corsConfiguration.setAllowedOriginPatterns(List.of("*"));
+//                    corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//                    corsConfiguration.setAllowedHeaders(List.of("*"));
+//                    corsConfiguration.setAllowCredentials(true);
+//                    return corsConfiguration;
+//                }))
+                .cors(AbstractHttpConfigurer::disable)
                .exceptionHandling(customizer -> customizer.accessDeniedHandler(customAccessDeniedHandler()))
                 //.exceptionHandling(exception -> exception.accessDeniedPage("/api/auth/error"))
                 .authorizeHttpRequests(request -> request
@@ -65,11 +65,10 @@ public class SecurityConfiguration {
                                 "/swagger-resources/*",
                                 "/v3/api-docs/**")
                         .permitAll()
-                        .requestMatchers("/endpoint", "/admin/**")
+                       .requestMatchers("/endpoint", "/admin/**")
                         .hasRole("ADMIN")
                         .anyRequest()
-                        //.authenticated()
-                        .permitAll()
+                        .authenticated()
                 )
 
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))

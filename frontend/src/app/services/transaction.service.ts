@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Transaction} from "../common/transaction";
 import {map, Observable} from "rxjs";
 
@@ -14,20 +14,22 @@ export class TransactionService {
     public getAllWithSearch(pageNumber?: number, pageSize?: number, state?: string[]) {
         const url: string = `http://localhost:5000/api/transactions/search?state=${state}&page=${pageNumber}&pageSize=${pageSize}`
         console.log(url)
-        return this.httpClient.get<GetTransactionResponse>(url).pipe(
+        return this.httpClient.get<GetTransactionResponse>(url, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}}).pipe(
             map(response => response));
     }
 
     public getAll(pageNumber?: number, pageSize?: number, state?: string[]) {
         const url: string = `http://localhost:5000/api/transactions?page=${pageNumber}&pageSize=${pageSize}`
+        let httpHeaders = new HttpHeaders({'Authorization': 'Bearer ' + sessionStorage.getItem('token')});
         console.log(url)
-        return this.httpClient.get<GetTransactionResponse>(url).pipe(
+        console.log(httpHeaders)
+        return this.httpClient.get<GetTransactionResponse>(url, {headers: httpHeaders}).pipe(
             map(response => response));
     }
 
     public changeTransactionStatus(transactionId: number, state: string): Observable<void> {
-        const url: string = ` http://localhost:5000/api/transactions/${transactionId}?state=${state}`;
-        return this.httpClient.put<void>(url, {});
+        const url: string = ` http://localhost:5000/api/transactions/state/${transactionId}?state=${state}`;
+        return this.httpClient.put<void>(url, {},  {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}});
     }
 }
 
