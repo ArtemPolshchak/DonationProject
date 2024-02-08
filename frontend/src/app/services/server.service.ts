@@ -14,7 +14,7 @@ export class ServerService {
   public getAll(pageNumber?: number, pageSize?: number) {
     const url: string = `api/servers/server-names?page=${pageNumber}&pageSize=${pageSize}`
     console.log(url)
-    return this.httpClient.get<GetServerResponse>(url).pipe(
+    return this.httpClient.get<GetServerResponse>(url, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}}).pipe(
         map(response => response));
   }
 
