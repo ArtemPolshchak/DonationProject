@@ -1,0 +1,45 @@
+<div class="header">
+    <div class="mb-3 d-flex justify-content-between">
+        <h1>Список транзакцій</h1>
+        <div class="d-flex">
+            <input type="text" class="form-control me-2" placeholder="Пошук...">
+            <select class="form-select me-2" aria-label="Статус">
+                <option selected>Статус</option>
+                <option value="IN_PROGRESS">IN_PROGRESS</option>
+                <option value="COMPLETED">COMPLETED</option>
+                <option value="CANCELLED">CANCELLED</option>
+            </select>
+            <button class="btn btn-primary" (click)="openDialog()">Застосувати фільтр</button>
+            <button class="btn btn-outline-primary ms-2" (click)="openDialog()">Створити нову заявку</button>
+        </div>
+    </div>
+</div>
+
+<div class="transactions-list">
+    <div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
+        <div class="item" ngbAccordionItem="{{transaction.id}}">
+            <h2 ngbAccordionHeader>
+                <button ngbAccordionButton>
+                    [ Дата создания {{transaction.dateCreated | date: 'dd MMMM yyyy'}}]
+                    [ Дата подтверждения {{transaction.dateApproved | date: 'dd MMMM yyyy'}}]
+                    [ Имя сервера {{ transaction.serverName}}]
+                    [ Почта донатора {{transaction.donatorEmail}}]
+                    [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]
+                </button>
+            </h2>
+            <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                    <ng-template>
+                        [Кто создал {{transaction.createdBy}}]
+                        [Кто подтвердил {{transaction.approvedBy}}]
+                        [Картинка {{transaction.imageUrl}}]
+                        [сумма зачисления  {{transaction.contributionAmount}}]
+                        [Общая сумма доната  {{transaction.totalAmount}}]
+                        [Состояние заявки {{transaction.state}}]
+                        [Комментарий {{transaction.comment}}]
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

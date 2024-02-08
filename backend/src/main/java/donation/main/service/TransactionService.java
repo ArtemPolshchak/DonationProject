@@ -63,9 +63,9 @@ public class TransactionService {
                 .orElseThrow(() -> new TransactionNotFoundException("Transaction not found with id: " + transactionId));
     }
 
-    public Page<TransactionEntity> search(TransactionSpecDto specDto, Pageable pageable) {
+    public Page<TransactionResponseDto> search(TransactionSpecDto specDto, Pageable pageable) {
         Specification<TransactionEntity> spec = specificationBuilder.build(specDto);
-        return transactionRepository.findAll(spec, pageable);
+        return transactionRepository.findAll(spec, pageable).map(transactionMapper::toDto);
     }
 
     public TransactionEntity save(TransactionEntity entity) {
