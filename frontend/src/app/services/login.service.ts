@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
 import {Login} from "../common/login";
 import {Router} from "@angular/router";
-import {TokenStorageService} from "./token-storage.service";
+import {StorageService} from "./storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class LoginService {
   constructor(
       private httpClient: HttpClient,
       private router: Router,
-      private storageService: TokenStorageService) {
+      private storageService: StorageService) {
   }
 
   login(loginData: Login): Observable<any> {

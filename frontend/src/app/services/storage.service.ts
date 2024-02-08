@@ -2,13 +2,11 @@ import { Injectable } from '@angular/core';
 import { TOKEN_KEY } from '../enums/app-constans';
 import {User} from "../common/user";
 import {jwtDecode} from "jwt-decode";
-import {error} from "@angular/compiler-cli/src/transformers/util";
-
 
 @Injectable({
   providedIn: 'root'
 })
-export class TokenStorageService {
+export class StorageService {
 
   signOut(): void {
     window.sessionStorage.clear();
