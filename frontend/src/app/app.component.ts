@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {SidebarComponent} from "./components/sidebar/sidebar.component";
-import {Router, RouterOutlet} from "@angular/router";
+import {RouterOutlet} from "@angular/router";
 import {NgIf} from "@angular/common";
 
 @Component({
@@ -14,6 +14,6 @@ import {NgIf} from "@angular/common";
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
     active = 'dashboard';
 }

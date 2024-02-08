@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TOKEN_KEY, USER_KEY } from '../enums/app-constans';
+import { TOKEN_KEY } from '../enums/app-constans';
 import {User} from "../common/user";
 import {jwtDecode} from "jwt-decode";
 import {error} from "@angular/compiler-cli/src/transformers/util";
@@ -36,7 +36,7 @@ export class TokenStorageService {
     try {
       return jwtDecode(token);
     } catch (Error) {
-      return error("Can't decode token");
+      return "Can't decode token";
     }
   }
 }
