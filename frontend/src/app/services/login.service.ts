@@ -9,7 +9,7 @@ import {Router} from "@angular/router";
 })
 export class LoginService {
 
-  private loginUrl = 'http://localhost:5000/api/auth/sign-in';
+  private loginUrl = 'api/auth/sign-in';
 
   constructor(private httpClient: HttpClient, private router: Router) { // Внедрюємо Router
   }

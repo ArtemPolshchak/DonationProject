@@ -12,7 +12,7 @@ export class ServerService {
   constructor(private httpClient: HttpClient) { }
 
   public getAll(pageNumber?: number, pageSize?: number) {
-    const url: string = `http://localhost:5000/api/servers/server-names?page=${pageNumber}&pageSize=${pageSize}`
+    const url: string = `api/servers/server-names?page=${pageNumber}&pageSize=${pageSize}`
     console.log(url)
     return this.httpClient.get<GetServerResponse>(url).pipe(
         map(response => response));

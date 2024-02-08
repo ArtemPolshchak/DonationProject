@@ -11,7 +11,7 @@ export class UserService {
   constructor(private httpClient: HttpClient) { }
 
   public getAll(pageNumber?: number, pageSize?: number) {
-    const url: string = `http://localhost:5000/api/users/?page=${pageNumber}&pageSize=${pageSize}`
+    const url: string = `api/users/?page=${pageNumber}&pageSize=${pageSize}`
     console.log(url)
     return this.httpClient.get<GetUserResponse>(url).pipe(
         map(response => response));

@@ -12,7 +12,7 @@ export class DonatorService {
   }
 
   public getAll(pageNumber?: number, pageSize?: number) {
-    const url: string = `http://localhost:5000/api/donators/?page=${pageNumber}&pageSize=${pageSize}`
+    const url: string = `api/donators/?page=${pageNumber}&pageSize=${pageSize}`
     console.log(url)
     return this.httpClient.get<GetTransactionResponse>(url).pipe(
         map(response => response));
