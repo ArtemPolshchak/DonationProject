@@ -13,7 +13,7 @@ export class UserService {
   public getAll(pageNumber?: number, pageSize?: number) {
     const url: string = `api/users/?page=${pageNumber}&pageSize=${pageSize}`
     console.log(url)
-    return this.httpClient.get<GetUserResponse>(url).pipe(
+    return this.httpClient.get<GetUserResponse>(url, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}}).pipe(
         map(response => response));
   }
 

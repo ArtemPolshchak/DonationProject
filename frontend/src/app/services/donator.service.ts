@@ -14,7 +14,7 @@ export class DonatorService {
   public getAll(pageNumber?: number, pageSize?: number) {
     const url: string = `api/donators/?page=${pageNumber}&pageSize=${pageSize}`
     console.log(url)
-    return this.httpClient.get<GetTransactionResponse>(url).pipe(
+    return this.httpClient.get<GetTransactionResponse>(url, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}}).pipe(
         map(response => response));
   }
 }
