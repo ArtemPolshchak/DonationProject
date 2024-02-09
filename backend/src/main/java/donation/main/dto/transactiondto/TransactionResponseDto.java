@@ -9,6 +9,8 @@ public record TransactionResponseDto(
         String donatorEmail,
         String serverName,
         String dateCreated,
+        int serverBonus,
+        int personalBonus,
         String dateApproved,
         String imageUrl,
         String createdBy,
