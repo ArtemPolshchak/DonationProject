@@ -12,7 +12,7 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
     //PagingAndSortingRepository<TransactionEntity, Long>
     Page<TransactionEntity> findAllByState(TransactionState state, Pageable pageable);
 
-    @Query("SELECT t FROM TransactionEntity t WHERE t.donator.id = :donatorId AND t.state = 'COMPLETED'")
+    @Query("FROM TransactionEntity t WHERE t.donator.id = :donatorId AND t.state = 'COMPLETED'")
     Page<TransactionEntity> findAllByDonatorId(Long donatorId, Pageable pageable);
 
 }

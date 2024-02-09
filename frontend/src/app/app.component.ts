@@ -41,4 +41,8 @@ export class AppComponent implements OnInit{
     public isGuest(): boolean {
         return Roles.GUEST == this.storageService.getUser()?.role;
     }
+
+    isLoggedIn(): boolean {
+        return this.storageService.getUser() !== undefined;
+    }
 }
