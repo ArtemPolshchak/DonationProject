@@ -21,13 +21,13 @@ export class StorageService {
     return sessionStorage.getItem(TOKEN_KEY);
   }
 
-  public getUser(): User | null {
+  public getUser(): User | undefined {
     const token = window.sessionStorage.getItem(TOKEN_KEY);
     if (token) {
       const tokenInfo = this.getDecodedAccessToken(token);
       return new User(tokenInfo.id, tokenInfo.sub, tokenInfo.email, tokenInfo.role)
     }
-    return null;
+    return undefined;
   }
 
   getDecodedAccessToken(token: string): any {

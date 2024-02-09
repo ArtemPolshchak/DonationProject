@@ -7,5 +7,6 @@ public record UpdateTransactionDto(
         String imageUrl,
         String comment,
         Long serverId
+
 ) {
 }

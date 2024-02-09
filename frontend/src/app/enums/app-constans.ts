@@ -1,12 +1,9 @@
 export const TOKEN_KEY = 'token';
-export const ROLE_ADMIN = 'ADMIN';
-export const ROLE_MODERATOR = 'MODERATOR';
-export const ROLE_GUEST = 'GUEST';
 
 export class Roles {
-  static readonly ADMIN = ROLE_ADMIN;
-  static readonly MODERATOR = ROLE_MODERATOR;
-  static readonly GUEST = ROLE_GUEST;
+  static readonly ADMIN = 'ADMIN';
+  static readonly MODERATOR = 'MODERATOR';
+  static readonly GUEST = 'GUEST';
 }
 
 export const STATE_IN_PROCESS = 'IN_PROCESS';

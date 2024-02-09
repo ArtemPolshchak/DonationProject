@@ -44,17 +44,4 @@ export class UserComponent implements OnInit {
           console.log(this.users)
         })
   }
-
-   static isAdmin(tokenStorage: StorageService): boolean {
-    return 'ADMIN' == tokenStorage.getUser()?.role;
-  }
-
-  static isModerator(tokenStorage: StorageService): boolean {
-    return 'MODERATOR' == tokenStorage.getUser()?.role;
-  }
-
-  static isGuest(tokenStorage: StorageService): boolean {
-    return 'GUEST' == tokenStorage.getUser()?.role;
-  }
-
 }
