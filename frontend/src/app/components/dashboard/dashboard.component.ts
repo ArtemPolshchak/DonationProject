@@ -3,6 +3,7 @@ import {NgbAccordionModule} from "@ng-bootstrap/ng-bootstrap";
 import {CurrencyPipe, DatePipe, NgForOf} from "@angular/common";
 import {TransactionService} from "../../services/transaction.service";
 import {Transaction} from "../../common/transaction";
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
     selector: 'app-dashboard',
@@ -11,7 +12,8 @@ import {Transaction} from "../../common/transaction";
         NgbAccordionModule,
         NgForOf,
         DatePipe,
-        CurrencyPipe
+        CurrencyPipe,
+        SidebarComponent
     ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
