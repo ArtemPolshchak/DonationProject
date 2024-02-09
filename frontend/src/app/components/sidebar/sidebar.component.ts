@@ -1,7 +1,9 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {NgClass, NgForOf} from "@angular/common";
 import {NgbNavModule} from "@ng-bootstrap/ng-bootstrap";
+import {AuthService} from "../../services/auth.service";
+import {ADMIN_MENU_ITEMS, MODERATOR_MENU_ITEMS} from "../../enums/app-constans";
 
 @Component({
   selector: 'app-sidebar',
@@ -16,6 +18,13 @@ import {NgbNavModule} from "@ng-bootstrap/ng-bootstrap";
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
-export class SidebarComponent {
-  menuItems: string[] = ['dashboard', 'donations', 'donators', 'users',  'servers', 'settings'];
+export class SidebarComponent implements OnInit{
+  menuItems: string[] = [];
+
+  constructor(private authService: AuthService) {
+  }
+
+  ngOnInit(): void {
+    this.menuItems = this.authService.isAdmin() ? ADMIN_MENU_ITEMS : MODERATOR_MENU_ITEMS;
+  }
 }
