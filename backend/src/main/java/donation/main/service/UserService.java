@@ -40,7 +40,7 @@ public class UserService {
     }
 
     public UserEntity getByEmail(String email) {
-        return userRepository.findUserEntityByEmail(email)
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
