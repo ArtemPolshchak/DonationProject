@@ -39,13 +39,13 @@ public class AuthenticationService {
 
     public JwtAuthenticationResponseDto signIn(SignInRequestDto request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.username(),
+                request.email(),
                 request.password()
         ));
 
         UserDetails user = userService
                 .userDetailsService()
-                .loadUserByUsername(request.username());
+                .loadUserByUsername(request.email());
 
         return new JwtAuthenticationResponseDto(jwtService.generateToken(user));
     }
