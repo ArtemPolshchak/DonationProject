@@ -12,8 +12,14 @@
        [ Почта донатора {{transaction.donatorEmail}}]
        [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]
       </button>
-      <button (click)="confirmTransaction(transaction.id)">Підтвердити</button>
-      <button (click)="rejectTransaction(transaction.id)">Відхилити</button>
+      <div>
+        <mat-form-field>
+          <mat-label>Admin Bonus</mat-label>
+          <input matInput [(ngModel)]="transaction.adminBonus">
+        </mat-form-field>
+        <button (click)="updateTransaction(transaction, TransactionState.COMPLETED)">Підтвердити</button>
+      </div>
+      <button (click)="updateTransaction(transaction, TransactionState.CANCELLED)">Відхилити</button>
 <!--      <div ngbAccordionToggle>-->
 <!--        <div>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</div>-->
 <!--        <div>{{transaction.donatorEmail}}</div>-->

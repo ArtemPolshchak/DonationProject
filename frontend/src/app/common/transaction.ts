@@ -11,4 +11,5 @@ export class Transaction {
     contributionAmount!: number;
     totalAmount!: number;
     comment!: string;
+    adminBonus: number = 0;
 }

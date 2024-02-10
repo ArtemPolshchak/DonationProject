@@ -19,15 +19,15 @@ export class AuthService implements OnInit{
      return this.storageService.getUser()?.role
   }
 
-  public isAdmin(): boolean {
+  isAdmin(): boolean {
     return Role.ADMIN === this.getUserRole();
   }
 
-  public isModerator(): boolean {
+  isModerator(): boolean {
     return Role.MODERATOR === this.getUserRole();
   }
 
-  public isGuest(): boolean {
+  isGuest(): boolean {
     return Role.GUEST === this.getUserRole();
   }
 
@@ -43,5 +43,5 @@ export const hasRoleGuard: CanActivateFn = (route, state) => {
 
   const hasRole: boolean = expectedRoles.some((role) => userRole === role);
 
-  return hasRole || router.navigate(['unauthorized']);
+  return hasRole || router.navigate(['login']);
 };

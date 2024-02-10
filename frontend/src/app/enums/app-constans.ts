@@ -7,7 +7,7 @@ export class Role {
 }
 
 export class TransactionState {
-  static readonly IN_PROCESS = 'IN_PROCESS';
+  static readonly IN_PROGRESS = 'IN_PROGRESS';
   static readonly CANCELLED = 'CANCELLED';
   static readonly COMPLETED = 'COMPLETED';
 }

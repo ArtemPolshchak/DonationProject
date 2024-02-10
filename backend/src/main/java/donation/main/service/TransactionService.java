@@ -1,5 +1,6 @@
 package donation.main.service;
 
+import donation.main.dto.TransactionConfirmRequestDto;
 import donation.main.dto.transactiondto.CreateTransactionDto;
 import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
@@ -30,9 +31,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.SortedSet;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +57,7 @@ public class TransactionService {
         return transactionRepository.findAllByState(state, pageable).map(transactionMapper::toDto);
     }
 
-    public TransactionEntity findById(Long transactionId) {
+    public TransactionEntity getById(Long transactionId) {
         return transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new TransactionNotFoundException("Transaction not found with id: " + transactionId));
     }
@@ -68,12 +67,8 @@ public class TransactionService {
         return transactionRepository.findAll(spec, pageable).map(transactionMapper::toDto);
     }
 
-    public TransactionEntity save(TransactionEntity entity) {
-        return transactionRepository.save(entity);
-    }
-
     public TransactionEntity updateTransaction(Long transactionId, UpdateTransactionDto transactionDto) {
-        TransactionEntity existingTransaction = findById(transactionId);
+        TransactionEntity existingTransaction = getById(transactionId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         ServerEntity serverById = serverService.findById(transactionDto.serverId());
@@ -92,27 +87,29 @@ public class TransactionService {
 
     }
 
-    public TransactionEntity updateTransactionState(Long transactionId, TransactionState newState) {
-        TransactionEntity existingTransactionEntity = findById(transactionId);
+    public TransactionEntity adminUpdateTransaction(Long transactionId, TransactionConfirmRequestDto dto) {
+        TransactionEntity transaction = getById(transactionId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        TransactionState state = existingTransactionEntity.getState();
+        TransactionState currentState = transaction.getState();
+        TransactionState newState = TransactionState.valueOf(dto.state());
 
-        if (!transactionStateManager.isAllowedTransitionState(state, newState)) {
-            throw new InvalidTransactionState("This state cannot be set up, check state", newState);
+        if (!transactionStateManager.isAllowedTransitionState(currentState, newState)) {
+            throw new InvalidTransactionState("This state can't be set up, check state", newState);
         }
-        existingTransactionEntity.setState(newState);
+        transaction.setState(newState);
+        transaction.setTotalAmount(transaction.getTotalAmount().add(dto.adminBonus()));
 
-        countDonatorsTotalDonation(newState, existingTransactionEntity);
+        countDonatorsTotalDonation(newState, transaction);
 
-        existingTransactionEntity.setDateApproved(LocalDateTime.now());
+        transaction.setDateApproved(LocalDateTime.now());
         if (approveTransactionByUser(authentication)) {
-            existingTransactionEntity.setApprovedByUser(userService.getCurrentUser());
+            transaction.setApprovedByUser(userService.getCurrentUser());
         }
-        return save(existingTransactionEntity);
+        return transactionRepository.save(transaction);
     }
 
     private void countDonatorsTotalDonation(TransactionState newState, TransactionEntity existingTransactionEntity) {
-        if (newState == TransactionState.COMPLETED) {
+        if (newState.equals(TransactionState.COMPLETED)) {
             BigDecimal amount = existingTransactionEntity
                     .getDonator()
                     .getTotalDonations()

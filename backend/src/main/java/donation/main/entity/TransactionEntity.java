@@ -53,6 +53,9 @@ public class TransactionEntity {
     @Column(name = "total_amount")
     private BigDecimal totalAmount;
 
+    @Column(name = "total_amount")
+    private BigDecimal adminBonus;
+
     //todo set user from security context
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "approved_by_admin_id")
