@@ -6,10 +6,10 @@ import jakarta.validation.constraints.Size;
 
 @Schema(description = "Запрос на аутентификацию")
 public record SignInRequestDto(
-        @Schema(description = "Имя пользователя", example = "admin")
-        @NotBlank(message = "Имя пользователя не может быть пустыми")
-        @Size(min = 5, max = 50, message = "Имя пользователя должно содержать от 5 до 50 символов")
-        String username,
+        @Schema(description = "Почта пользователя", example = "admin@gmail.com")
+        @NotBlank(message = "Почта пользователя не может быть пустыми")
+        @Size(min = 5, max = 50, message = "Почта пользователя должна содержать от 5 до 50 символов")
+        String email,
         @Schema(description = "Пароль", example = "password")
         @NotBlank(message = "Пароль не может быть пустыми")
         @Size(min = 8, max = 255, message = "Длина пароля должна быть от 8 до 255 символов")

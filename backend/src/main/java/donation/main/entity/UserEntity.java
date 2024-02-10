@@ -37,7 +37,7 @@ public class UserEntity implements UserDetails {
 //    @GeneratedValue(strategy = GenerationType.UUID)
 //    private UUID id;
 
-    @Column(name = "username", columnDefinition = "VARCHAR(50)", unique = true, nullable = false)
+    @Column(name = "email", columnDefinition = "VARCHAR(50)", unique = true, nullable = false)
     private String username;
 
     @Column(name = "password", columnDefinition = "VARCHAR(100)", nullable = false)
