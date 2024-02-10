@@ -45,7 +45,7 @@ public class UserService {
     }
 
     public UserDetailsService userDetailsService() {
-        return this::getByUsername;
+        return this::getByEmail;
     }
 
     public UserEntity getCurrentUser() {

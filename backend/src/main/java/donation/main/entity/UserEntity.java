@@ -19,7 +19,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -33,11 +32,7 @@ public class UserEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.UUID)
-//    private UUID id;
-
-    @Column(name = "email", columnDefinition = "VARCHAR(50)", unique = true, nullable = false)
+    @Column(name = "username", columnDefinition = "VARCHAR(50)", unique = true, nullable = false)
     private String username;
 
     @Column(name = "password", columnDefinition = "VARCHAR(100)", nullable = false)
