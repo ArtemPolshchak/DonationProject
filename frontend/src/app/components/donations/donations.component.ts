@@ -10,6 +10,7 @@ import {TransactionService} from "../../services/transaction.service";
 import {Transaction} from "../../common/transaction";
 import { MatDialog } from '@angular/material/dialog';
 import { DonationsdialogComponent } from '../donationsdialog/donationsdialog.component';
+import {TransactionState} from "../../enums/app-constans";
 
 
 @Component({
@@ -58,4 +59,6 @@ export class DonationsComponent implements OnInit{
       // Тут можна додати логіку для обробки результату закриття діалогового вікна
     });
   }
+
+    protected readonly TransactionState = TransactionState;
 }

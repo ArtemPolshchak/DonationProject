@@ -54,7 +54,7 @@ public class TransactionEntity {
     private BigDecimal serverBonusPercentage;
 
     @Column(name = "donator_bonus_percentage")
-    private BigDecimal donatorBonusPercentage;
+    private BigDecimal personalBonusPercentage;
 
     @Column(name = "admin_bonus")
     private BigDecimal adminBonus = BigDecimal.ZERO;
@@ -88,7 +88,7 @@ public class TransactionEntity {
     }
 
     public TransactionEntity setDonatorBonus(BigDecimal donatorBonusPercentage) {
-        this.donatorBonusPercentage = donatorBonusPercentage;
+        this.personalBonusPercentage = donatorBonusPercentage;
         return this;
     }
 
