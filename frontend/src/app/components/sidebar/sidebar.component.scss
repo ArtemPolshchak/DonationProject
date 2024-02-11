@@ -30,7 +30,7 @@
 
 .menu-sidebar .navbar-list .navbar-sub-list{
   display:none;
-  padding-left:34px
+  padding-left:0px
 }
 
 .menu-sidebar .navbar-list .navbar-sub-list li a{
@@ -42,11 +42,6 @@
   height:-webkit-calc(100vh - 75px);
   height:-moz-calc(100vh - 75px);
   height:calc(100vh - 75px)
-}
-
-.navbar-sidebar{
-  padding:35px;
-  padding-bottom:0
 }
 
 .navbar-sidebar .navbar-list li a{
@@ -64,7 +59,20 @@
   color:#0da8e4
 }
 
-.sidebar-list-item{
-  margin-bottom: 12px;
-  width: 100%;
+.mat-button-toggle{
+  background-color: #9cacbc;
+  color: black;
+  padding: 12px;
+  width: 200px;
+}
+
+.mat-button-toggle:hover {
+  background-color: rgba(65, 85, 100, 0.4);
+  color: black;
+}
+
+.mat-button-toggle-checked {
+  background-color: #415564;
+  font-weight: 500;
+  color: #9cacbc;
 }

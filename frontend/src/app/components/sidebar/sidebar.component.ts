@@ -4,6 +4,7 @@ import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {NgbNavModule} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../services/auth.service";
 import {ADMIN_MENU_ITEMS, MODERATOR_MENU_ITEMS} from "../../enums/app-constans";
+import {MatButtonToggle, MatButtonToggleGroup} from "@angular/material/button-toggle";
 
 @Component({
   selector: 'app-sidebar',
@@ -14,7 +15,9 @@ import {ADMIN_MENU_ITEMS, MODERATOR_MENU_ITEMS} from "../../enums/app-constans";
     NgClass,
     NgbNavModule,
     NgForOf,
-    NgIf
+    NgIf,
+    MatButtonToggle,
+    MatButtonToggleGroup
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
