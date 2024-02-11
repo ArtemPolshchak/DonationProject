@@ -1,31 +1,284 @@
-
-<body>
-<div>
-    <h1>Dashboard</h1>
-    <div class="section">
-        <h2>Donations</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>Сервера</th>
-                <th>Имя Сервера</th>
-                <th>Бонусы игроков</th>
-                <th>Бонусы сервера</th>
-
-            </tr>
-            </thead>
-            <tbody>
-
-            <tr *ngFor="let donator of servers">
-                <td> {{ donator.serverName }}</td>
-                <td>Бонусы игроков</td>
-                <td>Бонусы сервера</td>
-
-            </tr>
-            </tbody>
-        </table>
+<div class="col">
+    <div class="main">
+        <div class="row justify-content-between">
+            <div class="col-auto">
+                <div class="name-page">
+                    Сервера
+                </div>
+            </div>
+            <div class="col-auto my-auto">
+                <div class="buttons">
+                    <div class="button" id="remove_server">
+                        <div class="row">
+                            <div class="col-auto pe-0">
+                                <img src="assets/images/trash.svg" alt="">
+                            </div>
+                            <button class="col-auto my-auto ps-0">
+                                УДАЛИТЬ
+                            </button>
+                        </div>
+                    </div>
+                    <div class="button" id="settings_server">
+                        <div class="row">
+                            <div class="col-auto pe-0">
+                                <img src="assets/images/settings.svg" alt="">
+                            </div>
+                            <div class="col-auto my-auto ps-0">
+                                НАСТРОИТЬ
+                            </div>
+                        </div>
+                    </div>
+                    <div class="button" id="add_server">
+                        <div class="row">
+                            <div class="col-auto pe-0">
+                                <img src="assets/images/add.svg" alt="">
+                            </div>
+                            <div class="col-auto my-auto ps-0">
+                                ДОБАВИТЬ
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="search">
+            <div class="row">
+                <div class="col">
+                    <input type="text" name="search" class="search-input" placeholder="Название сервера">
+                </div>
+                <div class="col-auto">
+                    <input type="button" class="search-button" value="ПОИСК">
+                </div>
+            </div>
+        </div>
+        <div class="servers row">
+            <div class="server col-lg-6 col-xxl-4">
+                <div class="row">
+                    <div class="col-auto">
+                        <input type="checkbox" class="checkbox">
+                    </div>
+                    <div class="col">
+                        <div class="box-server">
+                            <div class="title">
+                                Сервер 1
+                            </div>
+                            <div class="name-server">
+                                server_interlude1200
+                            </div>
+                            <div class="server-buttons">
+                                <a href="#" class="button">
+                                    БОНУСЫ ИГРОКОВ
+                                </a>
+                                <a href="#" class="button">
+                                    БОНУСЫ СЕРВЕРА
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="server col-lg-6 col-xxl-4">
+                <div class="row">
+                    <div class="col-auto">
+                        <input type="checkbox" class="checkbox">
+                    </div>
+                    <div class="col">
+                        <div class="box-server">
+                            <div class="title">
+                                Сервер 2
+                            </div>
+                            <div class="name-server">
+                                server_interlude1200
+                            </div>
+                            <div class="server-buttons">
+                                <a href="#" class="button">
+                                    БОНУСЫ ИГРОКОВ
+                                </a>
+                                <a href="#" class="button">
+                                    БОНУСЫ СЕРВЕРА
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="server col-lg-6 col-xxl-4">
+                <div class="row">
+                    <div class="col-auto">
+                        <input type="checkbox" class="checkbox">
+                    </div>
+                    <div class="col">
+                        <div class="box-server">
+                            <div class="title">
+                                Сервер 3
+                            </div>
+                            <div class="name-server">
+                                server_interlude1200
+                            </div>
+                            <div class="server-buttons">
+                                <a href="#" class="button">
+                                    БОНУСЫ ИГРОКОВ
+                                </a>
+                                <a href="#" class="button">
+                                    БОНУСЫ СЕРВЕРА
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="server col-lg-6 col-xxl-4">
+                <div class="row">
+                    <div class="col-auto">
+                        <input type="checkbox" class="checkbox">
+                    </div>
+                    <div class="col">
+                        <div class="box-server">
+                            <div class="title">
+                                Сервер 4
+                            </div>
+                            <div class="name-server">
+                                server_interlude1200
+                            </div>
+                            <div class="server-buttons">
+                                <a href="#" class="button">
+                                    БОНУСЫ ИГРОКОВ
+                                </a>
+                                <a href="#" class="button">
+                                    БОНУСЫ СЕРВЕРА
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- Add more sections here -->
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
-</body>
+<!-- Всплывающее окно настроек сервера -->
+<div class="popup" id="settings">
+    <div class="container">
+        <div class="crest">✕</div>
+        <div class="title">
+            Настройки
+        </div>
+        <div class="form">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="label">
+                        Имя сервера
+                    </div>
+                    <div class="input">
+                        <input type="text" placeholder="Name" name="name">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="label">
+                        URL
+                    </div>
+                    <div class="input">
+                        <input type="text" placeholder="https://" name="url">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="label">
+                        User name
+                    </div>
+                    <div class="input">
+                        <input type="text" placeholder="Name" name="username">
+                    </div>
+                </div>
+                <div class="col-6 mt-2">
+                    <div class="label">
+                        DB
+                    </div>
+                    <div class="input">
+                        <input type="text" placeholder="database" name="database">
+                    </div>
+                </div>
+                <div class="col-6 mt-2">
+                    <div class="label">
+                        Пароль
+                    </div>
+                    <div class="input">
+                        <input type="password" placeholder="*******" name="password">
+                    </div>
+                </div>
+                <div class="col-12 mt-4">
+                    <div class="buttons justify-content-end">
+                        <div class="button">
+                            ТЕСТ
+                        </div>
+                        <div class="button">
+                            СОХРАНИТЬ
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- окно добавления нового сервера -->
+<div class="popup" id="addserver">
+    <div class="container">
+        <div class="crest">✕</div>
+        <div class="title">
+            Добавить сервер
+        </div>
+        <div class="form">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="label">
+                        Имя сервера
+                    </div>
+                    <div class="input">
+                        <input type="text" placeholder="Name" name="name">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="label">
+                        URL
+                    </div>
+                    <div class="input">
+                        <input type="text" placeholder="https://" name="url">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="label">
+                        User name
+                    </div>
+                    <div class="input">
+                        <input type="text" placeholder="Name" name="username">
+                    </div>
+                </div>
+                <div class="col-6 mt-2">
+                    <div class="label">
+                        DB
+                    </div>
+                    <div class="input">
+                        <input type="text" placeholder="database" name="database">
+                    </div>
+                </div>
+                <div class="col-6 mt-2">
+                    <div class="label">
+                        Пароль
+                    </div>
+                    <div class="input">
+                        <input type="password" placeholder="*******" name="password">
+                    </div>
+                </div>
+                <div class="col-12 mt-4">
+                    <div class="buttons justify-content-end">
+                        <div class="button">
+                            ТЕСТ
+                        </div>
+                        <div class="button">
+                            СОХРАНИТЬ
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
