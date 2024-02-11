@@ -22,19 +22,34 @@ export class StorageService {
   }
 
   public getUser(): User | undefined {
-    const token = window.sessionStorage.getItem(TOKEN_KEY);
+    const token = this.getToken();
     if (token) {
       const tokenInfo = this.getDecodedAccessToken(token);
-      return new User(tokenInfo.id, tokenInfo.sub, tokenInfo.email, tokenInfo.role)
+      if (tokenInfo && this.isTokenValid(tokenInfo)) {
+        return new User(tokenInfo.id, tokenInfo.sub, tokenInfo.email, tokenInfo.role);
+      } else {
+        this.signOut();
+      }
     }
     return undefined;
   }
 
-  getDecodedAccessToken(token: string): any {
+  private getDecodedAccessToken(token: string): any {
     try {
       return jwtDecode(token);
     } catch (Error) {
-      return "Can't decode token";
+      console.error("Can't decode token", Error);
+      return null;
     }
+  }
+
+  private isTokenValid(tokenInfo: any): boolean {
+    if (!tokenInfo || !tokenInfo.exp || !tokenInfo.iat) {
+      return false;
+    }
+    const currentTime = Math.floor(Date.now() / 1000);
+
+    return !(tokenInfo.exp <= currentTime || tokenInfo.iat > currentTime);
+
   }
 }
