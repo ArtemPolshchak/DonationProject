@@ -26,9 +26,12 @@ export class TransactionService {
             map(response => response));
     }
 
-    public changeTransactionStatus(transactionId: number, state: string): Observable<void> {
-        const url: string = `api/transactions/state/${transactionId}?state=${state}`;
-        return this.httpClient.put<void>(url, {},  {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}});
+    public changeTransactionStatus(transactionId: number, state: string, adminBonus: number): Observable<void> {
+        const url: string = `api/transactions/${transactionId}/confirm`;
+        let transaction = new Transaction();
+        transaction.adminBonus = adminBonus;
+        transaction.state = state;
+        return this.httpClient.put<void>(url, transaction,  {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}});
     }
 }
 

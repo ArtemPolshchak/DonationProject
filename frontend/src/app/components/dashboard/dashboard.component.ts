@@ -4,6 +4,10 @@ import {CurrencyPipe, DatePipe, NgForOf} from "@angular/common";
 import {TransactionService} from "../../services/transaction.service";
 import {Transaction} from "../../common/transaction";
 import {SidebarComponent} from "../sidebar/sidebar.component";
+import {TransactionState} from "../../enums/app-constans";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {FormsModule} from "@angular/forms";
 
 @Component({
     selector: 'app-dashboard',
@@ -13,16 +17,19 @@ import {SidebarComponent} from "../sidebar/sidebar.component";
         NgForOf,
         DatePipe,
         CurrencyPipe,
-        SidebarComponent
+        SidebarComponent,
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule
     ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-    state: string[] = ["IN_PROGRESS"];
+    state: string[] = [TransactionState.IN_PROGRESS];
     transactions: Transaction[] = [];
     pageNumber: number = 0;
-    pageSize: number = 2;
+    pageSize: number = 10;
 
     constructor(private transactionService: TransactionService) {
     }
@@ -38,19 +45,12 @@ export class DashboardComponent implements OnInit {
             });
     }
 
-    confirmTransaction(transactionId: number): void {
-        this.transactionService.changeTransactionStatus(transactionId, 'COMPLETED')
+    confirmTransaction(transaction: Transaction, state: string): void {
+        this.transactionService.changeTransactionStatus(transaction.id, state, transaction.adminBonus)
             .subscribe(() => {
-                // Оновити список транзакцій після підтвердження
                 this.loadTransactions();
             });
     }
 
-    rejectTransaction(transactionId: number): void {
-        this.transactionService.changeTransactionStatus(transactionId, 'CANCELLED')
-            .subscribe(() => {
-                // Оновити список транзакцій після відхилення
-                this.loadTransactions();
-            });
-    }
+    protected readonly TransactionState = TransactionState;
 }
