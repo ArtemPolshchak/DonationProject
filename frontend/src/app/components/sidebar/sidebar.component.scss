@@ -1,157 +1,78 @@
-.chevron::before {
-  border-style: solid;
-  border-width: 0.15em 0.15em 0 0;
-  content: "";
-  display: inline-block;
-  height: 0.35em;
-  left: 0.15em;
-  position: relative;
-  top: 0.3em;
-  vertical-align: top;
-  width: 0.35em;
+.menu-sidebar{
+  width:200px;
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), 0 0 10px rgba(0, 0, 0, 0.14), 0 0 14px rgba(0, 0, 0, 0.12);
+  background: #9CACBB;
+  overflow-y:auto
 }
-.sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
 
-  height: 100vh;
-  transition: 0.3s;
+.menu-sidebar .logo{
+  height:75px;
+  padding:0 35px;
+  display:-webkit-box;
+  display:-webkit-flex;
+  display:-moz-box;
+  display:-ms-flexbox;
+  display:flex;
+  -webkit-box-align:center;
+  -webkit-align-items:center;
+  -moz-box-align:center;
+  -ms-flex-align:center;
+  align-items:center;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), 0 0 10px rgba(0, 0, 0, 0.14), 0 0 14px rgba(0, 0, 0, 0.12);
+  background: #9CACBB;
+  position:relative;
+  z-index:3
+}
 
-  width: 60px;
-  &.expanded {
-    width: 150px;
+.menu-sidebar .navbar-list .navbar-sub-list{
+  display:none;
+  padding-left:0px
+}
 
-    .header {
-      h1 {
-        margin-left: 0px;
-      }
-      .chevron {
-        margin-left: 0px;
-        &::before {
-          transform: rotate(-135deg);
-        }
-      }
-    }
-    .content {
-      .link {
-        .content {
-          .title {
-            max-width: 100px;
-          }
-          .icon {
-            margin-right: 3px;
-          }
-        }
-        .children {
-          .content {
-            padding-left: 30px;
-          }
-        }
-      }
-    }
-  }
+.menu-sidebar .navbar-list .navbar-sub-list li a{
+  padding:11.5px 0
+}
 
-  background: #1d1e2c;
-  color: #6d6e7e;
+.menu-sidebar-content{
+  position:relative;
+  height:-webkit-calc(100vh - 75px);
+  height:-moz-calc(100vh - 75px);
+  height:calc(100vh - 75px)
+}
 
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
+.navbar-sidebar .navbar-list li a{
+  display:block;
+  color:#555;
+  font-size:16px;
+  padding:5px 0
+}
 
-    background: #0f1017;
+.navbar-sidebar .navbar-list li a i{
+  margin-right:19px
+}
 
-    h1 {
-      font-size: 20px;
-      color: #6d6e7e;
-      margin: 0;
-      flex: 1;
-      transition: 0.3s;
+.navbar-sidebar .navbar-list li a:hover{
+  color:#0da8e4
+}
 
-      margin-left: -100px;
-    }
+.mat-button-toggle{
+  background-color: #9cacbc;
+  color: black;
+  padding: 12px;
+  width: 200px;
+}
 
-    .chevron {
-      color: #6d6e7e;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-left: -25px;
+.mat-button-toggle:hover {
+  background-color: rgba(65, 85, 100, 0.4);
+  color: black;
+}
 
-      padding: 10px;
-      min-width: 20px;
-      height: 20px;
-      display: block;
-      text-align: center;
-
-      &::before {
-        transition: 0.3s;
-        transform: rotate(45deg);
-      }
-
-      &:hover {
-        color: white;
-      }
-    }
-  }
-
-  .content {
-    .link {
-      .children {
-        .content {
-          background: #27283a;
-          // padding-left: 30px;
-          padding-left: 10px;
-
-          &.active {
-            background: #191a27;
-          }
-        }
-      }
-      .content {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 10px;
-
-        cursor: pointer;
-
-        transition: 0.3s;
-
-        &:hover {
-          background: #0f1017;
-          .title {
-            color: white;
-          }
-          svg {
-            fill: white;
-          }
-        }
-
-        &.active {
-          background: #0f1017;
-          .title {
-            color: white;
-          }
-        }
-
-        .icon {
-          flex: 0 0 30px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-right: 0px;
-        }
-        .title {
-          flex: 1;
-          // display: none;
-          color: #6d6e7e;
-          transition: 0.3s;
-          max-width: 0px;
-          overflow: hidden;
-        }
-      }
-    }
-  }
+.mat-button-toggle-checked {
+  background-color: #415564;
+  font-weight: 500;
+  color: #9cacbc;
 }

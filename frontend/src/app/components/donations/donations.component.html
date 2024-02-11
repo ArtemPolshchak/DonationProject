@@ -1,16 +1,26 @@
 <div>
-    <div class="mb-3 d-flex justify-content-between">
+    <div>
         <h1>Список транзакцій</h1>
         <div class="d-flex">
-            <input type="text" class="form-control me-2" placeholder="Пошук...">
             <select class="form-select me-2" aria-label="Статус">
                 <option selected>Статус</option>
                 <option value="IN_PROGRESS">IN_PROGRESS</option>
                 <option value="COMPLETED">COMPLETED</option>
                 <option value="CANCELLED">CANCELLED</option>
             </select>
-            <button class="btn btn-primary">Застосувати фільтр</button>
-            <button class="btn btn-outline-primary ms-2" (click)="openDialog()">Створити нову заявку</button>
+            <button class="button">Застосувати фільтр</button>
+            <button class="button" (click)="openDialog()">Створити нову заявку</button>
+        </div>
+    </div>
+</div>
+
+<div class="search">
+    <div class="row">
+        <div class="col">
+            <input type="text" name="search" class="search-input" placeholder="Название сервера">
+        </div>
+        <div class="col-auto">
+            <input type="button" class="search-button" value="ПОИСК">
         </div>
     </div>
 </div>

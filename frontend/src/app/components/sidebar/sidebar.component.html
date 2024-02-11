@@ -1,9 +1,16 @@
-<div class="menu-sidebar-content js-scrollbar1">
-  <nav class="navbar-sidebar">
-    <ul class="list-unstyled navbar-list">
-      <li *ngFor="let item of menuItems">
-        <a routerLink="/{{item}}" routerLinkActive="active-link">{{item.toUpperCase()}}</a>
-      </li>
-    </ul>
-  </nav>
-</div>
+<aside class="menu-sidebar d-none d-lg-block">
+    <div class="logo">
+        <a href="#">
+            <img src="assets/images/logo.png" alt="Logo" class="img-responsive">
+        </a>
+    </div>
+    <div class="menu-sidebar-content js-scrollbar1">
+        <nav class="navbar-sidebar">
+                <mat-button-toggle-group appearance="legacy" vertical="true">
+                    <ng-container *ngFor="let item of menuItems">
+                        <mat-button-toggle routerLink="/{{item}}">{{item.toUpperCase()}}</mat-button-toggle>
+                    </ng-container>
+                </mat-button-toggle-group>
+        </nav>
+    </div>
+</aside>
