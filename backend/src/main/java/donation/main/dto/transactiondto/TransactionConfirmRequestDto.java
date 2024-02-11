@@ -1,4 +1,4 @@
-package donation.main.dto;
+package donation.main.dto.transactiondto;
 
 import java.math.BigDecimal;
 

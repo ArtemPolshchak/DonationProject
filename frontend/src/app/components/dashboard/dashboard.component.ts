@@ -45,10 +45,9 @@ export class DashboardComponent implements OnInit {
             });
     }
 
-    updateTransaction(transaction: Transaction, state: string): void {
+    confirmTransaction(transaction: Transaction, state: string): void {
         this.transactionService.changeTransactionStatus(transaction.id, state, transaction.adminBonus)
             .subscribe(() => {
-                // Оновити список транзакцій після підтвердження
                 this.loadTransactions();
             });
     }

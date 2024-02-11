@@ -9,6 +9,8 @@ export class Transaction {
     approvedBy?: number;
     state!: string;
     contributionAmount!: number;
+    serverBonusPercentage!: number;
+    personalBonusPercentage!: number;
     totalAmount!: number;
     comment!: string;
     adminBonus: number = 0;

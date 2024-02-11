@@ -1,6 +1,6 @@
 package donation.main.controller;
 
-import donation.main.dto.TransactionConfirmRequestDto;
+import donation.main.dto.transactiondto.TransactionConfirmRequestDto;
 import donation.main.dto.transactiondto.CreateTransactionDto;
 import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
@@ -76,9 +76,9 @@ public class TransactionController {
     }
 
     @Operation(summary = "setup currens TransactionState to new one state")
-    @PutMapping("/confirm/{transactionId}")
+    @PutMapping("/{transactionId}/confirm")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<TransactionEntity> adminUpdateTransaction(
+    public ResponseEntity<TransactionEntity> confirmTransaction(
             @PathVariable Long transactionId, @RequestBody TransactionConfirmRequestDto dto) {
         TransactionEntity updateTransactionState = transactionService.adminUpdateTransaction(transactionId, dto);
         return ResponseEntity.status(HttpStatus.OK).body(updateTransactionState);
