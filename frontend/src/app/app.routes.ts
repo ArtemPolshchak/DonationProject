@@ -5,13 +5,42 @@ import {DonatorsComponent} from "./components/donators/donators.component";
 import {ServerComponent} from "./components/server/server.component";
 import {UserComponent} from "./components/user/user.component";
 import {LoginComponent} from "./components/login/login.component";
+import {UnauthorizedComponent} from "./components/unauthorized/unauthorized.component";
+import {hasRoleGuard} from "./services/auth.service";
+import {Role} from "./enums/app-constans";
 
 export const routes: Routes = [
     {path: '', redirectTo: 'login', pathMatch: "full", },
     {path: 'login', component: LoginComponent},
-    {path: 'dashboard', component: DashboardComponent},
-    {path: 'donations', component: DonationsComponent},
-    {path: 'donators', component: DonatorsComponent},
-    {path: 'servers', component: ServerComponent},
-    {path: 'users', component: UserComponent},
+    {path: 'dashboard',
+        component: DashboardComponent,
+        canActivate: [hasRoleGuard],
+        data: {
+            roles: [ Role.ADMIN ]
+        }},
+    {path: 'donations',
+        component: DonationsComponent,
+        canActivate: [hasRoleGuard],
+        data: {
+            roles: [ Role.ADMIN, Role.MODERATOR ]
+        }},
+    {path: 'donators',
+        component: DonatorsComponent,
+        canActivate: [hasRoleGuard],
+        data: {
+            roles: [ Role.ADMIN ]
+        }},
+    {path: 'servers',
+        component: ServerComponent,
+        canActivate: [hasRoleGuard],
+        data: {
+            roles: [ Role.ADMIN ]
+        }},
+    {path: 'users',
+        component: UserComponent,
+        canActivate: [hasRoleGuard],
+        data: {
+            roles: [ Role.ADMIN ]
+        }},
+    {path: 'unauthorized', component: UnauthorizedComponent},
 ];
