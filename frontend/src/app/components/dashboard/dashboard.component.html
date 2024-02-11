@@ -12,8 +12,8 @@
        [ Почта донатора {{transaction.donatorEmail}}]
        [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]
       </button>
-        <button (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">Підтвердити</button>
-      <button (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">Відхилити</button>
+        <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">Підтвердити</button>
+      <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">Відхилити</button>
 <!--      <div ngbAccordionToggle>-->
 <!--        <div>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</div>-->
 <!--        <div>{{transaction.donatorEmail}}</div>-->

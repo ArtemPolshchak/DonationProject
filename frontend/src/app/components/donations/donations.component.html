@@ -9,7 +9,7 @@
                 <option value="COMPLETED">COMPLETED</option>
                 <option value="CANCELLED">CANCELLED</option>
             </select>
-            <button class="btn btn-primary" (click)="openDialog()">Застосувати фільтр</button>
+            <button class="btn btn-primary">Застосувати фільтр</button>
             <button class="btn btn-outline-primary ms-2" (click)="openDialog()">Створити нову заявку</button>
         </div>
     </div>
@@ -27,12 +27,16 @@
                     [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]
                 </button>
             </h2>
+            <button class="btn btn-outline-primary ms-2" (click)="openDialog()">ИЗМЕНИТЬ</button>
             <div ngbAccordionCollapse>
                 <div ngbAccordionBody>
                     <ng-template>
                         [Кто создал {{transaction.createdBy}}]
                         [Кто подтвердил {{transaction.approvedBy}}]
                         [Картинка {{transaction.imageUrl}}]
+                        [бонусы Сервера {{transaction.serverBonusPercentage}}%]
+                        [Бонысы Донатора {{transaction.personalBonusPercentage}}%]
+                        [Бонысы Админа {{transaction.adminBonus}}]
                         [сумма зачисления  {{transaction.contributionAmount}}]
                         [Общая сумма доната  {{transaction.totalAmount}}]
                         [Состояние заявки {{transaction.state}}]
