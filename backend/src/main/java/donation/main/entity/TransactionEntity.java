@@ -12,10 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -53,6 +50,15 @@ public class TransactionEntity {
     @Column(name = "total_amount")
     private BigDecimal totalAmount;
 
+    @Column(name = "server_bonus_percentage")
+    private BigDecimal serverBonusPercentage;
+
+    @Column(name = "donator_bonus_percentage")
+    private BigDecimal donatorBonusPercentage;
+
+    @Column(name = "admin_bonus")
+    private BigDecimal adminBonus = BigDecimal.ZERO;
+
     //todo set user from security context
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "approved_by_admin_id")
@@ -71,4 +77,28 @@ public class TransactionEntity {
     @JoinColumn(name = "server_id")
     private ServerEntity server;
 
+    public TransactionEntity setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+        return this;
+    }
+
+    public TransactionEntity setServerBonusPercentage(BigDecimal serverBonus) {
+        this.serverBonusPercentage = serverBonus;
+        return this;
+    }
+
+    public TransactionEntity setDonatorBonus(BigDecimal donatorBonusPercentage) {
+        this.donatorBonusPercentage = donatorBonusPercentage;
+        return this;
+    }
+
+    public TransactionEntity setDonator(DonatorEntity donator) {
+        this.donator = donator;
+        return this;
+    }
+
+    public TransactionEntity setServer(ServerEntity server) {
+        this.server = server;
+        return this;
+    }
 }

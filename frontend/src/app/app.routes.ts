@@ -42,5 +42,4 @@ export const routes: Routes = [
         data: {
             roles: [ Role.ADMIN ]
         }},
-    {path: 'unauthorized', component: UnauthorizedComponent},
 ];
