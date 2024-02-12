@@ -12,7 +12,7 @@ export class TransactionService {
     }
 
     public getAllWithSearch(pageNumber?: number, pageSize?: number, state?: string[]) {
-        const url: string = `api/transactions/search?state=${state}&page=${pageNumber}&pageSize=${pageSize}`
+        const url: string = `api/transactions/search?state=${state}&page=${pageNumber}&size=${pageSize}`
 
         console.log(url)
         return this.httpClient.get<GetTransactionResponse>(url, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}}).pipe(
@@ -20,7 +20,7 @@ export class TransactionService {
     }
 
     public getAll(pageNumber?: number, pageSize?: number, state?: string[]) {
-        const url: string = `api/transactions?page=${pageNumber}&pageSize=${pageSize}`
+        const url: string = `api/transactions?page=${pageNumber}&size=${pageSize}`
         console.log(url)
         return this.httpClient.get<GetTransactionResponse>(url, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}}).pipe(
             map(response => response));
@@ -35,7 +35,7 @@ export class TransactionService {
     }
 }
 
-interface GetTransactionResponse {
+export interface GetTransactionResponse {
     content: Transaction[];
     pageable: {
         pageNumber: number;
