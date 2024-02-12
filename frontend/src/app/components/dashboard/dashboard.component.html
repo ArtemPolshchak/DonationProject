@@ -6,7 +6,6 @@
   <div class="item" ngbAccordionItem="{{transaction.id}}">
     <h2 ngbAccordionHeader>
       <button ngbAccordionButton>
-        <button> </button>
        [ Дата создания {{transaction.dateCreated | date: 'dd MMMM yyyy'}}]
        [ Айди сервера {{ transaction.serverName}}]
        [ Почта донатора {{transaction.donatorEmail}}]
@@ -40,3 +39,10 @@
     </div>
   </div>
 </div>
+
+<mat-paginator [length]="totalElements"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="[5, 10, 25, 100]"
+               [showFirstLastButtons]="true"
+               (page)="onPageChange($event)">
+</mat-paginator>
