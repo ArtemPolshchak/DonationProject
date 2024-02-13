@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit {
     }
 
     confirmTransaction(transaction: Transaction, state: string): void {
-        this.transactionService.changeTransactionStatus(transaction.id, state, transaction.adminBonus)
+        this.transactionService.confirmById(transaction.id, state, transaction.adminBonus)
             .subscribe(() => {
                 this.loadTransactions();
             });

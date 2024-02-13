@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Transaction} from "../common/transaction";
 import {map, Observable} from "rxjs";
 
@@ -19,19 +19,27 @@ export class TransactionService {
             map(response => response));
     }
 
-    public getAll(pageNumber?: number, pageSize?: number, state?: string[]) {
+    public getAll(pageNumber?: number, pageSize?: number) {
         const url: string = `api/transactions?page=${pageNumber}&pageSize=${pageSize}`
         console.log(url)
         return this.httpClient.get<GetTransactionResponse>(url, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}}).pipe(
             map(response => response));
     }
 
-    public changeTransactionStatus(transactionId: number, state: string, adminBonus: number): Observable<void> {
+    public confirmById(transactionId: number, state: string, adminBonus: number): Observable<void> {
         const url: string = `api/transactions/${transactionId}/confirm`;
         let transaction = new Transaction();
         transaction.adminBonus = adminBonus;
         transaction.state = state;
-        return this.httpClient.put<void>(url, transaction,  {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}});
+        return this.httpClient.put<void>(url, transaction,
+            {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}});
+    }
+
+    public updateById(transaction: Transaction) {
+        const url: string = `api/transactions/${transaction.id}`;
+        return this.httpClient.put<void>(url, transaction,  {
+            headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}
+        });
     }
 }
 

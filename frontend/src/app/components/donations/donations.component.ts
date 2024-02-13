@@ -9,7 +9,7 @@ import {
 import {TransactionService} from "../../services/transaction.service";
 import {Transaction} from "../../common/transaction";
 import { MatDialog } from '@angular/material/dialog';
-import {DonationsDialogComponent} from "../donations.dialog/donations-dialog.component";
+import {DonationsDialogComponent} from "./donations.dialog/donations-dialog.component";
 
 
 @Component({
@@ -30,7 +30,6 @@ import {DonationsDialogComponent} from "../donations.dialog/donations-dialog.com
   styleUrl: './donations.component.scss'
 })
 export class DonationsComponent implements OnInit{
-
   transactions: Transaction[] = [];
   pageNumber: number = 0;
   pageSize: number = 1;
@@ -41,17 +40,17 @@ export class DonationsComponent implements OnInit{
 
 
   ngOnInit(): void {
-    this.transactionService.getAll(this.pageNumber, this.pageSize, this.state).subscribe(data =>
+    this.transactionService.getAll(this.pageNumber, this.pageSize).subscribe(data =>
     this.transactions = data.content)
   }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(DonationsDialogComponent, {
-      width: '600px',
+      width: '50%',
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      this.transactionService.updateById(result);
     });
   }
 }
