@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {MatPaginator, PageEvent } from "@angular/material/paginator";
 import {MatCheckbox, MatCheckboxModule} from "@angular/material/checkbox";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {DonationsDialogComponent} from "./donations.dialog/donations-dialog.component";
+import {CreateTransactionDialog} from "./donations.dialog/create.transaction/create-transaction-dialog.component";
 
 
 
@@ -79,7 +79,7 @@ export class DonationsComponent implements OnInit{
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(DonationsDialogComponent, {
+    const dialogRef = this.dialog.open(CreateTransactionDialog, {
       width: '50%',
     });
 

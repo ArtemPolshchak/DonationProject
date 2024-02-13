@@ -49,6 +49,14 @@ export class TransactionService {
             headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}
         });
     }
+
+    public create(transaction: Transaction) {
+        const url: string = `api/transactions`;
+        console.log(url);
+        return this.httpClient.post<void>(url, transaction,  {
+            headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}
+        });
+    }
 }
 
 export interface GetTransactionResponse {
