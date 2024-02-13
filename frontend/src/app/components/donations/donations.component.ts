@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {CurrencyPipe, DatePipe, NgForOf} from "@angular/common";
+import {CurrencyPipe, DatePipe, JsonPipe, NgForOf} from "@angular/common";
 import {
   NgbAccordionBody,
   NgbAccordionButton,
@@ -9,12 +9,11 @@ import {
 import {TransactionService} from "../../services/transaction.service";
 import {Transaction} from "../../common/transaction";
 import { MatDialog } from '@angular/material/dialog';
-import { DonationsdialogComponent } from '../donationsdialog/donationsdialog.component';
 import {MatPaginator, PageEvent } from "@angular/material/paginator";
-import {MatCheckbox} from "@angular/material/checkbox";
+import {MatCheckbox, MatCheckboxModule} from "@angular/material/checkbox";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {JsonPipe} from '@angular/common';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import {DonationsDialogComponent} from "./donations.dialog/donations-dialog.component";
+
 
 
 @Component({
@@ -80,7 +79,7 @@ export class DonationsComponent implements OnInit{
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(DonationsdialogComponent, {
+    const dialogRef = this.dialog.open(DonationsDialogComponent, {
       width: '600px',
     });
 
