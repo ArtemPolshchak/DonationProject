@@ -13,8 +13,8 @@ import {MatPaginator, PageEvent } from "@angular/material/paginator";
 import {MatCheckbox, MatCheckboxModule} from "@angular/material/checkbox";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CreateTransactionDialog} from "./donations.dialog/create.transaction/create-transaction-dialog.component";
-
-
+import {MatInput} from "@angular/material/input";
+import {Server} from "../../common/server";
 
 @Component({
   selector: 'app-transaction',
@@ -31,7 +31,7 @@ import {CreateTransactionDialog} from "./donations.dialog/create.transaction/cre
     NgbAccordionItem,
     MatPaginator,
     MatCheckbox,
-    FormsModule, ReactiveFormsModule, MatCheckboxModule, JsonPipe
+    FormsModule, ReactiveFormsModule, MatCheckboxModule, JsonPipe, MatInput
   ],
   templateUrl: './donations.component.html',
   styleUrl: './donations.component.scss'
@@ -43,7 +43,13 @@ export class DonationsComponent implements OnInit{
   totalElements: number = 0;
   state: string[] = ["IN_PROGRESS", "CANCELLED", "COMPLETED"];
   serverNames?: string[];
-  donatorMails?: string[];
+  donatorMails?: string;
+  sortState?: string = "dateCreated,desc";
+  stateFilter: string = "";
+  servers: Server[] = [];
+  selectedServer: string = "";
+
+
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -60,11 +66,26 @@ export class DonationsComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.getFeedbackPage();
+    this.getTransactionPage();
+    const serversData = sessionStorage.getItem('servers');
+    if (serversData) {
+      this.servers = JSON.parse(serversData);
+    }
   }
 
-  getFeedbackPage(): void {
-    this.transactionService.getAllWithSearch(this.serverNames, this.donatorMails, this.state, this.pageNumber, this.pageSize)
+  applyFilterSortSearch(): void {
+    this.state = [];
+    if (this.stateFilter !== '') {
+      this.state.push(this.stateFilter);
+    }
+    this.serverNames = this.selectedServer ? [this.selectedServer] : undefined;
+    this.getTransactionPage();
+  }
+
+
+  getTransactionPage(): void {
+
+    this.transactionService.getAllWithSearch(this.serverNames, this.donatorMails, this.state, this.pageNumber, this.pageSize, this.sortState)
         .subscribe((response) => {
           this.transactions = response.content;
           this.totalElements = response.totalElements;
@@ -74,17 +95,13 @@ export class DonationsComponent implements OnInit{
   onPageChange(event: PageEvent): void {
     this.pageNumber = event.pageIndex;
     this.pageSize = event.pageSize;
-
-    this.getFeedbackPage();
+    this.getTransactionPage();
   }
 
-  openDialog(): void {
+  openCreateTransactionDialog(): void {
     const dialogRef = this.dialog.open(CreateTransactionDialog, {
       width: '50%',
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.transactionService.updateById(result);
+      data: this.servers,
     });
   }
 }
