@@ -1,29 +1,50 @@
+<section class="example-section" [formGroup]="toppings">
+    <h4>Select your toppings:</h4>
+    <p><mat-checkbox formControlName="pepperoni">Pepperoni</mat-checkbox></p>
+    <p><mat-checkbox formControlName="extracheese">Extra Cheese</mat-checkbox></p>
+    <p><mat-checkbox formControlName="mushroom">Mushroom</mat-checkbox></p>
+</section>
+
+<section class="example-section" [formGroup]="toppings">
+    <h4>You chose:</h4>
+    {{toppings.value | json}}
+</section>
+
 <div>
+    <h1>Донаты</h1>
     <div>
-        <h1>Список транзакцій</h1>
         <div class="d-flex">
+            <button class="button">ИСПОЛЬЗОВАТЬ СОРТИРОВКУ</button>
             <select class="form-select me-2" aria-label="Статус">
-                <option selected>Статус</option>
-                <option value="IN_PROGRESS">IN_PROGRESS</option>
-                <option value="COMPLETED">COMPLETED</option>
-                <option value="CANCELLED">CANCELLED</option>
+                <option selected>СОРТИРОВКА</option>
+                <option value="CANCELLED">ПО ДАТЕ ОТ СТАРЫХ К НОВЫМ</option>
+                <option value="CANCELLED">ПО ДАТЕ ОТ НОВЫХ К СТАРЫМ</option>
             </select>
-            <button class="button">Застосувати фільтр</button>
-            <button class="button" (click)="openDialog()">Створити нову заявку</button>
+            <button class="button">ИСПОЛЬЗОВАТЬ ФИЛЬТР</button>
+            <select class="form-select me-2" aria-label="Статус">
+                <option selected>фИЛЬТР</option>
+
+                <option value="IN_PROGRESS">ЗАЯВКИ ОЖИДАЮТ ПОДТВЕРЖДЕНИЯ</option>
+                <option value="COMPLETED">ЗАЯВКИ ПОДТВЕРЖДЕНЫ</option>
+                <option value="CANCELLED">ЗАЯВКИ ОТМЕНЕНЫ</option>
+            </select>
+            <button class="button" (click)="openDialog()">СОЗДАТЬ ЗАЯВКУ</button>
         </div>
     </div>
 </div>
-
 <div class="search">
     <div class="row">
         <div class="col">
-            <input type="text" name="search" class="search-input" placeholder="Название сервера">
+            <input type="text" name="search" class="search-input" placeholder="Почта донатора">
         </div>
         <div class="col-auto">
             <input type="button" class="search-button" value="ПОИСК">
         </div>
     </div>
+
+
 </div>
+
 
 <div class="transactions-list">
     <div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
