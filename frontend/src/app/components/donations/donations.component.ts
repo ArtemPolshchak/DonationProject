@@ -9,8 +9,7 @@ import {
 import {TransactionService} from "../../services/transaction.service";
 import {Transaction} from "../../common/transaction";
 import { MatDialog } from '@angular/material/dialog';
-import { DonationsdialogComponent } from '../donationsdialog/donationsdialog.component';
-import {TransactionState} from "../../enums/app-constans";
+import {DonationsDialogComponent} from "../donations.dialog/donations-dialog.component";
 
 
 @Component({
@@ -32,7 +31,6 @@ import {TransactionState} from "../../enums/app-constans";
 })
 export class DonationsComponent implements OnInit{
 
-
   transactions: Transaction[] = [];
   pageNumber: number = 0;
   pageSize: number = 1;
@@ -48,17 +46,12 @@ export class DonationsComponent implements OnInit{
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(DonationsdialogComponent, {
-      width: '600px', // Установіть ширину вікна за вашими вимогами
-      // Можна також передати будь-які дані у компонент діалогового вікна
-      // data: { /* ваші дані */ }
+    const dialogRef = this.dialog.open(DonationsDialogComponent, {
+      width: '600px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      // Тут можна додати логіку для обробки результату закриття діалогового вікна
     });
   }
-
-    protected readonly TransactionState = TransactionState;
 }
