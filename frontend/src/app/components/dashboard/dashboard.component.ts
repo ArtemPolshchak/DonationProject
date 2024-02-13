@@ -34,6 +34,8 @@ export class DashboardComponent implements OnInit {
     pageNumber: number = 0;
     pageSize: number = 5;
     totalElements: number = 0;
+    serverNames?: string[];
+    donatorMails?: string[];
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
     constructor(private transactionService: TransactionService,  private dialog: MatDialog) {
@@ -44,7 +46,7 @@ export class DashboardComponent implements OnInit {
     }
 
     getFeedbackPage(): void {
-        this.transactionService.getAllWithSearch(this.pageNumber, this.pageSize, this.state)
+        this.transactionService.getAllWithSearch(this.serverNames, this.donatorMails, this.state, this.pageNumber, this.pageSize)
             .subscribe((response) => {
                 this.transactions = response.content;
                 this.totalElements = response.totalElements;

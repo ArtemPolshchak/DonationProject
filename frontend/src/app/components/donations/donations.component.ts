@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {CurrencyPipe, DatePipe, NgForOf} from "@angular/common";
+import {CurrencyPipe, DatePipe, JsonPipe, NgForOf} from "@angular/common";
 import {
   NgbAccordionBody,
   NgbAccordionButton,
@@ -9,8 +9,11 @@ import {
 import {TransactionService} from "../../services/transaction.service";
 import {Transaction} from "../../common/transaction";
 import { MatDialog } from '@angular/material/dialog';
-import { DonationsdialogComponent } from '../donationsdialog/donationsdialog.component';
 import {MatPaginator, PageEvent } from "@angular/material/paginator";
+import {MatCheckbox, MatCheckboxModule} from "@angular/material/checkbox";
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {DonationsDialogComponent} from "./donations.dialog/donations-dialog.component";
+
 
 
 @Component({
@@ -26,7 +29,9 @@ import {MatPaginator, PageEvent } from "@angular/material/paginator";
     NgbAccordionDirective,
     NgbAccordionHeader,
     NgbAccordionItem,
-    MatPaginator
+    MatPaginator,
+    MatCheckbox,
+    FormsModule, ReactiveFormsModule, MatCheckboxModule, JsonPipe
   ],
   templateUrl: './donations.component.html',
   styleUrl: './donations.component.scss'
@@ -37,12 +42,21 @@ export class DonationsComponent implements OnInit{
   pageSize: number = 5;
   totalElements: number = 0;
   state: string[] = ["IN_PROGRESS", "CANCELLED", "COMPLETED"];
+  serverNames?: string[];
+  donatorMails?: string[];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  toppings = this._formBuilder.group({
+    pepperoni: false,
+    extracheese: false,
+    mushroom: false,
+  });
+
   constructor(
       private transactionService: TransactionService,
-      private dialog: MatDialog
+      private dialog: MatDialog,
+      private _formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -50,28 +64,22 @@ export class DonationsComponent implements OnInit{
   }
 
   getFeedbackPage(): void {
-    this.transactionService.getAllWithSearch(this.pageNumber, this.pageSize, this.state)
+    this.transactionService.getAllWithSearch(this.serverNames, this.donatorMails, this.state, this.pageNumber, this.pageSize)
         .subscribe((response) => {
           this.transactions = response.content;
           this.totalElements = response.totalElements;
-          console.log("transactions.length-----" + this.transactions.length)
-          console.log("page number-----" + this.pageNumber)
-          console.log("page size---------" + this.pageSize)
-          console.log("page state------" + this.state)
-          console.log("page totalElements------" + this.totalElements)
         });
   }
 
   onPageChange(event: PageEvent): void {
     this.pageNumber = event.pageIndex;
     this.pageSize = event.pageSize;
-    console.log('Page size======:', this.pageSize);
-    console.log('pageNumber=========:', this.pageNumber);
+
     this.getFeedbackPage();
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(DonationsdialogComponent, {
+    const dialogRef = this.dialog.open(DonationsDialogComponent, {
       width: '600px',
     });
 
