@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgbAccordionModule} from "@ng-bootstrap/ng-bootstrap";
 import {CurrencyPipe, DatePipe, NgForOf} from "@angular/common";
 import {TransactionService} from "../../services/transaction.service";
@@ -8,6 +8,8 @@ import {TransactionState} from "../../enums/app-constans";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
     selector: 'app-dashboard',
@@ -20,7 +22,8 @@ import {FormsModule} from "@angular/forms";
         SidebarComponent,
         MatFormFieldModule,
         MatInputModule,
-        FormsModule
+        FormsModule,
+        MatPaginator
     ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
@@ -29,26 +32,39 @@ export class DashboardComponent implements OnInit {
     state: string[] = [TransactionState.IN_PROGRESS];
     transactions: Transaction[] = [];
     pageNumber: number = 0;
-    pageSize: number = 10;
+    pageSize: number = 5;
+    totalElements: number = 0;
+    serverNames?: string[];
+    donatorMails?: string[];
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-    constructor(private transactionService: TransactionService) {
+    constructor(private transactionService: TransactionService,  private dialog: MatDialog) {
     }
 
     ngOnInit(): void {
-        this.loadTransactions();
+        this.getFeedbackPage();
     }
 
-    loadTransactions(): void {
-        this.transactionService.getAllWithSearch(this.pageNumber, this.pageSize, this.state)
-            .subscribe(data => {
-                this.transactions = data.content;
+    getFeedbackPage(): void {
+        this.transactionService.getAllWithSearch(this.serverNames, this.donatorMails, this.state, this.pageNumber, this.pageSize)
+            .subscribe((response) => {
+                this.transactions = response.content;
+                this.totalElements = response.totalElements;
             });
     }
+
+    onPageChange(event: PageEvent): void {
+        this.pageNumber = event.pageIndex;
+        this.pageSize = event.pageSize;
+        this.getFeedbackPage();
+    }
+
+
 
     confirmTransaction(transaction: Transaction, state: string): void {
         this.transactionService.confirmById(transaction.id, state, transaction.adminBonus)
             .subscribe(() => {
-                this.loadTransactions();
+                this.getFeedbackPage();
             });
     }
 

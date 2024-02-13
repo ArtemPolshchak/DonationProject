@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {CurrencyPipe, DatePipe, NgForOf} from "@angular/common";
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {CurrencyPipe, DatePipe, JsonPipe, NgForOf} from "@angular/common";
 import {
   NgbAccordionBody,
   NgbAccordionButton,
@@ -9,7 +9,11 @@ import {
 import {TransactionService} from "../../services/transaction.service";
 import {Transaction} from "../../common/transaction";
 import { MatDialog } from '@angular/material/dialog';
+import {MatPaginator, PageEvent } from "@angular/material/paginator";
+import {MatCheckbox, MatCheckboxModule} from "@angular/material/checkbox";
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DonationsDialogComponent} from "./donations.dialog/donations-dialog.component";
+
 
 
 @Component({
@@ -24,7 +28,10 @@ import {DonationsDialogComponent} from "./donations.dialog/donations-dialog.comp
     NgbAccordionCollapse,
     NgbAccordionDirective,
     NgbAccordionHeader,
-    NgbAccordionItem
+    NgbAccordionItem,
+    MatPaginator,
+    MatCheckbox,
+    FormsModule, ReactiveFormsModule, MatCheckboxModule, JsonPipe
   ],
   templateUrl: './donations.component.html',
   styleUrl: './donations.component.scss'
@@ -32,16 +39,43 @@ import {DonationsDialogComponent} from "./donations.dialog/donations-dialog.comp
 export class DonationsComponent implements OnInit{
   transactions: Transaction[] = [];
   pageNumber: number = 0;
-  pageSize: number = 1;
+  pageSize: number = 5;
+  totalElements: number = 0;
   state: string[] = ["IN_PROGRESS", "CANCELLED", "COMPLETED"];
-  sortField: string = "dateCreated"
-  sortCriteria: string = "desc"
-  constructor(private transactionService: TransactionService, public dialog: MatDialog) {}
+  serverNames?: string[];
+  donatorMails?: string[];
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  toppings = this._formBuilder.group({
+    pepperoni: false,
+    extracheese: false,
+    mushroom: false,
+  });
+
+  constructor(
+      private transactionService: TransactionService,
+      private dialog: MatDialog,
+      private _formBuilder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
-    this.transactionService.getAll(this.pageNumber, this.pageSize).subscribe(data =>
-    this.transactions = data.content)
+    this.getFeedbackPage();
+  }
+
+  getFeedbackPage(): void {
+    this.transactionService.getAllWithSearch(this.serverNames, this.donatorMails, this.state, this.pageNumber, this.pageSize)
+        .subscribe((response) => {
+          this.transactions = response.content;
+          this.totalElements = response.totalElements;
+        });
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.pageNumber = event.pageIndex;
+    this.pageSize = event.pageSize;
+
+    this.getFeedbackPage();
   }
 
   openDialog(): void {

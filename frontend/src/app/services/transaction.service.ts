@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Transaction} from "../common/transaction";
 import {map, Observable} from "rxjs";
 
@@ -11,12 +11,20 @@ export class TransactionService {
     constructor(private httpClient: HttpClient) {
     }
 
-    public getAllWithSearch(pageNumber?: number, pageSize?: number, state?: string[]) {
-        const url: string = `api/transactions/search?state=${state}&page=${pageNumber}&pageSize=${pageSize}`
+    public getAllWithSearch(serverNames?: string[], donatorMails?: string[], state?: string[], pageNumber?: number, pageSize?: number ) {
+        let params = new HttpParams();
 
-        console.log(url)
-        return this.httpClient.get<GetTransactionResponse>(url, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}}).pipe(
-            map(response => response));
+        params = (serverNames && serverNames.length > 0) ? params.set('serverNames', serverNames.join(',')) : params;
+        params = (donatorMails && donatorMails.length > 0) ? params.set('donatorMails', donatorMails.join(',')) : params;
+        params = (state && state.length > 0) ? params.set('state', state.join(',')) : params;
+        params = (pageNumber) ? params.set('page', pageNumber.toString()) : params;
+        params = (pageSize) ? params.set('size', pageSize.toString()) : params;
+
+        const url: string = 'api/transactions/search';
+
+        return this.httpClient.get<GetTransactionResponse>(url, { params: params, headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')} }).pipe(
+            map(response => response)
+        );
     }
 
     public getAll(pageNumber?: number, pageSize?: number) {
@@ -43,7 +51,7 @@ export class TransactionService {
     }
 }
 
-interface GetTransactionResponse {
+export interface GetTransactionResponse {
     content: Transaction[];
     pageable: {
         pageNumber: number;

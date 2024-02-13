@@ -14,6 +14,12 @@
   /* Додайте інші стилі за потреби */
 }
 
+.paginator {
+  width: auto;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+
+}
+
 .button {
   background: #425565;
   color: #C5CCD3;
@@ -49,4 +55,8 @@
       outline: none;
     }
   }
+}
+
+.example-section {
+  margin: 12px 0;
 }
