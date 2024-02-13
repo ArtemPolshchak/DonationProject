@@ -14,20 +14,27 @@
     <h1>Донаты</h1>
     <div>
         <div class="d-flex">
-            <button class="button">ИСПОЛЬЗОВАТЬ СОРТИРОВКУ</button>
-            <select class="form-select me-2" aria-label="Статус">
-                <option selected>СОРТИРОВКА</option>
-                <option value="CANCELLED">ПО ДАТЕ ОТ СТАРЫХ К НОВЫМ</option>
-                <option value="CANCELLED">ПО ДАТЕ ОТ НОВЫХ К СТАРЫМ</option>
+<!--            <button class="button" (click)="applyFilterSortSearch()">ИСПОЛЬЗОВАТЬ СОРТИРОВКУ</button>-->
+            <select class="form-select me-2" aria-label="Сорт" [(ngModel)]="sortState" (change)="applyFilterSortSearch()">
+                <option selected disabled hidden>СОРТИРОВКА</option>
+                <option value="dateCreated,asc">ПО ДАТЕ ОТ СТАРЫХ К НОВЫМ</option>
+                <option value="dateCreated,desc">ПО ДАТЕ ОТ НОВЫХ К СТАРЫМ</option>
             </select>
-            <button class="button">ИСПОЛЬЗОВАТЬ ФИЛЬТР</button>
-            <select class="form-select me-2" aria-label="Статус">
-                <option selected>фИЛЬТР</option>
 
+<!--            <button class="button" (click)="applyFilterSortSearch()">ИСПОЛЬЗОВАТЬ ФИЛЬТР</button>-->
+            <select class="form-select me-2" aria-label="Фильтр" [(ngModel)]="stateFilter" (change)="applyFilterSortSearch()">
+                <option selected disabled hidden>фИЛЬТР</option>
+                <option value="">ВСЕ ЗАЯВКИ</option>
                 <option value="IN_PROGRESS">ЗАЯВКИ ОЖИДАЮТ ПОДТВЕРЖДЕНИЯ</option>
                 <option value="COMPLETED">ЗАЯВКИ ПОДТВЕРЖДЕНЫ</option>
                 <option value="CANCELLED">ЗАЯВКИ ОТМЕНЕНЫ</option>
             </select>
+
+            <select class="form-select me-2" aria-label="Сервер" [(ngModel)]="selectedServer" (change)="applyFilterSortSearch()">
+                <option selected disabled hidden>Оберіть сервер</option>
+                <option *ngFor="let server of servers" [value]="server.serverName">{{ server.serverName }}</option>
+            </select>
+
             <button class="button" (click)="openDialog()">СОЗДАТЬ ЗАЯВКУ</button>
         </div>
     </div>
@@ -35,10 +42,11 @@
 <div class="search">
     <div class="row">
         <div class="col">
-            <input type="text" name="search" class="search-input" placeholder="Почта донатора">
+            <input type="text" name="search" class="search-input" placeholder="Почта донатора" matInput [(ngModel)]="donatorMails">
         </div>
         <div class="col-auto">
-            <input type="button" class="search-button" value="ПОИСК">
+            <input type="button" class="search-button" value="ПОИСК" (click)="applyFilterSortSearch()">
+
         </div>
     </div>
 
