@@ -53,6 +53,10 @@ export class CreateTransactionDialog{
         this.servers = data;
     }
 
+    isFormValid(){
+       return this.serverControl.valid && this.contributionControl.valid && this.emailControl.valid;
+    }
+
     createTransaction() {
         this.transaction.serverId = this.serverControl.value!.id
         this.transaction.contributionAmount = Number(this.contributionControl.value!);

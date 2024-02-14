@@ -33,7 +33,7 @@
 
 <mat-dialog-actions align="start">
     <button class="cancel-button" mat-button mat-dialog-close>Cancel</button>
-    <button class="ok-button" mat-button (click)="createTransaction()" mat-dialog-close>SendRequest</button>
+    <button class="ok-button" mat-button (click)="createTransaction()" [disabled]="!isFormValid()" mat-dialog-close>SendRequest</button>
 </mat-dialog-actions>
 
 

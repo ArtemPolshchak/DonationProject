@@ -36,7 +36,6 @@ public class UserEntity implements UserDetails {
     private String username;
 
     @Column(name = "password", columnDefinition = "VARCHAR(100)", nullable = false)
-    /*@JsonIgnore*/
     private String password;
 
     @Column(name = "email", columnDefinition = "VARCHAR(100)", unique = true, nullable = false)
