@@ -41,6 +41,13 @@ export class TransactionService {
         transaction.state = state;
         return this.httpClient.put<void>(url, transaction,  {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}});
     }
+
+    public getAllTransactionsFromOneDonator(donatorId: number, pageNumber?: number, pageSize?: number, sort?: string) {
+        const url: string = `api/transactions/donators?id=${donatorId}&page=${pageNumber}&size=${pageSize}&sort=${sort}`;
+        return this.httpClient.get<GetTransactionResponse>(url, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}}).pipe(
+            map(response => response));
+
+    }
 }
 
 export interface GetTransactionResponse {

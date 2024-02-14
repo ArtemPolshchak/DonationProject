@@ -1,32 +1,46 @@
-
 <body>
-<div>
-    <h1>Донаторы</h1>
-    <div class="section">
+<h1>Донаторы</h1>
+<div class="search">
+    <div class="row">
+        <div class="col">
+            <input type="text" name="search" class="search-input" placeholder="Почта донатора" matInput [(ngModel)]="donatorsMail">
+        </div>
+        <div class="col-auto">
+            <input type="button" class="search-button" value="ПОИСК" (click)="applySearch()">
 
+        </div>
+    </div>
+</div>
+<div>
+    <div class="section">
         <table>
             <thead>
             <tr>
                 <th>Почта Донатора</th>
                 <th>Общая сумма доната</th>
-                <th>Amount</th>
-                <th>Comment</th>
-                <th>Filled by</th>
+
             </tr>
             </thead>
             <tbody>
-
             <tr *ngFor="let donator of donators">
                 <td> {{ donator.email }}</td>
                 <td> {{ donator.totalDonations }}</td>
-                <td>server</td>
-                <td>server</td>
-
+                <td> <button class="button" (click)="goToDonatorStory(donator.id, donator.email, donator.totalDonations)">ИСТОРИЯ</button></td>
             </tr>
+
             </tbody>
+
         </table>
     </div>
+
     <!-- Add more sections here -->
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+
+<mat-paginator [length]="totalElements"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="[5, 10, 25, 100]"
+               [showFirstLastButtons]="true"
+               (page)="onPageChange($event)">
+</mat-paginator>
 </body>

@@ -44,7 +44,7 @@ export class DonationsComponent implements OnInit{
   totalElements: number = 0;
   state: string[] = ["IN_PROGRESS", "CANCELLED", "COMPLETED"];
   serverNames?: string[];
-  donatorMails?: string;
+  donatorsMail?: string;
   sortState?: string = "dateCreated,desc";
   stateFilter: string = "";
   servers: Server[] = [];
@@ -88,7 +88,7 @@ export class DonationsComponent implements OnInit{
 
   getTransactionPage(): void {
 
-    this.transactionService.getAllWithSearch(this.serverNames, this.donatorMails, this.state, this.pageNumber, this.pageSize, this.sortState)
+    this.transactionService.getAllWithSearch(this.serverNames, this.donatorsMail, this.state, this.pageNumber, this.pageSize, this.sortState)
         .subscribe((response) => {
           this.transactions = response.content;
           this.totalElements = response.totalElements;
