@@ -26,19 +26,14 @@ export class AppComponent implements OnInit{
         if (!this.authService.isLoggedIn()) {
             this.router.navigateByUrl("/login")
         }
-
-        // Викликаємо метод для отримання списку серверів
         this.getServerList();
     }
 
     private getServerList(): void {
-        this.serverService.getAll().subscribe(
-            (response) => {
-                sessionStorage.setItem('servers', JSON.stringify(response.content));
-            },
-            (error) => {
-                console.error('Помилка при отриманні списку серверів:', error);
-            }
-        );
+        this.serverService.getAll().subscribe({
+            next: (v) =>
+                sessionStorage.setItem('servers', JSON.stringify(v.content)),
+            error: (e) => console.error(e),
+        });
     }
 }

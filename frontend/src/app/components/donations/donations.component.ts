@@ -12,9 +12,8 @@ import { MatDialog } from '@angular/material/dialog';
 import {MatPaginator, PageEvent } from "@angular/material/paginator";
 import {MatCheckbox, MatCheckboxModule} from "@angular/material/checkbox";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {DonationsDialogComponent} from "./donations.dialog/donations-dialog.component";
+import {CreateTransactionDialog} from "./donations.dialog/create.transaction/create-transaction-dialog.component";
 import {MatInput} from "@angular/material/input";
-import {TransactionState} from "../../enums/app-constans";
 import {Server} from "../../common/server";
 
 @Component({
@@ -75,13 +74,11 @@ export class DonationsComponent implements OnInit{
   }
 
   applyFilterSortSearch(): void {
-    this.state = []; // Очистити попередні фільтри стану
+    this.state = [];
     if (this.stateFilter !== '') {
       this.state.push(this.stateFilter);
     }
-    // Передайте обраний сервер для фільтрації
     this.serverNames = this.selectedServer ? [this.selectedServer] : undefined;
-    // Викликати метод для отримання сторінки транзакцій з новими параметрами
     this.getTransactionPage();
   }
 
@@ -98,19 +95,13 @@ export class DonationsComponent implements OnInit{
   onPageChange(event: PageEvent): void {
     this.pageNumber = event.pageIndex;
     this.pageSize = event.pageSize;
-
     this.getTransactionPage();
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(DonationsDialogComponent, {
-      width: '600px',
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+  openCreateTransactionDialog(): void {
+    const dialogRef = this.dialog.open(CreateTransactionDialog, {
+      width: '50%',
+      data: this.servers,
     });
   }
-
-  protected readonly TransactionState = TransactionState;
 }
