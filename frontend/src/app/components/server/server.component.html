@@ -8,22 +8,22 @@
             </div>
             <div class="col-auto my-auto">
                 <div class="buttons">
-                    <div class="button" id="remove_server">
+                    <div class="button" id="remove_server" [ngClass]="{ 'disabled': isButtonDisabled }" (click)="handleRemoveServerClick()">
                         <div class="row">
                             <div class="col-auto pe-0">
                                 <img src="assets/images/trash.svg" alt="">
                             </div>
-                            <button class="col-auto my-auto ps-0">
+                            <button class="col-auto my-auto ps-0" [disabled]="isButtonDisabled">
                                 УДАЛИТЬ
                             </button>
                         </div>
                     </div>
-                    <div class="button" id="settings_server">
+                    <div class="button" id="settings_server" [ngClass]="{ 'disabled': isButtonDisabled }" (click)="handleSettingsServerClick()">
                         <div class="row">
                             <div class="col-auto pe-0">
                                 <img src="assets/images/settings.svg" alt="">
                             </div>
-                            <div class="col-auto my-auto ps-0" (click)="openAddServerDialog()">
+                            <div class="col-auto my-auto ps-0">
                                 НАСТРОИТЬ
                             </div>
                         </div>
@@ -53,10 +53,10 @@
         </div>
         <div class="servers row">
             <ng-container *ngFor="let server of servers">
-                <div class="server col-lg-6 col-xxl-4">
+                <div class="server col-lg-6 col-xxl-4" (click)="handleServerClick(server.id)">
                     <div class="row">
                         <div class="col-auto">
-                            <input type="radio" class="checkbox" name="server" [value]="server.id">
+                            <input type="radio" class="checkbox" name="server" [value]="server.id" (change)="handleRadioChange(server.id)" [checked]="server.id === selectedServerId">
                         </div>
                         <div class="col">
                             <div class="box-server">
@@ -67,10 +67,10 @@
                                     {{ server.id }}
                                 </div>
                                 <div class="server-buttons">
-                                    <a href="#" class="button">
+                                    <a class="button"  (click)="goToDonatorBonusOnServer()">
                                         БОНУСЫ ИГРОКОВ
                                     </a>
-                                    <a href="#" class="button">
+                                    <a class="button" (click)="openServerBonusDialog()">
                                         БОНУСЫ СЕРВЕРА
                                     </a>
                                 </div>
@@ -78,11 +78,9 @@
                         </div>
                     </div>
                 </div>
+
             </ng-container>
         </div>
-
-
-
     </div>
 </div>
 <!-- Всплывающее окно настроек сервера -->

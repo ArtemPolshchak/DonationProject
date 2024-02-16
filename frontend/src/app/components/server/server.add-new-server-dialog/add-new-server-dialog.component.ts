@@ -41,14 +41,14 @@ import {Server} from "../../../common/server";
     NgIf,
     ReactiveFormsModule
   ],
-  templateUrl: './server.dialog.component.html',
-  styleUrl: './server.dialog.component.scss'
+  templateUrl: './add-new-server-dialog.component.html',
+  styleUrl: './add-new-server-dialog.component.scss'
 })
-export class ServerDialogComponent {
+export class AddNewServerDialogComponent {
   servers: Server[];
 
   constructor(
-      public dialogRef: MatDialogRef<ServerDialogComponent>,
+      public dialogRef: MatDialogRef<AddNewServerDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any) {
     this.servers = data;
   }
