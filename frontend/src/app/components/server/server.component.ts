@@ -17,18 +17,14 @@ import {ServerDialogComponent} from "./server.dialog/server.dialog.component";
 })
 export class ServerComponent implements OnInit {
   servers: Server[] = [];
+  selectedServerId: number | null = null;
 
   constructor(private serverService: ServerService,
               private dialog: MatDialog,) {
   }
 
-
-
   ngOnInit(): void {
-    this.serverService.getAll()
-        .subscribe(data => {
-          this.servers = data.content
-        })
+    this.getAllServers();
 
     // const serversFromStorage = sessionStorage.getItem('servers');
     // if (serversFromStorage) {
@@ -36,10 +32,20 @@ export class ServerComponent implements OnInit {
     // }
   }
 
+  getAllServers(): void {
+    this.serverService.getAll()
+        .subscribe(data => {
+          this.servers = data.content
+        })
+  }
+
   openAddServerDialog(): void {
     this.dialog.open(ServerDialogComponent, {
       width: '50%',
     });
+  }
+  handleRadioClick(serverId: number): void {
+    this.selectedServerId = serverId;
   }
 
 }
