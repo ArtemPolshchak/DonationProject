@@ -9,6 +9,8 @@ import {UnauthorizedComponent} from "./components/unauthorized/unauthorized.comp
 import {hasRoleGuard} from "./services/auth.service";
 import {Role} from "./enums/app-constans";
 import {DonatorstoryComponent} from "./components/donatorstory/donatorstory.component";
+import {ServerBonusComponent} from "./components/server/server.server-bonus-dialog/server-bonus.component";
+import {DonatorBonusOnServer} from "./components/donator-bonus-on-server/donator-bonus-on-server.component";
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: "full", },
@@ -39,6 +41,14 @@ export const routes: Routes = [
     {
         path: 'donatorstory/:id/:email/:totalDonations',
         component: DonatorstoryComponent,
+        canActivate: [hasRoleGuard],
+        data: {
+            roles: [ Role.ADMIN ]
+        }
+    },
+    {
+        path: 'donator-bonus-on-server',
+        component: DonatorBonusOnServer,
         canActivate: [hasRoleGuard],
         data: {
             roles: [ Role.ADMIN ]
