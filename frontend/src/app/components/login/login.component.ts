@@ -1,10 +1,11 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {Component, EventEmitter, Output} from '@angular/core';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatCard, MatCardContent, MatCardModule, MatCardTitle} from "@angular/material/card";
 import {NgIf} from "@angular/common";
 import {MatInput, MatInputModule} from "@angular/material/input";
 import {MatButton, MatButtonModule} from "@angular/material/button";
 import {LoginService} from "../../services/login.service";
+import {ServerService} from "../../services/server.service";
 
 
 @Component({
@@ -32,7 +33,8 @@ export class LoginComponent {
 
   @Output() loginSuccess = new EventEmitter();
 
-  constructor(private fb: FormBuilder, private loginService: LoginService) {
+  constructor(private fb: FormBuilder, private loginService: LoginService, private serverService: ServerService) {
+
     this.form = this.fb.group({
       email: ['', Validators.required],
       password: ['', Validators.required]
@@ -43,17 +45,23 @@ export class LoginComponent {
     if (this.form.valid) {
       this.loginService.login(this.form.value).subscribe(
           () => {
-            // Видалити повідомлення про помилку
             this.error = null;
-            // Оповістити батьківський компонент про успішний вхід
             this.loginSuccess.emit();
+            this.getServerList();
           },
           error => {
-            // Обробити помилку входу
             this.error = error.message;
           }
       );
     }
+  }
+
+  private getServerList(): void {
+    this.serverService.getAll().subscribe({
+      next: (v) =>
+          sessionStorage.setItem('servers', JSON.stringify(v.content)),
+      error: (e) => console.error(e),
+    });
   }
 }
 
