@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {CurrencyPipe, DatePipe, JsonPipe, NgForOf} from "@angular/common";
+import {CurrencyPipe, DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {
   NgbAccordionBody,
   NgbAccordionButton,
@@ -31,7 +31,7 @@ import {Server} from "../../common/server";
     NgbAccordionItem,
     MatPaginator,
     MatCheckbox,
-    FormsModule, ReactiveFormsModule, MatCheckboxModule, JsonPipe, MatInput
+    FormsModule, ReactiveFormsModule, MatCheckboxModule, JsonPipe, MatInput, NgIf
   ],
   templateUrl: './donations.component.html',
   styleUrl: './donations.component.scss'

@@ -66,7 +66,7 @@
                     [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]
                 </button>
             </h2>
-            <button class="btn btn-outline-primary ms-2" (click)="openCreateTransactionDialog()">ИЗМЕНИТЬ</button>
+            <button class="btn btn-outline-primary ms-2" *ngIf="transaction.state === 'IN_PROGRESS'" (click)="openCreateTransactionDialog()">ИЗМЕНИТЬ</button>
             <div ngbAccordionCollapse>
                 <div ngbAccordionBody>
                     <ng-template>
