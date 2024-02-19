@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {RouterLink, RouterLinkActive} from "@angular/router";
+import {Router, RouterLink, RouterLinkActive} from "@angular/router";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {NgbNavModule} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../services/auth.service";
 import {ADMIN_MENU_ITEMS, MODERATOR_MENU_ITEMS} from "../../enums/app-constans";
 import {MatButtonToggle, MatButtonToggleGroup} from "@angular/material/button-toggle";
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-sidebar',
@@ -17,7 +18,8 @@ import {MatButtonToggle, MatButtonToggleGroup} from "@angular/material/button-to
     NgForOf,
     NgIf,
     MatButtonToggle,
-    MatButtonToggleGroup
+    MatButtonToggleGroup,
+    MatButton
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
@@ -25,10 +27,14 @@ import {MatButtonToggle, MatButtonToggleGroup} from "@angular/material/button-to
 export class SidebarComponent implements OnInit{
   menuItems: string[] = [];
 
-  constructor(private authService: AuthService) {
-  }
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.menuItems = this.authService.isAdmin() ? ADMIN_MENU_ITEMS : MODERATOR_MENU_ITEMS;
+  }
+
+  logout(): void {
+    sessionStorage.removeItem('token');
+    this.router.navigateByUrl('/login');
   }
 }
