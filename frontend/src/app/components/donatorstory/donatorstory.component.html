@@ -1,9 +1,27 @@
 <button class="back-button" (click)="goToDonators()">НАЗАД</button>
 
-<h1>История донатов:  {{ email }}</h1>
-
-<p>Общая сумма донатов: {{ totalDonations }}</p>
-
+<div>
+    <h1>История донатов:  {{ email }}</h1>
+    <div class="search">
+        <div>
+            <div class="d-flex">
+                <select class="form-select me-2" aria-label="Сорт" [(ngModel)]="sortState"
+                        (change)="applyFilterSort()">
+                    <option selected disabled hidden>СОРТИРОВКА</option>
+                    <option value="dateCreated,asc">ПО ДАТЕ ОТ СТАРЫХ К НОВЫМ</option>
+                    <option value="dateCreated,desc">ПО ДАТЕ ОТ НОВЫХ К СТАРЫМ</option>
+                </select>
+                <select class="form-select me-2" aria-label="Сервер" [(ngModel)]="selectedServer"
+                        (change)="applyFilterSort()">
+                    <option value="">ВСЕ СЕРВЕРА</option>
+                    <option selected disabled hidden>Оберіть сервер</option>
+                    <option *ngFor="let server of servers" [value]="server.serverName">{{ server.serverName }}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<h1>Общая сумма донатов: {{ totalDonations }}</h1>
 <div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
     <div class="item" ngbAccordionItem="{{transaction.id}}">
         <h2 ngbAccordionHeader>

@@ -13,6 +13,8 @@ import {
   NgbAccordionDirective, NgbAccordionHeader, NgbAccordionItem
 } from "@ng-bootstrap/ng-bootstrap";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {Server} from "../../common/server";
+import {TransactionState} from "../../enums/app-constans";
 
 @Component({
   selector: 'app-donatorstory',
@@ -42,42 +44,64 @@ export class DonatorstoryComponent implements OnInit {
   donatorId!: number;
   email!: string;
   totalDonations!: number;
-  pageNumber: number = 0;
-  pageSize: number = 5;
-  totalElements: number = 0;
-  sortState?: string = "dateCreated,desc";
+  sortState = 'dateCreated,desc';
+  state: string[] = [TransactionState.COMPLETED];
+  selectedServer = '';
+  servers: Server[] = [];
+  serverNames?: string[];
+
+  pageNumber = 0;
+  pageSize = 5;
+  totalElements = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  constructor(private transactionService: TransactionService,
-              private route: ActivatedRoute,
-              private  router: Router) {
-  }
+
+  constructor(
+      private transactionService: TransactionService,
+      private route: ActivatedRoute,
+      private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.donatorId = +params['id'];
       this.email = params['email'];
       this.totalDonations = +params['totalDonations'];
-
-      this.getDonatorTransactions(this.donatorId);
+      this.getDonatorTransactions();
+      const serversData = sessionStorage.getItem('servers');
+      if (serversData) {
+        this.servers = JSON.parse(serversData);
+      }
     });
   }
-  getDonatorTransactions(donatorId: number): void {
-    this.transactionService.getAllTransactionsFromOneDonator(donatorId, this.pageNumber, this.pageSize, this.sortState)
-        .subscribe((response) => {
-          this.transactions = response.content;
-          this.totalElements = response.totalElements;
-        });
-  }
-
 
   goToDonators(): void {
     this.router.navigate(['/donators']);
   }
 
+  applyFilterSort(): void {
+    this.getDonatorTransactions();
+  }
+
+  getDonatorTransactions(): void {
+    this.transactionService
+        .getAllWithSearch(
+            this.selectedServer ? [this.selectedServer] : [],
+            this.email,
+            this.state,
+            this.pageNumber,
+            this.pageSize,
+            this.sortState
+        )
+        .subscribe(response => {
+          this.transactions = response.content;
+          this.totalElements = response.totalElements;
+        });
+  }
+
   onPageChange(event: PageEvent): void {
     this.pageNumber = event.pageIndex;
     this.pageSize = event.pageSize;
-    this.getDonatorTransactions(this.donatorId);
+    this.getDonatorTransactions();
   }
 }
