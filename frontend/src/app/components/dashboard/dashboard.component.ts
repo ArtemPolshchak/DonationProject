@@ -43,10 +43,10 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.getFeedbackPage();
+        this.getTransactionOnPage();
     }
 
-    getFeedbackPage(): void {
+    getTransactionOnPage(): void {
         this.transactionService.getAllWithSearch(this.serverNames, this.donatorMails, this.state, this.pageNumber, this.pageSize, this.sortState)
             .subscribe((response) => {
                 this.transactions = response.content;
@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
     onPageChange(event: PageEvent): void {
         this.pageNumber = event.pageIndex;
         this.pageSize = event.pageSize;
-        this.getFeedbackPage();
+        this.getTransactionOnPage();
     }
 
     confirmTransaction(transaction: Transaction, state: string): void {
@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit {
         }
         this.transactionService.confirmById(transaction.id, state, transaction.adminBonus)
             .subscribe(() => {
-                this.getFeedbackPage();
+                this.getTransactionOnPage();
             });
 
 
