@@ -23,7 +23,7 @@
       <div ngbAccordionBody>
         <mat-form-field>
           <mat-label>Admin Bonus</mat-label>
-          <input matInput [(ngModel)]="transaction.adminBonus">
+          <input matInput [(ngModel)]="transaction.adminBonus" [disabled]="transaction.state === TransactionState.CANCELLED">
         </mat-form-field>
         <ng-template>
           [Кто создал {{transaction.createdBy}}]
