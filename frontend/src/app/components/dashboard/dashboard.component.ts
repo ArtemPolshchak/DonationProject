@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit {
     sortState?: string = "dateCreated,desc";
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-    constructor(private transactionService: TransactionService,  private dialog: MatDialog) {
+    constructor(private transactionService: TransactionService, private dialog: MatDialog) {
     }
 
     ngOnInit(): void {
@@ -60,13 +60,16 @@ export class DashboardComponent implements OnInit {
         this.getFeedbackPage();
     }
 
-
-
     confirmTransaction(transaction: Transaction, state: string): void {
+        if (state === TransactionState.CANCELLED) {
+            transaction.adminBonus = 0;
+        }
         this.transactionService.confirmById(transaction.id, state, transaction.adminBonus)
             .subscribe(() => {
                 this.getFeedbackPage();
             });
+
+
     }
 
     protected readonly TransactionState = TransactionState;
