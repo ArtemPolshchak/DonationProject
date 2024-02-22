@@ -32,20 +32,9 @@ function noOverlapBonusValidator(): ValidatorFn {
       const fromValue = currentBonus.get('from')?.value; // Додано перевірку на нульовий об'єкт
       const toValue = currentBonus.get('to')?.value; // Додано перевірку на нульовий об'єкт
 
-      // Проходимося по всіх наступних бонусах
-      for (let j = i + 1; j < bonusesCount; j++) {
-        const nextBonus = bonusesArray.at(j) as FormGroup;
-
-        if (!nextBonus) continue; // Перевіряємо на нульовий об'єкт
-
-        const nextFromValue = nextBonus.get('from')?.value; // Додано перевірку на нульовий об'єкт
-        const nextToValue = nextBonus.get('to')?.value; // Додано перевірку на нульовий об'єкт
-
-        // Перевіряємо на наявність накладення
-        if ((fromValue && nextFromValue && fromValue >= nextFromValue && fromValue <= nextToValue) ||
-            (toValue && nextFromValue && toValue >= nextFromValue && toValue <= nextToValue)) {
-          return { 'overlap': true }; // Якщо є накладення, повертаємо помилку
-        }
+      // Перевіряємо, чи є накладення
+      if (fromValue !== null && toValue !== null && fromValue >= toValue) {
+        return { 'overlap': true }; // Якщо є накладення, повертаємо помилку
       }
     }
     return null; // Якщо накладень не знайдено, повертаємо null
@@ -70,13 +59,14 @@ function validBonusRangeValidator(): ValidatorFn {
       const nextToValue = nextBonus.get('to')?.value; // Додано перевірку на нульовий об'єкт
 
       // Перевіряємо на виконання умови
-      if (fromValue && nextToValue && fromValue >= nextToValue) {
+      if (fromValue !== null && nextToValue !== null && fromValue >= nextToValue) {
         return { 'invalidRange': true }; // Якщо умова не виконується, повертаємо помилку
       }
     }
     return null; // Якщо умова виконується для всіх бонусів, повертаємо null
   };
 }
+
 
 @Component({
   selector: 'app-server-bonus',
@@ -116,6 +106,10 @@ export class ServerBonusComponent {
       validators: [noOverlapBonusValidator(), validBonusRangeValidator()]
     });
 
+  }
+
+  isButtonDisabled(): boolean {
+    return this.bonusesForm.invalid;
   }
 
   addBonus(): void {
