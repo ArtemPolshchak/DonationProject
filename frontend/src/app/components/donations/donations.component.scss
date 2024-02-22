@@ -29,6 +29,20 @@
   margin-left: 4px;
 }
 
+.custom-button {
+  background-color: #425565;
+  color: #C5CCD3;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.custom-button:hover {
+  background-color: #344451;
+  color: #C5CCD3;
+}
+
+
 .search {
   margin-top: 15px;
   & input {

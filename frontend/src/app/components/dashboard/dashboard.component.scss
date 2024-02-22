@@ -1,3 +1,26 @@
 .item {
   margin-top: 16px;
 }
+
+.primary-button {
+  background-color: #425565;
+  color: #C5CCD3;
+  border: 1px solid #425565;
+}
+
+.primary-button:hover {
+  background-color: #344451;
+  color: #C5CCD3;
+}
+
+.secondary-button {
+  background-color: transparent;
+  color: #425565;
+  border: 1px solid #425565;
+}
+
+.secondary-button:hover {
+  background-color: #425565;
+  color: #C5CCD3;
+}
+

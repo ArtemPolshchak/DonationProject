@@ -49,7 +49,9 @@ export class DonatorBonusOnServer implements OnInit {
     }
   }
 
-
+  goToServers(): void {
+    this.router.navigate(['/servers']);
+  }
 
   handleClick($event: any) {
     $event.stopPropagation();
