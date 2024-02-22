@@ -50,6 +50,7 @@ public class ServerBonusSettingsService {
 
         return serverRepository.save(serverById).getServerBonusSettings();
     }
+
     private boolean isBonusRangesValid(List<CreateServerBonusesDto> serverBonusesDtos) {
         // Перевірка, щоб FromAmount було менше за ToAmount для кожного бонусу
         boolean fromToValid = serverBonusesDtos.stream()
