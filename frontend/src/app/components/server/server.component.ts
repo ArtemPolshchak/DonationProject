@@ -51,11 +51,23 @@ export class ServerComponent implements OnInit {
     });
   }
 
-  openServerBonusDialog(): void {
-    this.dialog.open(ServerBonusComponent, {
+  openServerBonusDialog(serverId: number): void {
+    const dialogRef = this.dialog.open(ServerBonusComponent, {
       width: '50%',
+      data: {
+        serverId: serverId
+
+      }
+    });
+
+
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log('Dialog result:', result);
     });
   }
+
 
   goToDonatorBonusOnServer(): void {
       this.router.navigate(['./donator-bonus-on-server']);
