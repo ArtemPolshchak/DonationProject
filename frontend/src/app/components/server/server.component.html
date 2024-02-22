@@ -41,16 +41,16 @@
                 </div>
             </div>
         </div>
-        <div class="search">
-            <div class="row">
-                <div class="col">
-                    <input type="text" name="search" class="search-input" placeholder="Название сервера">
-                </div>
-                <div class="col-auto">
-                    <input type="button" class="search-button" value="ПОИСК">
-                </div>
-            </div>
-        </div>
+<!--        <div class="search">-->
+<!--            <div class="row">-->
+<!--                <div class="col">-->
+<!--                    <input type="text" name="search" class="search-input" placeholder="Название сервера">-->
+<!--                </div>-->
+<!--                <div class="col-auto">-->
+<!--                    <input type="button" class="search-button" value="ПОИСК">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
         <div class="servers row">
             <ng-container *ngFor="let server of servers">
                 <div class="server col-lg-6 col-xxl-4" (click)="handleServerClick(server.id)">
