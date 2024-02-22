@@ -36,6 +36,16 @@ function noOverlapBonusValidator(): ValidatorFn {
       if (fromValue !== null && toValue !== null && fromValue >= toValue) {
         return { 'overlap': true }; // Якщо є накладення, повертаємо помилку
       }
+
+      // Перевіряємо, чи збігаються значення "до" і "от" у сусідніх інтервалах
+      if (i < bonusesCount - 1) {
+        const nextBonus = bonusesArray.at(i + 1) as FormGroup;
+        const nextFromValue = nextBonus.get('from')?.value;
+
+        if (toValue !== null && nextFromValue !== null && toValue >= nextFromValue) {
+          return { 'overlap': true }; // Якщо є накладення, повертаємо помилку
+        }
+      }
     }
     return null; // Якщо накладень не знайдено, повертаємо null
   };
@@ -54,11 +64,12 @@ function validBonusRangeValidator(): ValidatorFn {
       if (!currentBonus) continue; // Перевіряємо на нульовий об'єкт
 
       const fromValue = currentBonus.get('from')?.value; // Додано перевірку на нульовий об'єкт
+      const toValue = currentBonus.get('to')?.value;
 
+      // Перевіряємо, щоб "до" поточного бонусу був менше за "от" наступного бонусу
       const nextBonus = bonusesArray.at(i + 1) as FormGroup;
-      const nextToValue = nextBonus.get('to')?.value; // Додано перевірку на нульовий об'єкт
+      const nextToValue = nextBonus.get('to')?.value;
 
-      // Перевіряємо на виконання умови
       if (fromValue !== null && nextToValue !== null && fromValue >= nextToValue) {
         return { 'invalidRange': true }; // Якщо умова не виконується, повертаємо помилку
       }
@@ -66,6 +77,7 @@ function validBonusRangeValidator(): ValidatorFn {
     return null; // Якщо умова виконується для всіх бонусів, повертаємо null
   };
 }
+
 
 
 @Component({
