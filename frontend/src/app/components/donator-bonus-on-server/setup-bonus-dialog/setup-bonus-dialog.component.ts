@@ -1,5 +1,4 @@
 import {Component, Inject} from '@angular/core';
-import {TransactionService} from "../../../services/transaction.service";
 import {MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent} from "@angular/material/dialog";
 import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";

@@ -30,7 +30,8 @@
 </div>
 <div mat-dialog-actions>
     <button mat-button mat-dialog-close>ЗАКРЫТЬ</button>
-    <button mat-button (click)="save()" [disabled]="!bonusesForm.valid">СОХРАНИТЬ</button>
+    <button mat-button [disabled]="isButtonDisabled()" (click)="save()">СОХРАНИТЬ</button>
+
 </div>
 
 
