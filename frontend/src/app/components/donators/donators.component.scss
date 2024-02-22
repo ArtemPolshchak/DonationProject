@@ -60,3 +60,17 @@ h1, h2 {
   font-weight: 500;
   margin-left: 4px;
 }
+
+.custom-button-history {
+  background-color: #425565;
+  color: #C5CCD3;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.custom-button-history:hover {
+  background-color: #344451;
+  color: #C5CCD3;
+}
+
