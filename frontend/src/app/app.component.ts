@@ -4,6 +4,7 @@ import {Router, RouterOutlet} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {AuthService} from "./services/auth.service";
 
+
 @Component({
     selector: 'app-root',
     standalone: true,
@@ -17,12 +18,12 @@ import {AuthService} from "./services/auth.service";
 })
 export class AppComponent implements OnInit{
 
-    constructor(public authService: AuthService, private router: Router) {
-    }
+    constructor(public authService: AuthService,
+                private router: Router) {}
 
     ngOnInit(): void {
-       if (!this.authService.isLoggedIn()) {
-           this.router.navigateByUrl("/login")
-       }
+        if (!this.authService.isLoggedIn()) {
+            this.router.navigateByUrl("/login")
+        }
     }
 }

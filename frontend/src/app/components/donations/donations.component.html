@@ -1,30 +1,60 @@
+<!--<section class="example-section" [formGroup]="toppings">-->
+<!--    <h4>Select your toppings:</h4>-->
+<!--    <p><mat-checkbox formControlName="pepperoni">Pepperoni</mat-checkbox></p>-->
+<!--    <p><mat-checkbox formControlName="extracheese">Extra Cheese</mat-checkbox></p>-->
+<!--    <p><mat-checkbox formControlName="mushroom">Mushroom</mat-checkbox></p>-->
+<!--</section>-->
+
+<!--<section class="example-section" [formGroup]="toppings">-->
+<!--    <h4>You chose:</h4>-->
+<!--    {{toppings.value | json}}-->
+<!--</section>-->
 <div>
-    <div>
-        <h1>Список транзакцій</h1>
-        <div class="d-flex">
-            <select class="form-select me-2" aria-label="Статус">
-                <option selected>Статус</option>
-                <option value="IN_PROGRESS">IN_PROGRESS</option>
-                <option value="COMPLETED">COMPLETED</option>
-                <option value="CANCELLED">CANCELLED</option>
-            </select>
-            <button class="button">Застосувати фільтр</button>
-            <button class="button" (click)="openDialog()">Створити нову заявку</button>
+    <h1>Донаты</h1>
+    <div class="search">
+        <div class="row">
+            <div class="col">
+                <input type="text" name="search" class="search-input" placeholder="Почта донатора" matInput
+                       [(ngModel)]="donatorsMail">
+            </div>
+            <div class="col-auto">
+                <input type="button" class="search-button" value="ПОИСК" (click)="applyFilterSortSearch()">
+
+            </div>
+        </div>
+        <div>
+            <div class="d-flex">
+                <!--            <button class="button" (click)="applyFilterSortSearch()">ИСПОЛЬЗОВАТЬ СОРТИРОВКУ</button>-->
+                <select class="form-select me-2" aria-label="Сорт" [(ngModel)]="sortState"
+                        (change)="applyFilterSortSearch()">
+                    <option selected disabled hidden>СОРТИРОВКА</option>
+                    <option value="dateCreated,asc">ПО ДАТЕ ОТ СТАРЫХ К НОВЫМ</option>
+                    <option value="dateCreated,desc">ПО ДАТЕ ОТ НОВЫХ К СТАРЫМ</option>
+                </select>
+
+                <!--            <button class="button" (click)="applyFilterSortSearch()">ИСПОЛЬЗОВАТЬ ФИЛЬТР</button>-->
+                <select class="form-select me-2" aria-label="Фильтр" [(ngModel)]="stateFilter"
+                        (change)="applyFilterSortSearch()">
+                    <option selected disabled hidden>фИЛЬТР</option>
+                    <option value="">ВСЕ ЗАЯВКИ</option>
+                    <option value="IN_PROGRESS">ЗАЯВКИ ОЖИДАЮТ ПОДТВЕРЖДЕНИЯ</option>
+                    <option value="COMPLETED">ЗАЯВКИ ПОДТВЕРЖДЕНЫ</option>
+                    <option value="CANCELLED">ЗАЯВКИ ОТМЕНЕНЫ</option>
+                </select>
+
+                <select class="form-select me-2" aria-label="Сервер" [(ngModel)]="selectedServer"
+                        (change)="applyFilterSortSearch()">
+                    <option value="">СЕРВЕРА</option>
+                    <option selected disabled hidden>Оберіть сервер</option>
+                    <option *ngFor="let server of servers" [value]="server.serverName">{{ server.serverName }}</option>
+                </select>
+
+                <button class="custom-button" (click)="openCreateTransactionDialog()">СОЗДАТЬ ЗАЯВКУ</button>
+
+            </div>
         </div>
     </div>
 </div>
-
-<div class="search">
-    <div class="row">
-        <div class="col">
-            <input type="text" name="search" class="search-input" placeholder="Название сервера">
-        </div>
-        <div class="col-auto">
-            <input type="button" class="search-button" value="ПОИСК">
-        </div>
-    </div>
-</div>
-
 <div class="transactions-list">
     <div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
         <div class="item" ngbAccordionItem="{{transaction.id}}">
@@ -37,7 +67,9 @@
                     [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]
                 </button>
             </h2>
-            <button class="btn btn-outline-primary ms-2" (click)="openDialog()">ИЗМЕНИТЬ</button>
+            <button class="btn btn-outline-primary ms-2" *ngIf="transaction.state === 'IN_PROGRESS'"
+                    (click)="openCreateTransactionDialog()">ИЗМЕНИТЬ
+            </button>
             <div ngbAccordionCollapse>
                 <div ngbAccordionBody>
                     <ng-template>
@@ -56,4 +88,11 @@
             </div>
         </div>
     </div>
+    <mat-paginator [length]="totalElements"
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   [showFirstLastButtons]="true"
+                   (page)="onPageChange($event)">
+    </mat-paginator>
 </div>
+

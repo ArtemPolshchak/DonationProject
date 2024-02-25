@@ -50,11 +50,6 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.OK).body(transactionService.findAllTransactionsByDonatorId(id, page));
     }
 
-//    @GetMapping("/search")
-//    public ResponseEntity<Page<TransactionEntity>> getAllInProgress(@RequestParam TransactionState state, Pageable page) {
-//        return ResponseEntity.status(HttpStatus.OK).body(service.findAllByState(state, page));
-//    }
-
     @Operation(summary = "search transaction")
     @GetMapping("/search")
     public ResponseEntity<Page<TransactionResponseDto>> search(TransactionSpecDto specDto, Pageable page) {

@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {CurrencyPipe, DatePipe, NgForOf} from "@angular/common";
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {CurrencyPipe, DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {
   NgbAccordionBody,
   NgbAccordionButton,
@@ -9,9 +9,12 @@ import {
 import {TransactionService} from "../../services/transaction.service";
 import {Transaction} from "../../common/transaction";
 import { MatDialog } from '@angular/material/dialog';
-import { DonationsdialogComponent } from '../donationsdialog/donationsdialog.component';
-import {TransactionState} from "../../enums/app-constans";
-
+import {MatPaginator, PageEvent } from "@angular/material/paginator";
+import {MatCheckbox, MatCheckboxModule} from "@angular/material/checkbox";
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {CreateTransactionDialog} from "./donations.dialog/create.transaction/create-transaction-dialog.component";
+import {MatInput} from "@angular/material/input";
+import {Server} from "../../common/server";
 
 @Component({
   selector: 'app-transaction',
@@ -25,40 +28,80 @@ import {TransactionState} from "../../enums/app-constans";
     NgbAccordionCollapse,
     NgbAccordionDirective,
     NgbAccordionHeader,
-    NgbAccordionItem
+    NgbAccordionItem,
+    MatPaginator,
+    MatCheckbox,
+    FormsModule, ReactiveFormsModule, MatCheckboxModule, JsonPipe, MatInput, NgIf
   ],
   templateUrl: './donations.component.html',
   styleUrl: './donations.component.scss'
 })
 export class DonationsComponent implements OnInit{
-
-
   transactions: Transaction[] = [];
   pageNumber: number = 0;
-  pageSize: number = 1;
+  pageSize: number = 5;
+  totalElements: number = 0;
   state: string[] = ["IN_PROGRESS", "CANCELLED", "COMPLETED"];
-  sortField: string = "dateCreated"
-  sortCriteria: string = "desc"
-  constructor(private transactionService: TransactionService, public dialog: MatDialog) {}
+  serverNames?: string[];
+  donatorsMail?: string;
+  sortState?: string = "dateCreated,desc";
+  stateFilter: string = "";
+  servers: Server[] = [];
+  selectedServer: string = "";
 
+
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  toppings = this._formBuilder.group({
+    pepperoni: false,
+    extracheese: false,
+    mushroom: false,
+  });
+
+  constructor(
+      private transactionService: TransactionService,
+      private dialog: MatDialog,
+      private _formBuilder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
-    this.transactionService.getAll(this.pageNumber, this.pageSize, this.state).subscribe(data =>
-    this.transactions = data.content)
+    this.getTransactionPage();
+    const serversData = sessionStorage.getItem('servers');
+    if (serversData) {
+      this.servers = JSON.parse(serversData);
+    }
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(DonationsdialogComponent, {
-      width: '600px', // Установіть ширину вікна за вашими вимогами
-      // Можна також передати будь-які дані у компонент діалогового вікна
-      // data: { /* ваші дані */ }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      // Тут можна додати логіку для обробки результату закриття діалогового вікна
-    });
+  applyFilterSortSearch(): void {
+    this.state = [];
+    if (this.stateFilter !== '') {
+      this.state.push(this.stateFilter);
+    }
+    this.serverNames = this.selectedServer ? [this.selectedServer] : undefined;
+    this.getTransactionPage();
   }
 
-    protected readonly TransactionState = TransactionState;
+
+  getTransactionPage(): void {
+
+    this.transactionService.getAllWithSearch(this.serverNames, this.donatorsMail, this.state, this.pageNumber, this.pageSize, this.sortState)
+        .subscribe((response) => {
+          this.transactions = response.content;
+          this.totalElements = response.totalElements;
+        });
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.pageNumber = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.getTransactionPage();
+  }
+
+  openCreateTransactionDialog(): void {
+    const dialogRef = this.dialog.open(CreateTransactionDialog, {
+      width: '50%',
+      data: this.servers,
+    });
+  }
 }

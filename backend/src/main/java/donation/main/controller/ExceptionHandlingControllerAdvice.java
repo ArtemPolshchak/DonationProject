@@ -3,6 +3,7 @@ package donation.main.controller;
 import donation.main.exception.AccessForbiddenException;
 import donation.main.exception.EmailNotFoundException;
 import donation.main.exception.ErrorResponse;
+import donation.main.exception.InvalidBonusRangeException;
 import donation.main.exception.InvalidTransactionState;
 import donation.main.exception.TransactionBadRequestException;
 import donation.main.exception.TransactionNotFoundException;
@@ -105,6 +106,13 @@ public class ExceptionHandlingControllerAdvice {
     @ExceptionHandler(AccessForbiddenException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     Map<String, String> handleUserWithDataExistsException(AccessForbiddenException exception) {
+        return Map.of(MESSAGE, exception.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(InvalidBonusRangeException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    Map<String, String> handleUserWithDataExistsException(InvalidBonusRangeException exception) {
         return Map.of(MESSAGE, exception.getMessage());
     }
 }

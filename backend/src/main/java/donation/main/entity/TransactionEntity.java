@@ -1,5 +1,7 @@
 package donation.main.entity;
 
+import static java.math.BigDecimal.ZERO;
+
 import donation.main.enumeration.TransactionState;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -51,22 +53,22 @@ public class TransactionEntity {
     private BigDecimal totalAmount;
 
     @Column(name = "server_bonus_percentage")
-    private BigDecimal serverBonusPercentage;
+    private BigDecimal serverBonusPercentage = ZERO;
 
     @Column(name = "donator_bonus_percentage")
-    private BigDecimal personalBonusPercentage;
+    private BigDecimal personalBonusPercentage = ZERO;
 
     @Column(name = "admin_bonus")
-    private BigDecimal adminBonus = BigDecimal.ZERO;
+    private BigDecimal adminBonus = ZERO;
 
     //todo set user from security context
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "approved_by_admin_id")
+    @JoinColumn(name = "approved_by_user_id")
     private UserEntity approvedByUser;
 
     //todo set user from security context
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "create_by_moderator_id")
+    @JoinColumn(name = "created_by_user_id")
     private UserEntity createdByUser;
 
     @ManyToOne(cascade = CascadeType.MERGE)

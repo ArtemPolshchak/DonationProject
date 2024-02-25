@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  padding: 0 16px 16px;
+  margin: 0;
+}
+
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+mat-form-field {
+  margin-bottom: 8px;
+}
+
+mat-dialog-actions {
+  padding: 16px;
+  display: flex;
+  justify-content: flex-end;
+}

@@ -1,0 +1,26 @@
+<header class="header">
+    <h2 class="title">ИЗМЕНИТЬ ПЕРСОНАЛЬНЫЙ БОНУС</h2>
+</header>
+
+<mat-dialog-content>
+    <mat-card class="card-container">
+        <mat-card-content>
+<!--            <mat-form-field class="input-field" appearance="outline">-->
+<!--                <mat-label>Donator Email</mat-label>-->
+<!--                <input matInput [formControl]="emailControl" [defaultValue]="">-->
+<!--                <mat-error *ngIf="emailControl.hasError('required')">Field required!</mat-error>-->
+<!--                <mat-error *ngIf="emailControl.hasError('pattern')">Email not valid!</mat-error>-->
+<!--            </mat-form-field>-->
+            <mat-form-field class="input-field" appearance="outline">
+                <mat-label>Personal Bonus %</mat-label>
+                <input matInput [formControl]="contributionControl" [defaultValue]=""/>
+                <mat-error *ngIf="emailControl.hasError('required')">Field required!</mat-error>
+            </mat-form-field>
+        </mat-card-content>
+    </mat-card>
+</mat-dialog-content>
+
+<mat-dialog-actions align="start">
+    <button class="cancel-button" mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>
+

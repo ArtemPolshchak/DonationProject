@@ -6,11 +6,14 @@
     </div>
     <div class="menu-sidebar-content js-scrollbar1">
         <nav class="navbar-sidebar">
-            <ul class="list-unstyled navbar-list">
-                <li class="sidebar-list-item" *ngFor="let item of menuItems">
-                    <button routerLink="/{{item}}" routerLinkActive="active-link">{{item.toUpperCase()}}</button>
-                </li>
-            </ul>
+                <mat-button-toggle-group appearance="legacy" vertical="true">
+                    <ng-container *ngFor="let item of menuItems">
+                        <mat-button-toggle routerLink="/{{item}}">{{item.toUpperCase()}}</mat-button-toggle>
+                    </ng-container>
+                </mat-button-toggle-group>
         </nav>
+    </div>
+    <div class="btn logout-button ms-2">
+        <button mat-button (click)="logout()">Log out</button>
     </div>
 </aside>

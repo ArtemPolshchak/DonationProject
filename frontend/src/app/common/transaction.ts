@@ -1,6 +1,7 @@
 export class Transaction {
     id!: number;
     donatorEmail!: string;
+    serverId?: number;
     serverName!: string;
     dateCreated!: Date;
     dateApproved?: Date;

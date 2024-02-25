@@ -8,17 +8,17 @@
             </div>
             <div class="col-auto my-auto">
                 <div class="buttons">
-                    <div class="button" id="remove_server">
+                    <div class="button" id="remove_server" [ngClass]="{ 'disabled': isButtonDisabled }" (click)="handleRemoveServerClick()">
                         <div class="row">
                             <div class="col-auto pe-0">
                                 <img src="assets/images/trash.svg" alt="">
                             </div>
-                            <button class="col-auto my-auto ps-0">
+                            <button class="col-auto my-auto ps-0" [disabled]="isButtonDisabled">
                                 УДАЛИТЬ
                             </button>
                         </div>
                     </div>
-                    <div class="button" id="settings_server">
+                    <div class="button" id="settings_server" [ngClass]="{ 'disabled': isButtonDisabled }" (click)="handleSettingsServerClick()">
                         <div class="row">
                             <div class="col-auto pe-0">
                                 <img src="assets/images/settings.svg" alt="">
@@ -33,125 +33,53 @@
                             <div class="col-auto pe-0">
                                 <img src="assets/images/add.svg" alt="">
                             </div>
-                            <div class="col-auto my-auto ps-0">
-                                ДОБАВИТЬ
+                            <div class="col-auto my-auto ps-0" (click)="openAddServerDialog()">
+                                 ДОБАВИТЬ
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="search">
-            <div class="row">
-                <div class="col">
-                    <input type="text" name="search" class="search-input" placeholder="Название сервера">
-                </div>
-                <div class="col-auto">
-                    <input type="button" class="search-button" value="ПОИСК">
-                </div>
-            </div>
-        </div>
+<!--        <div class="search">-->
+<!--            <div class="row">-->
+<!--                <div class="col">-->
+<!--                    <input type="text" name="search" class="search-input" placeholder="Название сервера">-->
+<!--                </div>-->
+<!--                <div class="col-auto">-->
+<!--                    <input type="button" class="search-button" value="ПОИСК">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
         <div class="servers row">
-            <div class="server col-lg-6 col-xxl-4">
-                <div class="row">
-                    <div class="col-auto">
-                        <input type="checkbox" class="checkbox">
-                    </div>
-                    <div class="col">
-                        <div class="box-server">
-                            <div class="title">
-                                Сервер 1
-                            </div>
-                            <div class="name-server">
-                                server_interlude1200
-                            </div>
-                            <div class="server-buttons">
-                                <a href="#" class="button">
-                                    БОНУСЫ ИГРОКОВ
-                                </a>
-                                <a href="#" class="button">
-                                    БОНУСЫ СЕРВЕРА
-                                </a>
+            <ng-container *ngFor="let server of servers">
+                <div class="server col-lg-6 col-xxl-4" (click)="handleServerClick(server.id)">
+                    <div class="row">
+                        <div class="col-auto">
+                            <input type="radio" class="checkbox" name="server" [value]="server.id" (change)="handleRadioChange(server.id)" [checked]="server.id === selectedServerId">
+                        </div>
+                        <div class="col">
+                            <div class="box-server">
+                                <div class="title">
+                                    {{ server.serverName }}
+                                </div>
+                                <div class="name-server">
+                                    {{ server.id }}
+                                </div>
+                                <div class="server-buttons">
+                                    <a class="button"  (click)="goToDonatorBonusOnServer()">
+                                        БОНУСЫ ИГРОКОВ
+                                    </a>
+                                    <a class="button" (click)="openServerBonusDialog(server.id)">
+                                        БОНУСЫ СЕРВЕРА
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="server col-lg-6 col-xxl-4">
-                <div class="row">
-                    <div class="col-auto">
-                        <input type="checkbox" class="checkbox">
-                    </div>
-                    <div class="col">
-                        <div class="box-server">
-                            <div class="title">
-                                Сервер 2
-                            </div>
-                            <div class="name-server">
-                                server_interlude1200
-                            </div>
-                            <div class="server-buttons">
-                                <a href="#" class="button">
-                                    БОНУСЫ ИГРОКОВ
-                                </a>
-                                <a href="#" class="button">
-                                    БОНУСЫ СЕРВЕРА
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="server col-lg-6 col-xxl-4">
-                <div class="row">
-                    <div class="col-auto">
-                        <input type="checkbox" class="checkbox">
-                    </div>
-                    <div class="col">
-                        <div class="box-server">
-                            <div class="title">
-                                Сервер 3
-                            </div>
-                            <div class="name-server">
-                                server_interlude1200
-                            </div>
-                            <div class="server-buttons">
-                                <a href="#" class="button">
-                                    БОНУСЫ ИГРОКОВ
-                                </a>
-                                <a href="#" class="button">
-                                    БОНУСЫ СЕРВЕРА
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="server col-lg-6 col-xxl-4">
-                <div class="row">
-                    <div class="col-auto">
-                        <input type="checkbox" class="checkbox">
-                    </div>
-                    <div class="col">
-                        <div class="box-server">
-                            <div class="title">
-                                Сервер 4
-                            </div>
-                            <div class="name-server">
-                                server_interlude1200
-                            </div>
-                            <div class="server-buttons">
-                                <a href="#" class="button">
-                                    БОНУСЫ ИГРОКОВ
-                                </a>
-                                <a href="#" class="button">
-                                    БОНУСЫ СЕРВЕРА
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+            </ng-container>
         </div>
     </div>
 </div>

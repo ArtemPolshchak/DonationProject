@@ -1,5 +1,6 @@
 <body>
 <h1>Донаторы</h1>
+<button class="back-button" (click)="goToServers()">НАЗАД</button>
 <div class="search">
     <div class="row">
         <div class="col">
@@ -17,7 +18,7 @@
             <thead>
             <tr>
                 <th>Почта Донатора</th>
-                <th>Общая сумма доната</th>
+                <th>Персональный бонус</th>
 
             </tr>
             </thead>
@@ -25,8 +26,7 @@
             <tr *ngFor="let donator of donators">
                 <td> {{ donator.email }}</td>
                 <td> {{ donator.totalDonations }}</td>
-                <td><button class="custom-button-history" (click)="goToDonatorStory(donator.id, donator.email, donator.totalDonations)">ИСТОРИЯ</button></td>
-
+                <td> <button class="custom-button-settings" (click)="openSetupBonusDialog()">НАСТРОЙКИ</button></td>
             </tr>
 
             </tbody>

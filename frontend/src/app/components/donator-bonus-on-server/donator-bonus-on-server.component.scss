@@ -61,7 +61,22 @@ h1, h2 {
   margin-left: 4px;
 }
 
-.custom-button-history {
+.back-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #425565;
+  color: #C5CCD3;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.back-button:hover {
+  background: #425565;
+}
+
+.custom-button-settings {
   background-color: #425565;
   color: #C5CCD3;
   border: none;
@@ -69,8 +84,7 @@ h1, h2 {
   cursor: pointer;
 }
 
-.custom-button-history:hover {
+.custom-button-settings:hover {
   background-color: #344451;
   color: #C5CCD3;
 }
-
