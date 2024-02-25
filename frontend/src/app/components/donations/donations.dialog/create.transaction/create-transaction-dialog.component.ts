@@ -1,7 +1,7 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogModule} from "@angular/material/dialog";
 import {Transaction} from "../../../../common/transaction";
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatInputModule} from "@angular/material/input";
@@ -13,6 +13,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {TransactionService} from "../../../../services/transaction.service";
 import {Server} from "../../../../common/server";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
     selector: 'app-create-transaction-dialog',
@@ -36,6 +37,7 @@ import {Server} from "../../../../common/server";
     styleUrl: './create-transaction-dialog.component.scss'
 })
 export class CreateTransactionDialog{
+    durationInSeconds: number = 5;
     servers: Server[];
     transaction: Transaction = new Transaction();
     serverControl = new FormControl<Server | null>(null, Validators.required);
@@ -49,6 +51,7 @@ export class CreateTransactionDialog{
     )
 
     constructor(private transactionService: TransactionService,
+                private _snackBar: MatSnackBar,
                 @Inject(MAT_DIALOG_DATA) public data: any){
         this.servers = data;
     }
@@ -63,5 +66,14 @@ export class CreateTransactionDialog{
         this.transaction.donatorEmail = this.emailControl.value!;
         console.log(this.transaction);
         this.transactionService.create(this.transaction).subscribe();
+        this.openSnackBar();
     }
+
+    openSnackBar() {
+        const message = 'Заявка Отправлена на рассмотрение!';
+        this._snackBar.open(message, 'Закрыть', {
+            duration: this.durationInSeconds * 1000,
+        });
+    }
+
 }
