@@ -10,6 +10,7 @@ import {MatInputModule} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatDialog} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
     selector: 'app-dashboard',
@@ -37,9 +38,12 @@ export class DashboardComponent implements OnInit {
     serverNames?: string[];
     donatorMails?: string;
     sortState?: string = "dateCreated,desc";
+    durationInSeconds: number = 5;
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-    constructor(private transactionService: TransactionService, private dialog: MatDialog) {
+    constructor(private transactionService: TransactionService,
+                private dialog: MatDialog,
+                private _snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
@@ -67,10 +71,16 @@ export class DashboardComponent implements OnInit {
         this.transactionService.confirmById(transaction.id, state, transaction.adminBonus)
             .subscribe(() => {
                 this.getTransactionOnPage();
-            });
-
-
+                this.openSnackBar(state);
+            }
+        );
     }
 
+    openSnackBar(state: string) {
+        const message = state === TransactionState.COMPLETED ? 'Заявка Подтверждена!' : 'Заявка Отменена!';
+        this._snackBar.open(message, 'Закрыть', {
+            duration: this.durationInSeconds * 1000,
+        });
+    }
     protected readonly TransactionState = TransactionState;
 }
