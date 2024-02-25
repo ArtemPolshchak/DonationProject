@@ -82,5 +82,6 @@ export class DashboardComponent implements OnInit {
             duration: this.durationInSeconds * 1000,
         });
     }
+
     protected readonly TransactionState = TransactionState;
 }

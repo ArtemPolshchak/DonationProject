@@ -1,5 +1,6 @@
 .item {
-  margin-top: 16px;
+  margin-top: 8px;
+
 }
 
 .primary-button {
@@ -23,4 +24,14 @@
   background-color: #425565;
   color: #C5CCD3;
 }
+.d-flex {
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  z-index: 1000;
+  border-bottom: 1px solid #ccc;
+  width: 300px;
+  max-width: calc(100% - 340px); /* Максимальна ширина віджета сортування + відступ */
+}
+
 
