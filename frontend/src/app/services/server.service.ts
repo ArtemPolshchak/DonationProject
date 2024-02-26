@@ -3,7 +3,6 @@ import {HttpClient} from "@angular/common/http";
 import {map} from "rxjs";
 import {Server} from "../common/server";
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -18,6 +17,13 @@ export class ServerService {
         map(response => response));
   }
 
+  public create(newServer: CreateServerDto) {
+    const url: string = `api/servers`
+    console.log(url)
+    return this.httpClient.post<void>(url, newServer,  {
+      headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}
+    });
+  }
 }
 
 interface GetServerResponse {
@@ -27,4 +33,11 @@ interface GetServerResponse {
     pageSize: number
   }
   totalElements: number;
+}
+
+export interface CreateServerDto {
+  serverName: string;
+  serverUrl: string;
+  serverUserName: string;
+  serverPassword: string;
 }

@@ -47,6 +47,12 @@
   }
 }
 
+mat-dialog-actions {
+  padding: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .cancel-button {
   background-color: #fff;
   color: #333;
@@ -75,4 +81,9 @@
   &:hover {
     background-color: #3c7af7;
   }
+}
+.disabled {
+  opacity: 0.5; /* Змінює прозорість відключених елементів */
+  pointer-events: none; /* Вимикає події для відключених елементів */
+  cursor: not-allowed; /* Змінює вигляд курсора для відключених елементів */
 }
