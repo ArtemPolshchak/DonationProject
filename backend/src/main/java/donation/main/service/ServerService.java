@@ -12,6 +12,7 @@ import donation.main.mapper.ServerMapper;
 import donation.main.repository.DonatorRepository;
 import donation.main.repository.ServerRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.SoftDelete;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -66,5 +67,10 @@ public class ServerService {
         server.getDonatorsBonuses().put(donator, donatorsBonus);
         return serverRepository.save(server);
 
+    }
+
+    @SoftDelete
+    public ServerEntity delete() {
+        return null;
     }
 }

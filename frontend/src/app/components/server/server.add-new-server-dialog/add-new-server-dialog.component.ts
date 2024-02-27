@@ -84,6 +84,7 @@ export class AddNewServerDialogComponent {
       this.serverService.create(newServer).subscribe(
           (response) => {
             console.log('Server created successfully:', response);
+            this.getServerList();
             this.dialogRef.close();
           },
           (error) => {
@@ -92,6 +93,16 @@ export class AddNewServerDialogComponent {
       );
     }
   }
+
+  private getServerList(): void {
+    this.serverService.getAll().subscribe({
+      next: (v) =>
+          sessionStorage.setItem('servers', JSON.stringify(v.content)),
+      error: (e) => console.error(e),
+    });
+  }
+
+
   isFormValid(){
     return this.serverNameControl.valid
         && this.serverUrlControl.valid
