@@ -16,7 +16,7 @@
         <resources>
             <resource>
                 <directory>${basedir}/dist/${app.name}</directory>
-                <targetPath>public</targetPath>
+                <targetPath>static</targetPath>
                 <filtering>false</filtering>
             </resource>
         </resources>

@@ -6,6 +6,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {AddNewServerDialogComponent} from "./server.add-new-server-dialog/add-new-server-dialog.component";
 import {ServerBonusComponent} from "./server.server-bonus-dialog/server-bonus.component";
 import {Router} from "@angular/router";
+import {SetupServerDialogComponent} from "./setup-server-dialog/setup-server-dialog.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 @Component({
@@ -22,8 +24,10 @@ export class ServerComponent implements OnInit {
   servers: Server[] = [];
   selectedServerId: number | null = null;
   isButtonDisabled: boolean = true;
+  durationInSeconds: number = 5;
 
   constructor(
+      private _snackBar: MatSnackBar,
       private serverService: ServerService,
       private dialog: MatDialog,
       private router: Router) {
@@ -69,21 +73,22 @@ export class ServerComponent implements OnInit {
   }
 
 
-  goToDonatorBonusOnServer(): void {
-      this.router.navigate(['./donator-bonus-on-server']);
-
+  goToDonatorBonusOnServer(serverId: number): void {
+    this.router.navigate(['./donator-bonus-on-server', serverId]);
   }
 
   updateButtonStatus(): void {
     this.isButtonDisabled = this.selectedServerId === null;
   }
 
-  handleRemoveServerClick(): void {
-    this.openAddServerDialog();
+  removeServer(): void {
+    this.openSnackBar("Удаление Сервера еще не реализовано")
   }
 
-  handleSettingsServerClick(): void {
-    this.openAddServerDialog();
+  openSetUpServerDialog(): void {
+    this.dialog.open(SetupServerDialogComponent, {
+      width: '50%',
+    });
   }
 
   handleRadioChange(serverId: number): void {
@@ -96,5 +101,12 @@ export class ServerComponent implements OnInit {
       this.selectedServerId = null;
       this.updateButtonStatus();
     }
+  }
+
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'Закрыть', {
+      duration: this.durationInSeconds * 1000,
+    });
   }
 }

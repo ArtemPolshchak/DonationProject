@@ -8,7 +8,6 @@
         </div>
         <div class="col-auto">
             <input type="button" class="search-button" value="ПОИСК" (click)="applySearch()">
-
         </div>
     </div>
 </div>
@@ -19,24 +18,18 @@
             <tr>
                 <th>Почта Донатора</th>
                 <th>Персональный бонус</th>
-
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let donator of donators">
-                <td> {{ donator.email }}</td>
-                <td> {{ donator.totalDonations }}</td>
+            <tr *ngFor="let donator of donatorBonus">
+                <td> {{ donator.email  }} </td>
+                <td> {{ donator.personalBonus + "$" }}</td>
                 <td> <button class="custom-button-settings" (click)="openSetupBonusDialog()">НАСТРОЙКИ</button></td>
             </tr>
-
             </tbody>
-
         </table>
     </div>
-
-    <!-- Add more sections here -->
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
 
 <mat-paginator [length]="totalElements"
                [pageSize]="pageSize"
