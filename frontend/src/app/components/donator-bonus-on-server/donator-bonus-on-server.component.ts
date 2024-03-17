@@ -3,14 +3,12 @@ import {FormBuilder, FormsModule} from "@angular/forms";
 import {MatInput} from "@angular/material/input";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {NgForOf} from "@angular/common";
-import {Donator} from "../../common/donator";
 import {DonatorService} from "../../services/donator.service";
-import {Router} from "@angular/router";
-import {
-  CreateTransactionDialog
-} from "../donations/donations.dialog/create.transaction/create-transaction-dialog.component";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {SetupBonusDialogComponent} from "./setup-bonus-dialog/setup-bonus-dialog.component";
+import {DonatorBonus} from "../../common/donatorBonus";
+import {ServerService} from "../../services/server.service";
 
 @Component({
   selector: 'app-donator-bonus-on-server',
@@ -25,28 +23,27 @@ import {SetupBonusDialogComponent} from "./setup-bonus-dialog/setup-bonus-dialog
   styleUrl: './donator-bonus-on-server.component.scss'
 })
 export class DonatorBonusOnServer implements OnInit {
-  donators: Donator[] = [];
+  donatorBonus: DonatorBonus[] = [];
   pageNumber: number = 0;
   pageSize: number = 5;
   totalElements: number = 0;
   selectedItem: any;
   donatorsMail?: string;
-  sortState?: string = "totalDonations,desc";
+  sortState?: string = "email,asc";
+  serverId!: number;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private donatorService: DonatorService,
+              private serverService: ServerService,
               private router: Router,
               private dialog: MatDialog,
+              private route: ActivatedRoute,
               private _formBuilder: FormBuilder) {
-  }
 
-  goToDonatorStory(donatorId: number, email: string, totalDonations: number | undefined): void {
-    if (typeof totalDonations !== 'undefined') {
-      this.router.navigate(['/donatorstory', donatorId, email, totalDonations]);
-    } else {
-      console.error('Total donations is undefined.');
-    }
+    this.route.params.subscribe(params => {
+      this.serverId =  +params['id'];
+    });
   }
 
   goToServers(): void {
@@ -63,40 +60,38 @@ export class DonatorBonusOnServer implements OnInit {
 
   ngOnInit(): void {
     this.getDonatorsPage();
-
   }
 
   getDonatorsPage(): void {
-    this.getAll()
-
+    this.getAll();
   }
 
   getAll(): void {
-    this.donatorService.getAll(this.pageNumber, this.pageSize, this.sortState)
+    this.serverService.getDonatorsBonusesByServerId(this.serverId, this.pageNumber, this.pageSize, this.sortState)
         .subscribe((response) => {
-          this.donators = response.content;
+          this.donatorBonus = response.content;
           this.totalElements = response.totalElements;
-          console.log("donators" + this.donators.length);
-          console.log("totalElements" + this.totalElements);
+          console.log("serverId bonuses", this.serverId);
+          console.log("Donator bonuses", this.donatorBonus);
+          console.log("Total elements", this.totalElements);
+          console.log("pageSize", this.pageSize); // змінено на кому
         });
   }
 
   search(): void {
     this.donatorService.search(this.donatorsMail, this.pageNumber, this.pageSize, this.sortState)
         .subscribe((response) => {
-          this.donators = response.content;
+          this.donatorBonus = response.content;
           this.totalElements = response.totalElements;
-          console.log("donators" + this.donators.length);
+          console.log("donators" + this.donatorBonus.length);
+          console.log("pageSize" + this.pageSize);
           console.log("totalElements" + this.totalElements);
         });
   }
 
-
-
   onPageChange(event: PageEvent): void {
     this.pageNumber = event.pageIndex;
     this.pageSize = event.pageSize;
-
     this.getDonatorsPage();
   }
 
@@ -111,7 +106,6 @@ export class DonatorBonusOnServer implements OnInit {
   openSetupBonusDialog(): void {
     const dialogRef = this.dialog.open(SetupBonusDialogComponent, {
       width: '50%',
-
     });
   }
 }

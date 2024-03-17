@@ -1,6 +1,7 @@
 package donation.main.service;
 
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
+import donation.main.dto.donatorsdto.DonatorBonusDto;
 import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
 import donation.main.dto.serverdto.CreateServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
@@ -14,11 +15,14 @@ import donation.main.repository.ServerRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.SoftDelete;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -67,6 +71,22 @@ public class ServerService {
         server.getDonatorsBonuses().put(donator, donatorsBonus);
         return serverRepository.save(server);
 
+    }
+
+    public Page<DonatorBonusDto> findDonatorsBonusesByServerId(Long serverId, Pageable pageable) {
+        ServerEntity server = findById(serverId);
+        List<DonatorBonusDto> donatorBonusDtos = new ArrayList<>();
+        Map<DonatorEntity, BigDecimal> donatorsBonuses = server.getDonatorsBonuses();
+
+        for (Map.Entry<DonatorEntity, BigDecimal> entry: donatorsBonuses.entrySet()) {
+            DonatorEntity donator = entry.getKey();
+            BigDecimal bonus = entry.getValue();
+            donatorBonusDtos.add(new DonatorBonusDto(donator.getId(), donator.getEmail(), bonus));
+        }
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), donatorBonusDtos.size());
+        return new PageImpl<>(donatorBonusDtos.subList(start, end), pageable, donatorBonusDtos.size());
     }
 
     @SoftDelete

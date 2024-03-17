@@ -16,6 +16,7 @@ import {MatSelect} from "@angular/material/select";
 import {NgForOf, NgIf} from "@angular/common";
 import {Server} from "../../../common/server";
 import {CreateServerDto, ServerService} from "../../../services/server.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-server.dialog',
@@ -44,8 +45,10 @@ import {CreateServerDto, ServerService} from "../../../services/server.service";
 })
 export class AddNewServerDialogComponent {
   servers: Server[];
+  durationInSeconds: number = 5;
 
   constructor(
+      private _snackBar: MatSnackBar,
       public dialogRef: MatDialogRef<AddNewServerDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any,
       private serverService: ServerService) {
@@ -86,8 +89,10 @@ export class AddNewServerDialogComponent {
             console.log('Server created successfully:', response);
             this.getServerList();
             this.dialogRef.close();
+            this.openSnackBar("Сервер успешно добавлен")
           },
           (error) => {
+            this.openSnackBar("Произошла ошибка при добавления сервера")
             console.error('Error creating server:', error);
           }
       );
@@ -112,6 +117,12 @@ export class AddNewServerDialogComponent {
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'Закрыть', {
+      duration: this.durationInSeconds * 1000,
+    });
   }
 }
 export interface DialogData {

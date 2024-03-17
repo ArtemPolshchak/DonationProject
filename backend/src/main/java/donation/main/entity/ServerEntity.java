@@ -57,5 +57,4 @@ public class ServerEntity {
         serverBonusSettings.clear();
         serverBonusSettings.addAll(set);
     }
-
 }
