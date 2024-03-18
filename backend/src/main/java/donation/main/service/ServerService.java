@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -75,18 +76,37 @@ public class ServerService {
 
     public Page<DonatorBonusDto> findDonatorsBonusesByServerId(Long serverId, Pageable pageable) {
         ServerEntity server = findById(serverId);
+        List<DonatorBonusDto> donatorBonusDtos = getDonatorBonusesList(server);
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), donatorBonusDtos.size());
+        return new PageImpl<>(donatorBonusDtos.subList(start, end), pageable, donatorBonusDtos.size());
+    }
+
+    public Page<DonatorBonusDto> searchDonatorsByEmailContains(Long serverId, String email, Pageable pageable) {
+        ServerEntity server = findById(serverId);
+        List<DonatorBonusDto> donatorBonusDtos = getDonatorBonusesList(server);
+
+        List<DonatorBonusDto> filteredDonatorBonusDtos = donatorBonusDtos.stream()
+                .filter(dto -> dto.email().contains(email))
+                .toList();
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), filteredDonatorBonusDtos.size());
+        return new PageImpl<>(filteredDonatorBonusDtos.subList(start, end), pageable, filteredDonatorBonusDtos.size());
+    }
+
+    private List<DonatorBonusDto> getDonatorBonusesList(ServerEntity server) {
         List<DonatorBonusDto> donatorBonusDtos = new ArrayList<>();
         Map<DonatorEntity, BigDecimal> donatorsBonuses = server.getDonatorsBonuses();
 
-        for (Map.Entry<DonatorEntity, BigDecimal> entry: donatorsBonuses.entrySet()) {
+        for (Map.Entry<DonatorEntity, BigDecimal> entry : donatorsBonuses.entrySet()) {
             DonatorEntity donator = entry.getKey();
             BigDecimal bonus = entry.getValue();
             donatorBonusDtos.add(new DonatorBonusDto(donator.getId(), donator.getEmail(), bonus));
         }
 
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), donatorBonusDtos.size());
-        return new PageImpl<>(donatorBonusDtos.subList(start, end), pageable, donatorBonusDtos.size());
+        return donatorBonusDtos;
     }
 
     @SoftDelete

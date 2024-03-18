@@ -79,7 +79,7 @@ export class DonatorBonusOnServer implements OnInit {
   }
 
   search(): void {
-    this.donatorService.search(this.donatorsMail, this.pageNumber, this.pageSize, this.sortState)
+    this.serverService.searchDonatorsByEmailContains(this.serverId, this.donatorsMail, this.pageNumber, this.pageSize, this.sortState)
         .subscribe((response) => {
           this.donatorBonus = response.content;
           this.totalElements = response.totalElements;
