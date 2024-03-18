@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +57,7 @@ public class ServerService {
         return serverRepository.save(server);
     }
 
-    public ServerEntity updateDonatorsBonusOnserver(UpdateDonatorsBonusOnServer dto) {
+    public ServerEntity updateDonatorsBonusOnServer(UpdateDonatorsBonusOnServer dto) {
         DonatorEntity donator = donatorService.findById(dto.donatorId());
         ServerEntity server = findById(dto.serverId());
         BigDecimal donatorsBonus = dto.personalBonus();
