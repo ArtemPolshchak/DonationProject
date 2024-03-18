@@ -23,7 +23,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +33,8 @@ public class ServerService {
     private final DonatorMapper donatorMapper;
     private final DonatorService donatorService;
 
-    public Iterable<ServerEntity> readAll() {
-        return serverRepository.findAll();
+    public Page<ServerEntity> getAll(Pageable pageable) {
+        return serverRepository.findAll(pageable);
     }
 
     public Page<ServerIdNameDto> getAllServersNames(Pageable pageable) {
@@ -64,7 +63,7 @@ public class ServerService {
         return serverRepository.save(server);
     }
 
-    public ServerEntity updateDonatorsBonusOnserver(UpdateDonatorsBonusOnServer dto) {
+    public ServerEntity updateDonatorsBonusOnServer(UpdateDonatorsBonusOnServer dto) {
         DonatorEntity donator = donatorService.findById(dto.donatorId());
         ServerEntity server = findById(dto.serverId());
         BigDecimal donatorsBonus = dto.personalBonus();
@@ -75,6 +74,7 @@ public class ServerService {
     }
 
     public Page<DonatorBonusDto> findDonatorsBonusesByServerId(Long serverId, Pageable pageable) {
+        Page<DonatorBonusDto> donatorBonusesByServerId = serverRepository.getDonatorBonusesByServerId(serverId, pageable);
         ServerEntity server = findById(serverId);
         List<DonatorBonusDto> donatorBonusDtos = getDonatorBonusesList(server);
 

@@ -15,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,53 +24,50 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/servers")
 @RequiredArgsConstructor
 public class ServerController {
 
-    private final ServerService service;
+    private final ServerService serverService;
 
     @Operation(summary = "get all servers")
     @GetMapping("/")
 //    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Iterable<ServerEntity>> getAllServers() {
-        return ResponseEntity.status(HttpStatus.OK).body(service.readAll());
+    public ResponseEntity<Page<ServerEntity>> getAllServers(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(serverService.getAll(pageable));
     }
 
     @Operation(summary = "get all servers by names")
     @GetMapping("/server-names")
     public ResponseEntity<Page<ServerIdNameDto>> getAllServerNames(Pageable page) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.getAllServersNames(page));
+        return ResponseEntity.status(HttpStatus.OK).body(serverService.getAllServersNames(page));
     }
 
     @Operation(summary = "create new server")
     @PostMapping
     public ResponseEntity<ServerEntity> createServer(@RequestBody CreateServerDto serverDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.createServer(serverDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(serverService.createServer(serverDto));
     }
 
     @Operation(summary = "create bonuses for donators on server")
     @PostMapping("/create-donator-bonus")
     public ResponseEntity<ServerEntity> createDonatorsBonusOnServer(@RequestBody CreateDonatorBonusOnServer serverDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.createDonatorsBonusOnServer(serverDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(serverService.createDonatorsBonusOnServer(serverDto));
     }
 
     @Operation(summary = "update bonuses for donators on server")
     @PutMapping("/update-donator-bonus")
     public ResponseEntity<ServerEntity> updateDonatorsBonusOnServer(@RequestBody UpdateDonatorsBonusOnServer serverDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.updateDonatorsBonusOnserver(serverDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(serverService.updateDonatorsBonusOnServer(serverDto));
     }
 
     @Operation(summary = "Get all donators and their bonuses for a specific server with pagination")
     @GetMapping("/{serverId}/donator-bonus")
     public ResponseEntity<Page<DonatorBonusDto>> getDonatorsBonusesByServerId(
-            @PathVariable Long serverId,
-            @PageableDefault(sort = {"email"}, direction = Sort.Direction.ASC) Pageable pageable
+            @PathVariable Long serverId, Pageable pageable
     ) {
-        Page<DonatorBonusDto> donatorsBonuses = service.findDonatorsBonusesByServerId(serverId, pageable);
+        Page<DonatorBonusDto> donatorsBonuses = serverService.findDonatorsBonusesByServerId(serverId, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(donatorsBonuses);
     }
 
@@ -81,7 +77,7 @@ public class ServerController {
             @RequestParam(required = false) String email,
             @PageableDefault(sort = {"email"}, direction = Sort.Direction.ASC) Pageable pageable
     ) {
-        Page<DonatorBonusDto> donatorsPage = service.searchDonatorsByEmailContains(serverId, email, pageable);
+        Page<DonatorBonusDto> donatorsPage = serverService.searchDonatorsByEmailContains(serverId, email, pageable);
         return ResponseEntity.ok(donatorsPage);
     }
 

@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogModule} from "@angular/material/dialog";
 import {Transaction} from "../../../../common/transaction";
-import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, Validators} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatInputModule} from "@angular/material/input";
@@ -13,7 +13,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {TransactionService} from "../../../../services/transaction.service";
 import {Server} from "../../../../common/server";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
     selector: 'app-create-transaction-dialog',
@@ -32,12 +32,12 @@ import {MatSnackBar} from "@angular/material/snack-bar";
         MatGridListModule,
         MatSelect,
         MatOption,
+        MatIcon,
     ],
     templateUrl: './create-transaction-dialog.component.html',
     styleUrl: './create-transaction-dialog.component.scss'
 })
-export class CreateTransactionDialog{
-    durationInSeconds: number = 5;
+export class CreateTransactionDialog {
     servers: Server[];
     transaction: Transaction = new Transaction();
     serverControl = new FormControl<Server | null>(null, Validators.required);
@@ -49,15 +49,31 @@ export class CreateTransactionDialog{
         [Validators.required,
             Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]
     )
+    editForm = this.fb.group({
+        photo: [],
+    });
 
-    constructor(private transactionService: TransactionService,
-                private _snackBar: MatSnackBar,
-                @Inject(MAT_DIALOG_DATA) public data: any){
+    constructor(private fb: UntypedFormBuilder,
+                private transactionService: TransactionService,
+                @Inject(MAT_DIALOG_DATA) public data: any) {
         this.servers = data;
     }
 
-    isFormValid(){
-       return this.serverControl.valid && this.contributionControl.valid && this.emailControl.valid;
+    isFormValid() {
+        return this.serverControl.valid && this.contributionControl.valid && this.emailControl.valid;
+    }
+
+    setFileData(event: Event): void {
+        const eventTarget: HTMLInputElement | null =
+            event.target as HTMLInputElement | null;
+        if (eventTarget?.files?.[0]) {
+            const file: File = eventTarget.files[0];
+            const reader = new FileReader();
+            reader.addEventListener('load', () => {
+                this.editForm.get('photo')?.setValue(reader.result as string);
+            });
+            reader.readAsDataURL(file);
+        }
     }
 
     createTransaction() {
@@ -66,14 +82,5 @@ export class CreateTransactionDialog{
         this.transaction.donatorEmail = this.emailControl.value!;
         console.log(this.transaction);
         this.transactionService.create(this.transaction).subscribe();
-        this.openSnackBar();
     }
-
-    openSnackBar() {
-        const message = 'Заявка Отправлена на рассмотрение!';
-        this._snackBar.open(message, 'Закрыть', {
-            duration: this.durationInSeconds * 1000,
-        });
-    }
-
 }

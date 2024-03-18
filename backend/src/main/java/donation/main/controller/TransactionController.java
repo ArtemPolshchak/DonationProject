@@ -33,8 +33,8 @@ public class TransactionController {
 
     @Operation(summary = "get all transactions")
     @GetMapping()
-    public ResponseEntity<Page<TransactionResponseDto>> getAll(Pageable page) {
-        return ResponseEntity.status(HttpStatus.OK).body(transactionService.getAll(page));
+    public ResponseEntity<Page<TransactionResponseDto>> getAll(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(transactionService.getAll(pageable));
     }
 
     @Operation(summary = "get all transactions by State")
