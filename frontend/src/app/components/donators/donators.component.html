@@ -25,7 +25,8 @@
             <tr *ngFor="let donator of donators">
                 <td> {{ donator.email }}</td>
                 <td> {{ donator.totalDonations }}</td>
-                <td> <button class="button" (click)="goToDonatorStory(donator.id, donator.email, donator.totalDonations)">ИСТОРИЯ</button></td>
+                <td><button class="custom-button-history" (click)="goToDonatorStory(donator.id, donator.email, donator.totalDonations)">ИСТОРИЯ</button></td>
+
             </tr>
 
             </tbody>

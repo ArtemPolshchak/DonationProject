@@ -29,7 +29,8 @@
                     <ng-container *ngIf="editForm.get('photo')!.value">
                         <div>
                             <img [src]="editForm.get('photo')!.value" alt="img"/>
-                                <button mat-flat-button (click)="fileInput.value = ''; editForm.get('photo')?.setValue(null)">
+                            <button mat-flat-button
+                                    (click)="fileInput.value = ''; editForm.get('photo')?.setValue(null)">
                                 Remove
                             </button>
                         </div>
@@ -37,7 +38,8 @@
                     <div *ngIf="editForm.get('photo')!.value == null">
                         click or drag&drop
                     </div>
-                    <input #fileInput class="fileInput" type="file" multiple="multiple" accept="image/*" (change)="setFileData($event)"/>
+                    <input #fileInput class="fileInput" type="file" multiple="multiple" accept="image/*"
+                           (change)="setFileData($event)"/>
                 </div>
                 <input matInput formControlName="photo" [hidden]="true"/>
             </mat-form-field>
@@ -52,7 +54,8 @@
 
 <mat-dialog-actions align="start">
     <button class="cancel-button" mat-flat-button mat-dialog-close>Cancel</button>
-    <button class="ok-button" mat-flat-button (click)="createTransaction()" [disabled]="!isFormValid()" mat-dialog-close>
+    <button class="ok-button" mat-flat-button (click)="createTransaction()" [disabled]="!isFormValid()"
+            mat-dialog-close>
         SendRequest
     </button>
 </mat-dialog-actions>

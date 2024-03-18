@@ -2,6 +2,17 @@
 <!--<button class="btn btn-sm btn-outline-primary me-2" (click)="accordion.expandAll()">Expand all</button>-->
 <!--<button class="btn btn-sm btn-outline-primary me-2" (click)="accordion.collapseAll()">Collapse all</button>-->
 <h1>Заявки</h1>
+<div>
+  <div class="d-flex">
+    <!--            <button class="button" (click)="applyFilterSortSearch()">ИСПОЛЬЗОВАТЬ СОРТИРОВКУ</button>-->
+    <select class="form-select me-2" aria-label="Сорт" [(ngModel)]="sortState"
+            (change)="getTransactionOnPage()">
+      <option selected disabled hidden>СОРТИРОВКА</option>
+      <option value="dateCreated,asc">Сортировка по дате от старых к новым</option>
+      <option value="dateCreated,desc">Сортировка по дате от новых к старым</option>
+    </select>
+  </div>
+</div>
 <div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
   <div class="item" ngbAccordionItem="{{transaction.id}}">
     <h2 ngbAccordionHeader>
@@ -11,9 +22,13 @@
        [ Почта донатора {{transaction.donatorEmail}}]
        [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]
       </button>
-        <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">Підтвердити</button>
-      <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">Відхилити</button>
-<!--      <div ngbAccordionToggle>-->
+<!--        <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">Подтвердить</button>-->
+<!--      <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">Отменить</button>-->
+
+      <button class="btn primary-button ms-2" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">Подтвердить</button>
+      <button class="btn secondary-button ms-2" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">Отменить</button>
+
+      <!--      <div ngbAccordionToggle>-->
 <!--        <div>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</div>-->
 <!--        <div>{{transaction.donatorEmail}}</div>-->
 <!--        <div>{{transaction.contributionAmount | currency: 'USD'}}</div>-->
@@ -23,7 +38,7 @@
       <div ngbAccordionBody>
         <mat-form-field>
           <mat-label>Admin Bonus</mat-label>
-          <input matInput [(ngModel)]="transaction.adminBonus">
+          <input matInput [(ngModel)]="transaction.adminBonus" [disabled]="transaction.state === TransactionState.CANCELLED">
         </mat-form-field>
         <ng-template>
           [Кто создал {{transaction.createdBy}}]

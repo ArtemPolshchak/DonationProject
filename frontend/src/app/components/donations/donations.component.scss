@@ -29,6 +29,20 @@
   margin-left: 4px;
 }
 
+.custom-button {
+  background-color: #425565;
+  color: #C5CCD3;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.custom-button:hover {
+  background-color: #344451;
+  color: #C5CCD3;
+}
+
+
 .search {
   margin-top: 15px;
   & input {
@@ -59,4 +73,15 @@
 
 .example-section {
   margin: 12px 0;
+}
+
+.secondary-button {
+  background-color: transparent;
+  color: #425565;
+  border: 1px solid #425565;
+}
+
+.secondary-button:hover {
+  background-color: #425565;
+  color: #C5CCD3;
 }

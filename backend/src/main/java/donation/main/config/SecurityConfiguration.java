@@ -65,10 +65,10 @@ public class SecurityConfiguration {
                                 "/swagger-resources/*",
                                 "/v3/api-docs/**")
                         .permitAll()
-                        .requestMatchers("/endpoint", "/admin/**")
-                        .hasRole("ADMIN")
-                        .anyRequest()
+                        .requestMatchers("/api/**")
                         .authenticated()
+                        .anyRequest()
+                        .permitAll()
                 )
 
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
