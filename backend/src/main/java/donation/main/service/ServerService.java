@@ -88,7 +88,7 @@ public class ServerService {
         List<DonatorBonusDto> donatorBonusDtos = getDonatorBonusesList(server);
 
         List<DonatorBonusDto> filteredDonatorBonusDtos = donatorBonusDtos.stream()
-                .filter(dto -> dto.email().contains(email))
+                .filter(dto -> dto.email().toLowerCase().contains(email.toLowerCase()))
                 .toList();
 
         int start = (int) pageable.getOffset();
