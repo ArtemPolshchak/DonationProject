@@ -27,12 +27,18 @@ export class ServerService {
   }
 
   public getDonatorsBonusesByServerId(serverId: number, pageNumber?: number, pageSize?: number, sort?: string) {
-    const url: string = `api/servers/${serverId}/donators-bonuses?page=${pageNumber}&size=${pageSize}&sort=${sort}`;
+    const url: string = `api/servers/${serverId}/donator-bonus?page=${pageNumber}&size=${pageSize}&sort=${sort}`;
     console.log(url);
     console.log("pageSize" + pageSize);
     console.log(url);
     return this.httpClient.get<GetDonatorBonuses>(url, { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') } }).pipe(
         map(response => response));
+  }
+
+  public searchDonatorsByEmailContains(serverId: number, email?: string, pageNumber?: number, pageSize?: number, sort?: string) {
+    const url: string = `api/servers/${serverId}/donator-search?email=${email}&page=${pageNumber}&size=${pageSize}&sort=${sort}`;
+    console.log(url);
+    return this.httpClient.get<GetDonatorBonuses>(url, { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') } });
   }
 }
 

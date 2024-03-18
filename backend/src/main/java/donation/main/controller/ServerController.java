@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -65,13 +66,23 @@ public class ServerController {
     }
 
     @Operation(summary = "Get all donators and their bonuses for a specific server with pagination")
-    @GetMapping("/{serverId}/donators-bonuses")
+    @GetMapping("/{serverId}/donator-bonus")
     public ResponseEntity<Page<DonatorBonusDto>> getDonatorsBonusesByServerId(
             @PathVariable Long serverId,
             @PageableDefault(sort = {"email"}, direction = Sort.Direction.ASC) Pageable pageable
     ) {
         Page<DonatorBonusDto> donatorsBonuses = service.findDonatorsBonusesByServerId(serverId, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(donatorsBonuses);
+    }
+
+    @GetMapping("/{serverId}/donator-search")
+    public ResponseEntity<Page<DonatorBonusDto>> searchDonatorsByEmailContains(
+            @PathVariable Long serverId,
+            @RequestParam(required = false) String email,
+            @PageableDefault(sort = {"email"}, direction = Sort.Direction.ASC) Pageable pageable
+    ) {
+        Page<DonatorBonusDto> donatorsPage = service.searchDonatorsByEmailContains(serverId, email, pageable);
+        return ResponseEntity.ok(donatorsPage);
     }
 
 //    @PatchMapping
