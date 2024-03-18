@@ -40,8 +40,21 @@ export class ServerService {
     console.log(url);
     return this.httpClient.get<GetDonatorBonuses>(url, { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') } });
   }
+
+  public updateDonatorsBonusOnServer(dto: UpdateDonatorsBonus) {
+    const url: string = `api/servers/update-donator-bonus`;
+    console.log("ServerId: " + dto.serverId);
+    console.log("DonatorId: " + dto.donatorId);
+    console.log("PersonalBonus: " + dto.personalBonus);
+    return this.httpClient.put<UpdateDonatorsBonus>(url, dto, { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') } });
+  }
 }
 
+export interface UpdateDonatorsBonus {
+  serverId: number;
+  donatorId: number;
+  personalBonus: number;
+}
 interface GetServerResponse {
   content: Server[];
   pageable: {

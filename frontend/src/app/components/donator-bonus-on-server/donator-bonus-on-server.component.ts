@@ -3,7 +3,6 @@ import {FormBuilder, FormsModule} from "@angular/forms";
 import {MatInput} from "@angular/material/input";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {NgForOf} from "@angular/common";
-import {DonatorService} from "../../services/donator.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {SetupBonusDialogComponent} from "./setup-bonus-dialog/setup-bonus-dialog.component";
@@ -34,8 +33,7 @@ export class DonatorBonusOnServer implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private donatorService: DonatorService,
-              private serverService: ServerService,
+  constructor(private serverService: ServerService,
               private router: Router,
               private dialog: MatDialog,
               private route: ActivatedRoute,
@@ -103,9 +101,16 @@ export class DonatorBonusOnServer implements OnInit {
     }
   }
 
-  openSetupBonusDialog(): void {
+  openSetupBonusDialog(donatorId: number): void {
     const dialogRef = this.dialog.open(SetupBonusDialogComponent, {
       width: '50%',
+      data: {
+        serverId: this.serverId,
+        donatorId: donatorId
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.getAll();
     });
   }
 }
