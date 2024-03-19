@@ -9,6 +9,7 @@ import donation.main.dto.serverdto.CreateServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
 import donation.main.entity.DonatorEntity;
 import donation.main.entity.ServerEntity;
+import donation.main.exception.PageNotFoundException;
 import donation.main.exception.ServerNotFoundException;
 import donation.main.mapper.DonatorMapper;
 import donation.main.mapper.ServerMapper;
@@ -84,10 +85,14 @@ public class ServerService {
     }
 
     private Page<DonatorBonusDto> getPage(List<DonatorBonusDto> donatorBonuses, Pageable pageable) {
-        int toIndex = (donatorBonuses.size() - 1 - pageable.getOffset()) > pageable.getPageSize()
-                ? pageable.getPageSize()
-                : donatorBonuses.size() - 1;
+        int toIndex = (donatorBonuses.size() - 1) > pageable.getPageSize() + pageable.getOffset()
+                ? pageable.getPageSize() + (int) pageable.getOffset()
+                : donatorBonuses.size();
+        if (pageable.getOffset() >= toIndex) {
+            throw new PageNotFoundException("There is no page number " + pageable.getPageNumber());
+        }
         return new PageImpl<>(
-                donatorBonuses.subList((int) pageable.getOffset(), toIndex), pageable, donatorBonuses.size());
+                donatorBonuses.subList((int) pageable.getOffset(), toIndex),
+                pageable, donatorBonuses.size());
     }
 }
