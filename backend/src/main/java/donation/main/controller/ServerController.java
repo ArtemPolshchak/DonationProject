@@ -65,9 +65,10 @@ public class ServerController {
     @Operation(summary = "Get all donators and their bonuses for a specific server with pagination")
     @GetMapping("/{serverId}/donator-bonus")
     public ResponseEntity<Page<DonatorBonusDto>> getDonatorsBonusesByServerId(
-            @PathVariable Long serverId, Pageable pageable
+            @PathVariable Long serverId,
+            @PageableDefault(sort = {"email"}, direction = Sort.Direction.ASC) Pageable pageable
     ) {
-        Page<DonatorBonusDto> donatorsBonuses = serverService.findDonatorsBonusesByServerId(serverId, pageable);
+        Page<DonatorBonusDto> donatorsBonuses = serverService.getAllDonatorBonusesByServerId(serverId, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(donatorsBonuses);
     }
 
@@ -77,10 +78,7 @@ public class ServerController {
             @RequestParam(required = false) String email,
             @PageableDefault(sort = {"email"}, direction = Sort.Direction.ASC) Pageable pageable
     ) {
-        Page<DonatorBonusDto> donatorsPage = serverService.searchDonatorsByEmailContains(serverId, email, pageable);
+        Page<DonatorBonusDto> donatorsPage = serverService.searchDonatorsByEmailLike(serverId, email, pageable);
         return ResponseEntity.ok(donatorsPage);
     }
-
-//    @PatchMapping
-//    public ResponseEntity<ServerEntity> updateServer()
 }

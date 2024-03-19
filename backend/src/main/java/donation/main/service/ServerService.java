@@ -1,5 +1,7 @@
 package donation.main.service;
 
+import java.math.BigDecimal;
+import java.util.List;
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
 import donation.main.dto.donatorsdto.DonatorBonusDto;
 import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
@@ -18,11 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -73,38 +70,24 @@ public class ServerService {
 
     }
 
-    public Page<DonatorBonusDto> findDonatorsBonusesByServerId(Long serverId, Pageable pageable) {
-        return serverRepository.getDonatorBonusesByServerId(serverId, pageable);
+    public Page<DonatorBonusDto> getAllDonatorBonusesByServerId(Long serverId, Pageable pageable) {
+        return getPage(serverRepository.getDonatorBonusesByServerId(serverId), pageable);
     }
 
-    public Page<DonatorBonusDto> searchDonatorsByEmailContains(Long serverId, String email, Pageable pageable) {
-        ServerEntity server = findById(serverId);
-        List<DonatorBonusDto> donatorBonusDtos = getDonatorBonusesList(server);
-
-        List<DonatorBonusDto> filteredDonatorBonusDtos = donatorBonusDtos.stream()
-                .filter(dto -> dto.email().toLowerCase().contains(email.toLowerCase()))
-                .toList();
-
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), filteredDonatorBonusDtos.size());
-        return new PageImpl<>(filteredDonatorBonusDtos.subList(start, end), pageable, filteredDonatorBonusDtos.size());
-    }
-
-    private List<DonatorBonusDto> getDonatorBonusesList(ServerEntity server) {
-        List<DonatorBonusDto> donatorBonusDtos = new ArrayList<>();
-        Map<DonatorEntity, BigDecimal> donatorsBonuses = server.getDonatorsBonuses();
-
-        for (Map.Entry<DonatorEntity, BigDecimal> entry : donatorsBonuses.entrySet()) {
-            DonatorEntity donator = entry.getKey();
-            BigDecimal bonus = entry.getValue();
-            donatorBonusDtos.add(new DonatorBonusDto(donator.getId(), donator.getEmail(), bonus));
-        }
-
-        return donatorBonusDtos;
+    public Page<DonatorBonusDto> searchDonatorsByEmailLike(Long serverId, String email, Pageable pageable) {
+        return getPage(serverRepository.getBonusesByServerIdAndDonatorsEmail(serverId, email), pageable);
     }
 
     @SoftDelete
     public ServerEntity delete() {
         return null;
+    }
+
+    private Page<DonatorBonusDto> getPage(List<DonatorBonusDto> donatorBonuses, Pageable pageable) {
+        int toIndex = (donatorBonuses.size() - 1 - pageable.getOffset()) > pageable.getPageSize()
+                ? pageable.getPageSize()
+                : donatorBonuses.size() - 1;
+        return new PageImpl<>(
+                donatorBonuses.subList((int) pageable.getOffset(), toIndex), pageable, donatorBonuses.size());
     }
 }
