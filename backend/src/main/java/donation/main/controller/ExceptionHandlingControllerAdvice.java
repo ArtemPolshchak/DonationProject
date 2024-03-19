@@ -1,10 +1,13 @@
 package donation.main.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import donation.main.exception.AccessForbiddenException;
 import donation.main.exception.EmailNotFoundException;
 import donation.main.exception.ErrorResponse;
 import donation.main.exception.InvalidBonusRangeException;
 import donation.main.exception.InvalidTransactionState;
+import donation.main.exception.PageNotFoundException;
 import donation.main.exception.TransactionBadRequestException;
 import donation.main.exception.TransactionNotFoundException;
 import donation.main.exception.UnauthorizedActionException;
@@ -18,9 +21,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestControllerAdvice
 public class ExceptionHandlingControllerAdvice {
@@ -50,7 +50,7 @@ public class ExceptionHandlingControllerAdvice {
     @ExceptionHandler(ErrorResponse.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ResponseBody
-    Map<String, String> handleCustomException(ErrorResponse  ex) {
+    Map<String, String> handleCustomException(ErrorResponse ex) {
         return Map.of(MESSAGE, ex.getMessage());
     }
 
@@ -96,9 +96,11 @@ public class ExceptionHandlingControllerAdvice {
     }
 
     @ResponseBody
-    @ExceptionHandler(InvalidTransactionState.class)
+    @ExceptionHandler(
+            {InvalidTransactionState.class,
+            PageNotFoundException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    Map<String, String> handleUserWithDataExistsException(InvalidTransactionState exception) {
+    Map<String, String> handleUserWithDataExistsException(RuntimeException exception) {
         return Map.of(MESSAGE, exception.getMessage());
     }
 
