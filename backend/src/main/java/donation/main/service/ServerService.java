@@ -1,5 +1,7 @@
 package donation.main.service;
 
+import java.math.BigDecimal;
+import java.util.List;
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
 import donation.main.dto.donatorsdto.DonatorBonusDto;
 import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
@@ -15,9 +17,9 @@ import donation.main.repository.ServerRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.SoftDelete;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -68,16 +70,24 @@ public class ServerService {
 
     }
 
-    public Page<DonatorBonusDto> findDonatorsBonusesByServerId(Long serverId, Pageable pageable) {
-        return serverRepository.getDonatorBonusesByServerId(serverId, pageable);
+    public Page<DonatorBonusDto> getAllDonatorBonusesByServerId(Long serverId, Pageable pageable) {
+        return getPage(serverRepository.getDonatorBonusesByServerId(serverId), pageable);
     }
 
-    public Page<DonatorBonusDto> searchDonatorsByEmailContains(Long serverId, String email, Pageable pageable) {
-        return serverRepository.getBonusesByServerIdAndDonatorsEmail(serverId, email, pageable);
+    public Page<DonatorBonusDto> searchDonatorsByEmailLike(Long serverId, String email, Pageable pageable) {
+        return getPage(serverRepository.getBonusesByServerIdAndDonatorsEmail(serverId, email), pageable);
     }
 
     @SoftDelete
     public ServerEntity delete() {
         return null;
+    }
+
+    private Page<DonatorBonusDto> getPage(List<DonatorBonusDto> donatorBonuses, Pageable pageable) {
+        int toIndex = (donatorBonuses.size() - 1 - pageable.getOffset()) > pageable.getPageSize()
+                ? pageable.getPageSize()
+                : donatorBonuses.size() - 1;
+        return new PageImpl<>(
+                donatorBonuses.subList((int) pageable.getOffset(), toIndex), pageable, donatorBonuses.size());
     }
 }

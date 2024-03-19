@@ -68,7 +68,7 @@ public class ServerController {
             @PathVariable Long serverId,
             @PageableDefault(sort = {"email"}, direction = Sort.Direction.ASC) Pageable pageable
     ) {
-        Page<DonatorBonusDto> donatorsBonuses = serverService.findDonatorsBonusesByServerId(serverId, pageable);
+        Page<DonatorBonusDto> donatorsBonuses = serverService.getAllDonatorBonusesByServerId(serverId, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(donatorsBonuses);
     }
 
@@ -78,7 +78,7 @@ public class ServerController {
             @RequestParam(required = false) String email,
             @PageableDefault(sort = {"email"}, direction = Sort.Direction.ASC) Pageable pageable
     ) {
-        Page<DonatorBonusDto> donatorsPage = serverService.searchDonatorsByEmailContains(serverId, email, pageable);
+        Page<DonatorBonusDto> donatorsPage = serverService.searchDonatorsByEmailLike(serverId, email, pageable);
         return ResponseEntity.ok(donatorsPage);
     }
 }
