@@ -2,6 +2,7 @@ package donation.main.service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
 import donation.main.dto.donatorsdto.DonatorBonusDto;
 import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
@@ -20,6 +21,7 @@ import org.hibernate.annotations.SoftDelete;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -72,11 +74,12 @@ public class ServerService {
     }
 
     public Page<DonatorBonusDto> getAllDonatorBonusesByServerId(Long serverId, Pageable pageable) {
-        return getPage(serverRepository.getDonatorBonusesByServerId(serverId), pageable);
+        return getPage(serverRepository.getDonatorBonusesByServerId(serverId, pageable.getSort()), pageable);
     }
 
     public Page<DonatorBonusDto> searchDonatorsByEmailLike(Long serverId, String email, Pageable pageable) {
-        return getPage(serverRepository.getBonusesByServerIdAndDonatorsEmail(serverId, email), pageable);
+        return getPage(serverRepository
+                .getBonusesByServerIdAndDonatorsEmail(serverId, email, pageable.getSort()), pageable);
     }
 
     @SoftDelete
