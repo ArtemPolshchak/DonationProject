@@ -74,13 +74,7 @@ public class ServerService {
     }
 
     public Page<DonatorBonusDto> findDonatorsBonusesByServerId(Long serverId, Pageable pageable) {
-        Page<DonatorBonusDto> donatorBonusesByServerId = serverRepository.getDonatorBonusesByServerId(serverId, pageable);
-        ServerEntity server = findById(serverId);
-        List<DonatorBonusDto> donatorBonusDtos = getDonatorBonusesList(server);
-
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), donatorBonusDtos.size());
-        return new PageImpl<>(donatorBonusDtos.subList(start, end), pageable, donatorBonusDtos.size());
+        return serverRepository.getDonatorBonusesByServerId(serverId, pageable);
     }
 
     public Page<DonatorBonusDto> searchDonatorsByEmailContains(Long serverId, String email, Pageable pageable) {
