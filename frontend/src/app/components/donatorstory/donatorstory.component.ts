@@ -15,6 +15,8 @@ import {
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Server} from "../../common/server";
 import {TransactionState} from "../../enums/app-constans";
+import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-donatorstory',
@@ -59,7 +61,8 @@ export class DonatorstoryComponent implements OnInit {
   constructor(
       private transactionService: TransactionService,
       private route: ActivatedRoute,
-      private router: Router
+      private router: Router,
+      private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -103,5 +106,12 @@ export class DonatorstoryComponent implements OnInit {
     this.pageNumber = event.pageIndex;
     this.pageSize = event.pageSize;
     this.getDonatorTransactions();
+  }
+
+  openImageDialog(image: string) {
+    const dialogRef = this.dialog.open(OpenImageDialogComponent, {
+      width: '50%',
+      data: image,
+    });
   }
 }
