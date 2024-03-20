@@ -14,6 +14,8 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import {TransactionService} from "../../../../services/transaction.service";
 import {Server} from "../../../../common/server";
 import {MatIcon} from "@angular/material/icon";
+import {error} from "@angular/compiler-cli/src/transformers/util";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
     selector: 'app-create-transaction-dialog',
@@ -38,6 +40,8 @@ import {MatIcon} from "@angular/material/icon";
     styleUrl: './create-transaction-dialog.component.scss'
 })
 export class CreateTransactionDialog {
+    success: boolean = false;
+    durationInSeconds: number = 5;
     servers: Server[];
     transaction: Transaction = new Transaction();
     serverControl = new FormControl<Server | null>(null, Validators.required);
@@ -53,8 +57,10 @@ export class CreateTransactionDialog {
         photo: [],
     });
 
+
     constructor(private fb: UntypedFormBuilder,
                 private transactionService: TransactionService,
+                private _snackBar: MatSnackBar,
                 @Inject(MAT_DIALOG_DATA) public data: any) {
         this.servers = data;
     }
@@ -97,7 +103,19 @@ export class CreateTransactionDialog {
         this.transaction.serverId = this.serverControl.value!.id
         this.transaction.contributionAmount = Number(this.contributionControl.value!);
         this.transaction.donatorEmail = this.emailControl.value!;
-        this.transactionService.create(this.transaction).subscribe();
+        this.transactionService.create(this.transaction).subscribe(
+            () => {
+                this.success = true;
+                this.openSnackBar("Транзакция успешно создана")},
+            err => {this.openSnackBar("Ошибка при создании транзакции: " + err.message)}
+
+        );
+    }
+
+    openSnackBar(message: string) {
+        this._snackBar.open(message, 'Закрыть', {
+            duration: this.durationInSeconds * 1000,
+        });
     }
 
     protected readonly HTMLInputElement = HTMLInputElement;
