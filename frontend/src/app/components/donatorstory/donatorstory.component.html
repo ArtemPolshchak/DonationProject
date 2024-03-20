@@ -38,7 +38,6 @@
                 <ng-template>
                     [Кто создал {{transaction.createdBy}}]
                     [Кто подтвердил {{transaction.approvedBy}}]
-                    [Картинка {{transaction.image}}]
                     [бонусы Сервера {{transaction.serverBonusPercentage}}%]
                     [Бонысы Донатора {{transaction.personalBonusPercentage}}%]
                     [сумма зачисления  {{transaction.contributionAmount}}]
@@ -46,9 +45,10 @@
                     [Состояние заявки {{transaction.state}}]
                     [Комментарий {{transaction.comment}}]
                     <div class="image-container">
-                        <img [src]="transaction.image" alt="img"
-                             (click)="openImageDialog(transaction.image)"
-                             style="cursor:pointer"/>
+                        <img #image  [src]="transaction.image" alt="img"
+                             onerror="this.src='s../../assets/images/no-image.jpg'"
+                             width="20%" style="cursor:pointer"
+                             (click)="openImageDialog(image.src)"/>
                     </div>
                 </ng-template>
             </div>
