@@ -109,7 +109,7 @@ export class DonatorstoryComponent implements OnInit {
   }
 
   openImageDialog(image: string) {
-    const dialogRef = this.dialog.open(OpenImageDialogComponent, {
+    this.dialog.open(OpenImageDialogComponent, {
       width: '50%',
       data: image,
     });
