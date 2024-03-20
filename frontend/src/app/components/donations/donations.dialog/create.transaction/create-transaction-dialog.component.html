@@ -39,7 +39,7 @@
                             click or drag&drop
                         </div>
                         <input #fileInput class="fileInput" type="file" multiple="multiple" accept="image/*"
-                               (change)="saveImage($event)"/>
+                               (change)="emitFiles($event)"/>
                     </div>
                     <input matInput formControlName="photo" [hidden]="true"/>
                     <mat-error *ngIf="editForm.get('photo')!.value == null"></mat-error>
