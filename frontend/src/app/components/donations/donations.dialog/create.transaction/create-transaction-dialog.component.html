@@ -5,7 +5,6 @@
 <mat-dialog-content>
     <mat-card class="card-container">
         <mat-card-content>
-
             <mat-form-field class="input-field" appearance="outline">
                 <mat-label>Donator Email</mat-label>
                 <input matInput [formControl]="emailControl" [defaultValue]="">
@@ -24,25 +23,28 @@
                 </mat-select>
                 <mat-error *ngIf="serverControl.hasError('required')">Server required</mat-error>
             </mat-form-field>
-            <mat-form-field class="img-input-field">
-                <div class="fileUploadContainer">
-                    <ng-container *ngIf="editForm.get('photo')!.value">
-                        <div>
-                            <img [src]="editForm.get('photo')!.value" alt="img"/>
-                            <button mat-flat-button
-                                    (click)="fileInput.value = ''; editForm.get('photo')?.setValue(null)">
-                                Remove
-                            </button>
+            <form id="editForm" name="editForm" [formGroup]="editForm">
+                <mat-form-field class="img-input-field">
+                    <div class="fileUploadContainer">
+                        <ng-container *ngIf="editForm.get('photo')!.value">
+                            <div>
+                                <img [src]="editForm.get('photo')!.value" alt="img"/>
+                                <button mat-flat-button
+                                        (click)="fileInput.value = ''; removeImage()">
+                                    Remove
+                                </button>
+                            </div>
+                        </ng-container>
+                        <div *ngIf="editForm.get('photo')!.value == null">
+                            click or drag&drop
                         </div>
-                    </ng-container>
-                    <div *ngIf="editForm.get('photo')!.value == null">
-                        click or drag&drop
+                        <input #fileInput class="fileInput" type="file" multiple="multiple" accept="image/*"
+                               (change)="saveImage($event)"/>
                     </div>
-                    <input #fileInput class="fileInput" type="file" multiple="multiple" accept="image/*"
-                           (change)="setFileData($event)"/>
-                </div>
-                <input matInput formControlName="photo" [hidden]="true"/>
-            </mat-form-field>
+                    <input matInput formControlName="photo" [hidden]="true"/>
+                    <mat-error *ngIf="editForm.get('photo')!.value == null"></mat-error>
+                </mat-form-field>
+            </form>
             <mat-form-field class="input-field" appearance="outline">
                 <mat-label>Comment</mat-label>
                 <textarea matInput [(ngModel)]="transaction.comment" [defaultValue]=""

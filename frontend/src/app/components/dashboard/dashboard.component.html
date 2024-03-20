@@ -42,13 +42,13 @@
         </mat-form-field>
         <ng-template>
           [Кто создал {{transaction.createdBy}}]
-          [Картинка {{transaction.imageUrl}}]
           [бонусы Сервера {{transaction.serverBonusPercentage}}%]
           [Бонысы Донатора {{transaction.personalBonusPercentage}}%]
           [сумма зачисления  {{transaction.contributionAmount}}]
           [Общая сумма доната  {{transaction.totalAmount}}]
           [Состояние заявки {{transaction.state}}]
           [Комментарий {{transaction.comment}}]
+          <img [src]="transaction.image" alt="img"/>
         </ng-template>
       </div>
     </div>

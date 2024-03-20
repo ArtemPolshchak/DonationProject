@@ -27,8 +27,7 @@ public interface ServerRepository extends JpaRepository<ServerEntity, Long> {
             + "KEY(s.donatorsBonuses).email as email, "
             + "VALUE(s.donatorsBonuses)) "
             + "FROM ServerEntity s WHERE s.id = :id AND LOWER(KEY(s.donatorsBonuses).email) "
-            + "LIKE LOWER(CONCAT('%', :email, '%')) "
-            + "ORDER BY email")
+            + "LIKE LOWER(CONCAT('%', :email, '%'))")
     List<DonatorBonusDto> getBonusesByServerIdAndDonatorsEmail(
             Long id, @Param("email") String email, Sort sort);
 }

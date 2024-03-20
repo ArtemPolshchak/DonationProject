@@ -18,4 +18,4 @@ insert into donators (email, total_donations)
            ('17@gmail.com', '0.00'),
            ('18@gmail.com', '0.00'),
            ('19@gmail.com', '0.00'),
-           ('20@gmail.com', '0.00')
+           ('20@gmail.com', '0.00');

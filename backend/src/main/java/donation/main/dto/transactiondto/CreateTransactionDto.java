@@ -11,7 +11,7 @@ public record CreateTransactionDto(
         @DecimalMin("1")
         BigDecimal contributionAmount,
         @NotEmpty
-        String imageUrl,
+        String image,
         String comment,
         @NotNull
         Long serverId

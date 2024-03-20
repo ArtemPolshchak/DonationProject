@@ -1,3 +1,9 @@
+create table if not exists donators
+(
+    id    bigserial primary key,
+    email varchar(32)
+);
+
 insert into donators (email)
 values ('1@gmail.com'),
        ('2@gmail.com'),
