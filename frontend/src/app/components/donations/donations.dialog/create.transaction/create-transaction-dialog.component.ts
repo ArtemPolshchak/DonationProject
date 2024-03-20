@@ -63,17 +63,23 @@ export class CreateTransactionDialog {
         return this.serverControl.valid && this.contributionControl.valid && this.emailControl.valid;
     }
 
-    setFileData(event: Event): void {
-        const eventTarget: HTMLInputElement | null =
-            event.target as HTMLInputElement | null;
-        if (eventTarget?.files?.[0]) {
-            const file: File = eventTarget.files[0];
+    saveImage(event: Event): void {
+        const target = event.target as HTMLInputElement | null;
+        if (target?.files) {
+            const file: File= target.files?.[0];
             const reader = new FileReader();
             reader.addEventListener('load', () => {
                 this.editForm.get('photo')?.setValue(reader.result as string);
+                this.transaction.image = reader.result as string;
+                console.log(this.transaction.image);
             });
             reader.readAsDataURL(file);
         }
+    }
+
+    removeImage() {
+        this.editForm.get('photo')?.setValue(null);
+        this.transaction.image = "";
     }
 
     createTransaction() {
@@ -83,4 +89,6 @@ export class CreateTransactionDialog {
         console.log(this.transaction);
         this.transactionService.create(this.transaction).subscribe();
     }
+
+    protected readonly HTMLInputElement = HTMLInputElement;
 }

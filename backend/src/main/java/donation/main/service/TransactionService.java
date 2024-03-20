@@ -89,7 +89,7 @@ public class TransactionService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         checkPermission(authentication);
         TransactionState currentState = transaction.getState();
-        TransactionState newState = TransactionState.valueOf(dto.state());
+        TransactionState newState = dto.state();
         if (!transactionStateManager.isAllowedTransitionState(currentState, newState)) {
             throw new InvalidTransactionState("This state can't be set up, check state", newState);
         }

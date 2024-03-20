@@ -75,7 +75,7 @@
                     <ng-template>
                         [Кто создал {{transaction.createdBy}}]
                         [Кто подтвердил {{transaction.approvedBy}}]
-                        [Картинка {{transaction.imageUrl}}]
+                        [Картинка {{transaction.image}}]
                         [бонусы Сервера {{transaction.serverBonusPercentage}}%]
                         [Бонысы Донатора {{transaction.personalBonusPercentage}}%]
                         [Бонысы Админа {{transaction.adminBonus}}]
@@ -83,6 +83,7 @@
                         [Общая сумма доната  {{transaction.totalAmount}}]
                         [Состояние заявки {{transaction.state}}]
                         [Комментарий {{transaction.comment}}]
+                        <img [src]="transaction.image" alt="img"/>
                     </ng-template>
                 </div>
             </div>

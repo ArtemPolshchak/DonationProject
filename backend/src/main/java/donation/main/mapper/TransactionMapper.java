@@ -12,14 +12,17 @@ import org.mapstruct.MappingTarget;
 @Mapper(config = MapperConfig.class)
 public interface TransactionMapper {
 
+    @Mapping(target = "image", expression = "java(dto.image().getBytes())")
     TransactionEntity toEntity(CreateTransactionDto dto);
 
     @Mapping(source = "server.serverName", target = "serverName")
     @Mapping(source = "donator.email", target = "donatorEmail")
     @Mapping(source = "createdByUser.email", target = "createdBy")
     @Mapping(source = "approvedByUser.email", target = "approvedBy")
+    @Mapping(target = "image", expression = "java(new String(entity.getImage()))")
     TransactionResponseDto toDto(TransactionEntity entity);
 
+    @Mapping(target = "image", expression = "java(dto.image().getBytes())")
     TransactionEntity update(@MappingTarget TransactionEntity entity, UpdateTransactionDto dto);
 
 }

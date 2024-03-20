@@ -5,7 +5,7 @@ export class Transaction {
     serverName!: string;
     dateCreated!: Date;
     dateApproved?: Date;
-    imageUrl!: string;
+    image!: string;
     createdBy!: string;
     approvedBy?: number;
     state!: string;
