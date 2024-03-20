@@ -12,39 +12,43 @@ import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-donators',
-  standalone: true,
-  imports: [
-    NgForOf,
-    MatFormField,
-    MatInput,
-    MatIcon,
-    MatButton,
-    FormsModule,
-    MatMenuTrigger,
-    MatMenu,
-    MatMenuItem,
-    MatLabel,
-    MatPaginator,
-  ],
-  templateUrl: './donators.component.html',
-  styleUrl: './donators.component.scss'
+    selector: 'app-donators',
+    standalone: true,
+    imports: [
+        NgForOf,
+        MatFormField,
+        MatInput,
+        MatIcon,
+        MatButton,
+        FormsModule,
+        MatMenuTrigger,
+        MatMenu,
+        MatMenuItem,
+        MatLabel,
+        MatPaginator,
+    ],
+    templateUrl: './donators.component.html',
+    styleUrl: './donators.component.scss'
 })
 export class DonatorsComponent implements OnInit {
 
-  donators: Donator[] = [];
-  pageNumber: number = 0;
-  pageSize: number = 5;
-  totalElements: number = 0;
-  selectedItem: any;
-  donatorsMail?: string;
-  sortState?: string = "totalDonations,desc";
+    donators: Donator[] = [];
+    pageNumber: number = 0;
+    pageSize: number = 5;
+    totalElements: number = 0;
+    selectedItem: any;
+    donatorsMail?: string;
+    ascOrder = "asc";
+    descOrder = "desc";
+    defaultSortField = "totalDonations"
+    sortOrder: string = this.descOrder;
+    sortState: string = this.defaultSortField + ',' + this.sortOrder;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private donatorService: DonatorService,
-    private router: Router) {
-  }
+    constructor(private donatorService: DonatorService,
+                private router: Router) {
+    }
 
     goToDonatorStory(donatorId: number, email: string, totalDonations: number | undefined): void {
         if (typeof totalDonations !== 'undefined') {
@@ -54,54 +58,47 @@ export class DonatorsComponent implements OnInit {
         }
     }
 
-
-
     handleClick($event: any) {
-    $event.stopPropagation();
-  }
+        $event.stopPropagation();
+    }
 
-  select(item: any) {
-    this.selectedItem = item;
-  }
+    select(item: any) {
+        this.selectedItem = item;
+    }
 
-  ngOnInit(): void {
-    this.getDonatorsPage();
-
-  }
-
-  getDonatorsPage(): void {
-    this.getAll()
-
-  }
+    ngOnInit(): void {
+        this.getAll()
+    }
 
     getAll(): void {
         this.donatorService.getAll(this.pageNumber, this.pageSize, this.sortState)
             .subscribe((response) => {
                 this.donators = response.content;
                 this.totalElements = response.totalElements;
-                console.log("donators" + this.donators.length);
-                console.log("totalElements" + this.totalElements);
             });
     }
 
+    sort(sortField: string) {
+        this.sortOrder = this.sortOrder === this.descOrder ? this.ascOrder : this.descOrder;
+        this.sortState = sortField + ',' + this.sortOrder;
+        this.getAll();
+    }
+
     search(): void {
+        this.sortState = this.defaultSortField + ',' + this.sortOrder;
         this.donatorService.search(this.donatorsMail, this.pageNumber, this.pageSize, this.sortState)
             .subscribe((response) => {
                 this.donators = response.content;
                 this.totalElements = response.totalElements;
-                console.log("donators" + this.donators.length);
-                console.log("totalElements" + this.totalElements);
             });
     }
 
 
-
     onPageChange(event: PageEvent): void {
-    this.pageNumber = event.pageIndex;
-    this.pageSize = event.pageSize;
-
-    this.getDonatorsPage();
-  }
+        this.pageNumber = event.pageIndex;
+        this.pageSize = event.pageSize;
+        this.getAll();
+    }
 
     applySearch(): void {
         if (this.donatorsMail && this.donatorsMail.trim() !== '') {

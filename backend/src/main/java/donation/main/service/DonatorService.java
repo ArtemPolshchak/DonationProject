@@ -17,8 +17,8 @@ public class DonatorService {
     private final DonatorRepository donatorRepository;
     private final DonatorMapper donatorMapper;
 
-    public Page<DonatorEntity> findAllBy(Pageable pageable) {
-        return donatorRepository.findAllBy(pageable);
+    public Page<DonatorEntity> findAll(Pageable pageable) {
+        return donatorRepository.findAll(pageable);
     }
 
     public DonatorEntity findByMail(String email) {
