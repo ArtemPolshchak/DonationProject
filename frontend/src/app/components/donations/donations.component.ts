@@ -107,7 +107,9 @@ export class DonationsComponent implements OnInit {
             data: this.servers,
         });
         dialogRef.afterClosed().subscribe(() => {
-            this.getTransactionPage()
+           if (dialogRef.componentInstance.success) {
+               this.getTransactionPage()
+           }
         });
     }
 
