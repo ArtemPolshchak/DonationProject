@@ -11,6 +11,7 @@ import {FormsModule} from "@angular/forms";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
 
 @Component({
     selector: 'app-dashboard',
@@ -80,6 +81,13 @@ export class DashboardComponent implements OnInit {
         const message = state === TransactionState.COMPLETED ? 'Заявка Подтверждена!' : 'Заявка Отменена!';
         this._snackBar.open(message, 'Закрыть', {
             duration: this.durationInSeconds * 1000,
+        });
+    }
+
+    openImageDialog(image: string) {
+        const dialogRef = this.dialog.open(OpenImageDialogComponent, {
+            width: '50%',
+            data: image,
         });
     }
 

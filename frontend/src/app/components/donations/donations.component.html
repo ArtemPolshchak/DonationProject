@@ -75,7 +75,6 @@
                     <ng-template>
                         [Кто создал {{transaction.createdBy}}]
                         [Кто подтвердил {{transaction.approvedBy}}]
-                        [Картинка {{transaction.image}}]
                         [бонусы Сервера {{transaction.serverBonusPercentage}}%]
                         [Бонысы Донатора {{transaction.personalBonusPercentage}}%]
                         [Бонысы Админа {{transaction.adminBonus}}]
@@ -83,7 +82,9 @@
                         [Общая сумма доната  {{transaction.totalAmount}}]
                         [Состояние заявки {{transaction.state}}]
                         [Комментарий {{transaction.comment}}]
-                        <img [src]="transaction.image" alt="img"/>
+                        <img [src]="transaction.image" alt="img" width="20%"
+                             style="cursor:pointer"
+                             (click)="openImageDialog(transaction.image)"/>
                     </ng-template>
                 </div>
             </div>
@@ -96,4 +97,3 @@
                    (page)="onPageChange($event)">
     </mat-paginator>
 </div>
-

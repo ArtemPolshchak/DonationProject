@@ -48,7 +48,9 @@
           [Общая сумма доната  {{transaction.totalAmount}}]
           [Состояние заявки {{transaction.state}}]
           [Комментарий {{transaction.comment}}]
-          <img [src]="transaction.image" alt="img"/>
+          <img [src]="transaction.image" alt="img"
+               (click)="openImageDialog(transaction.image)"
+               width="20%" style="cursor:pointer"/>
         </ng-template>
       </div>
     </div>

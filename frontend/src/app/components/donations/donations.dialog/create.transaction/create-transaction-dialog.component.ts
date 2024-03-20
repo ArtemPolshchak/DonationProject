@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, HostListener, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogModule} from "@angular/material/dialog";
 import {Transaction} from "../../../../common/transaction";
 import {FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, Validators} from "@angular/forms";
@@ -63,18 +63,29 @@ export class CreateTransactionDialog {
         return this.serverControl.valid && this.contributionControl.valid && this.emailControl.valid;
     }
 
-    saveImage(event: Event): void {
+    emitFiles(event: Event): void {
         const target = event.target as HTMLInputElement | null;
         if (target?.files) {
-            const file: File= target.files?.[0];
-            const reader = new FileReader();
-            reader.addEventListener('load', () => {
-                this.editForm.get('photo')?.setValue(reader.result as string);
-                this.transaction.image = reader.result as string;
-                console.log(this.transaction.image);
-            });
-            reader.readAsDataURL(file);
+            const file: File = target.files?.[0];
+            this.saveImage(file);
         }
+    }
+
+    @HostListener('window:paste', ['$event']) onPaste(event: ClipboardEvent) {
+        if (event?.clipboardData?.files) {
+            const file = event.clipboardData.files?.[0];
+            this.saveImage(file);
+        }
+    }
+
+    saveImage(file: File) {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => {
+            this.editForm.get('photo')?.setValue(reader.result as string);
+            this.transaction.image = reader.result as string;
+            console.log(this.transaction.image);
+        });
+        reader.readAsDataURL(file);
     }
 
     removeImage() {
@@ -86,7 +97,6 @@ export class CreateTransactionDialog {
         this.transaction.serverId = this.serverControl.value!.id
         this.transaction.contributionAmount = Number(this.contributionControl.value!);
         this.transaction.donatorEmail = this.emailControl.value!;
-        console.log(this.transaction);
         this.transactionService.create(this.transaction).subscribe();
     }
 
