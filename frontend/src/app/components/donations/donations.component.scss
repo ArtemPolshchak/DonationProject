@@ -96,3 +96,88 @@
   background-color: #425565;
   color: #C5CCD3;
 }
+
+
+h2 {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Распределяет элементы на одинаковом расстоянии друг от друга */
+  border-radius: 6px;
+  margin-bottom: 15px;
+
+  button {
+    flex: 1; /* Даем всем кнопкам одинаковую ширину */
+    display: flex;
+    align-items: center; /* Выравниваем элементы по вертикали */
+    background: none;
+    border: 0;
+    padding: 0;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  button span {
+    flex: 1; /* Даем всем элементам внутри кнопки одинаковую ширину */
+    padding: 5px;
+    box-sizing: border-box;
+    line-height: 1.2;
+    color: #555;
+    margin-left: -1px;
+    white-space: nowrap; /* Запрещаем перенос текста */
+
+    &::before {
+      content: "";
+      padding-right: 5px;
+    }
+
+    &::after {
+      content: "";
+    }
+
+    &:nth-child(4n+1) strong {
+      font-weight: bold;
+    }
+  }
+
+  .secondary-button {
+    flex: none;
+    width: 120px;
+  }
+}
+//.image-container {
+//  display: flex;
+//  align-items: center; // Выравниваем элементы по вертикали
+//}
+//
+//.image-container img {
+//  max-width: 20%; // Задаем ширину изображения
+//  cursor: pointer;
+//  margin-right: 10px; // Добавляем небольшой отступ между изображением и текстом
+//}
+//
+//.text-content {
+//  flex: 1; // Растягиваем текстовое содержимое на всю доступную ширину
+//}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.info-block {
+  width: calc(40% - 5px);
+  margin-bottom: 10px;
+}
+
+.amounts-block {
+  width: calc(40% - 5px);
+  margin-bottom: 10px;
+}
+
+
+
+
