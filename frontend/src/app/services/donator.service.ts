@@ -44,4 +44,3 @@ interface GetTransactionResponse {
 export interface CreateDonator {
   email: string;
 }
-
