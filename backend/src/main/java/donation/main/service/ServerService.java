@@ -9,6 +9,7 @@ import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
 import donation.main.dto.serverdto.CreateServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
 import donation.main.entity.DonatorEntity;
+import donation.main.entity.ServerBonusSettingsEntity;
 import donation.main.entity.ServerEntity;
 import donation.main.exception.PageNotFoundException;
 import donation.main.exception.ServerNotFoundException;
@@ -42,7 +43,16 @@ public class ServerService {
     }
 
     public ServerEntity createServer(CreateServerDto serverDto) {
-        return serverRepository.save(serverMapper.toEntity(serverDto));
+
+        ServerEntity server = serverMapper.toEntity(serverDto);
+        ServerBonusSettingsEntity defaultBonus = new ServerBonusSettingsEntity();
+        defaultBonus.setBonusPercentage(BigDecimal.ZERO);
+        defaultBonus.setFromAmount(BigDecimal.ZERO);
+        defaultBonus.setToAmount(BigDecimal.ZERO);
+        defaultBonus.setServer(server);
+        server.getServerBonusSettings().add(defaultBonus);
+
+        return serverRepository.save(server);
     }
 
     public ServerEntity findById(Long id) {

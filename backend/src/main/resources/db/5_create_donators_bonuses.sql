@@ -1,4 +1,6 @@
-insert into servers_donators_bonuses(server_id, donators_bonuses, donator_id)
+create schema if not exists public;
+
+insert into public.servers_donators_bonuses(server_id, donators_bonuses, donator_id)
 values ('1', '10.00', '1'),
        ('2', '10.00', '1'),
        ('3', '10.00', '1'),

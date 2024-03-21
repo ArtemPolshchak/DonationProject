@@ -16,6 +16,12 @@ import {DonatorBonusDialogComponent} from "./donator-bonus-dialog/donator-bonus-
 import {CreateDonatorDialogComponent} from "./create-donator-dialog/create-donator-dialog.component";
 import {SetupBonusDialogComponent} from "../donator-bonus-on-server/setup-bonus-dialog/setup-bonus-dialog.component";
 
+import {Server} from "../../common/server";
+import {
+    CreateTransactionDialog
+} from "../donations/donations.dialog/create.transaction/create-transaction-dialog.component";
+
+
 @Component({
     selector: 'app-donators',
     standalone: true,
@@ -36,7 +42,7 @@ import {SetupBonusDialogComponent} from "../donator-bonus-on-server/setup-bonus-
     styleUrl: './donators.component.scss'
 })
 export class DonatorsComponent implements OnInit {
-
+    servers: Server[] = [];
     donators: Donator[] = [];
     pageNumber: number = 0;
     pageSize: number = 5;
@@ -74,6 +80,10 @@ export class DonatorsComponent implements OnInit {
 
     ngOnInit(): void {
         this.getAll()
+        const serversData = sessionStorage.getItem('servers');
+        if (serversData) {
+            this.servers = JSON.parse(serversData);
+        }
     }
 
     getAll(): void {
@@ -113,18 +123,16 @@ export class DonatorsComponent implements OnInit {
             this.getAll();
         }
     }
-    openServerBonusDialog(): void {
+
+    openPersonalBonusDialog(donatorEmail: string): void {
+
         const dialogRef = this.dialog.open(DonatorBonusDialogComponent, {
             width: '50%',
-            // data: {
-            //     serverId: serverId
-            //
-            // }
+            data: { email: donatorEmail, servers: this.servers },
         });
+        dialogRef.afterClosed().subscribe(() => {
+            this.getAll();
 
-        dialogRef.afterClosed().subscribe(result => {
-            console.log('The dialog was closed');
-            console.log('Dialog result:', result);
         });
     }
     createDonatorDialog(): void {

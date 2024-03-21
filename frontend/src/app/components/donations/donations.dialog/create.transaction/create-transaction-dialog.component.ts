@@ -14,7 +14,6 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import {TransactionService} from "../../../../services/transaction.service";
 import {Server} from "../../../../common/server";
 import {MatIcon} from "@angular/material/icon";
-import {error} from "@angular/compiler-cli/src/transformers/util";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
@@ -40,7 +39,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     styleUrl: './create-transaction-dialog.component.scss'
 })
 export class CreateTransactionDialog {
-    success: boolean = false;
+    maxImgSideSize = 800;
     durationInSeconds: number = 5;
     servers: Server[];
     transaction: Transaction = new Transaction();
@@ -86,12 +85,41 @@ export class CreateTransactionDialog {
 
     saveImage(file: File) {
         const reader = new FileReader();
+        const img = new Image()
         reader.addEventListener('load', () => {
             this.editForm.get('photo')?.setValue(reader.result as string);
-            this.transaction.image = reader.result as string;
-            console.log(this.transaction.image);
+            this.compressImage(reader.result as string).then(result => {
+                    this.transaction.image = result as string;
+                }
+            );
         });
         reader.readAsDataURL(file);
+    }
+
+    compressImage(src: string) {
+        return new Promise((res, rej) => {
+            const img = new Image();
+            img.src = src;
+            console.log(src)
+            img.onload = () => {
+                const elem = document.createElement('canvas');
+                if (img.height > img.width) {
+                    elem.height = this.maxImgSideSize
+                    elem.width = img.width * (this.maxImgSideSize / img.height)
+                } else {
+                    elem.width = this.maxImgSideSize
+                    elem.height = img.height * (this.maxImgSideSize / img.width)
+                }
+                const ctx = <CanvasRenderingContext2D>elem.getContext('2d');
+                console.log(img.width + " " + img.height);
+                console.log((this.maxImgSideSize / img.height));
+                console.log(elem.width + " " + elem.height);
+                ctx.drawImage(img, 0, 0, elem.width, elem.height);
+                const data = ctx.canvas.toDataURL();
+                res(data);
+            }
+            img.onerror = error => rej(error);
+        })
     }
 
     removeImage() {
@@ -103,12 +131,11 @@ export class CreateTransactionDialog {
         this.transaction.serverId = this.serverControl.value!.id
         this.transaction.contributionAmount = Number(this.contributionControl.value!);
         this.transaction.donatorEmail = this.emailControl.value!;
-        this.transactionService.create(this.transaction).subscribe(
-            () => {
-                this.success = true;
-                this.openSnackBar("Транзакция успешно создана")},
-            err => {this.openSnackBar("Ошибка при создании транзакции: " + err.message)}
-
+        console.log(this.transaction.image)
+        this.transactionService.create(this.transaction).subscribe({
+                next: () => this.openSnackBar("Транзакция успешно создана"),
+                error: (err) => this.openSnackBar("Ошибка при создании транзакции: " + err.message)
+            },
         );
     }
 

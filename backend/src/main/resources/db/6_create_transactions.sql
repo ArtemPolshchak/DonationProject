@@ -1,4 +1,6 @@
-insert into transactions(comment, contribution_amount, date_created, donator_bonus_percentage, server_bonus_percentage, state, total_amount, created_by_user_id, donator_id, server_id)
+create schema if not exists public;
+
+insert into public.transactions(comment, contribution_amount, date_created, donator_bonus_percentage, server_bonus_percentage, state, total_amount, created_by_user_id, donator_id, server_id)
 values ('string', '100.00', '2024-01-01 16:21:04.971409', '10.00', '10.00', 'IN_PROGRESS', '1100.00', '3', '1', '2'),
        ('string', '500.00', '2024-02-05 15:29:09.834000', '10.00', '10.00', 'IN_PROGRESS', '600.00', '2', '17', '1'),
        ('string','500.00','2024-02-08 15:29:23.213000','10.00','10.00','IN_PROGRESS', '600.00', '2','20','1'),

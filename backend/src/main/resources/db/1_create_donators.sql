@@ -1,4 +1,6 @@
-insert into donators (email, total_donations)
+create schema if not exists public;
+
+insert into public.donators (email, total_donations)
     values ('1@gmail.com', '0.00'),
            ('2@gmail.com', '0.00'),
            ('3@gmail.com', '0.00'),

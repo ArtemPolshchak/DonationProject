@@ -1,4 +1,6 @@
-insert into server_bonus_settings(bonus_percentage, from_amount, to_amount, server_id)
+create schema if not exists public;
+
+insert into public.server_bonus_settings(bonus_percentage, from_amount, to_amount, server_id)
 values ('5.00','100.00','499.00','1'),
        ('10.00','500.00','999.00','1'),
        ('15.00','1000.00','2499.00','1'),
