@@ -15,46 +15,100 @@
 </div>
 <div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
   <div class="item" ngbAccordionItem="{{transaction.id}}">
+
     <h2 ngbAccordionHeader>
       <button ngbAccordionButton>
-       [ Дата создания {{transaction.dateCreated | date: 'dd MMMM yyyy'}}]
-       [ Айди сервера {{ transaction.serverName}}]
-       [ Почта донатора {{transaction.donatorEmail}}]
-       [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]
+        <span *ngIf="transaction.dateCreated">
+          Дата создания: <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</strong>
+        </span>
+        <span *ngIf="transaction.serverName">
+          Имя сервера: <strong>{{ transaction.serverName}}</strong>
+        </span>
+        <span *ngIf="transaction.donatorEmail">
+          Почта донатора: <strong>{{transaction.donatorEmail}}</strong>
+        </span>
+        <span *ngIf="transaction.totalAmount">
+          Общая сумма Доната: <strong>{{transaction.totalAmount | currency: 'USD'}}</strong>
+        </span>
       </button>
-<!--        <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">Подтвердить</button>-->
-<!--      <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">Отменить</button>-->
-
-      <button class="btn primary-button ms-2" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">Подтвердить</button>
-      <button class="btn secondary-button ms-2" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">Отменить</button>
-
-      <!--      <div ngbAccordionToggle>-->
-<!--        <div>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</div>-->
-<!--        <div>{{transaction.donatorEmail}}</div>-->
-<!--        <div>{{transaction.contributionAmount | currency: 'USD'}}</div>-->
-<!--      </div>-->
     </h2>
+    <button class="btn primary-button ms-2" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">Подтвердить</button>
+
+    <button class="btn secondary-button ms-2" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">Отменить</button>
+
+<!--    <h2 ngbAccordionHeader>-->
+<!--      <button ngbAccordionButton>-->
+<!--       [ Дата создания {{transaction.dateCreated | date: 'dd MMMM yyyy'}}]-->
+<!--       [ Айди сервера {{ transaction.serverName}}]-->
+<!--       [ Почта донатора {{transaction.donatorEmail}}]-->
+<!--       [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]-->
+<!--      </button>-->
+<!--&lt;!&ndash;        <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">Подтвердить</button>&ndash;&gt;-->
+<!--&lt;!&ndash;      <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">Отменить</button>&ndash;&gt;-->
+
+<!--      <button class="btn primary-button ms-2" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">Подтвердить</button>-->
+<!--      <button class="btn secondary-button ms-2" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">Отменить</button>-->
+
+<!--      &lt;!&ndash;      <div ngbAccordionToggle>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div>{{transaction.donatorEmail}}</div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div>{{transaction.contributionAmount | currency: 'USD'}}</div>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--    </h2>-->
     <div ngbAccordionCollapse>
       <div ngbAccordionBody>
-        <mat-form-field>
-          <mat-label>Admin Bonus</mat-label>
-          <input matInput [(ngModel)]="transaction.adminBonus" [disabled]="transaction.state === TransactionState.CANCELLED">
-        </mat-form-field>
-        <ng-template>
-          [Кто создал {{transaction.createdBy}}]
-          [бонусы Сервера {{transaction.serverBonusPercentage}}%]
-          [Бонысы Донатора {{transaction.personalBonusPercentage}}%]
-          [сумма зачисления  {{transaction.contributionAmount}}]
-          [Общая сумма доната  {{transaction.totalAmount}}]
-          [Состояние заявки {{transaction.state}}]
-          [Комментарий {{transaction.comment}}]
+
+<!--        <ng-template>-->
+<!--          [Кто создал {{transaction.createdBy}}]-->
+<!--          [бонусы Сервера {{transaction.serverBonusPercentage}}%]-->
+<!--          [Бонысы Донатора {{transaction.personalBonusPercentage}}%]-->
+<!--          [сумма зачисления  {{transaction.contributionAmount}}]-->
+<!--          [Общая сумма доната  {{transaction.totalAmount}}]-->
+<!--          [Состояние заявки {{transaction.state}}]-->
+<!--          [Комментарий {{transaction.comment}}]-->
+<!--          <div class="image-container">-->
+<!--            <img #image  [src]="transaction.image" alt="img"-->
+<!--                 onerror="this.src='s../../assets/images/no-image.jpg'"-->
+<!--                 width="20%" style="cursor:pointer"-->
+<!--                 (click)="openImageDialog(image.src)"/>-->
+<!--          </div>-->
+<!--        </ng-template>-->
+        <div class="container">
           <div class="image-container">
-            <img #image  [src]="transaction.image" alt="img"
+            <img #image [src]="transaction.image" alt="img"
                  onerror="this.src='s../../assets/images/no-image.jpg'"
-                 width="20%" style="cursor:pointer"
+                 width="100%" style="cursor:pointer"
                  (click)="openImageDialog(image.src)"/>
           </div>
-        </ng-template>
+          <div class="info-block">
+            <div>
+              Кто создал: <strong>{{transaction.createdBy}}</strong> (Дата создания <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy'}})</strong>
+            </div>
+            <div>
+              Комментарий: <strong>{{transaction.comment}}</strong>
+            </div>
+            <div >
+              <mat-form-field>
+                <mat-label>Бонус от Админа</mat-label>
+                <input matInput [(ngModel)]="transaction.adminBonus" [disabled]="transaction.state === TransactionState.CANCELLED">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="amounts-block">
+            <div>
+              бонусы Сервера: <strong>{{transaction.serverBonusPercentage}}%</strong>
+            </div>
+            <div>
+              Бонысы Донатора: <strong>{{transaction.personalBonusPercentage}}%</strong>
+            </div>
+            <div>
+              сумма зачисления: <strong>{{transaction.contributionAmount}}</strong>
+            </div>
+            <div>
+              Общая сумма доната: <strong>{{transaction.totalAmount}}</strong>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

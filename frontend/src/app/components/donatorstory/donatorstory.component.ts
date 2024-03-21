@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {Transaction} from "../../common/transaction";
 import {TransactionService} from "../../services/transaction.service";
-import {CurrencyPipe, DatePipe, NgForOf} from "@angular/common";
+import {CurrencyPipe, DatePipe, NgForOf, NgIf} from "@angular/common";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {
@@ -21,23 +21,24 @@ import {MatDialog} from "@angular/material/dialog";
 @Component({
   selector: 'app-donatorstory',
   standalone: true,
-  imports: [
-    MatPaginator,
-    CurrencyPipe,
-    DatePipe,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    NgForOf,
-    NgbAccordionBody,
-    NgbAccordionButton,
-    NgbAccordionCollapse,
-    NgbAccordionDirective,
-    NgbAccordionHeader,
-    NgbAccordionItem,
-    ReactiveFormsModule,
-    FormsModule
-  ],
+    imports: [
+        MatPaginator,
+        CurrencyPipe,
+        DatePipe,
+        MatFormField,
+        MatInput,
+        MatLabel,
+        NgForOf,
+        NgbAccordionBody,
+        NgbAccordionButton,
+        NgbAccordionCollapse,
+        NgbAccordionDirective,
+        NgbAccordionHeader,
+        NgbAccordionItem,
+        ReactiveFormsModule,
+        FormsModule,
+        NgIf
+    ],
   templateUrl: './donatorstory.component.html',
   styleUrl: './donatorstory.component.scss'
 })
