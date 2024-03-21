@@ -1,10 +1,12 @@
-create table if not exists donators
+create schema if not exists external;
+
+create table if not exists external.donators
 (
     id    bigserial primary key,
-    email varchar(32)
+    email varchar(32) unique
 );
 
-insert into donators (email)
+insert into external.donators (email)
 values ('1@gmail.com'),
        ('2@gmail.com'),
        ('3@gmail.com'),
@@ -24,4 +26,4 @@ values ('1@gmail.com'),
        ('17@gmail.com'),
        ('18@gmail.com'),
        ('19@gmail.com'),
-       ('20@gmail.com')
+       ('20@gmail.com');

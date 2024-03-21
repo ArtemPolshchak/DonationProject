@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {map} from "rxjs";
 import {Server} from "../common/server";
 import {DonatorBonus} from "../common/donatorBonus";
+import {CreateDonatorBonus} from "../common/create-donator-bonus";
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +49,14 @@ export class ServerService {
     console.log("PersonalBonus: " + dto.personalBonus);
     return this.httpClient.put<UpdateDonatorsBonus>(url, dto, { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') } });
   }
+
+  public createDonatorsBonusOnServer(dto: CreateDonatorBonus) {
+    const url: string = `api/servers/create-donator-bonus`;
+    console.log("ServerId: " + dto.serverId);
+    console.log("DonatorEmail: " + dto.email);
+    console.log("PersonalBonus: " + dto.personalBonus);
+    return this.httpClient.post<CreateDonatorBonus>(url, dto, { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') } });
+  }
 }
 
 export interface UpdateDonatorsBonus {
@@ -55,6 +64,7 @@ export interface UpdateDonatorsBonus {
   donatorId: number;
   personalBonus: number;
 }
+
 interface GetServerResponse {
   content: Server[];
   pageable: {
