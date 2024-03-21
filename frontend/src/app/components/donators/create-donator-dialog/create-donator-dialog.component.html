@@ -1,0 +1,21 @@
+<header class="header">
+    <h2 class="title">Добавить нового донатора</h2>
+</header>
+<mat-dialog-content>
+    <mat-card class="card-container">
+        <mat-card-content>
+            <mat-form-field class="input-field" appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" [formControl]="emailControl" />
+                <mat-error *ngIf="emailControl.hasError('required')">Field required!</mat-error>
+                <mat-error *ngIf="emailControl.hasError('pattern')">Invalid email format!</mat-error>
+            </mat-form-field>
+        </mat-card-content>
+    </mat-card>
+</mat-dialog-content>
+<mat-dialog-actions align="start">
+    <button class="cancel-button" mat-button mat-dialog-close>Отменить</button>
+    <button class="ok-button" mat-button (click)="createDonator()" [disabled]="!isFormValid()" mat-dialog-close>Сохранить</button>
+</mat-dialog-actions>
+
+
