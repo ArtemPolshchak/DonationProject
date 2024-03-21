@@ -15,10 +15,12 @@ import {MatDialog} from "@angular/material/dialog";
 import {DonatorBonusDialogComponent} from "./donator-bonus-dialog/donator-bonus-dialog.component";
 import {CreateDonatorDialogComponent} from "./create-donator-dialog/create-donator-dialog.component";
 import {SetupBonusDialogComponent} from "../donator-bonus-on-server/setup-bonus-dialog/setup-bonus-dialog.component";
+
 import {Server} from "../../common/server";
 import {
     CreateTransactionDialog
 } from "../donations/donations.dialog/create.transaction/create-transaction-dialog.component";
+
 
 @Component({
     selector: 'app-donators',
@@ -121,6 +123,7 @@ export class DonatorsComponent implements OnInit {
             this.getAll();
         }
     }
+
     openPersonalBonusDialog(donatorEmail: string): void {
 
         const dialogRef = this.dialog.open(DonatorBonusDialogComponent, {
@@ -129,6 +132,7 @@ export class DonatorsComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(() => {
             this.getAll();
+
         });
     }
     createDonatorDialog(): void {

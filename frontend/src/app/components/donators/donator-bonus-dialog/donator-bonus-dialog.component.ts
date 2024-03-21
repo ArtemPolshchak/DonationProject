@@ -1,3 +1,4 @@
+
 import {Component, HostListener, Inject} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
@@ -16,6 +17,8 @@ import {Donator} from "../../../common/donator";
 import {DonatorBonus} from "../../../common/donatorBonus";
 import {ServerService} from "../../../services/server.service";
 import {CreateDonatorBonus} from "../../../common/create-donator-bonus";
+
+
 
 @Component({
   selector: 'app-donator-bonus-dialog',
@@ -38,10 +41,12 @@ import {CreateDonatorBonus} from "../../../common/create-donator-bonus";
         NgIf,
         ReactiveFormsModule
     ],
+
   templateUrl: './donator-bonus-dialog.component.html',
   styleUrl: './donator-bonus-dialog.component.scss'
 })
 export class DonatorBonusDialogComponent {
+
     durationInSeconds: number = 5;
     donator: CreateDonatorBonus = new CreateDonatorBonus();
     servers: Server[];
