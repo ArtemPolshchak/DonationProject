@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgbAccordionModule} from "@ng-bootstrap/ng-bootstrap";
-import {CurrencyPipe, DatePipe, NgForOf} from "@angular/common";
+import {CurrencyPipe, DatePipe, NgForOf, NgIf} from "@angular/common";
 import {TransactionService} from "../../services/transaction.service";
 import {Transaction} from "../../common/transaction";
 import {SidebarComponent} from "../sidebar/sidebar.component";
@@ -25,7 +25,8 @@ import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.c
         MatFormFieldModule,
         MatInputModule,
         FormsModule,
-        MatPaginator
+        MatPaginator,
+        NgIf
     ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
