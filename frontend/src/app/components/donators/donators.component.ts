@@ -10,6 +10,11 @@ import {FormsModule} from "@angular/forms";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {Router} from "@angular/router";
+import {ServerBonusComponent} from "../server/server.server-bonus-dialog/server-bonus.component";
+import {MatDialog} from "@angular/material/dialog";
+import {DonatorBonusDialogComponent} from "./donator-bonus-dialog/donator-bonus-dialog.component";
+import {CreateDonatorDialogComponent} from "./create-donator-dialog/create-donator-dialog.component";
+import {SetupBonusDialogComponent} from "../donator-bonus-on-server/setup-bonus-dialog/setup-bonus-dialog.component";
 
 @Component({
     selector: 'app-donators',
@@ -47,6 +52,7 @@ export class DonatorsComponent implements OnInit {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
     constructor(private donatorService: DonatorService,
+                private dialog: MatDialog,
                 private router: Router) {
     }
 
@@ -106,5 +112,30 @@ export class DonatorsComponent implements OnInit {
         } else {
             this.getAll();
         }
+    }
+    openServerBonusDialog(): void {
+        const dialogRef = this.dialog.open(DonatorBonusDialogComponent, {
+            width: '50%',
+            // data: {
+            //     serverId: serverId
+            //
+            // }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+            console.log('Dialog result:', result);
+        });
+    }
+    createDonatorDialog(): void {
+
+        const dialogRef = this.dialog.open(CreateDonatorDialogComponent, {
+            width: '50%',
+            data: {
+
+            }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+        });
     }
 }
