@@ -132,13 +132,10 @@ export class CreateTransactionDialog {
         this.transaction.contributionAmount = Number(this.contributionControl.value!);
         this.transaction.donatorEmail = this.emailControl.value!;
         console.log(this.transaction.image)
-        this.transactionService.create(this.transaction).subscribe(
-            () => {
-                this.openSnackBar("Транзакция успешно создана")
+        this.transactionService.create(this.transaction).subscribe({
+                next: () => this.openSnackBar("Транзакция успешно создана"),
+                error: (err) => this.openSnackBar("Ошибка при создании транзакции: " + err.message)
             },
-            err => {
-                this.openSnackBar("Ошибка при создании транзакции: " + err.message)
-            }
         );
     }
 
