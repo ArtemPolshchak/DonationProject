@@ -14,6 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -48,14 +49,15 @@ public class ServerEntity {
     @CollectionTable(name = "servers_donators_bonuses", joinColumns = @JoinColumn(name = "server_id", referencedColumnName = "id"))
     @MapKeyJoinColumn(name = "donator_id", referencedColumnName = "id")
     @Column(name = "donators_bonuses")
+    @BatchSize(size = 50)
     private Map<DonatorEntity, BigDecimal> donatorsBonuses = new HashMap<>();
 
     @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
+    @BatchSize(size = 50)
     private SortedSet<ServerBonusSettingsEntity> serverBonusSettings = new TreeSet<>();
 
     public void refreshBonuses(Set<ServerBonusSettingsEntity> set) {
         serverBonusSettings.clear();
         serverBonusSettings.addAll(set);
     }
-
 }

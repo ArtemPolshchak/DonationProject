@@ -57,6 +57,7 @@ export class LoginComponent {
   }
 
   private getServerList(): void {
+    sessionStorage.removeItem('servers');
     this.serverService.getAll().subscribe({
       next: (v) =>
           sessionStorage.setItem('servers', JSON.stringify(v.content)),

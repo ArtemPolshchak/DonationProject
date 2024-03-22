@@ -8,7 +8,7 @@
             </div>
             <div class="col-auto my-auto">
                 <div class="buttons">
-                    <div class="button" id="remove_server" [ngClass]="{ 'disabled': isButtonDisabled }" (click)="handleRemoveServerClick()">
+                    <div class="button" id="remove_server" [ngClass]="{ 'disabled': isButtonDisabled }" (click)="removeServer()">
                         <div class="row">
                             <div class="col-auto pe-0">
                                 <img src="assets/images/trash.svg" alt="">
@@ -18,7 +18,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="button" id="settings_server" [ngClass]="{ 'disabled': isButtonDisabled }" (click)="handleSettingsServerClick()">
+                    <div class="button" id="settings_server" [ngClass]="{ 'disabled': isButtonDisabled }" (click)="openSetUpServerDialog()">
                         <div class="row">
                             <div class="col-auto pe-0">
                                 <img src="assets/images/settings.svg" alt="">
@@ -67,7 +67,7 @@
                                     {{ server.id }}
                                 </div>
                                 <div class="server-buttons">
-                                    <a class="button"  (click)="goToDonatorBonusOnServer()">
+                                    <a class="button"  (click)="goToDonatorBonusOnServer(server.id)">
                                         БОНУСЫ ИГРОКОВ
                                     </a>
                                     <a class="button" (click)="openServerBonusDialog(server.id)">

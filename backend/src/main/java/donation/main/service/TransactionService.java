@@ -44,7 +44,9 @@ public class TransactionService {
     private final UserService userService;
 
     public TransactionEntity create(CreateTransactionDto dto) {
-        validateDonatorEmail(dto.donatorEmail());
+        //todo I temporoarily turn off the validation of external DB
+       // validateDonatorEmail(dto.donatorEmail());
+
         TransactionEntity entity = transactionMapper.toEntity(dto);
         ServerEntity serverById = serverService.findById(dto.serverId());
         DonatorEntity donatorEntity = donatorService.getDonatorEntityOrCreate(dto.donatorEmail());
@@ -89,7 +91,7 @@ public class TransactionService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         checkPermission(authentication);
         TransactionState currentState = transaction.getState();
-        TransactionState newState = TransactionState.valueOf(dto.state());
+        TransactionState newState = dto.state();
         if (!transactionStateManager.isAllowedTransitionState(currentState, newState)) {
             throw new InvalidTransactionState("This state can't be set up, check state", newState);
         }

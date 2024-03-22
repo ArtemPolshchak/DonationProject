@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -42,8 +43,9 @@ public class TransactionEntity {
     @Column(name = "date_created", nullable = false)
     private LocalDateTime dateCreated = LocalDateTime.now();
 
+    @Lob
     @Column(name = "image")
-    private String imageUrl;
+    private byte[] image;
 
     @Column(name = "state", nullable = false)
     @Enumerated(EnumType.STRING)

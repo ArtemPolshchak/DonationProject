@@ -1,0 +1,16 @@
+.delete-button{
+  position: absolute;
+  z-index: 10;
+  top: 10px;
+  inset-inline-end: 20px;
+  color: white;
+  background: rgba(52, 68,81, 1);
+  opacity: 65%;
+}
+.delete-button:hover{
+  opacity: 90%;
+}
+.image-content {
+  overflow: auto;
+  height: 80%;
+}

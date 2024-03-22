@@ -1,23 +1,29 @@
 package donation.main.service;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
+import donation.main.dto.donatorsdto.DonatorBonusDto;
 import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
 import donation.main.dto.serverdto.CreateServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
 import donation.main.entity.DonatorEntity;
+import donation.main.entity.ServerBonusSettingsEntity;
 import donation.main.entity.ServerEntity;
+import donation.main.exception.PageNotFoundException;
 import donation.main.exception.ServerNotFoundException;
 import donation.main.mapper.DonatorMapper;
 import donation.main.mapper.ServerMapper;
 import donation.main.repository.DonatorRepository;
 import donation.main.repository.ServerRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.SoftDelete;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +34,8 @@ public class ServerService {
     private final DonatorMapper donatorMapper;
     private final DonatorService donatorService;
 
-    public Iterable<ServerEntity> readAll() {
-        return serverRepository.findAll();
+    public Page<ServerEntity> getAll(Pageable pageable) {
+        return serverRepository.findAll(pageable);
     }
 
     public Page<ServerIdNameDto> getAllServersNames(Pageable pageable) {
@@ -37,7 +43,16 @@ public class ServerService {
     }
 
     public ServerEntity createServer(CreateServerDto serverDto) {
-        return serverRepository.save(serverMapper.toEntity(serverDto));
+
+        ServerEntity server = serverMapper.toEntity(serverDto);
+        ServerBonusSettingsEntity defaultBonus = new ServerBonusSettingsEntity();
+        defaultBonus.setBonusPercentage(BigDecimal.ZERO);
+        defaultBonus.setFromAmount(BigDecimal.ZERO);
+        defaultBonus.setToAmount(BigDecimal.ZERO);
+        defaultBonus.setServer(server);
+        server.getServerBonusSettings().add(defaultBonus);
+
+        return serverRepository.save(server);
     }
 
     public ServerEntity findById(Long id) {
@@ -58,7 +73,7 @@ public class ServerService {
         return serverRepository.save(server);
     }
 
-    public ServerEntity updateDonatorsBonusOnserver(UpdateDonatorsBonusOnServer dto) {
+    public ServerEntity updateDonatorsBonusOnServer(UpdateDonatorsBonusOnServer dto) {
         DonatorEntity donator = donatorService.findById(dto.donatorId());
         ServerEntity server = findById(dto.serverId());
         BigDecimal donatorsBonus = dto.personalBonus();
@@ -66,5 +81,31 @@ public class ServerService {
         server.getDonatorsBonuses().put(donator, donatorsBonus);
         return serverRepository.save(server);
 
+    }
+
+    public Page<DonatorBonusDto> getAllDonatorBonusesByServerId(Long serverId, Pageable pageable) {
+        return getPage(serverRepository.getDonatorBonusesByServerId(serverId, pageable.getSort()), pageable);
+    }
+
+    public Page<DonatorBonusDto> searchDonatorsByEmailLike(Long serverId, String email, Pageable pageable) {
+        return getPage(serverRepository
+                .getBonusesByServerIdAndDonatorsEmail(serverId, email, pageable.getSort()), pageable);
+    }
+
+    @SoftDelete
+    public ServerEntity delete() {
+        return null;
+    }
+
+    private Page<DonatorBonusDto> getPage(List<DonatorBonusDto> donatorBonuses, Pageable pageable) {
+        int toIndex = (donatorBonuses.size() - 1) > pageable.getPageSize() + pageable.getOffset()
+                ? pageable.getPageSize() + (int) pageable.getOffset()
+                : donatorBonuses.size();
+        if (pageable.getOffset() >= toIndex) {
+            throw new PageNotFoundException("There is no page number " + pageable.getPageNumber());
+        }
+        return new PageImpl<>(
+                donatorBonuses.subList((int) pageable.getOffset(), toIndex),
+                pageable, donatorBonuses.size());
     }
 }

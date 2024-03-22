@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DashboardComponent } from './dashboard.component';
+import { OpenImageDialogComponent } from './open-image-dialog.component';
 
-describe('DashboardComponent', () => {
-  let component: DashboardComponent;
-  let fixture: ComponentFixture<DashboardComponent>;
+describe('OpenImageDialogComponent', () => {
+  let component: OpenImageDialogComponent;
+  let fixture: ComponentFixture<OpenImageDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashboardComponent]
+      imports: [OpenImageDialogComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(DashboardComponent);
+    fixture = TestBed.createComponent(OpenImageDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

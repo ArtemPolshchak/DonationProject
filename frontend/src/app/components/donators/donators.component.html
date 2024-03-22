@@ -1,5 +1,5 @@
 <body>
-<h1>Донаторы</h1>
+<h1>Список всех донаторов</h1>
 <div class="search">
     <div class="row">
         <div class="col">
@@ -7,34 +7,34 @@
         </div>
         <div class="col-auto">
             <input type="button" class="search-button" value="ПОИСК" (click)="applySearch()">
-
         </div>
     </div>
+
+</div>
+<div class="d-flex">
+    <button class="custom-button" (click)="createDonatorDialog()">Добавить донатора</button>
 </div>
 <div>
     <div class="section">
         <table>
             <thead>
             <tr>
-                <th>Почта Донатора</th>
-                <th>Общая сумма доната</th>
-
+                <th style="cursor: pointer" (click)="sort('email')">Почта Донатора</th>
+                <th style="cursor: pointer" (click)="sort('totalDonations')">Общая сумма доната</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let donator of donators">
                 <td> {{ donator.email }}</td>
                 <td> {{ donator.totalDonations }}</td>
-                <td><button class="custom-button-history" (click)="goToDonatorStory(donator.id, donator.email, donator.totalDonations)">ИСТОРИЯ</button></td>
+                <td><button class="custom-button-history" (click)="goToDonatorStory(donator.id, donator.email, donator.totalDonations)">История</button></td>
+
+                <td><button class="custom-button-history" (click)="openPersonalBonusDialog(donator.email)">Настройки персональных бонусов</button></td>
 
             </tr>
-
             </tbody>
-
         </table>
     </div>
-
-    <!-- Add more sections here -->
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
 

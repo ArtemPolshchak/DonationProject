@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {Transaction} from "../../common/transaction";
 import {TransactionService} from "../../services/transaction.service";
-import {CurrencyPipe, DatePipe, NgForOf} from "@angular/common";
+import {CurrencyPipe, DatePipe, NgForOf, NgIf} from "@angular/common";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {
@@ -15,27 +15,30 @@ import {
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Server} from "../../common/server";
 import {TransactionState} from "../../enums/app-constans";
+import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-donatorstory',
   standalone: true,
-  imports: [
-    MatPaginator,
-    CurrencyPipe,
-    DatePipe,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    NgForOf,
-    NgbAccordionBody,
-    NgbAccordionButton,
-    NgbAccordionCollapse,
-    NgbAccordionDirective,
-    NgbAccordionHeader,
-    NgbAccordionItem,
-    ReactiveFormsModule,
-    FormsModule
-  ],
+    imports: [
+        MatPaginator,
+        CurrencyPipe,
+        DatePipe,
+        MatFormField,
+        MatInput,
+        MatLabel,
+        NgForOf,
+        NgbAccordionBody,
+        NgbAccordionButton,
+        NgbAccordionCollapse,
+        NgbAccordionDirective,
+        NgbAccordionHeader,
+        NgbAccordionItem,
+        ReactiveFormsModule,
+        FormsModule,
+        NgIf
+    ],
   templateUrl: './donatorstory.component.html',
   styleUrl: './donatorstory.component.scss'
 })
@@ -59,7 +62,8 @@ export class DonatorstoryComponent implements OnInit {
   constructor(
       private transactionService: TransactionService,
       private route: ActivatedRoute,
-      private router: Router
+      private router: Router,
+      private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -103,5 +107,12 @@ export class DonatorstoryComponent implements OnInit {
     this.pageNumber = event.pageIndex;
     this.pageSize = event.pageSize;
     this.getDonatorTransactions();
+  }
+
+  openImageDialog(image: string) {
+    this.dialog.open(OpenImageDialogComponent, {
+      width: '50%',
+      data: image,
+    });
   }
 }

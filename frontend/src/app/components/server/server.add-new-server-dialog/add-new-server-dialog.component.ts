@@ -15,9 +15,8 @@ import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {NgForOf, NgIf} from "@angular/common";
 import {Server} from "../../../common/server";
-
-
-
+import {CreateServerDto, ServerService} from "../../../services/server.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-server.dialog',
@@ -46,53 +45,89 @@ import {Server} from "../../../common/server";
 })
 export class AddNewServerDialogComponent {
   servers: Server[];
+  durationInSeconds: number = 5;
 
   constructor(
+      private _snackBar: MatSnackBar,
       public dialogRef: MatDialogRef<AddNewServerDialogComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: any) {
+      @Inject(MAT_DIALOG_DATA) public data: any,
+      private serverService: ServerService) {
     this.servers = data;
   }
-
-  databaseControl = new FormControl('',
+  serverNameControl = new FormControl('',
       [Validators.required,
-        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]
-  )
-
-  emailControl = new FormControl('',
+        Validators.pattern(/^\S+$/)
+      ]
+  );
+  serverUrlControl = new FormControl('',
       [Validators.required,
-        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]
-  )
-
-  passwordControl = new FormControl('',
+        Validators.pattern(/^\S+$/)
+      ] // Перевірка правильності формату URL
+  );
+  serverUserNameControl = new FormControl('',
       [Validators.required,
-        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]
-  )
-
-  serverControl = new FormControl<Server | null>(null, Validators.required);
-
-  usernameControl = new FormControl('',
+        Validators.pattern(/^\S+$/)
+      ]
+  );
+  serverPasswordControl = new FormControl('',
       [Validators.required,
-        Validators.pattern(/\d/)]
-  )
-
-  isFormValid(){
-    return this.serverControl.valid && this.usernameControl.valid && this.databaseControl.valid && this.passwordControl.valid;
-  }
+        Validators.pattern(/^\S+$/)
+      ]
+  );
 
   addNewServer() {
-    console.log();
+    if (this.isFormValid()) {
+      const newServer: CreateServerDto = {
+        serverName: this.serverNameControl.value!,
+        serverUrl: this.serverUrlControl.value!,
+        serverUserName: this.serverUserNameControl.value!,
+        serverPassword: this.serverPasswordControl.value!,
+      };
+
+      this.serverService.create(newServer).subscribe(
+          (response) => {
+            console.log('Server created successfully:', response);
+            this.getServerList();
+            this.dialogRef.close();
+            this.openSnackBar("Сервер успешно добавлен")
+          },
+          (error) => {
+            this.openSnackBar("Произошла ошибка при добавления сервера")
+            console.error('Error creating server:', error);
+          }
+      );
+    }
+  }
+  private getServerList(): void {
+    sessionStorage.removeItem('servers');
+    this.serverService.getAll().subscribe({
+      next: (v) =>
+          sessionStorage.setItem('servers', JSON.stringify(v.content)),
+      error: (e) => console.error(e),
+    });
+  }
+
+
+  isFormValid(){
+    return this.serverNameControl.valid
+        && this.serverUrlControl.valid
+        && this.serverUserNameControl.valid
+        && this.serverPasswordControl.valid;
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'Закрыть', {
+      duration: this.durationInSeconds * 1000,
+    });
+  }
 }
-
-
 export interface DialogData {
-  name: string;
-  url: string;
-  username: string;
-  database: string;
-  password: string;
+  serverName: string;
+  serverUrl: string;
+  serverUserName: string;
+  serverPassword: string;
 }

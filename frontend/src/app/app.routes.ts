@@ -47,7 +47,7 @@ export const routes: Routes = [
         }
     },
     {
-        path: 'donator-bonus-on-server',
+        path: 'donator-bonus-on-server/:id',
         component: DonatorBonusOnServer,
         canActivate: [hasRoleGuard],
         data: {

@@ -27,24 +27,24 @@
                 <!--            <button class="button" (click)="applyFilterSortSearch()">ИСПОЛЬЗОВАТЬ СОРТИРОВКУ</button>-->
                 <select class="form-select me-2" aria-label="Сорт" [(ngModel)]="sortState"
                         (change)="applyFilterSortSearch()">
-                    <option selected disabled hidden>СОРТИРОВКА</option>
-                    <option value="dateCreated,asc">ПО ДАТЕ ОТ СТАРЫХ К НОВЫМ</option>
-                    <option value="dateCreated,desc">ПО ДАТЕ ОТ НОВЫХ К СТАРЫМ</option>
+                    <option selected disabled hidden>Сортировка</option>
+                    <option value="dateCreated,asc">Сортировка по дате от старых к новым</option>
+                    <option value="dateCreated,desc">Сортировка по дате от новых к старым</option>
                 </select>
 
                 <!--            <button class="button" (click)="applyFilterSortSearch()">ИСПОЛЬЗОВАТЬ ФИЛЬТР</button>-->
                 <select class="form-select me-2" aria-label="Фильтр" [(ngModel)]="stateFilter"
                         (change)="applyFilterSortSearch()">
                     <option selected disabled hidden>фИЛЬТР</option>
-                    <option value="">ВСЕ ЗАЯВКИ</option>
-                    <option value="IN_PROGRESS">ЗАЯВКИ ОЖИДАЮТ ПОДТВЕРЖДЕНИЯ</option>
-                    <option value="COMPLETED">ЗАЯВКИ ПОДТВЕРЖДЕНЫ</option>
-                    <option value="CANCELLED">ЗАЯВКИ ОТМЕНЕНЫ</option>
+                    <option value="">Фильтр - Все заявки</option>
+                    <option value="IN_PROGRESS">Ожидают подтверждения</option>
+                    <option value="COMPLETED">Подтверждены</option>
+                    <option value="CANCELLED">Отменены</option>
                 </select>
 
                 <select class="form-select me-2" aria-label="Сервер" [(ngModel)]="selectedServer"
                         (change)="applyFilterSortSearch()">
-                    <option value="">СЕРВЕРА</option>
+                    <option value="">Фильтр - Все сервера</option>
                     <option selected disabled hidden>Оберіть сервер</option>
                     <option *ngFor="let server of servers" [value]="server.serverName">{{ server.serverName }}</option>
                 </select>
@@ -58,32 +58,97 @@
 <div class="transactions-list">
     <div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
         <div class="item" ngbAccordionItem="{{transaction.id}}">
+<!--            <h2 ngbAccordionHeader>-->
+<!--                <button ngbAccordionButton>-->
+<!--                    [ Дата создания {{transaction.dateCreated | date: 'dd MMMM yyyy'}}]-->
+<!--                    [ Дата подтверждения {{transaction.dateApproved | date: 'dd MMMM yyyy'}}]-->
+<!--                    [ Имя сервера {{ transaction.serverName}}]-->
+<!--                    [ Почта донатора {{transaction.donatorEmail}}]-->
+<!--                    [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]-->
+<!--                </button>-->
+<!--            </h2>-->
             <h2 ngbAccordionHeader>
                 <button ngbAccordionButton>
-                    [ Дата создания {{transaction.dateCreated | date: 'dd MMMM yyyy'}}]
-                    [ Дата подтверждения {{transaction.dateApproved | date: 'dd MMMM yyyy'}}]
-                    [ Имя сервера {{ transaction.serverName}}]
-                    [ Почта донатора {{transaction.donatorEmail}}]
-                    [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]
+                    <span *ngIf="transaction.dateCreated">
+                        Дата создания: <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</strong>
+                    </span>
+                    <span *ngIf="transaction.serverName">
+                        Имя сервера: <strong>{{ transaction.serverName}}</strong>
+                    </span>
+                    <span *ngIf="transaction.donatorEmail">
+                        Почта донатора: <strong>{{transaction.donatorEmail}}</strong>
+                    </span>
+                    <span *ngIf="transaction.totalAmount">
+                        Общая сумма Доната: <strong>{{transaction.totalAmount | currency: 'USD'}}</strong>
+                    </span>
                 </button>
-            </h2>
-            <button class="btn btn-outline-primary ms-2" *ngIf="transaction.state === 'IN_PROGRESS'"
+
+            <button class="btn secondary-button ms-2" *ngIf="transaction.state === 'IN_PROGRESS'"
                     (click)="openCreateTransactionDialog()">ИЗМЕНИТЬ
             </button>
+            </h2>
             <div ngbAccordionCollapse>
                 <div ngbAccordionBody>
-                    <ng-template>
-                        [Кто создал {{transaction.createdBy}}]
-                        [Кто подтвердил {{transaction.approvedBy}}]
-                        [Картинка {{transaction.imageUrl}}]
-                        [бонусы Сервера {{transaction.serverBonusPercentage}}%]
-                        [Бонысы Донатора {{transaction.personalBonusPercentage}}%]
-                        [Бонысы Админа {{transaction.adminBonus}}]
-                        [сумма зачисления  {{transaction.contributionAmount}}]
-                        [Общая сумма доната  {{transaction.totalAmount}}]
-                        [Состояние заявки {{transaction.state}}]
-                        [Комментарий {{transaction.comment}}]
-                    </ng-template>
+<!--                    <ng-template>-->
+<!--                        [Кто создал {{transaction.createdBy}}]-->
+<!--                        [ Дата создания {{transaction.dateCreated | date: 'dd MMMM yyyy'}}]-->
+<!--                        [Кто подтвердил {{transaction.approvedBy}}]-->
+<!--                        [Дата подтверждения {{transaction.dateApproved | date: 'dd MMMM yyyy'}}]-->
+<!--                        [бонусы Сервера {{transaction.serverBonusPercentage}}%]-->
+<!--                        [Бонысы Донатора {{transaction.personalBonusPercentage}}%]-->
+<!--                        [Бонысы Админа {{transaction.adminBonus}}]-->
+<!--                        [сумма зачисления  {{transaction.contributionAmount}}]-->
+<!--                        [Общая сумма доната  {{transaction.totalAmount}}]-->
+<!--                        [Состояние заявки {{transaction.state}}]-->
+<!--                        [Комментарий {{transaction.comment}}]-->
+<!--                        <div class="image-container">-->
+<!--                            <img #image [src]="transaction.image" alt="img"-->
+<!--                                 onerror="this.src='s../../assets/images/no-image.jpg'"-->
+<!--                                 width="20%" style="cursor:pointer"-->
+<!--                                 (click)="openImageDialog(image.src)"/>-->
+<!--                        </div>-->
+<!--                    </ng-template>-->
+                    <div class="container">
+                        <div class="image-container">
+                            <img #image [src]="transaction.image" alt="img"
+                                 onerror="this.src='s../../assets/images/no-image.jpg'"
+                                 width="100%" style="cursor:pointer"
+                                 (click)="openImageDialog(image.src)"/>
+                        </div>
+
+                        <div class="info-block">
+                            <div>
+                                Кто создал: <strong>{{transaction.createdBy}}</strong> (Дата создания <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy'}})</strong>
+                            </div>
+                            <div>
+                                Кто подтвердил: <strong>{{transaction.approvedBy}}</strong> (Дата подтверждения <strong>{{transaction.dateApproved | date: 'dd MMMM yyyy'}})</strong>
+                            </div>
+                            <div>
+                                Комментарий: <strong>{{transaction.comment}}</strong>
+                            </div>
+                            <div>
+                                Состояние заявки: <strong>{{transaction.state}}</strong>
+                            </div>
+                        </div>
+
+                        <div class="amounts-block">
+                            <div>
+                                бонусы Сервера: <strong>{{transaction.serverBonusPercentage}}%</strong>
+                            </div>
+                            <div>
+                                Бонысы Донатора: <strong>{{transaction.personalBonusPercentage}}%</strong>
+                            </div>
+                            <div>
+                                Бонысы Админа: <strong>{{transaction.adminBonus}}</strong>
+                            </div>
+                            <div>
+                                сумма зачисления: <strong>{{transaction.contributionAmount}}</strong>
+                            </div>
+                            <div>
+                                Общая сумма доната: <strong>{{transaction.totalAmount}}</strong>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -95,4 +160,3 @@
                    (page)="onPageChange($event)">
     </mat-paginator>
 </div>
-

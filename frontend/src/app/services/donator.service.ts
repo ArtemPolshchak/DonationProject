@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {map} from "rxjs";
+import {map, Observable} from "rxjs";
 import {Donator} from "../common/donator";
+import {CreateServerDto} from "./server.service";
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,11 @@ export class DonatorService {
     return this.httpClient.get<GetTransactionResponse>(url, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}}).pipe(
         map(response => response));
   }
+
+  public createDonator(email: CreateDonator)  {
+    const url: string = `api/donators`
+    return this.httpClient.post<void>(url, email, { headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token') } });
+  }
 }
 
 interface GetTransactionResponse {
@@ -34,3 +40,8 @@ interface GetTransactionResponse {
   }
   totalElements: number;
 }
+
+export interface CreateDonator {
+  email: string;
+}
+
