@@ -46,7 +46,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>ng</executable>
+                            <executable>node_modules/.bin/ng</executable>
                             <arguments>
                                 <argument>build</argument>
                             </arguments>
