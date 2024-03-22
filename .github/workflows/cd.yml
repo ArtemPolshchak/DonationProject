@@ -3,7 +3,7 @@ name: Java Build & Deploy to Elastic Beanstalk
 on:
   push:
     branches:
-      - dev # здесь можно указать имя вашей основной ветки, например, master
+      - main # здесь можно указать имя вашей основной ветки, например, master
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
