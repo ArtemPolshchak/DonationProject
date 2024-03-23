@@ -42,7 +42,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
     public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> containerCustomizer() {
         return container -> {
-            container.addErrorPages(new ErrorPage(HttpStatus.PERMANENT_REDIRECT,
+            container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,
                     "/urlNotFound"));
         };
     }
