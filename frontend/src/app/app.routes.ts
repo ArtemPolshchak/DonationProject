@@ -11,6 +11,7 @@ import {Role} from "./enums/app-constans";
 import {DonatorstoryComponent} from "./components/donatorstory/donatorstory.component";
 import {ServerBonusComponent} from "./components/server/server.server-bonus-dialog/server-bonus.component";
 import {DonatorBonusOnServer} from "./components/donator-bonus-on-server/donator-bonus-on-server.component";
+import {PageNotFoundComponent} from "./components/page-not-found/page-not-found.component";
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: "full", },
@@ -70,5 +71,5 @@ export const routes: Routes = [
             roles: [ Role.ADMIN ]
         }
     },
-    { path: '**', redirectTo: 'login' } // Якщо маршрут не знайдено, перенаправлення на 'login'
+    { path: '**', component: PageNotFoundComponent }
 ];
