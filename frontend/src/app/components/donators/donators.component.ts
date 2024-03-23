@@ -109,7 +109,6 @@ export class DonatorsComponent implements OnInit {
             });
     }
 
-
     onPageChange(event: PageEvent): void {
         this.pageNumber = event.pageIndex;
         this.pageSize = event.pageSize;
@@ -132,7 +131,6 @@ export class DonatorsComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(() => {
             this.getAll();
-
         });
     }
     createDonatorDialog(): void {

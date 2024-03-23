@@ -51,11 +51,9 @@ export class DonationsComponent implements OnInit {
     stateFilter: string = "";
     servers: Server[] = [];
     selectedServer: string = "";
-    imgToOpen?: string;
 
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
-
     toppings = this._formBuilder.group({
         pepperoni: false,
         extracheese: false,
@@ -110,9 +108,7 @@ export class DonationsComponent implements OnInit {
             data: this.servers,
         });
         dialogRef.afterClosed().subscribe(() => {
-            setTimeout(() => {
                 this.getTransactionPage();
-            }, 1000);
         });
     }
 

@@ -1,5 +1,5 @@
 import {Component, HostListener, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogModule} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {Transaction} from "../../../../common/transaction";
 import {FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, Validators} from "@angular/forms";
 import {CommonModule} from "@angular/common";
@@ -60,6 +60,7 @@ export class CreateTransactionDialog {
     constructor(private fb: UntypedFormBuilder,
                 private transactionService: TransactionService,
                 private _snackBar: MatSnackBar,
+                private dialogRef: MatDialogRef<CreateTransactionDialog>,
                 @Inject(MAT_DIALOG_DATA) public data: any) {
         this.servers = data;
     }
@@ -100,7 +101,6 @@ export class CreateTransactionDialog {
         return new Promise((res, rej) => {
             const img = new Image();
             img.src = src;
-            console.log(src)
             img.onload = () => {
                 const elem = document.createElement('canvas');
                 if (img.height > img.width) {
@@ -111,9 +111,6 @@ export class CreateTransactionDialog {
                     elem.height = img.height * (this.maxImgSideSize / img.width)
                 }
                 const ctx = <CanvasRenderingContext2D>elem.getContext('2d');
-                console.log(img.width + " " + img.height);
-                console.log((this.maxImgSideSize / img.height));
-                console.log(elem.width + " " + elem.height);
                 ctx.drawImage(img, 0, 0, elem.width, elem.height);
                 const data = ctx.canvas.toDataURL();
                 res(data);
@@ -131,10 +128,12 @@ export class CreateTransactionDialog {
         this.transaction.serverId = this.serverControl.value!.id
         this.transaction.contributionAmount = Number(this.contributionControl.value!);
         this.transaction.donatorEmail = this.emailControl.value!;
-        console.log(this.transaction.image)
         this.transactionService.create(this.transaction).subscribe({
-                next: () => this.openSnackBar("Транзакция успешно создана"),
-                error: (err) => this.openSnackBar("Ошибка при создании транзакции: " + err.message)
+                next: () => {
+                    this.openSnackBar("Транзакция успешно создана")
+                    this.closeWindow();
+                },
+                error: (err) => this.openSnackBar("Ошибка при создании транзакции: " + err.message),
             },
         );
     }
@@ -145,5 +144,7 @@ export class CreateTransactionDialog {
         });
     }
 
-    protected readonly HTMLInputElement = HTMLInputElement;
+    closeWindow() {
+        this.dialogRef.close()
+    }
 }
