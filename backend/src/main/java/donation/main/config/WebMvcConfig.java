@@ -32,18 +32,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
             }
         };
     }
-
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/urlNotFound")
-                .setViewName("forward:/index.html");
-    }
-
-    @Bean
-    public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> containerCustomizer() {
-        return container -> {
-            container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,
-                    "/urlNotFound"));
-        };
-    }
 }
