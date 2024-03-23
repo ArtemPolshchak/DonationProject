@@ -1,4 +1,4 @@
-import {Component, HostListener, Inject} from '@angular/core';
+import {Component, EventEmitter, HostListener, Inject, Output} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {Transaction} from "../../../../common/transaction";
 import {FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, Validators} from "@angular/forms";
@@ -39,6 +39,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     styleUrl: './create-transaction-dialog.component.scss'
 })
 export class CreateTransactionDialog {
+    @Output() transactionResponse =  new EventEmitter();
     maxImgSideSize = 800;
     durationInSeconds: number = 5;
     servers: Server[];
@@ -60,7 +61,6 @@ export class CreateTransactionDialog {
     constructor(private fb: UntypedFormBuilder,
                 private transactionService: TransactionService,
                 private _snackBar: MatSnackBar,
-                private dialogRef: MatDialogRef<CreateTransactionDialog>,
                 @Inject(MAT_DIALOG_DATA) public data: any) {
         this.servers = data;
     }
@@ -86,7 +86,6 @@ export class CreateTransactionDialog {
 
     saveImage(file: File) {
         const reader = new FileReader();
-        const img = new Image()
         reader.addEventListener('load', () => {
             this.editForm.get('photo')?.setValue(reader.result as string);
             this.compressImage(reader.result as string).then(result => {
@@ -129,9 +128,9 @@ export class CreateTransactionDialog {
         this.transaction.contributionAmount = Number(this.contributionControl.value!);
         this.transaction.donatorEmail = this.emailControl.value!;
         this.transactionService.create(this.transaction).subscribe({
-                next: () => {
+                next: (result) => {
+                    this.transactionResponse.emit(result)
                     this.openSnackBar("Транзакция успешно создана")
-                    this.closeWindow();
                 },
                 error: (err) => this.openSnackBar("Ошибка при создании транзакции: " + err.message),
             },
@@ -142,9 +141,5 @@ export class CreateTransactionDialog {
         this._snackBar.open(message, 'Закрыть', {
             duration: this.durationInSeconds * 1000,
         });
-    }
-
-    closeWindow() {
-        this.dialogRef.close()
     }
 }
