@@ -9,6 +9,7 @@ import donation.main.entity.TransactionEntity;
 import donation.main.enumeration.TransactionState;
 import donation.main.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,7 +59,7 @@ public class TransactionController {
 
     @Operation(summary = "create new transaction")
     @PostMapping
-    public ResponseEntity<TransactionEntity> create(@RequestBody CreateTransactionDto formDto) {
+    public ResponseEntity<TransactionEntity> create(@Valid @RequestBody CreateTransactionDto formDto) {
         return ResponseEntity.status(HttpStatus.OK).body(transactionService.create(formDto));
     }
 
