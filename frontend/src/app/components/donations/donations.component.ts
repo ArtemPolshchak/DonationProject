@@ -53,6 +53,7 @@ export class DonationsComponent implements OnInit {
     selectedServer: string = "";
     imgToOpen?: string;
 
+
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
     toppings = this._formBuilder.group({
@@ -87,8 +88,10 @@ export class DonationsComponent implements OnInit {
 
 
     getTransactionPage(): void {
-
-        this.transactionService.getAllWithSearch(this.serverNames, this.donatorsMail, this.state, this.pageNumber, this.pageSize, this.sortState)
+        this.transactionService.getAllWithSearch(
+            this.serverNames, this.donatorsMail,
+            this.state, this.pageNumber,
+            this.pageSize, this.sortState)
             .subscribe((response) => {
                 this.transactions = response.content;
                 this.totalElements = response.totalElements;
@@ -107,7 +110,9 @@ export class DonationsComponent implements OnInit {
             data: this.servers,
         });
         dialogRef.afterClosed().subscribe(() => {
-               this.getTransactionPage()
+            setTimeout(() => {
+                this.getTransactionPage();
+            }, 1000);
         });
     }
 
