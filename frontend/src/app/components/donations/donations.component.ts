@@ -107,9 +107,10 @@ export class DonationsComponent implements OnInit {
             width: '50%',
             data: this.servers,
         });
-        dialogRef.afterClosed().subscribe(() => {
-                this.getTransactionPage();
+        dialogRef.componentInstance.transactionResponse.subscribe( () => {
+            this.getTransactionPage()
         });
+
     }
 
     openImageDialog(image: string) {

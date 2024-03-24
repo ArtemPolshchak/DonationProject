@@ -10,7 +10,6 @@ public record CreateTransactionDto(
         String donatorEmail,
         @DecimalMin("1")
         BigDecimal contributionAmount,
-        @NotEmpty
         String image,
         String comment,
         @NotNull
