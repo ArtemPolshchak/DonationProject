@@ -13,5 +13,4 @@ export class TransactionState {
 }
 
 export const ADMIN_MENU_ITEMS: string[] = ['dashboard', 'donations', 'donators', 'users',  'servers'];
-export const MODERATOR_MENU_ITEMS: string[] = ['donations', 'donators', 'users',  'servers'];
-
+export const MODERATOR_MENU_ITEMS: string[] = ['donations'];

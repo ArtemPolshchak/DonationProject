@@ -27,7 +27,7 @@ import {MatButton} from "@angular/material/button";
 export class SidebarComponent implements OnInit{
   menuItems: string[] = [];
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(public authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.menuItems = this.authService.isAdmin() ? ADMIN_MENU_ITEMS : MODERATOR_MENU_ITEMS;

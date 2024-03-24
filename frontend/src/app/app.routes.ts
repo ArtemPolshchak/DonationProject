@@ -12,6 +12,7 @@ import {DonatorstoryComponent} from "./components/donatorstory/donatorstory.comp
 import {ServerBonusComponent} from "./components/server/server.server-bonus-dialog/server-bonus.component";
 import {DonatorBonusOnServer} from "./components/donator-bonus-on-server/donator-bonus-on-server.component";
 import {PageNotFoundComponent} from "./components/page-not-found/page-not-found.component";
+import {GuestPageComponent} from "./components/guest-page/guest-page.component";
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: "full", },
@@ -69,6 +70,14 @@ export const routes: Routes = [
         canActivate: [hasRoleGuard],
         data: {
             roles: [ Role.ADMIN ]
+        }
+    },
+    {
+        path: 'app-guest-page',
+        component: GuestPageComponent,
+        canActivate: [hasRoleGuard],
+        data: {
+            roles: [Role.ADMIN, Role.MODERATOR, Role.GUEST ]
         }
     },
     { path: '**', component: PageNotFoundComponent }
