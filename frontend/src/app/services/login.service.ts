@@ -16,12 +16,26 @@ export class LoginService {
       private storageService: StorageService) {
   }
 
-  login(loginData: Login): Observable<any> {
-    return this.httpClient.post<any>('api/auth/sign-in', loginData).pipe(
-        tap(response => {
-            this.storageService.saveToken(response.token)
-          this.router.navigateByUrl('/dashboard');
-        })
-    );
-  }
+    login(loginData: Login): Observable<any> {
+        return this.httpClient.post<any>('api/auth/sign-in', loginData).pipe(
+            tap(response => {
+                this.storageService.saveToken(response.token);
+                const redirect = this.storageService.getUser()?.role
+                this.redirectBasedOnRole(redirect);
+            })
+        );
+    }
+    private redirectBasedOnRole(role: string | undefined): void {
+        switch (role) {
+            case 'ADMIN':
+                this.router.navigateByUrl('/dashboard');
+                break;
+            case 'MODERATOR':
+                this.router.navigateByUrl('/donations');
+                break;
+            default:
+                this.router.navigateByUrl('/app-guest-page');
+                break;
+        }
+    }
 }

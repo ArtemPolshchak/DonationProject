@@ -50,8 +50,11 @@ export class ServerComponent implements OnInit {
   }
 
   openAddServerDialog(): void {
-    this.dialog.open(AddNewServerDialogComponent, {
+    const dialogRef = this.dialog.open(AddNewServerDialogComponent, {
       width: '50%',
+    });
+    dialogRef.componentInstance.serverResponse.subscribe( () => {
+      this.getAllServers()
     });
   }
 
@@ -60,11 +63,8 @@ export class ServerComponent implements OnInit {
       width: '50%',
       data: {
         serverId: serverId
-
       }
     });
-
-
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');

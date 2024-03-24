@@ -59,13 +59,13 @@ public class TransactionController {
 
     @Operation(summary = "create new transaction")
     @PostMapping
-    public ResponseEntity<TransactionEntity> create(@Valid @RequestBody CreateTransactionDto formDto) {
+    public ResponseEntity<TransactionResponseDto> create(@Valid @RequestBody CreateTransactionDto formDto) {
         return ResponseEntity.status(HttpStatus.OK).body(transactionService.create(formDto));
     }
 
     @Operation(summary = "update an existing transaction")
     @PutMapping("/{transactionId}")
-    public ResponseEntity<TransactionEntity> updateTransaction(
+    public ResponseEntity<TransactionEntity> update(
             @PathVariable Long transactionId, @RequestBody UpdateTransactionDto transactionDto) {
         TransactionEntity updateTransaction = transactionService.updateTransaction(transactionId, transactionDto);
         return ResponseEntity.status(HttpStatus.OK).body(updateTransaction);

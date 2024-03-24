@@ -54,6 +54,7 @@ public class MainDataSourceConfig {
                 .build();
     }
 
+    @Primary
     @Bean(name = "mainTransactionManager")
     public PlatformTransactionManager mainTransactionManager(
             @Qualifier("mainEntityManagerFactory")EntityManagerFactory mainEntityManagerFactory) {

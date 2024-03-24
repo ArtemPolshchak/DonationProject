@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, EventEmitter, Inject, Output} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions, MatDialogClose,
@@ -46,6 +46,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export class AddNewServerDialogComponent {
   servers: Server[];
   durationInSeconds: number = 5;
+  @Output() serverResponse =  new EventEmitter();
 
   constructor(
       private _snackBar: MatSnackBar,
@@ -84,20 +85,20 @@ export class AddNewServerDialogComponent {
         serverPassword: this.serverPasswordControl.value!,
       };
 
-      this.serverService.create(newServer).subscribe(
-          (response) => {
-            console.log('Server created successfully:', response);
-            this.getServerList();
-            this.dialogRef.close();
-            this.openSnackBar("Сервер успешно добавлен")
-          },
-          (error) => {
-            this.openSnackBar("Произошла ошибка при добавления сервера")
-            console.error('Error creating server:', error);
-          }
+      this.serverService.create(newServer).subscribe({
+        next: (result) => {
+          this.serverResponse.emit(result)
+          this.getServerList();
+          this.dialogRef.close();
+          this.openSnackBar("Сервер успешно добавлен")
+        },
+            error: (err) => this.openSnackBar("Ошибка при добавлении сервера: " + err.message),
+      },
       );
     }
   }
+
+
   private getServerList(): void {
     sessionStorage.removeItem('servers');
     this.serverService.getAll().subscribe({

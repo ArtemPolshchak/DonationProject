@@ -5,13 +5,12 @@ import {DonatorsComponent} from "./components/donators/donators.component";
 import {ServerComponent} from "./components/server/server.component";
 import {UserComponent} from "./components/user/user.component";
 import {LoginComponent} from "./components/login/login.component";
-import {UnauthorizedComponent} from "./components/unauthorized/unauthorized.component";
 import {hasRoleGuard} from "./services/auth.service";
 import {Role} from "./enums/app-constans";
 import {DonatorstoryComponent} from "./components/donatorstory/donatorstory.component";
-import {ServerBonusComponent} from "./components/server/server.server-bonus-dialog/server-bonus.component";
 import {DonatorBonusOnServer} from "./components/donator-bonus-on-server/donator-bonus-on-server.component";
 import {PageNotFoundComponent} from "./components/page-not-found/page-not-found.component";
+import {GuestPageComponent} from "./components/guest-page/guest-page.component";
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: "full", },
@@ -69,6 +68,14 @@ export const routes: Routes = [
         canActivate: [hasRoleGuard],
         data: {
             roles: [ Role.ADMIN ]
+        }
+    },
+    {
+        path: 'app-guest-page',
+        component: GuestPageComponent,
+        canActivate: [hasRoleGuard],
+        data: {
+            roles: [Role.ADMIN, Role.MODERATOR, Role.GUEST ]
         }
     },
     { path: '**', component: PageNotFoundComponent }

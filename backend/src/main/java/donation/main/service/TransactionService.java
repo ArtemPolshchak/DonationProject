@@ -30,6 +30,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,22 +44,25 @@ public class TransactionService {
     private final TransactionStateManager transactionStateManager;
     private final UserService userService;
 
-    public TransactionEntity create(CreateTransactionDto dto) {
+    @Transactional
+    public TransactionResponseDto create(CreateTransactionDto dto) {
         //todo I temporoarily turn off the validation of external DB
        // validateDonatorEmail(dto.donatorEmail());
 
         TransactionEntity entity = transactionMapper.toEntity(dto);
         ServerEntity serverById = serverService.findById(dto.serverId());
         DonatorEntity donatorEntity = donatorService.getDonatorEntityOrCreate(dto.donatorEmail());
-        return transactionRepository.save(
+       transactionRepository.save(
                 setTransactionFields(entity, donatorEntity, serverById, dto.contributionAmount()));
+       return transactionMapper.toDto(entity);
     }
 
+    @Transactional
     public TransactionEntity updateTransaction(Long transactionId, UpdateTransactionDto dto) {
         TransactionEntity updatedTransaction = transactionMapper.update(getById(transactionId), dto);
         ServerEntity serverById = serverService.findById(dto.serverId());
         DonatorEntity donatorEntity = donatorService
-                .getDonatorEntityOrCreate(updatedTransaction.getDonator().getEmail());
+                .getDonatorEntityOrCreate(dto.donatorEmail());
         return transactionRepository.save(
                 setTransactionFields(updatedTransaction, donatorEntity, serverById, dto.contributionAmount()));
 
@@ -117,6 +121,7 @@ public class TransactionService {
         }
     }
 
+    //todo this method temporarily turned off. forbidden for delete
     private void validateDonatorEmail(String donatorEmail) {
         if (!externalDonatorService.existsByEmail(donatorEmail)) {
             throw new EmailNotFoundException("Donator with the email does not exist:", donatorEmail);
