@@ -59,7 +59,7 @@ public class TransactionController {
 
     @Operation(summary = "create new transaction")
     @PostMapping
-    public ResponseEntity<TransactionEntity> create(@Valid @RequestBody CreateTransactionDto formDto) {
+    public ResponseEntity<TransactionResponseDto> create(@Valid @RequestBody CreateTransactionDto formDto) {
         return ResponseEntity.status(HttpStatus.OK).body(transactionService.create(formDto));
     }
 
