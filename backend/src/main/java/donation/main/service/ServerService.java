@@ -1,8 +1,10 @@
 package donation.main.service;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.TreeSet;
+
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
 import donation.main.dto.donatorsdto.DonatorBonusDto;
 import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
@@ -22,7 +24,6 @@ import org.hibernate.annotations.SoftDelete;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -43,15 +44,8 @@ public class ServerService {
     }
 
     public ServerEntity createServer(CreateServerDto serverDto) {
-
         ServerEntity server = serverMapper.toEntity(serverDto);
-        ServerBonusSettingsEntity defaultBonus = new ServerBonusSettingsEntity();
-        defaultBonus.setBonusPercentage(BigDecimal.ZERO);
-        defaultBonus.setFromAmount(BigDecimal.ZERO);
-        defaultBonus.setToAmount(BigDecimal.ZERO);
-        defaultBonus.setServer(server);
-        server.getServerBonusSettings().add(defaultBonus);
-
+        server.setServerBonusSettings(new TreeSet<>(Collections.singletonList(createDefaultBonusForNewServer(server))));
         return serverRepository.save(server);
     }
 
@@ -107,5 +101,14 @@ public class ServerService {
         return new PageImpl<>(
                 donatorBonuses.subList((int) pageable.getOffset(), toIndex),
                 pageable, donatorBonuses.size());
+    }
+
+    private ServerBonusSettingsEntity createDefaultBonusForNewServer(ServerEntity server) {
+        ServerBonusSettingsEntity defaultBonus = new ServerBonusSettingsEntity();
+        defaultBonus.setBonusPercentage(BigDecimal.ZERO);
+        defaultBonus.setFromAmount(BigDecimal.ZERO);
+        defaultBonus.setToAmount(BigDecimal.ZERO);
+        defaultBonus.setServer(server);
+        return defaultBonus;
     }
 }
