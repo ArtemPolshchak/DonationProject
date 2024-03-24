@@ -51,10 +51,10 @@ export class TransactionService {
         });
     }
 
-    public create(transaction: Transaction) {
+    public create(transaction: Transaction): Observable<GetTransactionResponse> {
         const url: string = `api/transactions`;
         console.log(url);
-        return this.httpClient.post<void>(url, transaction,  {
+        return this.httpClient.post<GetTransactionResponse>(url, transaction,  {
             headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}
         });
     }

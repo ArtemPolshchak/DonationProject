@@ -60,7 +60,6 @@ export class CreateTransactionDialog {
     constructor(private fb: UntypedFormBuilder,
                 private transactionService: TransactionService,
                 private _snackBar: MatSnackBar,
-                private dialogRef: MatDialogRef<CreateTransactionDialog>,
                 @Inject(MAT_DIALOG_DATA) public data: any) {
         this.servers = data;
     }
@@ -131,9 +130,10 @@ export class CreateTransactionDialog {
         this.transactionService.create(this.transaction).subscribe({
                 next: () => {
                     this.openSnackBar("Транзакция успешно создана")
-                    this.closeWindow();
                 },
-                error: (err) => this.openSnackBar("Ошибка при создании транзакции: " + err.message),
+                error: (err) => {
+                    this.openSnackBar("Ошибка при создании транзакции: " + err.message)
+                },
             },
         );
     }
@@ -142,9 +142,5 @@ export class CreateTransactionDialog {
         this._snackBar.open(message, 'Закрыть', {
             duration: this.durationInSeconds * 1000,
         });
-    }
-
-    closeWindow() {
-        this.dialogRef.close()
     }
 }
