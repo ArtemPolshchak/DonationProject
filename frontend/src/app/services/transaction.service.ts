@@ -44,17 +44,17 @@ export class TransactionService {
             {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}});
     }
 
-    public updateById(transaction: Transaction) {
+    public update(transaction: Transaction): Observable<GetTransactionResponse> {
         const url: string = `api/transactions/${transaction.id}`;
-        return this.httpClient.put<void>(url, transaction,  {
+        return this.httpClient.put<GetTransactionResponse>(url, transaction,  {
             headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}
         });
     }
 
-    public create(transaction: Transaction) {
+    public create(transaction: Transaction): Observable<GetTransactionResponse> {
         const url: string = `api/transactions`;
         console.log(url);
-        return this.httpClient.post<void>(url, transaction,  {
+        return this.httpClient.post<GetTransactionResponse>(url, transaction,  {
             headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}
         });
     }

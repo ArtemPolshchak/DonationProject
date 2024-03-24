@@ -65,7 +65,7 @@ public class TransactionController {
 
     @Operation(summary = "update an existing transaction")
     @PutMapping("/{transactionId}")
-    public ResponseEntity<TransactionEntity> updateTransaction(
+    public ResponseEntity<TransactionEntity> update(
             @PathVariable Long transactionId, @RequestBody UpdateTransactionDto transactionDto) {
         TransactionEntity updateTransaction = transactionService.updateTransaction(transactionId, transactionDto);
         return ResponseEntity.status(HttpStatus.OK).body(updateTransaction);

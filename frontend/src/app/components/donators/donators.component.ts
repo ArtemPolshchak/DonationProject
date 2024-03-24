@@ -18,8 +18,8 @@ import {SetupBonusDialogComponent} from "../donator-bonus-on-server/setup-bonus-
 
 import {Server} from "../../common/server";
 import {
-    CreateTransactionDialog
-} from "../donations/donations.dialog/create.transaction/create-transaction-dialog.component";
+    TransactionDialog
+} from "../donations/transaction.dialog/transaction-dialog.component";
 
 
 @Component({
