@@ -70,7 +70,7 @@ export class DashboardComponent implements OnInit {
         if (state === TransactionState.CANCELLED) {
             transaction.adminBonus = 0;
         }
-        this.transactionService.confirmById(transaction.id, state, transaction.adminBonus)
+        this.transactionService.confirmById(transaction.id!, state, transaction.adminBonus)
             .subscribe(() => {
                 this.getTransactionOnPage();
                 this.openSnackBar(state);

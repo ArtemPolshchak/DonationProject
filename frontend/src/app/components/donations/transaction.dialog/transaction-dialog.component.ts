@@ -1,6 +1,6 @@
-import {Component, EventEmitter, HostListener, Inject, Output} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import {Transaction} from "../../../../common/transaction";
+import {Component, EventEmitter, HostListener, Inject, OnInit, Output} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogModule} from "@angular/material/dialog";
+import {Transaction} from "../../../common/transaction";
 import {FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, Validators} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {MatCheckboxModule} from "@angular/material/checkbox";
@@ -11,13 +11,13 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {MatTableModule} from "@angular/material/table";
 import {MatButtonModule} from "@angular/material/button";
 import {MatOption, MatSelect} from "@angular/material/select";
-import {TransactionService} from "../../../../services/transaction.service";
-import {Server} from "../../../../common/server";
+import {TransactionService} from "../../../services/transaction.service";
+import {Server} from "../../../common/server";
 import {MatIcon} from "@angular/material/icon";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
-    selector: 'app-create-transaction-dialog',
+    selector: 'app-transaction-dialog',
     standalone: true,
     imports: [
         FormsModule,
@@ -35,15 +35,15 @@ import {MatSnackBar} from "@angular/material/snack-bar";
         MatOption,
         MatIcon,
     ],
-    templateUrl: './create-transaction-dialog.component.html',
-    styleUrl: './create-transaction-dialog.component.scss'
+    templateUrl: './transaction-dialog.component.html',
+    styleUrl: './transaction-dialog.component.scss'
 })
-export class CreateTransactionDialog {
-    @Output() transactionResponse =  new EventEmitter();
+export class TransactionDialog implements OnInit {
+    @Output() transactionResponse = new EventEmitter();
     maxImgSideSize = 800;
     durationInSeconds: number = 5;
     servers: Server[];
-    transaction: Transaction = new Transaction();
+    transaction: Transaction;
     serverControl = new FormControl<Server | null>(null, Validators.required);
     contributionControl = new FormControl('',
         [Validators.required,
@@ -53,16 +53,25 @@ export class CreateTransactionDialog {
         [Validators.required,
             Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]
     )
-    editForm = this.fb.group({
+    imageForm = this.fb.group({
         photo: [],
     });
-
 
     constructor(private fb: UntypedFormBuilder,
                 private transactionService: TransactionService,
                 private _snackBar: MatSnackBar,
                 @Inject(MAT_DIALOG_DATA) public data: any) {
-        this.servers = data;
+        this.servers = this.data.servers;
+        this.transaction = this.data.transaction ? this.data.transaction : new Transaction();
+    }
+
+    ngOnInit(): void {
+        if (this.data.transaction) {
+            this.serverControl.setValue(this.findServerByName(this.data.transaction.serverName));
+            this.contributionControl.setValue(this.data.transaction.contributionAmount);
+            this.emailControl.setValue(this.data.transaction.donatorEmail);
+            this.imageForm.get('photo')?.setValue(this.data.transaction.image);
+        }
     }
 
     isFormValid() {
@@ -87,7 +96,7 @@ export class CreateTransactionDialog {
     saveImage(file: File) {
         const reader = new FileReader();
         reader.addEventListener('load', () => {
-            this.editForm.get('photo')?.setValue(reader.result as string);
+            this.imageForm.get('photo')?.setValue(reader.result as string);
             this.compressImage(reader.result as string).then(result => {
                     this.transaction.image = result as string;
                 }
@@ -119,15 +128,27 @@ export class CreateTransactionDialog {
     }
 
     removeImage() {
-        this.editForm.get('photo')?.setValue(null);
-        this.transaction.image = "";
+        this.imageForm.get('photo')?.setValue(null);
+        this.transaction.image = null;
     }
 
-    createTransaction() {
+    proceedTransaction() {
         this.transaction.serverId = this.serverControl.value!.id
         this.transaction.contributionAmount = Number(this.contributionControl.value!);
         this.transaction.donatorEmail = this.emailControl.value!;
-        this.transactionService.create(this.transaction).subscribe({
+        this.transaction.id ?
+            this.updateTransaction(this.transaction) :
+            this.createTransaction(this.transaction);
+    }
+
+    openSnackBar(message: string) {
+        this._snackBar.open(message, 'Закрыть', {
+            duration: this.durationInSeconds * 1000,
+        });
+    }
+
+    private createTransaction(transaction: Transaction) {
+        this.transactionService.create(transaction).subscribe({
                 next: (result) => {
                     this.transactionResponse.emit(result)
                     this.openSnackBar("Транзакция успешно создана")
@@ -139,9 +160,20 @@ export class CreateTransactionDialog {
         );
     }
 
-    openSnackBar(message: string) {
-        this._snackBar.open(message, 'Закрыть', {
-            duration: this.durationInSeconds * 1000,
-        });
+    private updateTransaction(transaction: Transaction) {
+        this.transactionService.update(transaction).subscribe({
+                next: (result) => {
+                    this.transactionResponse.emit(result)
+                    this.openSnackBar("Транзакция успешно изменена")
+                },
+                error: (err) => {
+                    this.openSnackBar("Ошибка при обновлении транзакции: " + err.message)
+                },
+            },
+        );
+    }
+
+    private findServerByName(serverName: string): Server {
+        return this.servers.find(s => s.serverName === serverName)!;
     }
 }
