@@ -30,6 +30,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +44,7 @@ public class TransactionService {
     private final TransactionStateManager transactionStateManager;
     private final UserService userService;
 
+    @Transactional
     public TransactionResponseDto create(CreateTransactionDto dto) {
         //todo I temporoarily turn off the validation of external DB
        // validateDonatorEmail(dto.donatorEmail());
@@ -55,11 +57,12 @@ public class TransactionService {
        return transactionMapper.toDto(entity);
     }
 
+    @Transactional
     public TransactionEntity updateTransaction(Long transactionId, UpdateTransactionDto dto) {
         TransactionEntity updatedTransaction = transactionMapper.update(getById(transactionId), dto);
         ServerEntity serverById = serverService.findById(dto.serverId());
         DonatorEntity donatorEntity = donatorService
-                .getDonatorEntityOrCreate(updatedTransaction.getDonator().getEmail());
+                .getDonatorEntityOrCreate(dto.donatorEmail());
         return transactionRepository.save(
                 setTransactionFields(updatedTransaction, donatorEntity, serverById, dto.contributionAmount()));
 

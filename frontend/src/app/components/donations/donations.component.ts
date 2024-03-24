@@ -14,7 +14,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatCheckbox, MatCheckboxModule} from "@angular/material/checkbox";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {CreateTransactionDialog} from "./donations.dialog/create.transaction/create-transaction-dialog.component";
+import {TransactionDialog} from "./transaction.dialog/transaction-dialog.component";
 import {MatInput} from "@angular/material/input";
 import {Server} from "../../common/server";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
@@ -102,20 +102,22 @@ export class DonationsComponent implements OnInit {
         this.getTransactionPage();
     }
 
-    openCreateTransactionDialog(): void {
-        const dialogRef = this.dialog.open(CreateTransactionDialog, {
+    openTransactionDialog(transaction?: Transaction): void {
+        const dialogRef = this.dialog.open(TransactionDialog, {
             width: '50%',
-            data: this.servers,
+            data: {
+                servers: this.servers,
+                transaction: transaction
+            }
         });
         dialogRef.componentInstance.transactionResponse.subscribe( () => {
             this.getTransactionPage()
         });
-
     }
 
     openImageDialog(image: string) {
         this.dialog.open(OpenImageDialogComponent, {
-            width: '50%',
+            width: '70%',
             data: image,
         });
     }

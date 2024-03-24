@@ -23,26 +23,26 @@
                 </mat-select>
                 <mat-error *ngIf="serverControl.hasError('required')">Server required</mat-error>
             </mat-form-field>
-            <form id="editForm" name="editForm" [formGroup]="editForm">
+            <form id="editForm" name="editForm" [formGroup]="imageForm">
                 <mat-form-field class="img-input-field">
                     <div class="fileUploadContainer">
-                        <ng-container *ngIf="editForm.get('photo')!.value">
+                        <ng-container *ngIf="imageForm.get('photo')!.value">
                             <div>
-                                <img [src]="editForm.get('photo')!.value" alt="img"/>
+                                <img [src]="imageForm.get('photo')!.value" alt="img"/>
                                 <button mat-flat-button
                                         (click)="fileInput.value = ''; removeImage()">
                                     Remove
                                 </button>
                             </div>
                         </ng-container>
-                        <div *ngIf="editForm.get('photo')!.value == null">
+                        <div *ngIf="imageForm.get('photo')!.value == null">
                             click or drag&drop
                         </div>
                         <input #fileInput class="fileInput" type="file" multiple="multiple" accept="image/*"
                                (change)="emitFiles($event)"/>
                     </div>
                     <input matInput formControlName="photo" [hidden]="true"/>
-                    <mat-error *ngIf="editForm.get('photo')!.value == null"></mat-error>
+                    <mat-error *ngIf="imageForm.get('photo')!.value == null"></mat-error>
                 </mat-form-field>
             </form>
             <mat-form-field class="input-field" appearance="outline">
@@ -56,7 +56,7 @@
 
 <mat-dialog-actions align="start">
     <button class="cancel-button" mat-flat-button mat-dialog-close>Cancel</button>
-    <button class="ok-button" mat-flat-button (click)="createTransaction()" mat-dialog-close [disabled]="!isFormValid()">
+    <button class="ok-button" mat-flat-button (click)="proceedTransaction()" mat-dialog-close [disabled]="!isFormValid()">
         SendRequest
     </button>
 </mat-dialog-actions>

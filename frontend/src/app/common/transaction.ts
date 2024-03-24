@@ -1,11 +1,11 @@
 export class Transaction {
-    id!: number;
+    id?: number;
     donatorEmail!: string;
     serverId?: number;
     serverName!: string;
     dateCreated!: Date;
     dateApproved?: Date;
-    image!: string;
+    image: string | null = null;
     createdBy!: string;
     approvedBy?: number;
     state!: string;
