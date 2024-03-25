@@ -4,7 +4,7 @@ import donation.main.config.MapperConfig;
 import donation.main.dto.userdto.SignInRequestDto;
 import donation.main.dto.userdto.SignUpRequestDto;
 import donation.main.dto.userdto.UserResponseDto;
-import donation.main.dto.userdto.UserUpdateRequestDto;
+import donation.main.dto.userdto.UserSelfUpdateRequestDto;
 import donation.main.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -13,7 +13,7 @@ import org.mapstruct.MappingTarget;
 public interface UserMapper {
     UserEntity toEntity(SignUpRequestDto dto);
 
-    UserEntity update(@MappingTarget UserEntity entity, UserUpdateRequestDto dto);
+    UserEntity update(@MappingTarget UserEntity entity, UserSelfUpdateRequestDto dto);
 
     UserEntity toEntity(SignInRequestDto dto);
 

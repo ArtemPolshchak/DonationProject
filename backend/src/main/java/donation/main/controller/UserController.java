@@ -2,7 +2,7 @@ package donation.main.controller;
 
 import jakarta.validation.Valid;
 import donation.main.dto.userdto.UserResponseDto;
-import donation.main.dto.userdto.UserUpdateRequestDto;
+import donation.main.dto.userdto.UserSelfUpdateRequestDto;
 import donation.main.entity.UserEntity;
 import donation.main.enumeration.Role;
 import donation.main.service.UserService;
@@ -63,7 +63,7 @@ public class UserController {
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDto> update(
             @PathVariable Long id,
-            @RequestBody @Valid UserUpdateRequestDto dto) {
+            @RequestBody @Valid UserSelfUpdateRequestDto dto) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.update(id, dto));
     }
 }
