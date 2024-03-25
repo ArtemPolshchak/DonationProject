@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable, Output} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
 import {Login} from "../common/login";
@@ -10,7 +10,7 @@ import {StorageService} from "./storage.service";
 })
 export class LoginService {
 
-  constructor(
+    constructor(
       private httpClient: HttpClient,
       private router: Router,
       private storageService: StorageService) {

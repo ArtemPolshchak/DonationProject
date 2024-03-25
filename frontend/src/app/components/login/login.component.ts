@@ -31,8 +31,6 @@ export class LoginComponent {
     form: FormGroup;
     error: string | null = null;
 
-    @Output() loginSuccess = new EventEmitter();
-
     constructor(private fb: FormBuilder, private loginService: LoginService, private serverService: ServerService) {
 
         this.form = this.fb.group({
@@ -45,8 +43,6 @@ export class LoginComponent {
         if (this.form.valid) {
             this.loginService.login(this.form.value).subscribe({
                 next: () => {
-                    this.error = null;
-                    this.loginSuccess.emit();
                     this.getServerList();
                 },
                 error: (err) => {
@@ -59,8 +55,9 @@ export class LoginComponent {
     private getServerList(): void {
         sessionStorage.removeItem('servers');
         this.serverService.getAllServerNames().subscribe({
-            next: (v) =>
-                sessionStorage.setItem('servers', JSON.stringify(v.content)),
+            next: (v) => {
+                sessionStorage.setItem('servers', JSON.stringify(v.content));
+            },
             error: (e) => console.error(e),
         });
     }

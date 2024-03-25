@@ -69,10 +69,6 @@ export class DonationsComponent implements OnInit {
 
     ngOnInit(): void {
         this.getTransactionPage();
-        const serversData = sessionStorage.getItem('servers');
-        if (serversData) {
-            this.servers = JSON.parse(serversData);
-        }
     }
 
     applyFilterSortSearch(): void {
@@ -103,6 +99,7 @@ export class DonationsComponent implements OnInit {
     }
 
     openTransactionDialog(transaction?: Transaction): void {
+        this.getServers()
         const dialogRef = this.dialog.open(TransactionDialog, {
             width: '50%',
             data: {
@@ -113,6 +110,11 @@ export class DonationsComponent implements OnInit {
         dialogRef.componentInstance.transactionResponse.subscribe( () => {
             this.getTransactionPage()
         });
+    }
+
+    private getServers() {
+        const serversData = sessionStorage.getItem('servers');
+        this.servers = serversData ? JSON.parse(serversData) : [];
     }
 
     openImageDialog(image: string) {
