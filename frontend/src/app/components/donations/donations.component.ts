@@ -18,6 +18,7 @@ import {TransactionDialog} from "./transaction.dialog/transaction-dialog.compone
 import {MatInput} from "@angular/material/input";
 import {Server} from "../../common/server";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
+import {StorageService} from "../../services/storage.service";
 
 @Component({
     selector: 'app-transaction',
@@ -49,7 +50,7 @@ export class DonationsComponent implements OnInit {
     donatorsMail?: string;
     sortState?: string = "dateCreated,desc";
     stateFilter: string = "";
-    servers: Server[] = [];
+    servers: Server[];
     selectedServer: string = "";
 
 
@@ -65,6 +66,8 @@ export class DonationsComponent implements OnInit {
         private dialog: MatDialog,
         private _formBuilder: FormBuilder
     ) {
+        const serversData = StorageService.get('servers');
+        this.servers = serversData ? JSON.parse(serversData) : [];
     }
 
     ngOnInit(): void {
@@ -99,7 +102,6 @@ export class DonationsComponent implements OnInit {
     }
 
     openTransactionDialog(transaction?: Transaction): void {
-        this.getServers()
         const dialogRef = this.dialog.open(TransactionDialog, {
             width: '50%',
             data: {
@@ -110,11 +112,6 @@ export class DonationsComponent implements OnInit {
         dialogRef.componentInstance.transactionResponse.subscribe( () => {
             this.getTransactionPage()
         });
-    }
-
-    private getServers() {
-        const serversData = sessionStorage.getItem('servers');
-        this.servers = serversData ? JSON.parse(serversData) : [];
     }
 
     openImageDialog(image: string) {

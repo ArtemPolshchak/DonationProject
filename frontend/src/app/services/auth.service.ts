@@ -8,15 +8,13 @@ import {CanActivateFn, Router} from "@angular/router";
 })
 export class AuthService implements OnInit{
   private userRole?: Role;
-  constructor(private storageService: StorageService) {
-  }
 
   ngOnInit(): void {
     this.userRole = this.getUserRole()
   }
 
   getUserRole(): Role | undefined {
-     return this.storageService.getUser()?.role
+     return StorageService.getUser()?.role
   }
 
   isAdmin(): boolean {
@@ -32,7 +30,7 @@ export class AuthService implements OnInit{
   }
 
   isLoggedIn(): boolean {
-    return this.storageService.getUser() !== undefined;
+    return StorageService.getUser() !== undefined;
   }
 }
 

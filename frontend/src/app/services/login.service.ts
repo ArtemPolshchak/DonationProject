@@ -1,41 +1,36 @@
-import {EventEmitter, Injectable, Output} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
 import {Login} from "../common/login";
-import {Router} from "@angular/router";
 import {StorageService} from "./storage.service";
+import {ServerService} from "./server.service";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class LoginService {
 
     constructor(
-      private httpClient: HttpClient,
-      private router: Router,
-      private storageService: StorageService) {
-  }
+        private httpClient: HttpClient,
+        private serverService: ServerService) {
+    }
 
-    login(loginData: Login): Observable<any> {
+    async login(loginData: Login) {
         return this.httpClient.post<any>('api/auth/sign-in', loginData).pipe(
             tap(response => {
-                this.storageService.saveToken(response.token);
-                const redirect = this.storageService.getUser()?.role
-                this.redirectBasedOnRole(redirect);
+                StorageService.saveToken(response.token);
+                this.getServerList()
             })
         );
     }
-    private redirectBasedOnRole(role: string | undefined): void {
-        switch (role) {
-            case 'ADMIN':
-                this.router.navigateByUrl('/dashboard');
-                break;
-            case 'MODERATOR':
-                this.router.navigateByUrl('/donations');
-                break;
-            default:
-                this.router.navigateByUrl('/app-guest-page');
-                break;
-        }
+
+    private getServerList() {
+        sessionStorage.removeItem('servers');
+        this.serverService.getAllServerNames().subscribe({
+            next: (v) => {
+                StorageService.add('servers', JSON.stringify(v.content));
+            },
+            error: (e) => console.error(e),
+        });
     }
 }
