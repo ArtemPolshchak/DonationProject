@@ -8,6 +8,7 @@ import {ServerBonusComponent} from "./server.server-bonus-dialog/server-bonus.co
 import {Router} from "@angular/router";
 import {SetupServerDialogComponent} from "./setup-server-dialog/setup-server-dialog.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatButton} from "@angular/material/button";
 
 
 @Component({
@@ -15,7 +16,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   standalone: true,
   imports: [
     NgForOf,
-    NgClass
+    NgClass,
+    MatButton
   ],
   templateUrl: './server.component.html',
   styleUrl: './server.component.scss'

@@ -63,16 +63,13 @@
                                 <div class="title">
                                     {{ server.serverName }}
                                 </div>
-                                <div class="name-server">
-                                    {{ server.id }}
-                                </div>
                                 <div class="server-buttons">
-                                    <a class="button"  (click)="goToDonatorBonusOnServer(server.id)">
+                                    <button mat-flat-button  (click)="goToDonatorBonusOnServer(server.id)">
                                         БОНУСЫ ИГРОКОВ
-                                    </a>
-                                    <a class="button" (click)="openServerBonusDialog(server.id)">
+                                    </button>
+                                    <button mat-flat-button (click)="openServerBonusDialog(server.id)">
                                         БОНУСЫ СЕРВЕРА
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </div>

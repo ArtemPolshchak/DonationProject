@@ -1,8 +1,6 @@
 package donation.main.entity;
 
 import static java.math.BigDecimal.ZERO;
-
-import donation.main.enumeration.TransactionState;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,18 +13,23 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import donation.main.enumeration.TransactionState;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "transactions")
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class TransactionEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,6 +44,7 @@ public class TransactionEntity {
     private LocalDateTime dateApproved;
 
     @Column(name = "date_created", nullable = false)
+    @Builder.Default
     private LocalDateTime dateCreated = LocalDateTime.now();
 
     @Lob
@@ -49,18 +53,22 @@ public class TransactionEntity {
 
     @Column(name = "state", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private TransactionState state = TransactionState.IN_PROGRESS;
 
     @Column(name = "total_amount")
     private BigDecimal totalAmount;
 
     @Column(name = "server_bonus_percentage")
+    @Builder.Default
     private BigDecimal serverBonusPercentage = ZERO;
 
     @Column(name = "donator_bonus_percentage")
+    @Builder.Default
     private BigDecimal personalBonusPercentage = ZERO;
 
     @Column(name = "admin_bonus")
+    @Builder.Default
     private BigDecimal adminBonus = ZERO;
 
     //todo set user from security context
@@ -80,29 +88,4 @@ public class TransactionEntity {
     @ManyToOne
     @JoinColumn(name = "server_id")
     private ServerEntity server;
-
-    public TransactionEntity setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-        return this;
-    }
-
-    public TransactionEntity setServerBonusPercentage(BigDecimal serverBonus) {
-        this.serverBonusPercentage = serverBonus;
-        return this;
-    }
-
-    public TransactionEntity setDonatorBonus(BigDecimal donatorBonusPercentage) {
-        this.personalBonusPercentage = donatorBonusPercentage;
-        return this;
-    }
-
-    public TransactionEntity setDonator(DonatorEntity donator) {
-        this.donator = donator;
-        return this;
-    }
-
-    public TransactionEntity setServer(ServerEntity server) {
-        this.server = server;
-        return this;
-    }
 }

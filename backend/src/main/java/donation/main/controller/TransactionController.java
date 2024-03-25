@@ -5,7 +5,6 @@ import donation.main.dto.transactiondto.CreateTransactionDto;
 import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
 import donation.main.dto.transactiondto.UpdateTransactionDto;
-import donation.main.entity.TransactionEntity;
 import donation.main.enumeration.TransactionState;
 import donation.main.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,48 +34,53 @@ public class TransactionController {
     @Operation(summary = "get all transactions")
     @GetMapping()
     public ResponseEntity<Page<TransactionResponseDto>> getAll(Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(transactionService.getAll(pageable));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(transactionService.getAll(pageable));
     }
 
     @Operation(summary = "get all transactions by State")
     @GetMapping("/state")
     public ResponseEntity<Page<TransactionResponseDto>> getAllTransactionsByState(
             @RequestParam TransactionState state, Pageable page) {
-        return ResponseEntity.status(HttpStatus.OK).body(transactionService.findAllByState(state, page));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(transactionService.findAllByState(state, page));
     }
 
     @Operation(summary = "get all transactions from one Donator")
     @GetMapping("/donators")
     public ResponseEntity<Page<TransactionResponseDto>> findAllByDonatorId(@RequestParam Long id, Pageable page) {
-        return ResponseEntity.status(HttpStatus.OK).body(transactionService.findAllTransactionsByDonatorId(id, page));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(transactionService.findAllTransactionsByDonatorId(id, page));
     }
 
     @Operation(summary = "search transaction")
     @GetMapping("/search")
     public ResponseEntity<Page<TransactionResponseDto>> search(TransactionSpecDto specDto, Pageable page) {
-        return ResponseEntity.status(HttpStatus.OK).body(transactionService.search(specDto, page));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(transactionService.search(specDto, page));
     }
 
     @Operation(summary = "create new transaction")
     @PostMapping
     public ResponseEntity<TransactionResponseDto> create(@Valid @RequestBody CreateTransactionDto formDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(transactionService.create(formDto));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(transactionService.create(formDto));
     }
 
     @Operation(summary = "update an existing transaction")
     @PutMapping("/{transactionId}")
-    public ResponseEntity<TransactionEntity> update(
+    public ResponseEntity<TransactionResponseDto> update(
             @PathVariable Long transactionId, @RequestBody UpdateTransactionDto transactionDto) {
-        TransactionEntity updateTransaction = transactionService.updateTransaction(transactionId, transactionDto);
-        return ResponseEntity.status(HttpStatus.OK).body(updateTransaction);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(transactionService.updateTransaction(transactionId, transactionDto));
     }
 
     @Operation(summary = "setup currens TransactionState to new one state")
     @PutMapping("/{transactionId}/confirm")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<TransactionEntity> confirmTransaction(
+    public ResponseEntity<TransactionResponseDto> confirmTransaction(
             @PathVariable Long transactionId, @RequestBody TransactionConfirmRequestDto dto) {
-        TransactionEntity updateTransactionState = transactionService.adminUpdateTransaction(transactionId, dto);
-        return ResponseEntity.status(HttpStatus.OK).body(updateTransactionState);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(transactionService.changeState(transactionId, dto));
     }
 }
