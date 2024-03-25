@@ -9,11 +9,11 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class)
 public interface DonatorMapper {
-    DonatorEntity toEntity(CreateDonatorDto dotatorDto);
+    DonatorEntity toEntity(CreateDonatorDto dto);
 
-    DonatorEntity toEntity(CreateDonatorBonusOnServer dotatorDto);
+    DonatorEntity toEntity(CreateDonatorBonusOnServer dto);
 
     CreateDonatorDto toDto(DonatorEntity entity);
 
-    DonatorEntity update(@MappingTarget DonatorEntity entity, CreateDonatorDto dotatorDto);
+    DonatorEntity update(@MappingTarget DonatorEntity entity, CreateDonatorDto dto);
 }

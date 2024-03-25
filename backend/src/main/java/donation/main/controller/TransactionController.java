@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/transactions")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyAuthority('ADMIN', 'MODERATOR')")
 public class TransactionController {
 
     private final TransactionService transactionService;

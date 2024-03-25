@@ -4,6 +4,7 @@ package donation.main.security;
 import donation.main.dto.userdto.JwtAuthenticationResponseDto;
 import donation.main.dto.userdto.SignInRequestDto;
 import donation.main.dto.userdto.SignUpRequestDto;
+import donation.main.dto.userdto.UserResponseDto;
 import donation.main.entity.UserEntity;
 import donation.main.mapper.UserMapper;
 import donation.main.service.UserService;
@@ -28,13 +29,11 @@ public class AuthenticationService {
 
     private final UserMapper userMapper;
 
-    public JwtAuthenticationResponseDto signUp(SignUpRequestDto request) {
-
-        UserEntity user = userMapper.toEntity(request);
-        user.setPassword(passwordEncoder.encode(request.password()));
-        userService.createUser(user);
-
-        return new JwtAuthenticationResponseDto(jwtService.generateToken(user));
+    public UserResponseDto signUp(SignUpRequestDto dto) {
+        userService.checkIsExist(dto.username(), dto.email());
+        UserEntity user = userMapper.toEntity(dto);
+        user.setPassword(passwordEncoder.encode(dto.password()));
+        return userMapper.toDto(userService.save(user));
     }
 
     public JwtAuthenticationResponseDto signIn(SignInRequestDto request) {

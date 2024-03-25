@@ -12,7 +12,7 @@ public record SignInRequestDto(
         String email,
         @Schema(description = "Пароль", example = "password")
         @NotBlank(message = "Пароль не может быть пустыми")
-        @Size(min = 8, max = 255, message = "Длина пароля должна быть от 8 до 255 символов")
+        @Size(min = 6, max = 50, message = "Длина пароля должна быть от 8 до 255 символов")
         String password
 ) {
 

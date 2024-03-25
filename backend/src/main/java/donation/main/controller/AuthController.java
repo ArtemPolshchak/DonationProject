@@ -3,10 +3,12 @@ package donation.main.controller;
 import donation.main.dto.userdto.JwtAuthenticationResponseDto;
 import donation.main.dto.userdto.SignInRequestDto;
 import donation.main.dto.userdto.SignUpRequestDto;
+import donation.main.dto.userdto.UserResponseDto;
 import donation.main.security.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,8 +24,8 @@ public class AuthController {
 
     @Operation(summary = "Registration new user")
     @PostMapping("/sign-up")
-    public JwtAuthenticationResponseDto signUp(@RequestBody @Valid SignUpRequestDto request) {
-        return authenticationService.signUp(request);
+    public ResponseEntity<UserResponseDto> signUp(@RequestBody @Valid SignUpRequestDto request) {
+        return ResponseEntity.ok(authenticationService.signUp(request));
     }
 
     @Operation(summary = "Authorisation user")

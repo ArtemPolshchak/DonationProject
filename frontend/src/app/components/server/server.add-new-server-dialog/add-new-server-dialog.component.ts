@@ -101,7 +101,7 @@ export class AddNewServerDialogComponent {
 
   private getServerList(): void {
     sessionStorage.removeItem('servers');
-    this.serverService.getAll().subscribe({
+    this.serverService.getAllServerNames().subscribe({
       next: (v) =>
           sessionStorage.setItem('servers', JSON.stringify(v.content)),
       error: (e) => console.error(e),

@@ -9,60 +9,60 @@ import {ServerService} from "../../services/server.service";
 
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [
-    MatCardTitle,
-    MatCard,
-    MatCardContent,
-    ReactiveFormsModule,
-    NgIf,
-    MatInput,
-    MatButton,
-    MatCardModule,
-    MatInputModule,
-    MatButtonModule,
-      FormsModule
-  ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+    selector: 'app-login',
+    standalone: true,
+    imports: [
+        MatCardTitle,
+        MatCard,
+        MatCardContent,
+        ReactiveFormsModule,
+        NgIf,
+        MatInput,
+        MatButton,
+        MatCardModule,
+        MatInputModule,
+        MatButtonModule,
+        FormsModule
+    ],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  form: FormGroup;
-  error: string | null = null;
+    form: FormGroup;
+    error: string | null = null;
 
-  @Output() loginSuccess = new EventEmitter();
+    @Output() loginSuccess = new EventEmitter();
 
-  constructor(private fb: FormBuilder, private loginService: LoginService, private serverService: ServerService) {
+    constructor(private fb: FormBuilder, private loginService: LoginService, private serverService: ServerService) {
 
-    this.form = this.fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required]
-    });
-  }
-
-  submit(): void {
-    if (this.form.valid) {
-      this.loginService.login(this.form.value).subscribe(
-          () => {
-            this.error = null;
-            this.loginSuccess.emit();
-            this.getServerList();
-          },
-          error => {
-            this.error = error.message;
-          }
-      );
+        this.form = this.fb.group({
+            email: ['', Validators.required],
+            password: ['', Validators.required]
+        });
     }
-  }
 
-  private getServerList(): void {
-    sessionStorage.removeItem('servers');
-    this.serverService.getAll().subscribe({
-      next: (v) =>
-          sessionStorage.setItem('servers', JSON.stringify(v.content)),
-      error: (e) => console.error(e),
-    });
-  }
+    submit(): void {
+        if (this.form.valid) {
+            this.loginService.login(this.form.value).subscribe({
+                next: () => {
+                    this.error = null;
+                    this.loginSuccess.emit();
+                    this.getServerList();
+                },
+                error: (err) => {
+                    this.error = err.message;
+                }
+            });
+        }
+    }
+
+    private getServerList(): void {
+        sessionStorage.removeItem('servers');
+        this.serverService.getAllServerNames().subscribe({
+            next: (v) =>
+                sessionStorage.setItem('servers', JSON.stringify(v.content)),
+            error: (e) => console.error(e),
+        });
+    }
 }
 

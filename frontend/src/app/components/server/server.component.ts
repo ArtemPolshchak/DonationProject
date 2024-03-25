@@ -10,7 +10,6 @@ import {SetupServerDialogComponent} from "./setup-server-dialog/setup-server-dia
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatButton} from "@angular/material/button";
 
-
 @Component({
   selector: 'app-server',
   standalone: true,
@@ -45,7 +44,7 @@ export class ServerComponent implements OnInit {
   }
 
   getAllServers(): void {
-    this.serverService.getAll()
+    this.serverService.getAllServerNames()
         .subscribe(data => {
           this.servers = data.content
         })
@@ -66,11 +65,6 @@ export class ServerComponent implements OnInit {
       data: {
         serverId: serverId
       }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log('Dialog result:', result);
     });
   }
 

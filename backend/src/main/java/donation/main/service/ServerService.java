@@ -39,7 +39,7 @@ public class ServerService {
         return serverRepository.getAllByServerNameAndId(pageable);
     }
 
-    public ServerEntity createServer(CreateServerDto serverDto) {
+    public ServerEntity create(CreateServerDto serverDto) {
         ServerEntity server = serverMapper.toEntity(serverDto);
         server.getServerBonusSettings().add(ServerBonusSettingsEntity.builder().server(server).build());
         return serverRepository.save(server);
