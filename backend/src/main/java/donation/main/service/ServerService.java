@@ -45,7 +45,7 @@ public class ServerService {
 
     public ServerEntity createServer(CreateServerDto serverDto) {
         ServerEntity server = serverMapper.toEntity(serverDto);
-        server.setServerBonusSettings(new TreeSet<>(Collections.singletonList(createDefaultBonusForNewServer(server))));
+        server.setServerBonusSettings(new TreeSet<>(List.of(createDefaultBonusForNewServer(server))));
         return serverRepository.save(server);
     }
 
