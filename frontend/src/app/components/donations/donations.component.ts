@@ -19,6 +19,7 @@ import {MatInput} from "@angular/material/input";
 import {Server} from "../../common/server";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
 import {StorageService} from "../../services/storage.service";
+import {Subject} from "rxjs";
 
 @Component({
     selector: 'app-transaction',
@@ -50,8 +51,8 @@ export class DonationsComponent implements OnInit {
     donatorsMail?: string;
     sortState?: string = "dateCreated,desc";
     stateFilter: string = "";
-    servers: Server[];
     selectedServer: string = "";
+    servers: Server[];
 
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -66,8 +67,8 @@ export class DonationsComponent implements OnInit {
         private dialog: MatDialog,
         private _formBuilder: FormBuilder
     ) {
-        const serversData = StorageService.get('servers');
-        this.servers = serversData ? JSON.parse(serversData) : [];
+            const serversData = StorageService.getItem('servers');
+            this.servers = serversData ? JSON.parse(serversData) : [];
     }
 
     ngOnInit(): void {
