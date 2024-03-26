@@ -8,7 +8,7 @@ import {jwtDecode} from "jwt-decode";
 })
 export abstract class StorageService {
 
-    static storage: Storage = localStorage;
+    static storage: Storage = window.localStorage;
 
     static signOut(): void {
         this.storage.clear();
