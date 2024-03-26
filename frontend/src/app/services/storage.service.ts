@@ -22,13 +22,9 @@ export abstract class StorageService {
     static getToken(): string | undefined {
         const token = this.storage.getItem(TOKEN_KEY);
         if (token) {
-            const tokenInfo = this.getDecodedAccessToken(token);
-            if (tokenInfo && this.isTokenValid(tokenInfo)) {
-                return token;
-            } else {
-                this.clear();
-            }
+            return token;
         }
+        this.clear();
         return undefined;
     }
 
