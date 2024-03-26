@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {TOKEN_KEY} from '../enums/app-constans';
 import {User} from "../common/user";
 import {jwtDecode} from "jwt-decode";
+import {Observable, Subject} from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -9,10 +10,15 @@ import {jwtDecode} from "jwt-decode";
 export abstract class StorageService {
 
     static storage: Storage = localStorage;
+    static storageSub= new Subject<string>();
 
+   static watchStorage(): Observable<any> {
+        return this.storageSub.asObservable();
+    }
     static saveToken(token: string) {
         this.storage.removeItem(TOKEN_KEY);
         this.storage.setItem(TOKEN_KEY, token);
+        this.storageSub.next(token);
     }
 
     static addItem(key: string, value: string): void {
@@ -58,8 +64,11 @@ export abstract class StorageService {
         if (!tokenInfo || !tokenInfo.exp || !tokenInfo.iat) {
             return false;
         }
-        const currentTime = Math.floor(Date.now() / 1000);
-        return !(tokenInfo.exp <= currentTime || tokenInfo.iat > currentTime);
+        const date = new Date(Date.now())
+        const dateUTC = Date.UTC(date.getFullYear(), date.getMonth(),
+            date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds())
+        const currentUTCTime = Math.floor(dateUTC / 1000);
+        return !(tokenInfo.exp <= currentUTCTime || tokenInfo.iat > currentUTCTime);
     }
 
     static getItem(key: string): string | null {

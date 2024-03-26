@@ -3,13 +3,15 @@ import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Transaction} from "../common/transaction";
 import {map, Observable} from "rxjs";
 import {StorageService} from "./storage.service";
+import {HttpClientService} from "./http-client.service";
+import {GET, POST, PUT} from "../enums/app-constans";
 
 @Injectable({
     providedIn: 'root'
 })
 export class TransactionService {
 
-    constructor(private httpClient: HttpClient) {
+    constructor(private httpClient: HttpClientService) {
     }
 
     public getAllWithSearch(serverNames?: string[], donatorMails?: string, state?: string[], pageNumber?: number, pageSize?: number, sort?: string) {
@@ -21,47 +23,37 @@ export class TransactionService {
         params = (pageSize) ? params.set('size', pageSize.toString()) : params;
         params = (sort) ? params.set('sort', sort) : params;
         const url: string = 'api/transactions/search';
-        return this.httpClient.get<GetTransactionResponse>(url, { params: params, headers: {'Authorization': 'Bearer ' + StorageService.getToken()} }).pipe(
-            map(response => response)
-        );
+        return this.httpClient.process<GetTransactionResponse>(GET, url, true, params);
     }
 
     public getAll(pageNumber?: number, pageSize?: number) {
         const url: string = `api/transactions?page=${pageNumber}&pageSize=${pageSize}`
         console.log(url)
-        return this.httpClient.get<GetTransactionResponse>(url, {headers: {'Authorization': 'Bearer ' + StorageService.getToken()}}).pipe(
-            map(response => response));
+        return this.httpClient.process<GetTransactionResponse>(GET, url, true);
     }
 
-    public confirmById(transactionId: number, state: string, adminBonus: number): Observable<void> {
+    public confirmById(transactionId: number, state: string, adminBonus: number): Observable<GetTransactionResponse> {
         const url: string = `api/transactions/${transactionId}/confirm`;
         let transaction = new Transaction();
         transaction.adminBonus = adminBonus;
         transaction.state = state;
-        return this.httpClient.put<void>(url, transaction,
-            {headers: {'Authorization': 'Bearer ' + StorageService.getToken()}});
+        return this.httpClient.process<GetTransactionResponse>(PUT, url, true, transaction);
+
     }
 
     public update(transaction: Transaction): Observable<GetTransactionResponse> {
         const url: string = `api/transactions/${transaction.id}`;
-        return this.httpClient.put<GetTransactionResponse>(url, transaction,  {
-            headers: {'Authorization': 'Bearer ' + StorageService.getToken()}
-        });
+        return this.httpClient.process<GetTransactionResponse>(PUT, url, true, transaction);
     }
 
     public create(transaction: Transaction): Observable<GetTransactionResponse> {
         const url: string = `api/transactions`;
-        console.log(url);
-        return this.httpClient.post<GetTransactionResponse>(url, transaction,  {
-            headers: {'Authorization': 'Bearer ' + StorageService.getToken()}
-        });
+        return this.httpClient.process<GetTransactionResponse>(POST, url, true, transaction);
     }
 
     public getAllTransactionsFromOneDonator(donatorId: number, pageNumber?: number, pageSize?: number, sort?: string) {
         const url: string = `api/transactions/donators?id=${donatorId}&page=${pageNumber}&size=${pageSize}&sort=${sort}`;
-        return this.httpClient.get<GetTransactionResponse>(url, {headers: {'Authorization': 'Bearer ' + StorageService.getToken()}}).pipe(
-            map(response => response));
-
+        return this.httpClient.process<GetTransactionResponse>(GET, url, true);
     }
 }
 

@@ -1,4 +1,9 @@
 export const TOKEN_KEY = 'token';
+export const GET = 'get';
+export const POST = 'post';
+export const PUT = 'put';
+export const PATCH = 'patch';
+export const DELETE = 'delete';
 
 export class Role {
   static readonly ADMIN = 'ADMIN';

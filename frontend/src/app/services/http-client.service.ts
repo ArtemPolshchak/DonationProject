@@ -1,19 +1,39 @@
-import {HttpClient, HttpHandler, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHandler, HttpHeaders, HttpParams} from "@angular/common/http";
 import {StorageService} from "./storage.service";
-import {OnInit} from "@angular/core";
-import {TOKEN_KEY} from "../enums/app-constans";
+import {Injectable} from "@angular/core";
 
-export class HttpClientService extends HttpClient implements OnInit {
+@Injectable({
+    providedIn: 'root'
+})
+export class HttpClientService extends HttpClient{
     headers?: HttpHeaders
 
     constructor(handler: HttpHandler) {
         super(handler);
+        console.log("HttpClientService created");
+        StorageService.watchStorage().subscribe( {
+            next: value => {
+                this.headers = new HttpHeaders({'Authorization': 'Bearer ' + value});
+                console.log(value);
+                console.log("HttpClientService created");
+            }
+        });
     }
 
-    ngOnInit(): void {
-        localStorage.getItem(TOKEN_KEY)
-        if (StorageService.getToken()) {
-            this.headers = new HttpHeaders({'Authorization': 'Bearer ' + StorageService.getToken()})
+    process<T>(method: string, url: string, auth: boolean, body?: any, params?: HttpParams) {
+        if (auth && body && params) {
+            return this.request<T>(method, url, {headers: this.headers, body: body, params: params});
+        } else if  (auth && body) {
+            return this.request<T>(method, url, {headers: this.headers, body: body});
+        } else if (body && params) {
+            return this.request<T>(method, url, {body: body, params: params});
+        } else if (body) {
+            return this.request<T>(method, url, {body: body});
+        } else if (auth) {
+            return this.request<T>(method, url, {headers: this.headers});
+        } else if (params) {
+            return this.request<T>(method, url, {params: params});
         }
+        return this.request<T>(method, url);
     }
 }
