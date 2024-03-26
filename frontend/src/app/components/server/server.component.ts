@@ -8,14 +8,15 @@ import {ServerBonusComponent} from "./server.server-bonus-dialog/server-bonus.co
 import {Router} from "@angular/router";
 import {SetupServerDialogComponent} from "./setup-server-dialog/setup-server-dialog.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
-
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-server',
   standalone: true,
   imports: [
     NgForOf,
-    NgClass
+    NgClass,
+    MatButton
   ],
   templateUrl: './server.component.html',
   styleUrl: './server.component.scss'
@@ -43,7 +44,7 @@ export class ServerComponent implements OnInit {
   }
 
   getAllServers(): void {
-    this.serverService.getAll()
+    this.serverService.getAllServerNames()
         .subscribe(data => {
           this.servers = data.content
         })
@@ -64,11 +65,6 @@ export class ServerComponent implements OnInit {
       data: {
         serverId: serverId
       }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log('Dialog result:', result);
     });
   }
 

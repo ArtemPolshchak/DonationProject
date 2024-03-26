@@ -1,5 +1,6 @@
 package donation.main.entity;
 
+import static java.math.BigDecimal.ZERO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,14 +10,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "server_bonus_settings")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class ServerBonusSettingsEntity implements Comparable<ServerBonusSettingsEntity> {
@@ -26,13 +32,16 @@ public class ServerBonusSettingsEntity implements Comparable<ServerBonusSettings
     private Long id;
 
     @Column(name = "bonus_percentage")
-    private BigDecimal bonusPercentage;
+    @Builder.Default
+    private BigDecimal bonusPercentage = ZERO;
 
     @Column(name = "from_amount")
-    private BigDecimal fromAmount;
+    @Builder.Default
+    private BigDecimal fromAmount = ZERO;
 
     @Column(name = "to_amount")
-    private BigDecimal toAmount;
+    @Builder.Default
+    private BigDecimal toAmount = ZERO;
 
     @JsonIgnoreProperties("serverBonusSettings")
     @ManyToOne

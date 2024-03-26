@@ -25,12 +25,13 @@ html, body {
   padding-left: 45px;
   padding-right: 45px
 }
+
 .buttons {
   display: flex;
   & .button {
     border-radius: 4px;
     border: 1px solid #000000;
-    font-size: 14px;
+    font-size: 10px;
     font-weight: 500;
     padding: 10px 16px;
     cursor: pointer;

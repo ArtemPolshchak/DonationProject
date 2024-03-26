@@ -41,7 +41,6 @@ export class UserComponent implements OnInit {
     this.userService.getAll(this.pageNumber, this.pageSize)
         .subscribe(data => {
           this.users = data.content
-          console.log(this.users)
         })
   }
 }

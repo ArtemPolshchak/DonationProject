@@ -8,7 +8,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class)
 public interface ServerBonusSettingsMapper {
-    ServerBonusSettingsEntity toEntity(CreateServerBonusesDto serverBonusesDto);
+    ServerBonusSettingsEntity toEntity(CreateServerBonusesDto dto);
 
     CreateServerBonusesDto toDto(ServerBonusSettingsEntity entity);
 

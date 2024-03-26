@@ -1,8 +1,7 @@
 package donation.main.service;
 
-import donation.main.dto.donatorsdto.CreateDotatorDto;
+import donation.main.dto.donatorsdto.CreateDonatorDto;
 import donation.main.entity.DonatorEntity;
-import donation.main.exception.EmailNotFoundException;
 import donation.main.exception.UserNotFoundException;
 import donation.main.mapper.DonatorMapper;
 import donation.main.repository.DonatorRepository;
@@ -21,33 +20,21 @@ public class DonatorService {
         return donatorRepository.findAll(pageable);
     }
 
-    public DonatorEntity findByMail(String email) {
-        return donatorRepository.findByEmail(email)
-                .orElseThrow(() -> new EmailNotFoundException("Email not found", email));
-    }
-
     public DonatorEntity findById(Long id) {
         return donatorRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Cannot find current Donator"));
+                .orElseThrow(() -> new UserNotFoundException("Can't find Donator by id " + id));
     }
 
-    public Page<DonatorEntity> findByMailPaginated(String mail, Pageable pageable) {
+    public Page<DonatorEntity> findByEmailLike(String mail, Pageable pageable) {
         return donatorRepository.findByEmailContainingIgnoreCase(mail, pageable);
     }
 
-    public DonatorEntity createDonator(CreateDotatorDto dotatorDto) {
-        return donatorRepository.save(donatorMapper.toEntity(dotatorDto));
+    public DonatorEntity create(CreateDonatorDto dto) {
+        return donatorRepository.save(donatorMapper.toEntity(dto));
     }
 
-    public DonatorEntity getDonatorEntityOrCreate(String donatorEmail) {
-        try {
-            return findByMail(donatorEmail);
-        } catch (EmailNotFoundException e) {
-            return createDonator(new CreateDotatorDto(donatorEmail));
-        }
-    }
-
-    public boolean existsByEmail(String email) {
-        return donatorRepository.existsByEmail(email);
+    public DonatorEntity getByEmailOrCreate(String email) {
+        return donatorRepository.findByEmail(email)
+                .orElseGet(() -> donatorRepository.save(DonatorEntity.builder().email(email).build()));
     }
 }
