@@ -10,21 +10,26 @@ export abstract class StorageService {
 
     static storage: Storage = window.localStorage;
 
-    static signOut(): void {
-        this.storage.clear();
-    }
-
-    static saveToken(token: string): void {
+    static saveToken(token: string) {
         this.storage.removeItem(TOKEN_KEY);
         this.storage.setItem(TOKEN_KEY, token);
     }
 
-    static add(key: string, value: string): void {
+    static addItem(key: string, value: string): void {
         this.storage.setItem(key, value);
     }
 
-    static getToken(): string | null {
-        return this.storage.getItem(TOKEN_KEY);
+    static getToken(): string | undefined {
+        const token = this.storage.getItem(TOKEN_KEY);
+        if (token) {
+            const tokenInfo = this.getDecodedAccessToken(token);
+            if (tokenInfo && this.isTokenValid(tokenInfo)) {
+                return token;
+            } else {
+                this.clear();
+            }
+        }
+        return undefined;
     }
 
     static clear() {
@@ -35,11 +40,7 @@ export abstract class StorageService {
         const token = this.getToken();
         if (token) {
             const tokenInfo = this.getDecodedAccessToken(token);
-            if (tokenInfo && this.isTokenValid(tokenInfo)) {
-                return new User(tokenInfo.id, tokenInfo.sub, tokenInfo.email, tokenInfo.role);
-            } else {
-                this.signOut();
-            }
+            return new User(tokenInfo.id, tokenInfo.sub, tokenInfo.email, tokenInfo.role);
         }
         return undefined;
     }
@@ -61,7 +62,11 @@ export abstract class StorageService {
         return !(tokenInfo.exp <= currentTime || tokenInfo.iat > currentTime);
     }
 
-    static get(key: string): string | null {
-       return this.storage.getItem(key);
+    static getItem(key: string): string | null {
+        return this.storage.getItem(key);
+    }
+
+    static removeItem(key: string) {
+        this.storage.removeItem(key);
     }
 }

@@ -5,9 +5,10 @@ import {NgIf} from "@angular/common";
 import {MatInput, MatInputModule} from "@angular/material/input";
 import {MatButton, MatButtonModule} from "@angular/material/button";
 import {LoginService} from "../../services/login.service";
-import {ServerService} from "../../services/server.service";
 import {Router} from "@angular/router";
 import {StorageService} from "../../services/storage.service";
+import {ServerService} from "../../services/server.service";
+import {take} from "rxjs";
 
 
 @Component({
@@ -35,9 +36,9 @@ export class LoginComponent {
 
     constructor(private fb: FormBuilder,
                 private loginService: LoginService,
+                private serverService: ServerService,
                 private router: Router
     ) {
-
         this.form = this.fb.group({
             email: ['', Validators.required],
             password: ['', Validators.required]
@@ -46,16 +47,28 @@ export class LoginComponent {
 
     submit() {
         if (this.form.valid) {
-            this.loginService.login(this.form.value).then((result) =>
-                result.subscribe({
-                    next: () => {
-                        this.redirectBasedOnRole(StorageService.getUser()?.role)
-                    },
-                    error: (err) => {
-                        this.error = err.message;
-                    }
-                }));
+            this.loginService.login(this.form.value).subscribe({
+                next: (response) => {
+                    StorageService.saveToken(response.token);
+                    this.getServerList();
+                },
+                error: (err) => {
+                    this.error = err.message;
+                }
+            })
         }
+    }
+
+    private getServerList(): void {
+        this.serverService.getAllServerNames().pipe(take(1)).subscribe({
+            next: (val) => {
+                StorageService.addItem('servers', JSON.stringify(val.content));
+                this.redirectBasedOnRole(StorageService.getUser()?.role)
+            },
+            error: (err) => {
+                console.error(err);
+            },
+        });
     }
 
     private redirectBasedOnRole(role: string | undefined): void {
@@ -68,7 +81,6 @@ export class LoginComponent {
                 break;
             default:
                 this.router.navigateByUrl('/app-guest-page');
-                break;
         }
     }
 }
