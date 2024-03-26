@@ -4,6 +4,7 @@ import {map} from "rxjs";
 import {Server} from "../common/server";
 import {DonatorBonus} from "../common/donatorBonus";
 import {CreateDonatorBonus} from "../common/create-donator-bonus";
+import {StorageService} from "./storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -12,50 +13,38 @@ export class ServerService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public getAll(pageNumber?: number, pageSize?: number) {
-    const url: string = `api/servers/server-names?page=${pageNumber}&pageSize=${pageSize}`
-    console.log(url)
-    return this.httpClient.get<GetServerResponse>(url, {headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}}).pipe(
+  public getAllServerNames(pageNumber?: number, pageSize?: number) {
+    const url: string = `api/servers/names?page=${pageNumber}&pageSize=${pageSize}`
+    return this.httpClient.get<GetServerResponse>(url, {headers: {'Authorization': 'Bearer ' + StorageService.getToken()}}).pipe(
         map(response => response));
   }
 
   public create(newServer: CreateServerDto) {
     const url: string = `api/servers`
-    console.log(url)
     return this.httpClient.post<void>(url, newServer,  {
-      headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}
+      headers: {'Authorization': 'Bearer ' + StorageService.getToken()}
     });
   }
 
   public getDonatorsBonusesByServerId(serverId: number, pageNumber?: number, pageSize?: number, sort?: string) {
     const url: string = `api/servers/${serverId}/donator-bonus?page=${pageNumber}&size=${pageSize}&sort=${sort}`;
-    console.log(url);
-    console.log("pageSize" + pageSize);
-    console.log(url);
-    return this.httpClient.get<GetDonatorBonuses>(url, { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') } }).pipe(
+    return this.httpClient.get<GetDonatorBonuses>(url, { headers: { 'Authorization': 'Bearer ' + StorageService.getToken()} }).pipe(
         map(response => response));
   }
 
   public searchDonatorsByEmailContains(serverId: number, email?: string, pageNumber?: number, pageSize?: number, sort?: string) {
     const url: string = `api/servers/${serverId}/donator-search?email=${email}&page=${pageNumber}&size=${pageSize}&sort=${sort}`;
-    console.log(url);
-    return this.httpClient.get<GetDonatorBonuses>(url, { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') } });
+    return this.httpClient.get<GetDonatorBonuses>(url, { headers: { 'Authorization': 'Bearer ' + StorageService.getToken()} });
   }
 
   public updateDonatorsBonusOnServer(dto: UpdateDonatorsBonus) {
     const url: string = `api/servers/update-donator-bonus`;
-    console.log("ServerId: " + dto.serverId);
-    console.log("DonatorId: " + dto.donatorId);
-    console.log("PersonalBonus: " + dto.personalBonus);
-    return this.httpClient.put<UpdateDonatorsBonus>(url, dto, { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') } });
+    return this.httpClient.put<UpdateDonatorsBonus>(url, dto, { headers: { 'Authorization': 'Bearer ' + StorageService.getToken()} });
   }
 
   public createDonatorsBonusOnServer(dto: CreateDonatorBonus) {
     const url: string = `api/servers/create-donator-bonus`;
-    console.log("ServerId: " + dto.serverId);
-    console.log("DonatorEmail: " + dto.email);
-    console.log("PersonalBonus: " + dto.personalBonus);
-    return this.httpClient.post<CreateDonatorBonus>(url, dto, { headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem('token') } });
+    return this.httpClient.post<CreateDonatorBonus>(url, dto, { headers: { 'Authorization': 'Bearer ' + StorageService.getToken()} });
   }
 }
 

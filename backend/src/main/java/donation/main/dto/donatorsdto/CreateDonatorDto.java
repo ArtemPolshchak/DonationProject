@@ -1,6 +1,6 @@
 package donation.main.dto.donatorsdto;
 
-public record CreateDotatorDto(
+public record CreateDonatorDto(
         String email
 ) {
 }

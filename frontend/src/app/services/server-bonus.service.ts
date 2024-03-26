@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import {StorageService} from "./storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class ServerBonusService {
     console.log(url);
     console.log(serverId + "server ID")
     return this.httpClient.post<void>(url, serverBonuses, {
-      headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('token')}
+      headers: {'Authorization': 'Bearer ' + StorageService.getToken()}
     });
   }
 

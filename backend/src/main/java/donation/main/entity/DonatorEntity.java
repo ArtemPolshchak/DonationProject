@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +22,9 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @ToString(of = {"email", "totalDonations"})
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class DonatorEntity {
 
     @Id
@@ -31,6 +35,6 @@ public class DonatorEntity {
     private String email;
 
     @Column(name = "total_donations")
+    @Builder.Default
     private BigDecimal totalDonations = BigDecimal.ZERO;
-
 }

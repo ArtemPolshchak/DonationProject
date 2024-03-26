@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,19 +28,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/servers")
 @RequiredArgsConstructor
+@PreAuthorize("hasAuthority('ADMIN')")
 public class ServerController {
 
     private final ServerService serverService;
 
     @Operation(summary = "get all servers")
     @GetMapping("/")
-//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<ServerEntity>> getAllServers(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(serverService.getAll(pageable));
     }
 
     @Operation(summary = "get all servers by names")
-    @GetMapping("/server-names")
+    @GetMapping("/names")
     public ResponseEntity<Page<ServerIdNameDto>> getAllServerNames(Pageable page) {
         return ResponseEntity.status(HttpStatus.OK).body(serverService.getAllServersNames(page));
     }
@@ -47,7 +48,7 @@ public class ServerController {
     @Operation(summary = "create new server")
     @PostMapping
     public ResponseEntity<ServerEntity> createServer(@RequestBody CreateServerDto serverDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(serverService.createServer(serverDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(serverService.create(serverDto));
     }
 
     @Operation(summary = "create bonuses for donators on server")
@@ -58,8 +59,8 @@ public class ServerController {
 
     @Operation(summary = "update bonuses for donators on server")
     @PutMapping("/update-donator-bonus")
-    public ResponseEntity<ServerEntity> updateDonatorsBonusOnServer(@RequestBody UpdateDonatorsBonusOnServer serverDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(serverService.updateDonatorsBonusOnServer(serverDto));
+    public ResponseEntity<ServerEntity> updateDonatorsBonusOnServer(@RequestBody UpdateDonatorsBonusOnServer dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(serverService.updateDonatorsBonusOnServer(dto));
     }
 
     @Operation(summary = "Get all donators and their bonuses for a specific server with pagination")

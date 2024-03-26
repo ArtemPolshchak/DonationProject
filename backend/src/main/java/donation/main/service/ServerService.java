@@ -1,10 +1,6 @@
 package donation.main.service;
 
-import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
-import java.util.TreeSet;
-
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
 import donation.main.dto.donatorsdto.DonatorBonusDto;
 import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
@@ -43,9 +39,9 @@ public class ServerService {
         return serverRepository.getAllByServerNameAndId(pageable);
     }
 
-    public ServerEntity createServer(CreateServerDto serverDto) {
+    public ServerEntity create(CreateServerDto serverDto) {
         ServerEntity server = serverMapper.toEntity(serverDto);
-        server.setServerBonusSettings(new TreeSet<>(Collections.singletonList(createDefaultBonusForNewServer(server))));
+        server.getServerBonusSettings().add(ServerBonusSettingsEntity.builder().server(server).build());
         return serverRepository.save(server);
     }
 
@@ -55,24 +51,18 @@ public class ServerService {
     }
 
     public ServerEntity createDonatorsBonusOnServer(CreateDonatorBonusOnServer dto) {
-
         //todo here should be connect to server with gamers
         DonatorEntity donator = donatorRepository.findByEmail(dto.email())
                 .orElseGet(() -> donatorRepository.save(donatorMapper.toEntity(dto)));
-
         ServerEntity server = findById(dto.serverId());
-
         server.getDonatorsBonuses().put(donator, dto.personalBonus());
-
         return serverRepository.save(server);
     }
 
     public ServerEntity updateDonatorsBonusOnServer(UpdateDonatorsBonusOnServer dto) {
         DonatorEntity donator = donatorService.findById(dto.donatorId());
         ServerEntity server = findById(dto.serverId());
-        BigDecimal donatorsBonus = dto.personalBonus();
-
-        server.getDonatorsBonuses().put(donator, donatorsBonus);
+        server.getDonatorsBonuses().put(donator, dto.personalBonus());
         return serverRepository.save(server);
 
     }
@@ -101,14 +91,5 @@ public class ServerService {
         return new PageImpl<>(
                 donatorBonuses.subList((int) pageable.getOffset(), toIndex),
                 pageable, donatorBonuses.size());
-    }
-
-    private ServerBonusSettingsEntity createDefaultBonusForNewServer(ServerEntity server) {
-        ServerBonusSettingsEntity defaultBonus = new ServerBonusSettingsEntity();
-        defaultBonus.setBonusPercentage(BigDecimal.ZERO);
-        defaultBonus.setFromAmount(BigDecimal.ZERO);
-        defaultBonus.setToAmount(BigDecimal.ZERO);
-        defaultBonus.setServer(server);
-        return defaultBonus;
     }
 }

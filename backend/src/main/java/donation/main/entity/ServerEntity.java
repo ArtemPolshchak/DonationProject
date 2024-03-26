@@ -28,9 +28,6 @@ import java.util.TreeSet;
 
 @Entity
 @Table(name = "servers")
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class ServerEntity {
