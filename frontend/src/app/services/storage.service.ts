@@ -2,17 +2,23 @@ import {Injectable} from '@angular/core';
 import {TOKEN_KEY} from '../enums/app-constans';
 import {User} from "../common/user";
 import {jwtDecode} from "jwt-decode";
+import {Observable, Subject} from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export abstract class StorageService {
 
-    static storage: Storage = window.localStorage;
+    static storage: Storage = localStorage;
+    static storageSub= new Subject<string>();
 
+   static watchStorageToken(): Observable<any> {
+        return this.storageSub.asObservable();
+    }
     static saveToken(token: string) {
         this.storage.removeItem(TOKEN_KEY);
         this.storage.setItem(TOKEN_KEY, token);
+        this.storageSub.next(token);
     }
 
     static addItem(key: string, value: string): void {
