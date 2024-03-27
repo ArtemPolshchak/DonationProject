@@ -76,7 +76,6 @@ export class DonationsComponent implements OnInit {
     }
 
     applyFilterSortSearch(): void {
-        this.pageNumber = 0;
         this.state = [];
         if (this.stateFilter !== '') {
             this.state.push(this.stateFilter);

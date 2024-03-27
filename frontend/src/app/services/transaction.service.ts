@@ -13,7 +13,6 @@ export class TransactionService {
 
     public getAllWithSearch(serverNames?: string[], donatorMails?: string, state?: string[], pageNumber?: number, pageSize?: number, sort?: string) {
         let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort, donatorMails, serverNames, state);
-        console.log(params)
         const url: string = 'api/transactions/search';
         return this.httpClient.fetch<GetTransactionResponse>(GET, url, true, params);
     }
