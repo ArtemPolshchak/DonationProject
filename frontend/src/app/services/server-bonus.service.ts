@@ -1,28 +1,23 @@
-import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "./storage.service";
+import {Injectable} from '@angular/core';
+import {HttpClientService} from "./http-client.service";
+import {POST} from "../enums/app-constans";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class ServerBonusService {
 
-  constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClientService) {
+    }
 
-  public createOrRecreateBonuses(serverBonuses: ServerBonusDto[], serverId?: number) {
-    const url: string = `api/server-bonus-settings?serverId=${serverId}`;
-    console.log(url);
-    console.log(serverId + "server ID")
-    return this.httpClient.post<void>(url, serverBonuses, {
-      headers: {'Authorization': 'Bearer ' + StorageService.getToken()}
-    });
-  }
-
-
+    public createOrRecreateBonuses(serverBonuses: ServerBonusDto[], serverId?: number) {
+        const url: string = `api/server-bonus-settings?serverId=${serverId}`;
+        return this.httpClient.process<void>(POST, url, true, serverBonuses);
+    }
 }
 
 export interface ServerBonusDto {
-  fromAmount: number;
-  toAmount: number;
-  bonusPercentage: number;
+    fromAmount: number;
+    toAmount: number;
+    bonusPercentage: number;
 }
