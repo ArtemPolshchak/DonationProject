@@ -17,6 +17,7 @@ import {NgForOf, NgIf} from "@angular/common";
 import {Server} from "../../../common/server";
 import {CreateServerDto, ServerService} from "../../../services/server.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {StorageService} from "../../../services/storage.service";
 
 @Component({
   selector: 'app-server.dialog',
@@ -100,10 +101,9 @@ export class AddNewServerDialogComponent {
 
 
   private getServerList(): void {
-    sessionStorage.removeItem('servers');
     this.serverService.getAllServerNames().subscribe({
       next: (v) =>
-          sessionStorage.setItem('servers', JSON.stringify(v.content)),
+          StorageService.addItem('servers', JSON.stringify(v.content)),
       error: (e) => console.error(e),
     });
   }

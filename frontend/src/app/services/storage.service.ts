@@ -12,7 +12,7 @@ export abstract class StorageService {
     static storage: Storage = localStorage;
     static storageSub= new Subject<string>();
 
-   static watchStorage(): Observable<any> {
+   static watchStorageToken(): Observable<any> {
         return this.storageSub.asObservable();
     }
     static saveToken(token: string) {
@@ -61,7 +61,7 @@ export abstract class StorageService {
     }
 
     static isTokenValid(tokenInfo: any): boolean {
-        if (!tokenInfo || !tokenInfo.exp || !tokenInfo.iat) {
+        if (!tokenInfo &&  !tokenInfo.exp && !tokenInfo.iat) {
             return false;
         }
         const date = new Date(Date.now())
