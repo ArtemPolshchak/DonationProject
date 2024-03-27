@@ -12,7 +12,7 @@ export class ServerBonusService {
 
     public createOrRecreateBonuses(serverBonuses: ServerBonusDto[], serverId?: number) {
         const url: string = `api/server-bonus-settings?serverId=${serverId}`;
-        return this.httpClient.process<void>(POST, url, true, serverBonuses);
+        return this.httpClient.load<void>(POST, url, true, serverBonuses);
     }
 }
 

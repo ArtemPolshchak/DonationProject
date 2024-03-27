@@ -48,8 +48,8 @@ public class TransactionController {
     }
 
     @Operation(summary = "get all transactions from one Donator")
-    @GetMapping("/donators")
-    public ResponseEntity<Page<TransactionResponseDto>> findAllByDonatorId(@RequestParam Long id, Pageable page) {
+    @GetMapping("/donators/{id}")
+    public ResponseEntity<Page<TransactionResponseDto>> findAllByDonatorId(@PathVariable Long id, Pageable page) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(transactionService.findAllTransactionsByDonatorId(id, page));
     }

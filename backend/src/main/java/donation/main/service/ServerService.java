@@ -50,18 +50,18 @@ public class ServerService {
                 .orElseThrow(() -> new ServerNotFoundException("Server not found by Id=", id));
     }
 
-    public ServerEntity createDonatorsBonusOnServer(CreateDonatorBonusOnServer dto) {
+    public ServerEntity createDonatorsBonusOnServer(Long serverId, Long donatorId, CreateDonatorBonusOnServer dto) {
         //todo here should be connect to server with gamers
-        DonatorEntity donator = donatorRepository.findByEmail(dto.email())
+        DonatorEntity donator = donatorRepository.findById(donatorId)
                 .orElseGet(() -> donatorRepository.save(donatorMapper.toEntity(dto)));
-        ServerEntity server = findById(dto.serverId());
+        ServerEntity server = findById(serverId);
         server.getDonatorsBonuses().put(donator, dto.personalBonus());
         return serverRepository.save(server);
     }
 
-    public ServerEntity updateDonatorsBonusOnServer(UpdateDonatorsBonusOnServer dto) {
-        DonatorEntity donator = donatorService.findById(dto.donatorId());
-        ServerEntity server = findById(dto.serverId());
+    public ServerEntity updateDonatorsBonusOnServer(Long serverId, Long donatorId, UpdateDonatorsBonusOnServer dto) {
+        DonatorEntity donator = donatorService.findById(donatorId);
+        ServerEntity server = findById(serverId);
         server.getDonatorsBonuses().put(donator, dto.personalBonus());
         return serverRepository.save(server);
 
