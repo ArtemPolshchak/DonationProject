@@ -10,17 +10,13 @@ import {FormsModule} from "@angular/forms";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {Router} from "@angular/router";
-import {ServerBonusComponent} from "../server/server.server-bonus-dialog/server-bonus.component";
 import {MatDialog} from "@angular/material/dialog";
 import {DonatorBonusDialogComponent} from "./donator-bonus-dialog/donator-bonus-dialog.component";
 import {CreateDonatorDialogComponent} from "./create-donator-dialog/create-donator-dialog.component";
-import {SetupBonusDialogComponent} from "../donator-bonus-on-server/setup-bonus-dialog/setup-bonus-dialog.component";
 
 import {Server} from "../../common/server";
-import {
-    TransactionDialog
-} from "../donations/transaction.dialog/transaction-dialog.component";
 import {StorageService} from "../../services/storage.service";
+import {HttpEventType} from "@angular/common/http";
 
 
 @Component({
@@ -53,9 +49,9 @@ export class DonatorsComponent implements OnInit {
     totalElements: number = 0;
     selectedItem: any;
     donatorsMail?: string;
-    ascOrder = "asc";
-    descOrder = "desc";
-    defaultSortField = "totalDonations"
+    ascOrder: string = "asc";
+    descOrder: string = "desc";
+    defaultSortField: string = "totalDonations"
     sortOrder: string = this.descOrder;
     sortState: string = this.defaultSortField + ',' + this.sortOrder;
 
@@ -92,9 +88,9 @@ export class DonatorsComponent implements OnInit {
 
     getAll(): void {
         this.donatorService.getAll(this.pageNumber, this.pageSize, this.sortState)
-            .subscribe((response) => {
-                this.donators = response.content;
-                this.totalElements = response.totalElements;
+            .subscribe((data) => {
+                    this.donators = data.content;
+                    this.totalElements = data.totalElements;
             });
     }
 
@@ -107,9 +103,9 @@ export class DonatorsComponent implements OnInit {
     search(): void {
         this.sortState = this.defaultSortField + ',' + this.sortOrder;
         this.donatorService.search(this.donatorsMail, this.pageNumber, this.pageSize, this.sortState)
-            .subscribe((response) => {
-                this.donators = response.content;
-                this.totalElements = response.totalElements;
+            .subscribe((data) => {
+                    this.donators = data.content;
+                    this.totalElements = data.totalElements;
             });
     }
 
@@ -127,23 +123,22 @@ export class DonatorsComponent implements OnInit {
         }
     }
 
-    openPersonalBonusDialog(donatorEmail: string): void {
+    openPersonalBonusDialog(donatorId: number): void {
 
         const dialogRef = this.dialog.open(DonatorBonusDialogComponent, {
             width: '50%',
-            data: { email: donatorEmail, servers: this.servers },
+            data: {donatorId: donatorId, servers: this.servers},
         });
         dialogRef.afterClosed().subscribe(() => {
             this.getAll();
         });
     }
+
     createDonatorDialog(): void {
 
         const dialogRef = this.dialog.open(CreateDonatorDialogComponent, {
             width: '50%',
-            data: {
-
-            }
+            data: {}
         });
         dialogRef.afterClosed().subscribe(result => {
         });

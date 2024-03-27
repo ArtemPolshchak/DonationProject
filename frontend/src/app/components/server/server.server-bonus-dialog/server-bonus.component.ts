@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, EventEmitter, Inject, Output} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions, MatDialogClose,
@@ -104,7 +104,7 @@ function validBonusRangeValidator(): ValidatorFn {
 })
 export class ServerBonusComponent {
   bonusesForm: FormGroup;
-
+  @Output() componentResponse = new EventEmitter();
 
   constructor(
       public dialogRef: MatDialogRef<ServerBonusComponent>,
@@ -158,7 +158,7 @@ export class ServerBonusComponent {
 
       this.serverBonusService.createOrRecreateBonuses(createServerBonusesDtoArray, serverId).subscribe({
         next: (response) => {
-          // Обробити успішну відповідь від бекенда
+          this.componentResponse.emit(response);
           console.log('Server bonuses created or recreated successfully:', response);
           this.dialogRef.close(response); // Закрити діалогове вікно після успішного створення або перестворення бонусів
         },

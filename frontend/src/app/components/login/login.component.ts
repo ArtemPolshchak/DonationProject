@@ -61,8 +61,8 @@ export class LoginComponent {
 
     private getServerList(): void {
         this.serverService.getAllServerNames().pipe(take(1)).subscribe({
-            next: (val) => {
-                StorageService.addItem('servers', JSON.stringify(val.content));
+            next: (data) => {
+                StorageService.addItem('servers', JSON.stringify(data.content));
                 this.redirectBasedOnRole(StorageService.getUser()?.role)
             },
             error: (err) => {

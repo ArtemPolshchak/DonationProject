@@ -12,18 +12,20 @@ export class DonatorService {
     }
 
     public getAll(pageNumber?: number, pageSize?: number, sort?: string) {
-        const url: string = `api/donators/?page=${pageNumber}&size=${pageSize}&sort=${sort}`;
-        return this.httpClient.process<GetTransactionResponse>(GET, url, true);
+        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort);
+        const url: string = `api/donators`;
+        return this.httpClient.fetch<GetTransactionResponse>(GET, url, true, params);
     }
 
     public search(donatorMails?: string, pageNumber?: number, pageSize?: number, sort?: string) {
-        const url: string = `api/donators/search?mail=${donatorMails}&page=${pageNumber}&size=${pageSize}&sort=${sort}`;
-        return this.httpClient.process<GetTransactionResponse>(GET, url, true);
+        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort, donatorMails);
+        const url: string = `api/donators/search`;
+        return this.httpClient.fetch<GetTransactionResponse>(GET, url, true, params);
     }
 
     public createDonator(email: CreateDonator) {
         const url: string = `api/donators`
-        return this.httpClient.process<GetTransactionResponse>(GET, url, true, email);
+        return this.httpClient.load<GetTransactionResponse>(GET, url, true, email);
     }
 }
 

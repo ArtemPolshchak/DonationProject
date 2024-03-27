@@ -52,19 +52,27 @@ public class ServerController {
     }
 
     @Operation(summary = "create bonuses for donators on server")
-    @PostMapping("/create-donator-bonus")
-    public ResponseEntity<ServerEntity> createDonatorsBonusOnServer(@RequestBody CreateDonatorBonusOnServer serverDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(serverService.createDonatorsBonusOnServer(serverDto));
+    @PostMapping("/{serverId}/donators/{donatorId}/bonus")
+    public ResponseEntity<ServerEntity> createDonatorsBonusOnServer(
+            @PathVariable Long serverId,
+            @PathVariable Long donatorId,
+            @RequestBody CreateDonatorBonusOnServer dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(serverService.createDonatorsBonusOnServer(serverId, donatorId, dto));
     }
 
     @Operation(summary = "update bonuses for donators on server")
-    @PutMapping("/update-donator-bonus")
-    public ResponseEntity<ServerEntity> updateDonatorsBonusOnServer(@RequestBody UpdateDonatorsBonusOnServer dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(serverService.updateDonatorsBonusOnServer(dto));
+    @PutMapping("/{serverId}/donators/{donatorId}/bonus")
+    public ResponseEntity<ServerEntity> updateDonatorsBonusOnServer(
+            @PathVariable Long serverId,
+            @PathVariable Long donatorId,
+            @RequestBody UpdateDonatorsBonusOnServer dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(serverService.updateDonatorsBonusOnServer(serverId, donatorId, dto));
     }
 
     @Operation(summary = "Get all donators and their bonuses for a specific server with pagination")
-    @GetMapping("/{serverId}/donator-bonus")
+    @GetMapping("/{serverId}/donators/bonus")
     public ResponseEntity<Page<DonatorBonusDto>> getDonatorsBonusesByServerId(
             @PathVariable Long serverId,
             @PageableDefault(sort = {"email"}, direction = Sort.Direction.ASC) Pageable pageable
@@ -76,10 +84,10 @@ public class ServerController {
     @GetMapping("/{serverId}/donator-search")
     public ResponseEntity<Page<DonatorBonusDto>> searchDonatorsByEmailContains(
             @PathVariable Long serverId,
-            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String donatorMails,
             @PageableDefault(sort = {"email"}, direction = Sort.Direction.ASC) Pageable pageable
     ) {
-        Page<DonatorBonusDto> donatorsPage = serverService.searchDonatorsByEmailLike(serverId, email, pageable);
+        Page<DonatorBonusDto> donatorsPage = serverService.searchDonatorsByEmailLike(serverId, donatorMails, pageable);
         return ResponseEntity.ok(donatorsPage);
     }
 }

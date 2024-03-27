@@ -9,6 +9,7 @@ import {Router} from "@angular/router";
 import {SetupServerDialogComponent} from "./setup-server-dialog/setup-server-dialog.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatButton} from "@angular/material/button";
+import {HttpEventType} from "@angular/common/http";
 
 @Component({
   selector: 'app-server',
@@ -41,7 +42,7 @@ export class ServerComponent implements OnInit {
   getAllServers(): void {
     this.serverService.getAllServerNames()
         .subscribe(data => {
-          this.servers = data.content
+            this.servers = data.content;
         })
   }
 
@@ -49,7 +50,7 @@ export class ServerComponent implements OnInit {
     const dialogRef = this.dialog.open(AddNewServerDialogComponent, {
       width: '50%',
     });
-    dialogRef.componentInstance.serverResponse.subscribe( () => {
+    dialogRef.componentInstance.componentResponse.subscribe( () => {
       this.getAllServers()
     });
   }
@@ -60,6 +61,9 @@ export class ServerComponent implements OnInit {
       data: {
         serverId: serverId
       }
+    });
+    dialogRef.componentInstance.componentResponse.subscribe( () => {
+      this.getAllServers()
     });
   }
 

@@ -41,7 +41,7 @@
                 <td> {{ donator.totalDonations }}</td>
                 <td><button class="custom-button-history" (click)="goToDonatorStory(donator.id, donator.email, donator.totalDonations)">История</button></td>
 
-                <td><button class="custom-button-history" (click)="openPersonalBonusDialog(donator.email)">Настройки персональных бонусов</button></td>
+                <td><button class="custom-button-history" (click)="openPersonalBonusDialog(donator.id)">Настройки персональных бонусов</button></td>
 
             </tr>
             </tbody>
