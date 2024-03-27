@@ -36,11 +36,6 @@ export class ServerComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllServers();
-
-    // const serversFromStorage = sessionStorage.getItem('servers');
-    // if (serversFromStorage) {
-    //   this.servers = JSON.parse(serversFromStorage);
-    // }
   }
 
   getAllServers(): void {

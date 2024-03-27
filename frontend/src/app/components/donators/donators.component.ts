@@ -20,6 +20,7 @@ import {Server} from "../../common/server";
 import {
     TransactionDialog
 } from "../donations/transaction.dialog/transaction-dialog.component";
+import {StorageService} from "../../services/storage.service";
 
 
 @Component({
@@ -83,7 +84,7 @@ export class DonatorsComponent implements OnInit {
 
     ngOnInit(): void {
         this.getAll()
-        const serversData = sessionStorage.getItem('servers');
+        const serversData = StorageService.getItem('servers');
         if (serversData) {
             this.servers = JSON.parse(serversData);
         }

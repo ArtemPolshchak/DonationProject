@@ -1,11 +1,9 @@
 import {Injectable} from '@angular/core';
-import {map} from "rxjs";
 import {Server} from "../common/server";
 import {DonatorBonus} from "../common/donatorBonus";
 import {CreateDonatorBonus} from "../common/create-donator-bonus";
 import {HttpClientService} from "./http-client.service";
 import {GET, POST, PUT} from "../enums/app-constans";
-import {StorageService} from "./storage.service";
 
 @Injectable({
     providedIn: 'root'

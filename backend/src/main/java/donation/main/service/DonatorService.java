@@ -2,7 +2,9 @@ package donation.main.service;
 
 import donation.main.dto.donatorsdto.CreateDonatorDto;
 import donation.main.entity.DonatorEntity;
+import donation.main.exception.EmailNotFoundException;
 import donation.main.exception.UserNotFoundException;
+import donation.main.externaldb.service.ExternalDonatorService;
 import donation.main.mapper.DonatorMapper;
 import donation.main.repository.DonatorRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class DonatorService {
     private final DonatorRepository donatorRepository;
     private final DonatorMapper donatorMapper;
+    private final ExternalDonatorService externalDonatorService;
 
     public Page<DonatorEntity> findAll(Pageable pageable) {
         return donatorRepository.findAll(pageable);
@@ -36,5 +39,12 @@ public class DonatorService {
     public DonatorEntity getByEmailOrCreate(String email) {
         return donatorRepository.findByEmail(email)
                 .orElseGet(() -> donatorRepository.save(DonatorEntity.builder().email(email).build()));
+    }
+
+    //todo this method temporarily turned off. forbidden for delete
+    public void validateDonatorEmail(String donatorEmail) {
+        if (!externalDonatorService.existsByEmail(donatorEmail)) {
+            throw new EmailNotFoundException("Donator with the email does not exist:", donatorEmail);
+        }
     }
 }

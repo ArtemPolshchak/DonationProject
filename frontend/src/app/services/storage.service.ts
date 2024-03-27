@@ -12,7 +12,7 @@ export abstract class StorageService {
     static storage: Storage = localStorage;
     static storageSub= new Subject<string>();
 
-   static watchStorage(): Observable<any> {
+   static watchStorageToken(): Observable<any> {
         return this.storageSub.asObservable();
     }
     static saveToken(token: string) {
@@ -61,14 +61,14 @@ export abstract class StorageService {
     }
 
     static isTokenValid(tokenInfo: any): boolean {
-        if (!tokenInfo || !tokenInfo.exp || !tokenInfo.iat) {
+        if (!tokenInfo.exp && !tokenInfo.iat) {
             return false;
         }
         const date = new Date(Date.now())
         const dateUTC = Date.UTC(date.getFullYear(), date.getMonth(),
             date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds())
         const currentUTCTime = Math.floor(dateUTC / 1000);
-        return !(tokenInfo.exp <= currentUTCTime || tokenInfo.iat > currentUTCTime);
+        return tokenInfo.exp > currentUTCTime && tokenInfo.iat < currentUTCTime;
     }
 
     static getItem(key: string): string | null {

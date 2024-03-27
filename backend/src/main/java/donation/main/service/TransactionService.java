@@ -40,14 +40,13 @@ public class TransactionService {
     private final TransactionMapper transactionMapper;
     private final DonatorService donatorService;
     private final ServerService serverService;
-    private final ExternalDonatorService externalDonatorService;
     private final TransactionStateManager transactionStateManager;
     private final UserService userService;
 
     @Transactional
     public TransactionResponseDto create(CreateTransactionDto dto) {
         //todo I temporoarily turn off the validation of external DB
-        //validateDonatorEmail(dto.donatorEmail());
+        //donatorService.validateDonatorEmail(dto.donatorEmail());
         TransactionEntity transaction = transactionMapper.toEntity(dto);
         ServerEntity server = serverService.findById(dto.serverId());
         DonatorEntity donator = donatorService.getByEmailOrCreate(dto.donatorEmail());
@@ -121,13 +120,6 @@ public class TransactionService {
                     .add(transaction
                             .getContributionAmount());
             transaction.getDonator().setTotalDonations(amount);
-        }
-    }
-
-    //todo this method temporarily turned off. forbidden for delete
-    private void validateDonatorEmail(String donatorEmail) {
-        if (!externalDonatorService.existsByEmail(donatorEmail)) {
-            throw new EmailNotFoundException("Donator with the email does not exist:", donatorEmail);
         }
     }
 
