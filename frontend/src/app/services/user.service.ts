@@ -1,31 +1,28 @@
-import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {Injectable} from '@angular/core';
 import {User} from "../common/user";
-import {map} from "rxjs";
-import {StorageService} from "./storage.service";
+import {GET} from "../enums/app-constans";
+import {HttpClientService} from "./http-client.service";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class UserService {
 
-  constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClientService) {
+    }
 
-  public getAll(pageNumber?: number, pageSize?: number) {
-    const url: string = `api/users/?page=${pageNumber}&pageSize=${pageSize}`
-    console.log(url)
-    return this.httpClient.get<GetUserResponse>(url, {headers: {'Authorization': 'Bearer ' + StorageService.getToken()}}).pipe(
-        map(response => response));
-  }
-
+    public getAll(pageNumber?: number, pageSize?: number) {
+        const url: string = `api/users/?page=${pageNumber}&pageSize=${pageSize}`
+        return this.httpClient.process<GetUserResponse>(GET, url, true);
+    }
 }
 
 interface GetUserResponse {
-  content: User[];
-  pageable: {
-    pageNumber: number;
-    pageSize: number
-  }
-  totalElements: number;
+    content: User[];
+    pageable: {
+        pageNumber: number;
+        pageSize: number
+    }
+    totalElements: number;
 }
 
