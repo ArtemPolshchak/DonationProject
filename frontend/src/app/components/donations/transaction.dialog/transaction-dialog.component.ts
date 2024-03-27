@@ -1,5 +1,5 @@
 import {Component, EventEmitter, HostListener, Inject, OnInit, Output} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogModule} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {Transaction} from "../../../common/transaction";
 import {FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, Validators} from "@angular/forms";
 import {CommonModule} from "@angular/common";
@@ -39,6 +39,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     styleUrl: './transaction-dialog.component.scss'
 })
 export class TransactionDialog implements OnInit {
+    tempImg?: string | null;
     @Output() transactionResponse = new EventEmitter();
     maxImgSideSize = 800;
     durationInSeconds: number = 5;
@@ -58,6 +59,7 @@ export class TransactionDialog implements OnInit {
     });
 
     constructor(private fb: UntypedFormBuilder,
+                private dialogRef: MatDialogRef<TransactionDialog>,
                 private transactionService: TransactionService,
                 private _snackBar: MatSnackBar,
                 @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -129,7 +131,15 @@ export class TransactionDialog implements OnInit {
 
     removeImage() {
         this.imageForm.get('photo')?.setValue(null);
+        this.tempImg = this.transaction.image;
         this.transaction.image = null;
+    }
+
+    onCancel(){
+        if(this.tempImg) {
+            this.transaction.image = this.tempImg;
+        }
+        this.dialogRef.close();
     }
 
     proceedTransaction() {
