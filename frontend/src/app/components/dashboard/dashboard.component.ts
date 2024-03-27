@@ -33,7 +33,7 @@ import {HttpEventType} from "@angular/common/http";
     styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-    state: string[] = [TransactionState.IN_PROGRESS];
+    transactionState: string[] = [TransactionState.IN_PROGRESS];
     transactions: Transaction[] = [];
     pageNumber: number = 0;
     pageSize: number = 5;
@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
     }
 
     getAll(): void {
-        this.transactionService.getAll(this.pageNumber, this.pageSize, this.sortState)
+        this.transactionService.getAllWithSearch(this.pageNumber, this.pageSize, this.sortState, this.transactionState)
             .subscribe((data) => {
                     this.transactions = data.content;
                     this.totalElements = data.totalElements;

@@ -94,12 +94,12 @@ export class DonatorstoryComponent implements OnInit {
     getDonatorTransactions(): void {
         this.transactionService
             .getAllWithSearch(
-                this.selectedServer ? [this.selectedServer] : [],
-                this.email,
-                this.state,
                 this.pageNumber,
                 this.pageSize,
-                this.sortState
+                this.sortState,
+                this.state,
+                this.selectedServer ? [this.selectedServer] : [],
+                this.email,
             )
             .subscribe(data => {
                 this.transactions = data.content;
