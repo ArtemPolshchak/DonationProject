@@ -27,7 +27,6 @@ export class TransactionService {
 
     public getAll(pageNumber?: number, pageSize?: number) {
         const url: string = `api/transactions?page=${pageNumber}&pageSize=${pageSize}`
-        console.log(url)
         return this.httpClient.process<GetTransactionResponse>(GET, url, true);
     }
 
