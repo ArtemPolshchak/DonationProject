@@ -17,6 +17,7 @@ import {Server} from "../../common/server";
 import {TransactionState} from "../../enums/app-constans";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
+import {StorageService} from "../../services/storage.service";
 
 @Component({
   selector: 'app-donatorstory',
@@ -72,7 +73,7 @@ export class DonatorstoryComponent implements OnInit {
       this.email = params['email'];
       this.totalDonations = +params['totalDonations'];
       this.getDonatorTransactions();
-      const serversData = sessionStorage.getItem('servers');
+      const serversData = StorageService.getItem('servers');
       if (serversData) {
         this.servers = JSON.parse(serversData);
       }
