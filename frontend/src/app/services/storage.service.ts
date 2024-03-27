@@ -68,7 +68,7 @@ export abstract class StorageService {
         const dateUTC = Date.UTC(date.getFullYear(), date.getMonth(),
             date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds())
         const currentUTCTime = Math.floor(dateUTC / 1000);
-        return tokenInfo.exp > currentUTCTime && tokenInfo.iat < currentUTCTime;
+        return (tokenInfo.exp > currentUTCTime && tokenInfo.iat < currentUTCTime);
     }
 
     static getItem(key: string): string | null {
