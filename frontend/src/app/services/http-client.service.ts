@@ -1,6 +1,6 @@
 import {HttpClient, HttpHandler, HttpHeaders, HttpParams} from "@angular/common/http";
 import {StorageService} from "./storage.service";
-import {Injectable} from "@angular/core";
+import {Injectable, OnInit} from "@angular/core";
 
 @Injectable({
     providedIn: 'root'
@@ -10,14 +10,15 @@ export class HttpClientService extends HttpClient{
 
     constructor(handler: HttpHandler) {
         super(handler);
-        console.log("HttpClientService created");
-        StorageService.watchStorage().subscribe( {
-            next: value => {
-                this.headers = new HttpHeaders({'Authorization': 'Bearer ' + value});
-                console.log(value);
-                console.log("HttpClientService created");
-            }
-        });
+        let token = StorageService.getToken();
+        if (!token) {
+            StorageService.watchStorage().subscribe( {
+                next: value => {
+                    token = value;
+                }
+            });
+        }
+        this.headers = new HttpHeaders({'Authorization': 'Bearer ' + token});
     }
 
     process<T>(method: string, url: string, auth: boolean, body?: any, params?: HttpParams) {
