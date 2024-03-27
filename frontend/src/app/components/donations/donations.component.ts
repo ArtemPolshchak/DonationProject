@@ -19,7 +19,7 @@ import {MatInput} from "@angular/material/input";
 import {Server} from "../../common/server";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
 import {StorageService} from "../../services/storage.service";
-import {Subject} from "rxjs";
+import {HttpEventType} from "@angular/common/http";
 
 @Component({
     selector: 'app-transaction',
@@ -67,8 +67,8 @@ export class DonationsComponent implements OnInit {
         private dialog: MatDialog,
         private _formBuilder: FormBuilder
     ) {
-            const serversData = StorageService.getItem('servers');
-            this.servers = serversData ? JSON.parse(serversData) : [];
+        const serversData = StorageService.getItem('servers');
+        this.servers = serversData ? JSON.parse(serversData) : [];
     }
 
     ngOnInit(): void {
@@ -76,6 +76,7 @@ export class DonationsComponent implements OnInit {
     }
 
     applyFilterSortSearch(): void {
+        this.pageNumber = 0;
         this.state = [];
         if (this.stateFilter !== '') {
             this.state.push(this.stateFilter);
@@ -90,9 +91,9 @@ export class DonationsComponent implements OnInit {
             this.serverNames, this.donatorsMail,
             this.state, this.pageNumber,
             this.pageSize, this.sortState)
-            .subscribe((response) => {
-                this.transactions = response.content;
-                this.totalElements = response.totalElements;
+            .subscribe((data) => {
+                    this.transactions = data.content;
+                    this.totalElements = data.totalElements;
             });
     }
 
@@ -110,7 +111,7 @@ export class DonationsComponent implements OnInit {
                 transaction: transaction
             }
         });
-        dialogRef.componentInstance.transactionResponse.subscribe( () => {
+        dialogRef.componentInstance.transactionResponse.subscribe(() => {
             this.getTransactionPage()
         });
     }

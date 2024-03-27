@@ -12,6 +12,7 @@ import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
+import {HttpEventType} from "@angular/common/http";
 
 @Component({
     selector: 'app-dashboard',
@@ -37,9 +38,7 @@ export class DashboardComponent implements OnInit {
     pageNumber: number = 0;
     pageSize: number = 5;
     totalElements: number = 0;
-    serverNames?: string[];
-    donatorMails?: string;
-    sortState?: string = "dateCreated,desc";
+    sortState: string = "dateCreated,desc";
     durationInSeconds: number = 5;
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -49,21 +48,21 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.getTransactionOnPage();
+        this.getAll();
     }
 
-    getTransactionOnPage(): void {
-        this.transactionService.getAllWithSearch(this.serverNames, this.donatorMails, this.state, this.pageNumber, this.pageSize, this.sortState)
-            .subscribe((response) => {
-                this.transactions = response.content;
-                this.totalElements = response.totalElements;
+    getAll(): void {
+        this.transactionService.getAll(this.pageNumber, this.pageSize, this.sortState)
+            .subscribe((data) => {
+                    this.transactions = data.content;
+                    this.totalElements = data.totalElements;
             });
     }
 
     onPageChange(event: PageEvent): void {
         this.pageNumber = event.pageIndex;
         this.pageSize = event.pageSize;
-        this.getTransactionOnPage();
+        this.getAll();
     }
 
     confirmTransaction(transaction: Transaction, state: string): void {
@@ -72,7 +71,7 @@ export class DashboardComponent implements OnInit {
         }
         this.transactionService.confirmById(transaction.id!, state, transaction.adminBonus)
             .subscribe(() => {
-                this.getTransactionOnPage();
+                this.getAll();
                 this.openSnackBar(state);
             }
         );

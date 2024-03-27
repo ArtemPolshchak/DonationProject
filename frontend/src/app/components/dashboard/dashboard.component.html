@@ -6,7 +6,7 @@
   <div class="d-flex">
     <!--            <button class="button" (click)="applyFilterSortSearch()">ИСПОЛЬЗОВАТЬ СОРТИРОВКУ</button>-->
     <select class="form-select me-2" aria-label="Сорт" [(ngModel)]="sortState"
-            (change)="getTransactionOnPage()">
+            (change)="getAll()">
       <option selected disabled hidden>СОРТИРОВКА</option>
       <option value="dateCreated,asc">Сортировка по дате от старых к новым</option>
       <option value="dateCreated,desc">Сортировка по дате от новых к старым</option>

@@ -12,8 +12,9 @@ export class UserService {
     }
 
     public getAll(pageNumber?: number, pageSize?: number) {
-        const url: string = `api/users/?page=${pageNumber}&pageSize=${pageSize}`
-        return this.httpClient.process<GetUserResponse>(GET, url, true);
+        let params = this.httpClient.getHttpParams(pageNumber, pageSize);
+        const url: string = `api/users`
+        return this.httpClient.fetch<GetUserResponse>(GET, url, true, params);
     }
 }
 

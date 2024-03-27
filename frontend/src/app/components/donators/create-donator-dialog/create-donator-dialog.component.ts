@@ -12,7 +12,7 @@ import {
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {NgIf} from "@angular/common";
-import {UpdateDonatorBonus} from "../../../common/update-donator-bonus";
+import {LoadDonatorBonus} from "../../../common/load-donator-bonus";
 import {CreateServerDto, ServerService} from "../../../services/server.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {CreateDonator, DonatorService} from "../../../services/donator.service";
@@ -40,7 +40,7 @@ import {CreateDonator, DonatorService} from "../../../services/donator.service";
 })
 export class CreateDonatorDialogComponent implements OnInit {
   email!: string;
-  updateDonatorBonus!: UpdateDonatorBonus;
+  updateDonatorBonus!: LoadDonatorBonus;
   durationInSeconds: number = 5;
 
   constructor(

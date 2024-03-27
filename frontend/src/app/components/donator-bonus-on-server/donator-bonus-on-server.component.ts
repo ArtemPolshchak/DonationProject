@@ -8,6 +8,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {SetupBonusDialogComponent} from "./setup-bonus-dialog/setup-bonus-dialog.component";
 import {DonatorBonus} from "../../common/donatorBonus";
 import {ServerService} from "../../services/server.service";
+import {HttpEventType} from "@angular/common/http";
 
 @Component({
   selector: 'app-donator-bonus-on-server',
@@ -66,24 +67,17 @@ export class DonatorBonusOnServer implements OnInit {
 
   getAll(): void {
     this.serverService.getDonatorsBonusesByServerId(this.serverId, this.pageNumber, this.pageSize, this.sortState)
-        .subscribe((response) => {
-          this.donatorBonus = response.content;
-          this.totalElements = response.totalElements;
-          console.log("serverId bonuses", this.serverId);
-          console.log("Donator bonuses", this.donatorBonus);
-          console.log("Total elements", this.totalElements);
-          console.log("pageSize", this.pageSize); // змінено на кому
+        .subscribe((data) => {
+            this.donatorBonus = data.content;
+            this.totalElements = data.totalElements;
         });
   }
 
   search(): void {
     this.serverService.searchDonatorsByEmailContains(this.serverId, this.donatorsMail, this.pageNumber, this.pageSize, this.sortState)
-        .subscribe((response) => {
-          this.donatorBonus = response.content;
-          this.totalElements = response.totalElements;
-          console.log("donators" + this.donatorBonus.length);
-          console.log("pageSize" + this.pageSize);
-          console.log("totalElements" + this.totalElements);
+        .subscribe((data) => {
+            this.donatorBonus = data.content;
+            this.totalElements = data.totalElements;
         });
   }
 
