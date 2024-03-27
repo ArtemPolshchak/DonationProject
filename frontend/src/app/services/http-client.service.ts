@@ -13,8 +13,8 @@ export class HttpClientService extends HttpClient {
         let token = StorageService.getToken();
         if (!token) {
             StorageService.watchStorageToken().subscribe({
-                next: value => {
-                    token = value;
+                next: () => {
+                    token = StorageService.getToken();
                 }
             });
         }
@@ -28,6 +28,8 @@ export class HttpClientService extends HttpClient {
             return this.request<T>(method, url, {headers: this.headers, body: body});
         } else if (body && params) {
             return this.request<T>(method, url, {body: body, params: params});
+        } else if (auth && params) {
+            return this.request<T>(method, url, {headers: this.headers, params: params});
         } else if (body) {
             return this.request<T>(method, url, {body: body});
         } else if (auth) {
