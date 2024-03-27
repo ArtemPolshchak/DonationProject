@@ -13,8 +13,8 @@ export class HttpClientService extends HttpClient {
         let token = StorageService.getToken();
         if (!token) {
             StorageService.watchStorageToken().subscribe({
-                next: value => {
-                    token = value;
+                next: () => {
+                    token = StorageService.getToken();
                 }
             });
         }
