@@ -29,7 +29,7 @@ public class UserController {
     private final UserService userService;
 
     @Operation(summary = "get all users")
-    @GetMapping("/")
+    @GetMapping()
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Iterable<UserEntity>> getAllUsers(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(pageable));

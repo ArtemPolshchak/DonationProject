@@ -7,34 +7,45 @@ import {Injectable} from "@angular/core";
 })
 export class HttpClientService extends HttpClient {
     headers?: HttpHeaders
+    token: string | undefined;
+
 
     constructor(handler: HttpHandler) {
         super(handler);
-        let token = StorageService.getToken();
-        if (!token) {
+        this.token = StorageService.getToken()
+        if (this.token) {
+            this.headers = new HttpHeaders({'Authorization': 'Bearer ' + StorageService.getToken()});
+        } else {
             StorageService.watchStorageToken().subscribe({
-                next: value => {
-                    token = value;
+                next: () => {
+                    this.headers = new HttpHeaders({'Authorization': 'Bearer ' + StorageService.getToken()});
                 }
             });
         }
-        this.headers = new HttpHeaders({'Authorization': 'Bearer ' + token});
     }
 
-    process<T>(method: string, url: string, auth: boolean, body?: any, params?: HttpParams) {
-        if (auth && body && params) {
-            return this.request<T>(method, url, {headers: this.headers, body: body, params: params});
-        } else if (auth && body) {
-            return this.request<T>(method, url, {headers: this.headers, body: body});
-        } else if (body && params) {
-            return this.request<T>(method, url, {body: body, params: params});
-        } else if (body) {
-            return this.request<T>(method, url, {body: body});
-        } else if (auth) {
-            return this.request<T>(method, url, {headers: this.headers});
-        } else if (params) {
-            return this.request<T>(method, url, {params: params});
-        }
-        return this.request<T>(method, url);
+    fetch<T>(method: string, url: string, auth: boolean, params?: HttpParams) {
+        let options: any = {};
+        auth ? options.headers = this.headers : options;
+        params ? options.params = params : options;
+        return this.request<T>(method, url, <Object>options);
+    }
+
+    load<T>(method: string, url: string, auth: boolean, body?: any) {
+        let options: any = {};
+        auth ? options.headers = this.headers : options;
+        body ? options.body = body : options;
+        return this.request<T>(method, url, <Object>options);
+    }
+
+    getHttpParams(pageNumber?: number, pageSize?: number, sort?: string, donatorMails?: string, serverNames?: string[], state?: string[]) {
+        let params = new HttpParams();
+        params = (serverNames && serverNames.length > 0) ? params.set('serverNames', serverNames.join(',')) : params;
+        params = (donatorMails && donatorMails.length > 0) ? params.set('donatorMails', donatorMails) : params;
+        params = (state && state.length > 0) ? params.set('state', state.join(',')) : params;
+        params = (pageNumber) ? params.set('page', pageNumber.toString()) : params;
+        params = (pageSize) ? params.set('size', pageSize.toString()) : params;
+        params = (sort) ? params.set('sort', sort) : params;
+        return params;
     }
 }

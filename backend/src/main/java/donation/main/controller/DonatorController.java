@@ -24,7 +24,7 @@ public class DonatorController {
     private final DonatorService donatorService;
 
     @Operation(summary = "get all donators")
-    @GetMapping("/")
+    @GetMapping()
     //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<DonatorEntity>> getAllDonators(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(donatorService.findAll(pageable));
@@ -32,8 +32,8 @@ public class DonatorController {
 
     @Operation(summary = "find donator by donators email")
     @GetMapping("/search")
-    public ResponseEntity<Page<DonatorEntity>> searchDonatorByMail(@RequestParam String mail, Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(donatorService.findByEmailLike(mail, pageable));
+    public ResponseEntity<Page<DonatorEntity>> searchDonatorByMail(@RequestParam String donatorMails, Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(donatorService.findByEmailLike(donatorMails, pageable));
     }
 
     @Operation(summary = "create new donator")
