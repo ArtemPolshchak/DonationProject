@@ -8,6 +8,7 @@ import donation.main.exception.ErrorResponse;
 import donation.main.exception.InvalidBonusRangeException;
 import donation.main.exception.InvalidTransactionState;
 import donation.main.exception.PageNotFoundException;
+import donation.main.exception.ServerAlreadyExistsException;
 import donation.main.exception.TransactionBadRequestException;
 import donation.main.exception.TransactionNotFoundException;
 import donation.main.exception.UnauthorizedActionException;
@@ -115,6 +116,13 @@ public class ExceptionHandlingControllerAdvice {
     @ExceptionHandler(InvalidBonusRangeException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     Map<String, String> handleUserWithDataExistsException(InvalidBonusRangeException exception) {
+        return Map.of(MESSAGE, exception.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(ServerAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    Map<String, String> handleUserWithDataExistsException(ServerAlreadyExistsException exception) {
         return Map.of(MESSAGE, exception.getMessage());
     }
 }
