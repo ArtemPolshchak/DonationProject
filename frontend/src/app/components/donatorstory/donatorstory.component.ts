@@ -76,9 +76,11 @@ export class DonatorstoryComponent implements OnInit {
             this.email = params['email'];
             this.totalDonations = +params['totalDonations'];
             this.getDonatorTransactions();
-            const serversData = StorageService.getItem('servers');
-            if (serversData) {
-                this.servers = JSON.parse(serversData);
+            this.servers = StorageService.getServers()
+            if (this.servers.length === 0) {
+                StorageService.watchServers().subscribe({
+                    next: (response)  => this.servers = response
+                })
             }
         });
     }

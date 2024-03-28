@@ -17,7 +17,7 @@ export class DonatorService {
         return this.httpClient.fetch<GetTransactionResponse>(url, true, params);
     }
 
-    public search(donatorMails?: string, pageNumber?: number, pageSize?: number, sort?: string) {
+    public search(pageNumber?: number, pageSize?: number, sort?: string, donatorMails?: string) {
         let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort, donatorMails);
         const url: string = `api/donators/search`;
         return this.httpClient.fetch<GetTransactionResponse>(url, true, params);

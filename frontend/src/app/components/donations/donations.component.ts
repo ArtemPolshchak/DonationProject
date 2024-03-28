@@ -52,7 +52,7 @@ export class DonationsComponent implements OnInit {
     sortState?: string = "dateCreated,desc";
     stateFilter: string = "";
     selectedServer: string = "";
-    servers: Server[];
+    servers: Server[] = [];
 
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -67,11 +67,15 @@ export class DonationsComponent implements OnInit {
         private dialog: MatDialog,
         private _formBuilder: FormBuilder
     ) {
-        const serversData = StorageService.getItem('servers');
-        this.servers = serversData ? JSON.parse(serversData) : [];
     }
 
     ngOnInit(): void {
+        this.servers = StorageService.getServers()
+        if (this.servers.length === 0) {
+            StorageService.watchServers().subscribe({
+                next: (response)  => this.servers = response
+            })
+        }
         this.getTransactionPage();
     }
 

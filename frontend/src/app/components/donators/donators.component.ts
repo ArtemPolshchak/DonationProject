@@ -16,7 +16,6 @@ import {CreateDonatorDialogComponent} from "./create-donator-dialog/create-donat
 
 import {Server} from "../../common/server";
 import {StorageService} from "../../services/storage.service";
-import {HttpEventType} from "@angular/common/http";
 
 
 @Component({
@@ -79,33 +78,27 @@ export class DonatorsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.getAll()
-        const serversData = StorageService.getItem('servers');
-        if (serversData) {
-            this.servers = JSON.parse(serversData);
+        this.servers = StorageService.getServers()
+        if (this.servers.length === 0) {
+            StorageService.watchServers().subscribe({
+                next: (response)  => this.servers = response
+            })
         }
-    }
-
-    getAll(): void {
-        this.donatorService.getAll(this.pageNumber, this.pageSize, this.sortState)
-            .subscribe((data) => {
-                    this.donators = data.content;
-                    this.totalElements = data.totalElements;
-            });
+        this.getAll()
     }
 
     sort(sortField: string) {
         this.sortOrder = this.sortOrder === this.descOrder ? this.ascOrder : this.descOrder;
-        this.sortState = sortField + ',' + this.sortOrder;
+        this.sortState = `${sortField},${this.sortOrder}`;
         this.getAll();
     }
 
-    search(): void {
+    getAll(): void {
         this.sortState = this.defaultSortField + ',' + this.sortOrder;
-        this.donatorService.search(this.donatorsMail, this.pageNumber, this.pageSize, this.sortState)
+        this.donatorService.search(this.pageNumber, this.pageSize, this.sortState, this.donatorsMail)
             .subscribe((data) => {
-                    this.donators = data.content;
-                    this.totalElements = data.totalElements;
+                this.donators = data.content;
+                this.totalElements = data.totalElements;
             });
     }
 
@@ -115,32 +108,23 @@ export class DonatorsComponent implements OnInit {
         this.getAll();
     }
 
-    applySearch(): void {
-        if (this.donatorsMail && this.donatorsMail.trim() !== '') {
-            this.search();
-        } else {
-            this.getAll();
-        }
-    }
-
     openPersonalBonusDialog(donatorId: number): void {
-
         const dialogRef = this.dialog.open(DonatorBonusDialogComponent, {
             width: '50%',
             data: {donatorId: donatorId, servers: this.servers},
         });
-        dialogRef.afterClosed().subscribe(() => {
+        dialogRef.componentInstance.response.subscribe(() => {
             this.getAll();
         });
     }
 
     createDonatorDialog(): void {
-
         const dialogRef = this.dialog.open(CreateDonatorDialogComponent, {
             width: '50%',
             data: {}
         });
-        dialogRef.afterClosed().subscribe(result => {
+        dialogRef.componentInstance.response.subscribe(() => {
+            this.getAll();
         });
     }
 }
