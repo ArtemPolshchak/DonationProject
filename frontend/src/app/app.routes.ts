@@ -6,7 +6,7 @@ import {ServerComponent} from "./components/server/server.component";
 import {UserComponent} from "./components/user/user.component";
 import {LoginComponent} from "./components/login/login.component";
 import {hasRoleGuard} from "./services/auth.service";
-import {Role} from "./enums/app-constans";
+import {Role} from "./enums/role";
 import {DonatorstoryComponent} from "./components/donatorstory/donatorstory.component";
 import {DonatorBonusOnServer} from "./components/donator-bonus-on-server/donator-bonus-on-server.component";
 import {PageNotFoundComponent} from "./components/page-not-found/page-not-found.component";

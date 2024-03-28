@@ -16,7 +16,7 @@ import {
 } from "@ng-bootstrap/ng-bootstrap";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Server} from "../../common/server";
-import {TransactionState} from "../../enums/app-constans";
+import {TransactionState} from "../../enums/transaction-state";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {StorageService} from "../../services/storage.service";

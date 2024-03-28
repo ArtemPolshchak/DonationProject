@@ -6,7 +6,7 @@
   <div class="d-flex">
     <!--            <button class="button" (click)="applyFilterSortSearch()">ИСПОЛЬЗОВАТЬ СОРТИРОВКУ</button>-->
     <select class="form-select me-2" aria-label="Сорт" [(ngModel)]="sortState"
-            (change)="getAll()">
+            (change)="sort()">
       <option selected disabled hidden>СОРТИРОВКА</option>
       <option value="dateCreated,asc">Сортировка по дате от старых к новым</option>
       <option value="dateCreated,desc">Сортировка по дате от новых к старым</option>
@@ -43,11 +43,11 @@
 <!--       [ Почта донатора {{transaction.donatorEmail}}]-->
 <!--       [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]-->
 <!--      </button>-->
-<!--&lt;!&ndash;        <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">Подтвердить</button>&ndash;&gt;-->
-<!--&lt;!&ndash;      <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">Отменить</button>&ndash;&gt;-->
+<!--&lt;!&ndash;        <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionStateEnum.COMPLETED)">Подтвердить</button>&ndash;&gt;-->
+<!--&lt;!&ndash;      <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionStateEnum.CANCELLED)">Отменить</button>&ndash;&gt;-->
 
-<!--      <button class="btn primary-button ms-2" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">Подтвердить</button>-->
-<!--      <button class="btn secondary-button ms-2" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">Отменить</button>-->
+<!--      <button class="btn primary-button ms-2" (click)="confirmTransaction(transaction, TransactionStateEnum.COMPLETED)">Подтвердить</button>-->
+<!--      <button class="btn secondary-button ms-2" (click)="confirmTransaction(transaction, TransactionStateEnum.CANCELLED)">Отменить</button>-->
 
 <!--      &lt;!&ndash;      <div ngbAccordionToggle>&ndash;&gt;-->
 <!--&lt;!&ndash;        <div>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</div>&ndash;&gt;-->
