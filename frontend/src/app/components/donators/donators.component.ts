@@ -16,8 +16,6 @@ import {CreateDonatorDialogComponent} from "./create-donator-dialog/create-donat
 
 import {Server} from "../../common/server";
 import {StorageService} from "../../services/storage.service";
-import {SEARCH_STATE_KEY} from "../../enums/app-constans";
-
 
 @Component({
     selector: 'app-donators',
