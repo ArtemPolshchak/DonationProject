@@ -37,8 +37,8 @@ export class DonatorBonusOnServer implements OnInit {
   constructor(private serverService: ServerService,
               private router: Router,
               private dialog: MatDialog,
-              private route: ActivatedRoute,
-              private _formBuilder: FormBuilder) {
+              private route: ActivatedRoute
+  ) {
 
     this.route.params.subscribe(params => {
       this.serverId =  +params['id'];
@@ -62,15 +62,7 @@ export class DonatorBonusOnServer implements OnInit {
   }
 
   getDonatorsPage(): void {
-    this.getAll();
-  }
-
-  getAll(): void {
-    this.serverService.getDonatorsBonusesByServerId(this.serverId, this.pageNumber, this.pageSize, this.sortState)
-        .subscribe((data) => {
-            this.donatorBonus = data.content;
-            this.totalElements = data.totalElements;
-        });
+    this.search();
   }
 
   search(): void {
@@ -91,7 +83,7 @@ export class DonatorBonusOnServer implements OnInit {
     if (this.donatorsMail && this.donatorsMail.trim() !== '') {
       this.search();
     } else {
-      this.getAll();
+      this.search();
     }
   }
 
@@ -104,7 +96,7 @@ export class DonatorBonusOnServer implements OnInit {
       }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.getAll();
+      this.search();
     });
   }
 }

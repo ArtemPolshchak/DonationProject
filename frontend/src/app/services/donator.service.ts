@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Donator} from "../common/donator";
 import {HttpClientService} from "./http-client.service";
-import {GET} from "../enums/app-constans";
+import {GET, POST} from "../enums/app-constans";
 
 @Injectable({
     providedIn: 'root'
@@ -25,7 +25,7 @@ export class DonatorService {
 
     public createDonator(email: CreateDonator) {
         const url: string = `api/donators`
-        return this.httpClient.load<GetTransactionResponse>(GET, url, true, email);
+        return this.httpClient.load<GetTransactionResponse>(POST, url, true, email);
     }
 }
 

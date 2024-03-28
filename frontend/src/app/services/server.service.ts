@@ -14,8 +14,8 @@ export class ServerService {
     constructor(private httpClient: HttpClientService) {
     }
 
-    public getAllServerNames(pageNumber?: number, pageSize?: number) {
-        let params = this.httpClient.getHttpParams(pageNumber, pageSize);
+    public getAllServerNames(pageNumber?: number, pageSize?: number, sortState?: string) {
+        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sortState);
         const url: string = `api/servers/names`
         return this.httpClient.fetch<GetServerResponse>(GET, url, true, params)
     }
@@ -33,7 +33,7 @@ export class ServerService {
 
     public searchDonatorsByEmailContains(serverId: number, email?: string, pageNumber?: number, pageSize?: number, sort?: string) {
         let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort, email);
-        const url: string = `api/servers/${serverId}/donator-search`;
+        const url: string = `api/servers/${serverId}/donators/search`;
         return this.httpClient.fetch<GetDonatorBonuses>(GET, url, true, params);
     }
 

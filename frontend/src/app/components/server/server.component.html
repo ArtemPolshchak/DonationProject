@@ -1,3 +1,4 @@
+
 <div class="col">
     <div class="main">
         <div class="row justify-content-between">
@@ -206,4 +207,12 @@
             </div>
         </div>
     </div>
+</div>
+<div class="mat-paginator">
+    <mat-paginator [length]="totalElements"
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="[6, 9, 18, 100]"
+                   [showFirstLastButtons]="true"
+                   (page)="onPageChange($event)">
+    </mat-paginator>
 </div>

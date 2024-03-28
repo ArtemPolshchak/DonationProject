@@ -10,6 +10,7 @@ import {SetupServerDialogComponent} from "./setup-server-dialog/setup-server-dia
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatButton} from "@angular/material/button";
 import {HttpEventType} from "@angular/common/http";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-server',
@@ -17,7 +18,8 @@ import {HttpEventType} from "@angular/common/http";
   imports: [
     NgForOf,
     NgClass,
-    MatButton
+    MatButton,
+    MatPaginator
   ],
   templateUrl: './server.component.html',
   styleUrl: './server.component.scss'
@@ -27,6 +29,10 @@ export class ServerComponent implements OnInit {
   selectedServerId: number | null = null;
   isButtonDisabled: boolean = true;
   durationInSeconds: number = 5;
+  pageNumber: number = 0;
+  totalElements: number = 0;
+  pageSize: number = 6;
+  sortState: string = "asc";
 
   constructor(
       private _snackBar: MatSnackBar,
@@ -40,9 +46,10 @@ export class ServerComponent implements OnInit {
   }
 
   getAllServers(): void {
-    this.serverService.getAllServerNames()
+    this.serverService.getAllServerNames(this.pageNumber, this.pageSize, this.sortState)
         .subscribe(data => {
             this.servers = data.content;
+            this.totalElements = data.totalElements;
         })
   }
 
@@ -103,5 +110,11 @@ export class ServerComponent implements OnInit {
     this._snackBar.open(message, 'Закрыть', {
       duration: this.durationInSeconds * 1000,
     });
+  }
+
+  onPageChange(event: PageEvent) {
+      this.pageSize = event.pageSize;
+      this.pageNumber = event.pageIndex;
+      this.getAllServers();
   }
 }
