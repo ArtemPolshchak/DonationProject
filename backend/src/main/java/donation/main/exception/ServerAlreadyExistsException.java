@@ -14,6 +14,4 @@ public class ServerAlreadyExistsException extends RuntimeException {
         super(String.format("%s  %s", message, serverName));
         this.serverName = serverName;
     }
-
-
 }
