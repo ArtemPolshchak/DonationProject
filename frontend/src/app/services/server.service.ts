@@ -33,7 +33,7 @@ export class ServerService {
 
     public searchDonatorsByEmailContains(serverId: number, email?: string, pageNumber?: number, pageSize?: number, sort?: string) {
         let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort, email);
-        const url: string = `api/servers/${serverId}/donator-search`;
+        const url: string = `api/servers/${serverId}/donators/search`;
         return this.httpClient.fetch<GetDonatorBonuses>(GET, url, true, params);
     }
 

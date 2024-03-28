@@ -9,6 +9,7 @@ import donation.main.entity.ServerEntity;
 import donation.main.service.ServerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -81,10 +82,10 @@ public class ServerController {
         return ResponseEntity.status(HttpStatus.OK).body(donatorsBonuses);
     }
 
-    @GetMapping("/{serverId}/donator-search")
+    @GetMapping("/{serverId}/donators/search")
     public ResponseEntity<Page<DonatorBonusDto>> searchDonatorsByEmailContains(
             @PathVariable Long serverId,
-            @RequestParam(required = false) String donatorMails,
+            @RequestParam(defaultValue = "")  String donatorMails,
             @PageableDefault(sort = {"email"}, direction = Sort.Direction.ASC) Pageable pageable
     ) {
         Page<DonatorBonusDto> donatorsPage = serverService.searchDonatorsByEmailLike(serverId, donatorMails, pageable);
