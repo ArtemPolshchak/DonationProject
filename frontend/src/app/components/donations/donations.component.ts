@@ -19,7 +19,6 @@ import {MatInput} from "@angular/material/input";
 import {Server} from "../../common/server";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
 import {StorageService} from "../../services/storage.service";
-import {HttpEventType} from "@angular/common/http";
 
 @Component({
     selector: 'app-transaction',
@@ -52,7 +51,7 @@ export class DonationsComponent implements OnInit {
     sortState?: string = "dateCreated,desc";
     stateFilter: string = "";
     selectedServer: string = "";
-    servers: Server[];
+    servers: Server[] = [];
 
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -67,12 +66,20 @@ export class DonationsComponent implements OnInit {
         private dialog: MatDialog,
         private _formBuilder: FormBuilder
     ) {
-        const serversData = StorageService.getItem('servers');
-        this.servers = serversData ? JSON.parse(serversData) : [];
     }
 
     ngOnInit(): void {
-        this.getTransactionPage();
+        this.servers = StorageService.getServers()
+        if (this.servers.length === 0) {
+            StorageService.watchServers().subscribe({
+                next: (response) => {
+                    this.servers = response;
+                    this.getTransactionPage()
+                }
+            });
+        } else {
+            this.getTransactionPage();
+        }
     }
 
     applyFilterSortSearch(): void {
@@ -81,17 +88,19 @@ export class DonationsComponent implements OnInit {
             this.transactionState.push(this.stateFilter);
         }
         this.serverNames = this.selectedServer ? [this.selectedServer] : undefined;
+        this.pageNumber = 0
+        this.paginator.pageIndex = this.pageNumber;
         this.getTransactionPage();
     }
 
 
     getTransactionPage(): void {
         this.transactionService.getAllWithSearch(
-             this.pageNumber, this.pageSize, this.sortState,
+            this.pageNumber, this.pageSize, this.sortState,
             this.transactionState, this.serverNames, this.donatorsMail)
             .subscribe((data) => {
-                    this.transactions = data.content;
-                    this.totalElements = data.totalElements;
+                this.transactions = data.content;
+                this.totalElements = data.totalElements;
             });
     }
 

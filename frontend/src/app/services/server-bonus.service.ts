@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClientService} from "./http-client.service";
-import {POST} from "../enums/app-constans";
+import {HttpMethod} from "../enums/http-method";
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +12,7 @@ export class ServerBonusService {
 
     public createOrRecreateBonuses(serverBonuses: ServerBonusDto[], serverId?: number) {
         const url: string = `api/server-bonus-settings?serverId=${serverId}`;
-        return this.httpClient.load<void>(POST, url, true, serverBonuses);
+        return this.httpClient.load<void>(HttpMethod.POST, url, true, serverBonuses);
     }
 }
 

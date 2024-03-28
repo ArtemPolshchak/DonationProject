@@ -4,7 +4,7 @@ import {CurrencyPipe, DatePipe, NgForOf, NgIf} from "@angular/common";
 import {TransactionService} from "../../services/transaction.service";
 import {Transaction} from "../../common/transaction";
 import {SidebarComponent} from "../sidebar/sidebar.component";
-import {TransactionState} from "../../enums/app-constans";
+import {TransactionState} from "../../enums/transaction-state";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
@@ -12,7 +12,6 @@ import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
-import {HttpEventType} from "@angular/common/http";
 
 @Component({
     selector: 'app-dashboard',
@@ -89,6 +88,12 @@ export class DashboardComponent implements OnInit {
             width: '50%',
             data: image,
         });
+    }
+
+    sort() {
+        this.pageNumber = 0;
+        this.paginator.pageIndex = this.pageNumber;
+        this.getAll();
     }
 
     protected readonly TransactionState = TransactionState;

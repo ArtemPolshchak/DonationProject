@@ -49,8 +49,10 @@ export class LoginComponent {
         if (this.form.valid) {
             this.loginService.login(this.form.value).subscribe({
                 next: (response) => {
-                    StorageService.saveToken(response.token);
-                    this.getServerList();
+                    StorageService.watchToken().subscribe({
+                        next: () => this.getServerList()
+                    })
+                    StorageService.addToken(response.token);
                 },
                 error: (err) => {
                     this.error = err.message;
@@ -60,9 +62,9 @@ export class LoginComponent {
     }
 
     private getServerList(): void {
-        this.serverService.getAllServerNames().pipe(take(1)).subscribe({
+        this.serverService.getAllServerNames().subscribe({
             next: (data) => {
-                StorageService.addItem('servers', JSON.stringify(data.content));
+                StorageService.addServers(JSON.stringify(data.content));
                 this.redirectBasedOnRole(StorageService.getUser()?.role)
             },
             error: (err) => {

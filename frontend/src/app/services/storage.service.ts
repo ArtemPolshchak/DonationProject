@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
-import {TOKEN_KEY} from '../enums/app-constans';
+import {SERVERS_KEY, TOKEN_KEY} from '../enums/app-constans';
 import {User} from "../common/user";
 import {jwtDecode} from "jwt-decode";
-import {Observable, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
+import {Server} from "../common/server";
 
 @Injectable({
     providedIn: 'root'
@@ -10,15 +11,18 @@ import {Observable, Subject} from 'rxjs';
 export abstract class StorageService {
 
     static storage: Storage = localStorage;
-    static storageSub= new Subject<string>();
 
-   static watchStorageToken(): Observable<any> {
-        return this.storageSub.asObservable();
-    }
-    static saveToken(token: string) {
-        this.storage.removeItem(TOKEN_KEY);
+    static serversSub = new Subject<Server[]>();
+    static tokenSub = new Subject<string>();
+
+    static addToken(token: string) {
         this.storage.setItem(TOKEN_KEY, token);
-        this.storageSub.next(token);
+        this.tokenSub.next(token);
+    }
+
+    static addServers(servers: string) {
+        this.storage.setItem(SERVERS_KEY, servers);
+        this.serversSub.next(JSON.parse(servers));
     }
 
     static addItem(key: string, value: string): void {
@@ -26,7 +30,7 @@ export abstract class StorageService {
     }
 
     static getToken(): string | undefined {
-        const token = this.storage.getItem(TOKEN_KEY);
+        let token = this.storage.getItem(TOKEN_KEY);
         if (token) {
             const tokenInfo = this.getDecodedAccessToken(token);
             if (tokenInfo && this.isTokenValid(tokenInfo)) {
@@ -36,6 +40,19 @@ export abstract class StorageService {
             }
         }
         return undefined;
+    }
+
+    static getServers() {
+        const serversData = this.storage.getItem(SERVERS_KEY);
+        return serversData ? JSON.parse(this.storage.getItem(SERVERS_KEY)!) : serversData;
+    }
+
+    static watchServers() {
+        return this.serversSub.asObservable();
+    }
+
+    static watchToken() {
+        return this.tokenSub.asObservable();
     }
 
     static clear() {

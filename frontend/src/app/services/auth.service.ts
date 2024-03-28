@@ -1,6 +1,6 @@
 import {inject, Injectable, OnInit} from '@angular/core';
 import {StorageService} from "./storage.service";
-import {Role} from "../enums/app-constans";
+import {Role} from "../enums/role";
 import {CanActivateFn, Router} from "@angular/router";
 
 @Injectable({

@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {User} from "../common/user";
-import {GET} from "../enums/app-constans";
 import {HttpClientService} from "./http-client.service";
 
 @Injectable({
@@ -14,7 +13,7 @@ export class UserService {
     public getAll(pageNumber?: number, pageSize?: number) {
         let params = this.httpClient.getHttpParams(pageNumber, pageSize);
         const url: string = `api/users`
-        return this.httpClient.fetch<GetUserResponse>(GET, url, true, params);
+        return this.httpClient.fetch<GetUserResponse>(url, true, params);
     }
 }
 
