@@ -77,7 +77,7 @@ export class DonatorStoryComponent implements OnInit {
             this.servers = StorageService.getServers()
             if (this.servers.length === 0) {
                 StorageService.watchServers().subscribe({
-                    next: (response)  => {
+                    next: (response) => {
                         this.servers = response
                         this.getDonatorTransactions();
                     }

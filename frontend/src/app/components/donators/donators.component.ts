@@ -54,7 +54,6 @@ export class DonatorsComponent implements OnInit {
     defaultSortField: string = "totalDonations"
     sortOrder: string = this.descOrder;
     sortState: string = this.defaultSortField + ',' + this.sortOrder;
-    savedSearchState?: SavedSearchState;
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -70,21 +69,11 @@ export class DonatorsComponent implements OnInit {
                 next: (response) => this.servers = response
             })
         }
-        const savedSearchState = StorageService.getItem(SEARCH_STATE_KEY);
-        if (savedSearchState) {
-            this.savedSearchState = JSON.parse(savedSearchState);
-            this.sortState = this.savedSearchState!.sortState;
-            this.donatorsMail = this.savedSearchState?.email;
-        }
         this.getAll();
     }
 
     goToDonatorStory(donatorId: number, email: string, totalDonations: number | undefined): void {
         if (typeof totalDonations !== 'undefined') {
-            StorageService.addItem(SEARCH_STATE_KEY, JSON.stringify({
-                sortState: this.sortState,
-                email: this.donatorsMail
-            }));
             this.router.navigate(['/donator-story', donatorId, email, totalDonations]);
         } else {
             console.error('Total donations is undefined.');
@@ -139,9 +128,4 @@ export class DonatorsComponent implements OnInit {
             this.getAll();
         });
     }
-}
-
-interface SavedSearchState {
-    sortState: string,
-    email: string
 }
