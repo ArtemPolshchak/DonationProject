@@ -1,6 +1,8 @@
 package donation.main.service;
 
 import java.util.List;
+import java.util.Optional;
+
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
 import donation.main.dto.donatorsdto.DonatorBonusDto;
 import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
@@ -10,6 +12,7 @@ import donation.main.entity.DonatorEntity;
 import donation.main.entity.ServerBonusSettingsEntity;
 import donation.main.entity.ServerEntity;
 import donation.main.exception.PageNotFoundException;
+import donation.main.exception.ServerAlreadyExistsException;
 import donation.main.exception.ServerNotFoundException;
 import donation.main.mapper.DonatorMapper;
 import donation.main.mapper.ServerMapper;
@@ -40,9 +43,23 @@ public class ServerService {
     }
 
     public ServerEntity create(CreateServerDto serverDto) {
+        String serverName = serverDto.serverName();
+        Optional<ServerEntity> existingServerOpt = serverRepository.findByServerName(serverName);
+
+        if (existingServerOpt.isPresent()) {
+            throw new ServerAlreadyExistsException("Server already exists with name:", serverName);
+        }
+
         ServerEntity server = serverMapper.toEntity(serverDto);
         server.getServerBonusSettings().add(ServerBonusSettingsEntity.builder().server(server).build());
         return serverRepository.save(server);
+    }
+
+    public Optional<ServerEntity> findByServerName(String serverName) {
+        ServerEntity server = serverRepository.findByServerName(serverName)
+                .orElseThrow(() -> new ServerNotFoundException("server not fount by serverName= ", serverName));
+
+        return Optional.of(server);
     }
 
     public ServerEntity findById(Long id) {

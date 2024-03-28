@@ -1,6 +1,8 @@
 package donation.main.repository;
 
 import java.util.List;
+import java.util.Optional;
+
 import donation.main.dto.donatorsdto.DonatorBonusDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
 import donation.main.entity.ServerEntity;
@@ -30,4 +32,6 @@ public interface ServerRepository extends JpaRepository<ServerEntity, Long> {
             + "LIKE LOWER(CONCAT('%', :email, '%'))")
     List<DonatorBonusDto> getBonusesByServerIdAndDonatorsEmail(
             Long id, @Param("email") String email, Sort sort);
+
+    Optional<ServerEntity> findByServerName(String serverName);
 }
