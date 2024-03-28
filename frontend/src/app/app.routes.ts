@@ -7,7 +7,7 @@ import {UserComponent} from "./components/user/user.component";
 import {LoginComponent} from "./components/login/login.component";
 import {hasRoleGuard} from "./services/auth.service";
 import {Role} from "./enums/role";
-import {DonatorstoryComponent} from "./components/donatorstory/donatorstory.component";
+import {DonatorStoryComponent} from "./components/donators/donator-story/donator-story.component";
 import {DonatorBonusOnServer} from "./components/donator-bonus-on-server/donator-bonus-on-server.component";
 import {PageNotFoundComponent} from "./components/page-not-found/page-not-found.component";
 import {GuestPageComponent} from "./components/guest-page/guest-page.component";
@@ -39,8 +39,8 @@ export const routes: Routes = [
         }
     },
     {
-        path: 'donatorstory/:id/:email/:totalDonations',
-        component: DonatorstoryComponent,
+        path: 'donator-story/:id/:email/:totalDonations',
+        component: DonatorStoryComponent,
         canActivate: [hasRoleGuard],
         data: {
             roles: [ Role.ADMIN ]

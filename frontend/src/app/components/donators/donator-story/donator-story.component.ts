@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {Transaction} from "../../common/transaction";
-import {TransactionService} from "../../services/transaction.service";
+import {Transaction} from "../../../common/transaction";
+import {TransactionService} from "../../../services/transaction.service";
 import {CurrencyPipe, DatePipe, NgForOf, NgIf} from "@angular/common";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
@@ -15,11 +15,11 @@ import {
     NgbAccordionItem
 } from "@ng-bootstrap/ng-bootstrap";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {Server} from "../../common/server";
-import {TransactionState} from "../../enums/transaction-state";
-import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
+import {Server} from "../../../common/server";
+import {TransactionState} from "../../../enums/transaction-state";
+import {OpenImageDialogComponent} from "../../open-image-dialog/open-image-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
-import {StorageService} from "../../services/storage.service";
+import {StorageService} from "../../../services/storage.service";
 
 @Component({
     selector: 'app-donatorstory',
@@ -42,10 +42,10 @@ import {StorageService} from "../../services/storage.service";
         FormsModule,
         NgIf
     ],
-    templateUrl: './donatorstory.component.html',
-    styleUrl: './donatorstory.component.scss'
+    templateUrl: './donator-story.component.html',
+    styleUrl: './donator-story.component.scss'
 })
-export class DonatorstoryComponent implements OnInit {
+export class DonatorStoryComponent implements OnInit {
     transactions: Transaction[] = [];
     donatorId!: number;
     email!: string;
@@ -55,7 +55,6 @@ export class DonatorstoryComponent implements OnInit {
     selectedServer: string = '';
     servers: Server[] = [];
     serverNames?: string[];
-
     pageNumber: number = 0;
     pageSize: number = 5;
     totalElements: number = 0;
@@ -75,12 +74,16 @@ export class DonatorstoryComponent implements OnInit {
             this.donatorId = +params['id'];
             this.email = params['email'];
             this.totalDonations = +params['totalDonations'];
-            this.getDonatorTransactions();
             this.servers = StorageService.getServers()
             if (this.servers.length === 0) {
                 StorageService.watchServers().subscribe({
-                    next: (response)  => this.servers = response
+                    next: (response)  => {
+                        this.servers = response
+                        this.getDonatorTransactions();
+                    }
                 })
+            } else {
+                this.getDonatorTransactions();
             }
         });
     }
@@ -90,6 +93,8 @@ export class DonatorstoryComponent implements OnInit {
     }
 
     applyFilterSort(): void {
+        this.pageNumber = 0;
+        this.paginator.pageIndex = this.pageNumber;
         this.getDonatorTransactions();
     }
 

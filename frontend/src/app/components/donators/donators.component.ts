@@ -16,6 +16,7 @@ import {CreateDonatorDialogComponent} from "./create-donator-dialog/create-donat
 
 import {Server} from "../../common/server";
 import {StorageService} from "../../services/storage.service";
+import {SEARCH_STATE_KEY} from "../../enums/app-constans";
 
 
 @Component({
@@ -53,6 +54,7 @@ export class DonatorsComponent implements OnInit {
     defaultSortField: string = "totalDonations"
     sortOrder: string = this.descOrder;
     sortState: string = this.defaultSortField + ',' + this.sortOrder;
+    savedSearchState?: SavedSearchState;
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -61,9 +63,29 @@ export class DonatorsComponent implements OnInit {
                 private router: Router) {
     }
 
+    ngOnInit(): void {
+        this.servers = StorageService.getServers()
+        if (this.servers.length === 0) {
+            StorageService.watchServers().subscribe({
+                next: (response) => this.servers = response
+            })
+        }
+        const savedSearchState = StorageService.getItem(SEARCH_STATE_KEY);
+        if (savedSearchState) {
+            this.savedSearchState = JSON.parse(savedSearchState);
+            this.sortState = this.savedSearchState!.sortState;
+            this.donatorsMail = this.savedSearchState?.email;
+        }
+        this.getAll();
+    }
+
     goToDonatorStory(donatorId: number, email: string, totalDonations: number | undefined): void {
         if (typeof totalDonations !== 'undefined') {
-            this.router.navigate(['/donatorstory', donatorId, email, totalDonations]);
+            StorageService.addItem(SEARCH_STATE_KEY, JSON.stringify({
+                sortState: this.sortState,
+                email: this.donatorsMail
+            }));
+            this.router.navigate(['/donator-story', donatorId, email, totalDonations]);
         } else {
             console.error('Total donations is undefined.');
         }
@@ -75,16 +97,6 @@ export class DonatorsComponent implements OnInit {
 
     select(item: any) {
         this.selectedItem = item;
-    }
-
-    ngOnInit(): void {
-        this.servers = StorageService.getServers()
-        if (this.servers.length === 0) {
-            StorageService.watchServers().subscribe({
-                next: (response)  => this.servers = response
-            })
-        }
-        this.getAll()
     }
 
     sort(sortField: string) {
@@ -127,4 +139,9 @@ export class DonatorsComponent implements OnInit {
             this.getAll();
         });
     }
+}
+
+interface SavedSearchState {
+    sortState: string,
+    email: string
 }
