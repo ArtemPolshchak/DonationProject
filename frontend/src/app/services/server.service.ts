@@ -14,8 +14,8 @@ export class ServerService {
     constructor(private httpClient: HttpClientService) {
     }
 
-    public getAllServerNames(pageNumber?: number, pageSize?: number) {
-        let params = this.httpClient.getHttpParams(pageNumber, pageSize);
+    public getAllServerNames(pageNumber?: number, pageSize?: number, sortState?: string) {
+        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sortState);
         const url: string = `api/servers/names`
         return this.httpClient.fetch<GetServerResponse>(url, true, params)
     }
