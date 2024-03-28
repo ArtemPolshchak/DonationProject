@@ -1,6 +1,7 @@
 import {HttpClient, HttpHandler, HttpHeaders, HttpParams} from "@angular/common/http";
 import {StorageService} from "./storage.service";
 import {Injectable} from "@angular/core";
+import {HttpMethod} from "../enums/http-method";
 
 @Injectable({
     providedIn: 'root'
@@ -12,29 +13,19 @@ export class HttpClientService extends HttpClient {
 
     constructor(handler: HttpHandler) {
         super(handler);
-        this.token = StorageService.getToken()
-        if (this.token) {
-            this.headers = new HttpHeaders({'Authorization': 'Bearer ' + StorageService.getToken()});
-        } else {
-            StorageService.watchStorageToken().subscribe({
-                next: () => {
-                    this.headers = new HttpHeaders({'Authorization': 'Bearer ' + StorageService.getToken()});
-                }
-            });
-        }
     }
 
-    fetch<T>(method: string, url: string, auth: boolean, params?: HttpParams) {
+    fetch<T>(url: string, auth: boolean, params?: HttpParams) {
         let options: any = {};
-        auth ? options.headers = this.headers : options;
         params ? options.params = params : options;
-        return this.request<T>(method, url, <Object>options);
+        auth ? options.headers = this.getHeaders() : options;
+        return this.request<T>(HttpMethod.GET, url, <Object>options);
     }
 
-    load<T>(method: string, url: string, auth: boolean, body?: any) {
+    load<T>(method: HttpMethod, url: string, auth: boolean, body?: any) {
         let options: any = {};
-        auth ? options.headers = this.headers : options;
         body ? options.body = body : options;
+        auth ? options.headers = this.getHeaders() : options;
         return this.request<T>(method, url, <Object>options);
     }
 
@@ -47,5 +38,9 @@ export class HttpClientService extends HttpClient {
         params = (pageSize) ? params.set('size', pageSize.toString()) : params;
         params = (sort) ? params.set('sort', sort) : params;
         return params;
+    }
+
+    private getHeaders() {
+        return  new HttpHeaders({'Authorization': `Bearer ${StorageService.getToken()}`});
     }
 }

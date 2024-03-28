@@ -15,6 +15,8 @@ import {TransactionService} from "../../../services/transaction.service";
 import {Server} from "../../../common/server";
 import {MatIcon} from "@angular/material/icon";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {StorageService} from "../../../services/storage.service";
+import {LAST_SERVER_KEY} from "../../../enums/app-constans";
 
 @Component({
     selector: 'app-transaction-dialog',
@@ -68,6 +70,13 @@ export class TransactionDialog implements OnInit {
     }
 
     ngOnInit(): void {
+        let tempServer = StorageService.getItem(LAST_SERVER_KEY);
+        if (tempServer) {
+            const serverId = +(JSON.parse(tempServer))
+            const lastServer = this.servers.find(server => server.id === serverId) ?? null;
+            this.serverControl.setValue(lastServer);
+        }
+
         if (this.data.transaction) {
             this.serverControl.setValue(this.findServerByName(this.data.transaction.serverName));
             this.contributionControl.setValue(this.data.transaction.contributionAmount);
@@ -161,6 +170,7 @@ export class TransactionDialog implements OnInit {
         this.transactionService.create(transaction).subscribe({
                 next: (result) => {
                     this.transactionResponse.emit(result)
+                    StorageService.addItem(LAST_SERVER_KEY, JSON.stringify(this.serverControl.value?.id));
                     this.openSnackBar("Транзакция успешно создана")
                 },
                 error: (err) => {

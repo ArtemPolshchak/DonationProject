@@ -32,7 +32,8 @@ public class DonatorController {
 
     @Operation(summary = "find donator by donators email")
     @GetMapping("/search")
-    public ResponseEntity<Page<DonatorEntity>> searchDonatorByMail(@RequestParam String donatorMails, Pageable pageable) {
+    public ResponseEntity<Page<DonatorEntity>> searchDonatorByMail(
+            @RequestParam(defaultValue = "") String donatorMails, Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(donatorService.findByEmailLike(donatorMails, pageable));
     }
 

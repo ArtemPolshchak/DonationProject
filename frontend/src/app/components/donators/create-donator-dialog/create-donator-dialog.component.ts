@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {MatCard, MatCardContent} from "@angular/material/card";
@@ -13,7 +13,6 @@ import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {NgIf} from "@angular/common";
 import {LoadDonatorBonus} from "../../../common/load-donator-bonus";
-import {CreateServerDto, ServerService} from "../../../services/server.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {CreateDonator, DonatorService} from "../../../services/donator.service";
 
@@ -42,6 +41,7 @@ export class CreateDonatorDialogComponent implements OnInit {
   email!: string;
   updateDonatorBonus!: LoadDonatorBonus;
   durationInSeconds: number = 5;
+  @Output() response = new EventEmitter();
 
   constructor(
       @Inject(MAT_DIALOG_DATA) public data: any,
@@ -69,17 +69,16 @@ export class CreateDonatorDialogComponent implements OnInit {
       const newDonator: CreateDonator = {
         email: this.email
       };
-      this.donatorService.createDonator(newDonator).subscribe(
-          (response) => {
-            console.log('Donator created successfully:', response);
-            this.dialogRef.close();
-            this.openSnackBar("Донатор успешно добавлен");
-          },
-          (error) => {
-            this.openSnackBar("Произошла ошибка при добавления Донатора");
-            console.error('Error creating server:', error);
-          }
-      );
+      this.donatorService.createDonator(newDonator).subscribe({
+      next: (response)=> {
+        this.response.emit(response);
+        this.openSnackBar("Донатор успешно добавлен");
+      },
+      error: (error) => {
+        this.openSnackBar("Произошла ошибка при добавления Донатора");
+        console.error('Error creating server:', error);
+      }
+      });
     }
   }
 

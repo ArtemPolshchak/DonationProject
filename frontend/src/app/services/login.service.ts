@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {Login} from "../common/login";
+import {HttpClientService} from "./http-client.service";
+import {HttpMethod} from "../enums/http-method";
 
 @Injectable({
     providedIn: 'root'
@@ -8,10 +9,11 @@ import {Login} from "../common/login";
 export class LoginService {
 
     constructor(
-        private httpClient: HttpClient) {
+        private httpClient: HttpClientService) {
     }
 
     login(loginData: Login) {
-        return this.httpClient.post<any>('api/auth/sign-in', loginData);
+        let url = 'api/auth/sign-in'
+        return this.httpClient.load<any>(HttpMethod.POST, url, false, loginData);
     }
 }

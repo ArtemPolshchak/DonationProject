@@ -102,11 +102,10 @@ export class AddNewServerDialogComponent {
         }
     }
 
-
     private getServerList(): void {
         this.serverService.getAllServerNames().subscribe({
             next: (data) => {
-                    StorageService.addItem('servers', JSON.stringify(data.content));
+                    StorageService.addServers(JSON.stringify(data.content));
             },
             error: (e) => console.error(e),
         });
