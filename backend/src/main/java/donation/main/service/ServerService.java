@@ -82,14 +82,13 @@ public class ServerService {
     }
 
     private Page<DonatorBonusDto> getPage(List<DonatorBonusDto> donatorBonuses, Pageable pageable) {
-        int toIndex = (donatorBonuses.size() - 1) > pageable.getPageSize() + pageable.getOffset()
+        int totalElements = donatorBonuses.size();
+        int toIndex = (donatorBonuses.size() - 1) >= pageable.getPageSize() + pageable.getOffset()
                 ? pageable.getPageSize() + (int) pageable.getOffset()
                 : donatorBonuses.size();
-        if (pageable.getOffset() >= toIndex) {
-            throw new PageNotFoundException("There is no page number " + pageable.getPageNumber());
+        if (pageable.getOffset() < toIndex) {
+            donatorBonuses = donatorBonuses.subList((int) pageable.getOffset(), toIndex);
         }
-        return new PageImpl<>(
-                donatorBonuses.subList((int) pageable.getOffset(), toIndex),
-                pageable, donatorBonuses.size());
+        return new PageImpl<>(donatorBonuses, pageable, totalElements);
     }
 }

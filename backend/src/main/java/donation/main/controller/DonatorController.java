@@ -38,7 +38,7 @@ public class DonatorController {
 
     @Operation(summary = "create new donator")
     @PostMapping
-    public ResponseEntity<DonatorEntity> createDonator(@RequestBody CreateDonatorDto dotatorDto) {
+    public ResponseEntity<DonatorEntity> create(@RequestBody CreateDonatorDto dotatorDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(donatorService.create(dotatorDto));
     }
 }
