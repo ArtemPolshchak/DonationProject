@@ -33,5 +33,5 @@ public interface ServerRepository extends JpaRepository<ServerEntity, Long> {
     List<DonatorBonusDto> getBonusesByServerIdAndDonatorsEmail(
             Long id, @Param("email") String email, Sort sort);
 
-    Optional<ServerEntity> findByServerName(String serverName);
+    boolean existsServerEntitiesByServerName(String serverName);
 }

@@ -42,24 +42,13 @@ public class ServerService {
         return serverRepository.getAllByServerNameAndId(pageable);
     }
 
-    public ServerEntity create(CreateServerDto serverDto) {
-        String serverName = serverDto.serverName();
-        Optional<ServerEntity> existingServerOpt = serverRepository.findByServerName(serverName);
-
-        if (existingServerOpt.isPresent()) {
-            throw new ServerAlreadyExistsException("Server already exists with name:", serverName);
+    public ServerEntity create(CreateServerDto dto) {
+        if (serverRepository.existsServerEntitiesByServerName(dto.serverName())) {
+            throw new ServerAlreadyExistsException("Server already exists with name:", dto.serverName());
         }
-
-        ServerEntity server = serverMapper.toEntity(serverDto);
+        ServerEntity server = serverMapper.toEntity(dto);
         server.getServerBonusSettings().add(ServerBonusSettingsEntity.builder().server(server).build());
         return serverRepository.save(server);
-    }
-
-    public Optional<ServerEntity> findByServerName(String serverName) {
-        ServerEntity server = serverRepository.findByServerName(serverName)
-                .orElseThrow(() -> new ServerNotFoundException("server not fount by serverName= ", serverName));
-
-        return Optional.of(server);
     }
 
     public ServerEntity findById(Long id) {
