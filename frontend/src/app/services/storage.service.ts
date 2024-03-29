@@ -56,7 +56,8 @@ export abstract class StorageService {
     }
 
     static clear() {
-        this.storage.clear();
+        this.storage.removeItem(SERVERS_KEY);
+        this.storage.removeItem(TOKEN_KEY);
     }
 
     static getUser(): User | undefined {
