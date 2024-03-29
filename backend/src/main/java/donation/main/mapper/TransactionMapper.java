@@ -20,6 +20,7 @@ public interface TransactionMapper {
     @Mapping(source = "approvedByUser.email", target = "approvedBy")
     TransactionResponseDto toDto(TransactionEntity entity);
 
+    @Mapping(target = "image", expression = "java(imageBase64ToByteArray(dto.image()))")
     TransactionEntity update(@MappingTarget TransactionEntity entity, UpdateTransactionDto dto);
 
     default byte[] imageBase64ToByteArray(String image) {
@@ -27,6 +28,6 @@ public interface TransactionMapper {
     }
 
     default String imageByteArrayToBase64(byte[] image) {
-        return image == null ? null : new String(image);
+        return new String(image);
     }
 }
