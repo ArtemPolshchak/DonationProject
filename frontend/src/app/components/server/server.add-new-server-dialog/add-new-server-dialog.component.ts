@@ -54,9 +54,8 @@ export class AddNewServerDialogComponent {
     constructor(
         private _snackBar: MatSnackBar,
         public dialogRef: MatDialogRef<AddNewServerDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any,
         private serverService: ServerService) {
-        this.servers = data;
+        this.servers = StorageService.getServers();
     }
 
     serverNameControl = new FormControl('',
@@ -82,23 +81,29 @@ export class AddNewServerDialogComponent {
 
     addNewServer() {
         if (this.isFormValid()) {
-            const newServer: CreateServerDto = {
-                serverName: this.serverNameControl.value!,
-                serverUrl: this.serverUrlControl.value!,
-                serverUserName: this.serverUserNameControl.value!,
-                serverPassword: this.serverPasswordControl.value!,
-            };
+            const serverName = this.serverNameControl.value;
+            const lastServer = this.servers.find(server => server.serverName === serverName) ?? null;
+            if (lastServer) {
+                this.openSnackBar("Сервер с таким именем уже существует, смените имя сервера")
+            } else {
+                const newServer: CreateServerDto = {
+                    serverName: this.serverNameControl.value!,
+                    serverUrl: this.serverUrlControl.value!,
+                    serverUserName: this.serverUserNameControl.value!,
+                    serverPassword: this.serverPasswordControl.value!,
+                };
 
-            this.serverService.create(newServer).subscribe({
-                    next: (result) => {
-                        this.componentResponse.emit(result)
-                        this.getServerList();
-                        this.dialogRef.close();
-                        this.openSnackBar("Сервер успешно добавлен")
+                this.serverService.create(newServer).subscribe({
+                        next: (result) => {
+                            this.componentResponse.emit(result)
+                            this.getServerList();
+                            this.dialogRef.close();
+                            this.openSnackBar("Сервер успешно добавлен")
+                        },
+                        error: (err) => this.openSnackBar("Ошибка при добавлении сервера: " + err.message),
                     },
-                    error: (err) => this.openSnackBar("Ошибка при добавлении сервера: " + err.message),
-                },
-            );
+                );
+            }
         }
     }
 
