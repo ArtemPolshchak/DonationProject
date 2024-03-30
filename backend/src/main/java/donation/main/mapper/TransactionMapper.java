@@ -9,7 +9,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MapperConfig.class)
+import java.awt.*;
+
+@Mapper(config = MapperConfig.class, imports = Color.class)
 public interface TransactionMapper {
 
     TransactionEntity toEntity(CreateTransactionDto dto);
@@ -20,6 +22,7 @@ public interface TransactionMapper {
     @Mapping(source = "approvedByUser.email", target = "approvedBy")
     TransactionResponseDto toDto(TransactionEntity entity);
 
+    @Mapping(target = "color", expression = "java(Color.decode(dto.color()))")
     @Mapping(target = "image", expression = "java(imageBase64ToByteArray(dto.image()))")
     TransactionEntity update(@MappingTarget TransactionEntity entity, UpdateTransactionDto dto);
 
@@ -29,5 +32,13 @@ public interface TransactionMapper {
 
     default String imageByteArrayToBase64(byte[] image) {
         return new String(image);
+    }
+
+    default String convertHexToString(Color color) {
+        String hex = Integer.toHexString(color.getRGB() & 0xffffff);
+        if (hex.length() < 6) {
+            hex = "0" + hex;
+        }
+        return "#" + hex;
     }
 }

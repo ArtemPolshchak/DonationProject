@@ -1,4 +1,10 @@
-.delete-button{
+.image-content {
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: auto;
+}
+
+.close-button{
   position: absolute;
   z-index: 10;
   top: 10px;
@@ -7,10 +13,8 @@
   background: rgba(52, 68,81, 1);
   opacity: 65%;
 }
-.delete-button:hover{
+
+.close-button:hover{
   opacity: 90%;
 }
-.image-content {
-  overflow: auto;
-  height: 80%;
-}
+

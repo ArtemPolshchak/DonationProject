@@ -6,9 +6,11 @@ import {provideHttpClient} from "@angular/common/http";
 import {TransactionService} from "./services/transaction.service";
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
+
 export const appConfig: ApplicationConfig = {
     providers: [provideRouter(routes),
         provideHttpClient(),
-        TransactionService, provideAnimationsAsync()
+        TransactionService,
+        provideAnimationsAsync(),
     ]
 };

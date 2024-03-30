@@ -13,6 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
+import java.awt.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import donation.main.enumeration.TransactionState;
@@ -88,4 +90,8 @@ public class TransactionEntity {
     @ManyToOne
     @JoinColumn(name = "server_id")
     private ServerEntity server;
+
+    @Column(name = "color")
+    @Builder.Default
+    private Color color = Color.decode("#D3D3D3");
 }
