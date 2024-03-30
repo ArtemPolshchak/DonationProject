@@ -7,16 +7,15 @@ import {SidebarComponent} from "../sidebar/sidebar.component";
 import {TransactionState} from "../../enums/transaction-state";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
-import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
 import {NO_IMG_PATH} from "../../enums/app-constans";
-import {NgxColorsColor, NgxColorsModule} from 'ngx-colors';
+import { NgxColorsModule} from 'ngx-colors';
 import {Server} from "../../common/server";
 import {StorageService} from "../../services/storage.service";
-import {LAST_SERVER_KEY} from "../../enums/app-constans";
 
 @Component({
     selector: 'app-dashboard',
@@ -42,7 +41,6 @@ import {LAST_SERVER_KEY} from "../../enums/app-constans";
 export class DashboardComponent implements OnInit {
 
     servers: Server[] = [];
-    colorFormControl = new FormControl(null) ;
     transactionState: string[] = [TransactionState.IN_PROGRESS];
     transactions: Transaction[] = [];
     pageNumber: number = 0;
@@ -55,10 +53,10 @@ export class DashboardComponent implements OnInit {
     hideTextInput: boolean = true;
     colors: Array<any> = [
         "#D3D3D3",
-        "#d50954",
-        "#43a047",
-        "#039be5",
-        "#ffeb3b",
+        "#fd8888",
+        "#9dfc9e",
+        "#84d4ff",
+        "#ffeb8a",
     ];
 
     constructor(private transactionService: TransactionService,
@@ -77,10 +75,10 @@ export class DashboardComponent implements OnInit {
             transaction.serverId = this.findServerByName(transaction.serverName).id;
             this.transactionService.update(transaction).subscribe({
                     next: (result) => {
-                        this.openSnackBar("Транзакция успешно изменена")
+                        this.openSnackBarForColor("Цвет успешно изменен")
                     },
                     error: (err) => {
-                        this.openSnackBar("Ошибка при обновлении транзакции: " + err.message)
+                        this.openSnackBarForColor("Ошибка при изменении цвета: " + err.message)
                     },
                 },
             );
@@ -111,6 +109,12 @@ export class DashboardComponent implements OnInit {
                 this.openSnackBar(state);
             }
         );
+    }
+
+    openSnackBarForColor(state: string) {
+        this._snackBar.open(state, 'Закрыть', {
+            duration: this.durationInSeconds * 1000,
+        });
     }
 
     openSnackBar(state: string) {
