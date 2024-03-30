@@ -1,14 +1,3 @@
-<!--<section class="example-section" [formGroup]="toppings">-->
-<!--    <h4>Select your toppings:</h4>-->
-<!--    <p><mat-checkbox formControlName="pepperoni">Pepperoni</mat-checkbox></p>-->
-<!--    <p><mat-checkbox formControlName="extracheese">Extra Cheese</mat-checkbox></p>-->
-<!--    <p><mat-checkbox formControlName="mushroom">Mushroom</mat-checkbox></p>-->
-<!--</section>-->
-
-<!--<section class="example-section" [formGroup]="toppings">-->
-<!--    <h4>You chose:</h4>-->
-<!--    {{toppings.value | json}}-->
-<!--</section>-->
 <div>
     <h1>Донаты</h1>
     <div class="search">
@@ -58,15 +47,6 @@
 <div class="transactions-list">
     <div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
         <div class="item" ngbAccordionItem="{{transaction.id}}">
-<!--            <h2 ngbAccordionHeader>-->
-<!--                <button ngbAccordionButton>-->
-<!--                    [ Дата создания {{transaction.dateCreated | date: 'dd MMMM yyyy'}}]-->
-<!--                    [ Дата подтверждения {{transaction.dateApproved | date: 'dd MMMM yyyy'}}]-->
-<!--                    [ Имя сервера {{ transaction.serverName}}]-->
-<!--                    [ Почта донатора {{transaction.donatorEmail}}]-->
-<!--                    [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]-->
-<!--                </button>-->
-<!--            </h2>-->
             <h2 ngbAccordionHeader>
                 <button ngbAccordionButton>
                     <span *ngIf="transaction.dateCreated">
@@ -89,31 +69,11 @@
             </h2>
             <div ngbAccordionCollapse>
                 <div ngbAccordionBody>
-<!--                    <ng-template>-->
-<!--                        [Кто создал {{transaction.createdBy}}]-->
-<!--                        [ Дата создания {{transaction.dateCreated | date: 'dd MMMM yyyy'}}]-->
-<!--                        [Кто подтвердил {{transaction.approvedBy}}]-->
-<!--                        [Дата подтверждения {{transaction.dateApproved | date: 'dd MMMM yyyy'}}]-->
-<!--                        [бонусы Сервера {{transaction.serverBonusPercentage}}%]-->
-<!--                        [Бонысы Донатора {{transaction.personalBonusPercentage}}%]-->
-<!--                        [Бонысы Админа {{transaction.adminBonus}}]-->
-<!--                        [сумма зачисления  {{transaction.contributionAmount}}]-->
-<!--                        [Общая сумма доната  {{transaction.totalAmount}}]-->
-<!--                        [Состояние заявки {{transaction.state}}]-->
-<!--                        [Комментарий {{transaction.comment}}]-->
-<!--                        <div class="image-container">-->
-<!--                            <img #image [src]="transaction.image" alt="img"-->
-<!--                                 onerror="this.src='s../../assets/images/no-image.jpg'"-->
-<!--                                 width="20%" style="cursor:pointer"-->
-<!--                                 (click)="openImageDialog(image.src)"/>-->
-<!--                        </div>-->
-<!--                    </ng-template>-->
                     <div class="container">
                         <div class="image-container">
-                            <img #image [src]="transaction.image" alt="img"
-                                 onerror="this.src='s../../assets/images/no-image.jpg'"
+                            <img #image [src]="transaction.image ? transaction.image : NO_IMG_PATH" alt="img"
                                  width="100%" style="cursor:pointer"
-                                 (click)="openImageDialog(image.src)"/>
+                                 (click)="transaction.image ? openImageDialog(image.src) : {}"/>
                         </div>
 
                         <div class="info-block">

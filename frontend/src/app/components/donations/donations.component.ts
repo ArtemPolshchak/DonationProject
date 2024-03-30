@@ -19,6 +19,7 @@ import {MatInput} from "@angular/material/input";
 import {Server} from "../../common/server";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
 import {StorageService} from "../../services/storage.service";
+import {NO_IMG_PATH} from "../../enums/app-constans";
 
 @Component({
     selector: 'app-transaction',
@@ -35,7 +36,13 @@ import {StorageService} from "../../services/storage.service";
         NgbAccordionItem,
         MatPaginator,
         MatCheckbox,
-        FormsModule, ReactiveFormsModule, MatCheckboxModule, JsonPipe, MatInput, NgIf, NgStyle
+        FormsModule,
+        ReactiveFormsModule,
+        MatCheckboxModule,
+        JsonPipe,
+        MatInput,
+        NgIf,
+        NgStyle
     ],
     templateUrl: './donations.component.html',
     styleUrl: './donations.component.scss'
@@ -125,8 +132,9 @@ export class DonationsComponent implements OnInit {
 
     openImageDialog(image: string) {
         this.dialog.open(OpenImageDialogComponent, {
-            width: '70%',
             data: image,
         });
     }
+
+    protected readonly NO_IMG_PATH = NO_IMG_PATH;
 }

@@ -11,7 +11,7 @@ import {AuthService} from "./services/auth.service";
     imports: [
         SidebarComponent,
         RouterOutlet,
-        NgIf
+        NgIf,
     ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
