@@ -16,6 +16,7 @@ import {NO_IMG_PATH} from "../../enums/app-constans";
 import { NgxColorsModule} from 'ngx-colors';
 import {Server} from "../../common/server";
 import {StorageService} from "../../services/storage.service";
+import {ToasterService} from "../../services/toaster.service";
 
 @Component({
     selector: 'app-dashboard',
@@ -61,7 +62,7 @@ export class DashboardComponent implements OnInit {
 
     constructor(private transactionService: TransactionService,
                 private dialog: MatDialog,
-                private _snackBar: MatSnackBar) {
+                private toasterService: ToasterService) {
     }
 
     ngOnInit(): void {
@@ -75,10 +76,10 @@ export class DashboardComponent implements OnInit {
             transaction.serverId = this.findServerByName(transaction.serverName).id;
             this.transactionService.update(transaction).subscribe({
                     next: (result) => {
-                        this.openSnackBarForColor("Цвет успешно изменен")
+                        this.openSnackBar("Цвет успешно изменен")
                     },
                     error: (err) => {
-                        this.openSnackBarForColor("Ошибка при изменении цвета: " + err.message)
+                        this.openSnackBar("Ошибка при изменении цвета: " + err.message)
                     },
                 },
             );
@@ -106,23 +107,20 @@ export class DashboardComponent implements OnInit {
         this.transactionService.confirmById(transaction.id!, state, transaction.adminBonus)
             .subscribe(() => {
                 this.getAll();
-                this.openSnackBar(state);
+                this.transactionResponse(state);
             }
         );
     }
 
-    openSnackBarForColor(state: string) {
-        this._snackBar.open(state, 'Закрыть', {
-            duration: this.durationInSeconds * 1000,
-        });
+    openSnackBar(message: string) {
+        this.toasterService.openSnackBar(message);
     }
 
-    openSnackBar(state: string) {
+    transactionResponse(state: string) {
         const message = state === TransactionState.COMPLETED ? 'Заявка Подтверждена!' : 'Заявка Отменена!';
-        this._snackBar.open(message, 'Закрыть', {
-            duration: this.durationInSeconds * 1000,
-        });
+        this.toasterService.openSnackBar(message);
     }
+
 
     openImageDialog(image: string) {
         this.dialog.open(OpenImageDialogComponent, {
