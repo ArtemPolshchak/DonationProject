@@ -87,7 +87,7 @@ public class TransactionService {
         setTransactionState(transaction, dto.state());
         setTransactionAdminBonus(transaction, dto.adminBonus());
         setDonatorTotalDonation(transaction.getState(), transaction);
-        transaction.toBuilder()
+        transaction = transaction.toBuilder()
                 .dateApproved(LocalDateTime.now())
                 .approvedByUser(userService.getCurrentUser()).build();
         return transactionMapper.toDto(transactionRepository.save(transaction));
