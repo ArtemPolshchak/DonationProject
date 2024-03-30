@@ -17,6 +17,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {StorageService} from "../../../services/storage.service";
 import {LAST_SERVER_KEY} from "../../../enums/app-constans";
+import {ImageProcessorService} from "../../../services/image-processor.service";
 
 @Component({
     selector: 'app-transaction-dialog',
@@ -63,6 +64,7 @@ export class TransactionDialog implements OnInit {
     constructor(private fb: UntypedFormBuilder,
                 private dialogRef: MatDialogRef<TransactionDialog>,
                 private transactionService: TransactionService,
+                private imageProcessor: ImageProcessorService,
                 private _snackBar: MatSnackBar,
                 @Inject(MAT_DIALOG_DATA) public data: any) {
         this.servers = this.data.servers;
@@ -105,36 +107,10 @@ export class TransactionDialog implements OnInit {
     }
 
     saveImage(file: File) {
-        const reader = new FileReader();
-        reader.addEventListener('load', () => {
-            this.imageForm.get('photo')?.setValue(reader.result as string);
-            this.compressImage(reader.result as string).then(result => {
-                    this.transaction.image = result as string;
-                }
-            );
-        });
-        reader.readAsDataURL(file);
-    }
-
-    compressImage(src: string) {
-        return new Promise((res, rej) => {
-            const img = new Image();
-            img.src = src;
-            img.onload = () => {
-                const elem = document.createElement('canvas');
-                if (img.height > img.width) {
-                    elem.height = this.maxImgSideSize
-                    elem.width = img.width * (this.maxImgSideSize / img.height)
-                } else {
-                    elem.width = this.maxImgSideSize
-                    elem.height = img.height * (this.maxImgSideSize / img.width)
-                }
-                const ctx = <CanvasRenderingContext2D>elem.getContext('2d');
-                ctx.drawImage(img, 0, 0, elem.width, elem.height);
-                const data = ctx.canvas.toDataURL();
-                res(data);
-            }
-            img.onerror = error => rej(error);
+        this.imageProcessor.compress(file).then(result => {
+            this.transaction.image = result;
+            this.imageForm.get('photo')?.setValue(this.transaction.image);
+            console.log(`after compression: ${result}`)
         })
     }
 

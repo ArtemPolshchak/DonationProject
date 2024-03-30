@@ -12,6 +12,7 @@ import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
+import {NO_IMG_PATH} from "../../enums/app-constans";
 
 @Component({
     selector: 'app-dashboard',
@@ -85,7 +86,6 @@ export class DashboardComponent implements OnInit {
 
     openImageDialog(image: string) {
         this.dialog.open(OpenImageDialogComponent, {
-            width: '50%',
             data: image,
         });
     }
@@ -97,4 +97,5 @@ export class DashboardComponent implements OnInit {
     }
 
     protected readonly TransactionState = TransactionState;
+    protected readonly NO_IMG_PATH = NO_IMG_PATH;
 }

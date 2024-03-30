@@ -75,10 +75,9 @@
 <!--        </ng-template>-->
         <div class="container">
           <div class="image-container">
-            <img #image [src]="transaction.image" alt="img"
-                 onerror="this.src='s../../assets/images/no-image.jpg'"
+            <img #image [src]="transaction.image ? transaction.image : NO_IMG_PATH" alt="img"
                  width="100%" style="cursor:pointer"
-                 (click)="openImageDialog(image.src)"/>
+                 (click)="transaction.image ? openImageDialog(image.src) : {}"/>
           </div>
           <div class="info-block">
             <div>
