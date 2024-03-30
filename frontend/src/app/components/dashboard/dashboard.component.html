@@ -1,10 +1,6 @@
-
-<!--<button class="btn btn-sm btn-outline-primary me-2" (click)="accordion.expandAll()">Expand all</button>-->
-<!--<button class="btn btn-sm btn-outline-primary me-2" (click)="accordion.collapseAll()">Collapse all</button>-->
 <h1>Заявки</h1>
 <div>
   <div class="d-flex">
-    <!--            <button class="button" (click)="applyFilterSortSearch()">ИСПОЛЬЗОВАТЬ СОРТИРОВКУ</button>-->
     <select class="form-select me-2" aria-label="Сорт" [(ngModel)]="sortState"
             (change)="sort()">
       <option selected disabled hidden>СОРТИРОВКА</option>
@@ -16,7 +12,7 @@
 <div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
   <div class="item" ngbAccordionItem="{{transaction.id}}">
 
-    <h2 ngbAccordionHeader>
+    <h2 ngbAccordionHeader [ngStyle]="{'background-color': transaction.color}">
       <button ngbAccordionButton>
         <span *ngIf="transaction.dateCreated">
           Дата создания: <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</strong>
@@ -36,43 +32,24 @@
 
     <button class="btn secondary-button ms-2" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">Отменить</button>
 
-<!--    <h2 ngbAccordionHeader>-->
-<!--      <button ngbAccordionButton>-->
-<!--       [ Дата создания {{transaction.dateCreated | date: 'dd MMMM yyyy'}}]-->
-<!--       [ Айди сервера {{ transaction.serverName}}]-->
-<!--       [ Почта донатора {{transaction.donatorEmail}}]-->
-<!--       [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]-->
-<!--      </button>-->
-<!--&lt;!&ndash;        <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionStateEnum.COMPLETED)">Подтвердить</button>&ndash;&gt;-->
-<!--&lt;!&ndash;      <button class="btn btn-outline-primary ms-2" (click)="confirmTransaction(transaction, TransactionStateEnum.CANCELLED)">Отменить</button>&ndash;&gt;-->
+    <form class="example-form">
+      <ngx-colors
+              colorsAnimation="popup"
+              [hideTextInput]="hideTextInput"
+              [hideColorPicker]="hideColorPicker"
+              [palette]="colors"
+              ngx-colors-trigger
+              style="display: inline-block; margin:5px;"
+              [formControl]="colorFormControl"
+              (close)="updateTransactionColor($event, transaction)"
+      >
+      </ngx-colors>
 
-<!--      <button class="btn primary-button ms-2" (click)="confirmTransaction(transaction, TransactionStateEnum.COMPLETED)">Подтвердить</button>-->
-<!--      <button class="btn secondary-button ms-2" (click)="confirmTransaction(transaction, TransactionStateEnum.CANCELLED)">Отменить</button>-->
+    </form>
 
-<!--      &lt;!&ndash;      <div ngbAccordionToggle>&ndash;&gt;-->
-<!--&lt;!&ndash;        <div>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</div>&ndash;&gt;-->
-<!--&lt;!&ndash;        <div>{{transaction.donatorEmail}}</div>&ndash;&gt;-->
-<!--&lt;!&ndash;        <div>{{transaction.contributionAmount | currency: 'USD'}}</div>&ndash;&gt;-->
-<!--&lt;!&ndash;      </div>&ndash;&gt;-->
-<!--    </h2>-->
+
     <div ngbAccordionCollapse>
       <div ngbAccordionBody>
-
-<!--        <ng-template>-->
-<!--          [Кто создал {{transaction.createdBy}}]-->
-<!--          [бонусы Сервера {{transaction.serverBonusPercentage}}%]-->
-<!--          [Бонысы Донатора {{transaction.personalBonusPercentage}}%]-->
-<!--          [сумма зачисления  {{transaction.contributionAmount}}]-->
-<!--          [Общая сумма доната  {{transaction.totalAmount}}]-->
-<!--          [Состояние заявки {{transaction.state}}]-->
-<!--          [Комментарий {{transaction.comment}}]-->
-<!--          <div class="image-container">-->
-<!--            <img #image  [src]="transaction.image" alt="img"-->
-<!--                 onerror="this.src='s../../assets/images/no-image.jpg'"-->
-<!--                 width="20%" style="cursor:pointer"-->
-<!--                 (click)="openImageDialog(image.src)"/>-->
-<!--          </div>-->
-<!--        </ng-template>-->
         <div class="container">
           <div class="image-container">
             <img #image [src]="transaction.image" alt="img"

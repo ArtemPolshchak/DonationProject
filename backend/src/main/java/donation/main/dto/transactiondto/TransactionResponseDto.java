@@ -1,5 +1,6 @@
 package donation.main.dto.transactiondto;
 
+import java.awt.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import donation.main.enumeration.TransactionState;
@@ -19,6 +20,7 @@ public record TransactionResponseDto(
         TransactionState state,
         BigDecimal contributionAmount,
         BigDecimal totalAmount,
-        String comment
+        String comment,
+        String color
 ) {
 }

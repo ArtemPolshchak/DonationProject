@@ -7,6 +7,7 @@ public record UpdateTransactionDto(
         String donatorEmail,
         String image,
         String comment,
-        Long serverId
+        Long serverId,
+        String color
 ) {
 }
