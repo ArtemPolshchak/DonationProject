@@ -12,6 +12,7 @@ import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
+import {NO_IMG_PATH} from "../../enums/app-constans";
 import {NgxColorsColor, NgxColorsModule} from 'ngx-colors';
 import {Server} from "../../common/server";
 import {StorageService} from "../../services/storage.service";
@@ -94,8 +95,6 @@ export class DashboardComponent implements OnInit {
             });
     }
 
-
-
     onPageChange(event: PageEvent): void {
         this.pageNumber = event.pageIndex;
         this.pageSize = event.pageSize;
@@ -121,10 +120,8 @@ export class DashboardComponent implements OnInit {
         });
     }
 
-
     openImageDialog(image: string) {
         this.dialog.open(OpenImageDialogComponent, {
-            width: '50%',
             data: image,
         });
     }
@@ -140,5 +137,5 @@ export class DashboardComponent implements OnInit {
     }
 
     protected readonly TransactionState = TransactionState;
-
+    protected readonly NO_IMG_PATH = NO_IMG_PATH;
 }
