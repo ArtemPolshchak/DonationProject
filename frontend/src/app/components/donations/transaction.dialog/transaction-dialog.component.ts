@@ -78,7 +78,6 @@ export class TransactionDialog implements OnInit {
             const lastServer = this.servers.find(server => server.id === serverId) ?? null;
             this.serverControl.setValue(lastServer);
         }
-
         if (this.data.transaction) {
             this.serverControl.setValue(this.findServerByName(this.data.transaction.serverName));
             this.contributionControl.setValue(this.data.transaction.contributionAmount);
@@ -110,7 +109,6 @@ export class TransactionDialog implements OnInit {
         this.imageProcessor.compress(file).then(result => {
             this.transaction.image = result;
             this.imageForm.get('photo')?.setValue(this.transaction.image);
-            console.log(`after compression: ${result}`)
         })
     }
 
