@@ -117,9 +117,13 @@ public class TransactionService {
             BigDecimal amount = transaction
                     .getDonator()
                     .getTotalDonations()
-                    .add(transaction
-                            .getContributionAmount());
+                    .add(transaction.getContributionAmount());
+
+            Long count = transaction.getDonator().getTotalCompletedTransactions() + 1;
+
+            transaction.getDonator().setTotalCompletedTransactions(count);
             transaction.getDonator().setTotalDonations(amount);
+
         }
     }
 
