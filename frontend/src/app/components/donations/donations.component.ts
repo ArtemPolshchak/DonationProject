@@ -14,7 +14,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatCheckbox, MatCheckboxModule} from "@angular/material/checkbox";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {TransactionDialog} from "./transaction.dialog/transaction-dialog.component";
+import {TransactionDialog} from "./transaction-dialog/transaction-dialog.component";
 import {MatInput} from "@angular/material/input";
 import {Server} from "../../common/server";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";

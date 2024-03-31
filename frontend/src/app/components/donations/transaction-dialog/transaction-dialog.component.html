@@ -1,6 +1,6 @@
 <div>
-    <header class="header">
-        <h2 class="title">Create Transaction</h2>
+    <header class="dialog-header">
+        <h2 class="dialog-header-title">Create Transaction</h2>
     </header>
 
     <mat-dialog-content>
@@ -15,7 +15,8 @@
                 <mat-form-field class="input-field" appearance="outline">
                     <mat-label>Contribution Amount</mat-label>
                     <input matInput [formControl]="contributionControl" [defaultValue]=""/>
-                    <mat-error *ngIf="emailControl.hasError('required')">Field required!</mat-error>
+                    <mat-error *ngIf="contributionControl.hasError('required')">Field required!</mat-error>
+                    <mat-error *ngIf="contributionControl.hasError('pattern')">Numbers only!</mat-error>
                 </mat-form-field>
                 <mat-form-field class="input-field">
                     <mat-label>Server</mat-label>
@@ -53,10 +54,8 @@
         </mat-card>
     </mat-dialog-content>
 
-    <mat-dialog-actions align="start">
-        <button class="cancel-button" mat-flat-button (click)="onCancel()">Cancel</button>
-        <button class="ok-button" mat-flat-button (click)="proceedTransaction()" mat-dialog-close [disabled]="!isFormValid()">
-            SendRequest
-        </button>
+    <mat-dialog-actions class="dialog-action-buttons" align="center">
+        <button class="dialog-button" mat-button (click)="isFormValid() ? proceedTransaction() : {}">Apply</button>
+        <button class="dialog-button" mat-button (click)="onCancel()">Cancel</button>
     </mat-dialog-actions>
 </div>

@@ -23,24 +23,15 @@
   background-color: #425565;
   color: #C5CCD3;
 }
-.d-flex {
-  top: 10px;
-  right: 10px;
-  padding: 10px;
-  z-index: 1000;
-  border-bottom: 1px solid #ccc;
-  width: 300px;
-  max-width: calc(100% - 340px); /* Максимальна ширина віджета сортування + відступ */
-}
 
 .image-container {
   border: solid #8e8e8e;
-  height: 100px;
-  width: 100px;
+  width: 20vh;
   display: flex;
   justify-content: center;
   object-fit: cover;
   overflow: hidden;
+  margin-left: 20px;
 }
 
 .image-container img {
@@ -97,9 +88,9 @@ h2 {
   }
 }
 
-.container {
+.transaction-container {
+  width: 100%;
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
 }
 

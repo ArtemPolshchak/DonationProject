@@ -1,63 +1,50 @@
-
-<div class="col">
-    <div class="main">
-        <div class="row justify-content-between">
-            <div class="col-auto">
-                <div class="name-page">
-                    Сервера
+<div class="page-header">
+    <h1 class="page-header-title">Сервера</h1>
+    <div class="buttons">
+        <div class="button" id="remove_server" [ngClass]="{ 'disabled': isButtonDisabled }"
+             (click)="removeServer()">
+            <div class="row">
+                <div class="col-auto pe-0">
+                    <img src="assets/images/trash.svg" alt="">
                 </div>
+                <button class="col-auto my-auto ps-0" [disabled]="isButtonDisabled">
+                    УДАЛИТЬ
+                </button>
             </div>
-            <div class="col-auto my-auto">
-                <div class="buttons">
-                    <div class="button" id="remove_server" [ngClass]="{ 'disabled': isButtonDisabled }" (click)="removeServer()">
-                        <div class="row">
-                            <div class="col-auto pe-0">
-                                <img src="assets/images/trash.svg" alt="">
-                            </div>
-                            <button class="col-auto my-auto ps-0" [disabled]="isButtonDisabled">
-                                УДАЛИТЬ
-                            </button>
-                        </div>
-                    </div>
-                    <div class="button" id="settings_server" [ngClass]="{ 'disabled': isButtonDisabled }" (click)="openSetUpServerDialog()">
-                        <div class="row">
-                            <div class="col-auto pe-0">
-                                <img src="assets/images/settings.svg" alt="">
-                            </div>
-                            <div class="col-auto my-auto ps-0">
-                                НАСТРОИТЬ
-                            </div>
-                        </div>
-                    </div>
-                    <div class="button" id="add_server">
-                        <div class="row">
-                            <div class="col-auto pe-0">
-                                <img src="assets/images/add.svg" alt="">
-                            </div>
-                            <div class="col-auto my-auto ps-0" (click)="openAddServerDialog()">
-                                 ДОБАВИТЬ
-                            </div>
-                        </div>
-                    </div>
+        </div>
+        <div class="button" id="settings_server" [ngClass]="{ 'disabled': isButtonDisabled }"
+             (click)="openSetUpServerDialog()">
+            <div class="row">
+                <div class="col-auto pe-0">
+                    <img src="assets/images/settings.svg" alt="">
+                </div>
+                <div class="col-auto my-auto ps-0">
+                    НАСТРОИТЬ
                 </div>
             </div>
         </div>
-<!--        <div class="search">-->
-<!--            <div class="row">-->
-<!--                <div class="col">-->
-<!--                    <input type="text" name="search" class="search-input" placeholder="Название сервера">-->
-<!--                </div>-->
-<!--                <div class="col-auto">-->
-<!--                    <input type="button" class="search-button" value="ПОИСК">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+        <div class="button" id="add_server">
+            <div class="row">
+                <div class="col-auto pe-0">
+                    <img src="assets/images/add.svg" alt="">
+                </div>
+                <div class="col-auto my-auto ps-0" (click)="openAddServerDialog()">
+                    ДОБАВИТЬ
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-container">
+    <div class="main">
         <div class="servers row">
             <ng-container *ngFor="let server of servers">
                 <div class="server col-lg-6 col-xxl-4" (click)="handleServerClick(server.id)">
                     <div class="row">
                         <div class="col-auto">
-                            <input type="radio" class="checkbox" name="server" [value]="server.id" (change)="handleRadioChange(server.id)" [checked]="server.id === selectedServerId">
+                            <input type="radio" class="checkbox" name="server" [value]="server.id"
+                                   (change)="handleRadioChange(server.id)" [checked]="server.id === selectedServerId">
                         </div>
                         <div class="col">
                             <div class="box-server">
@@ -65,7 +52,7 @@
                                     {{ server.serverName }}
                                 </div>
                                 <div class="server-buttons">
-                                    <button mat-flat-button  (click)="goToDonatorBonusOnServer(server.id)">
+                                    <button mat-flat-button (click)="goToDonatorBonusOnServer(server.id)">
                                         БОНУСЫ ИГРОКОВ
                                     </button>
                                     <button mat-flat-button (click)="openServerBonusDialog(server.id)">
@@ -76,7 +63,6 @@
                         </div>
                     </div>
                 </div>
-
             </ng-container>
         </div>
     </div>
@@ -145,74 +131,13 @@
     </div>
 </div>
 
-<!-- окно добавления нового сервера -->
-<div class="popup" id="addserver">
-    <div class="container">
-        <div class="crest">✕</div>
-        <div class="title">
-            Добавить сервер
-        </div>
-        <div class="form">
-            <div class="row">
-                <div class="col-12 mb-4">
-                    <div class="label">
-                        Имя сервера
-                    </div>
-                    <div class="input">
-                        <input type="text" placeholder="Name" name="name">
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="label">
-                        URL
-                    </div>
-                    <div class="input">
-                        <input type="text" placeholder="https://" name="url">
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="label">
-                        User name
-                    </div>
-                    <div class="input">
-                        <input type="text" placeholder="Name" name="username">
-                    </div>
-                </div>
-                <div class="col-6 mt-2">
-                    <div class="label">
-                        DB
-                    </div>
-                    <div class="input">
-                        <input type="text" placeholder="database" name="database">
-                    </div>
-                </div>
-                <div class="col-6 mt-2">
-                    <div class="label">
-                        Пароль
-                    </div>
-                    <div class="input">
-                        <input type="password" placeholder="*******" name="password">
-                    </div>
-                </div>
-                <div class="col-12 mt-4">
-                    <div class="buttons justify-content-end">
-                        <div class="button">
-                            ТЕСТ
-                        </div>
-                        <div class="button">
-                            СОХРАНИТЬ
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="mat-paginator">
-    <mat-paginator [length]="totalElements"
-                   [pageSize]="pageSize"
-                   [pageSizeOptions]="[6, 9, 18, 100]"
-                   [showFirstLastButtons]="true"
-                   (page)="onPageChange($event)">
+<div class="paginator-container">
+    <mat-paginator
+            [length]="totalElements"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[6, 9, 18, 100]"
+            [showFirstLastButtons]="true"
+            (page)="onPageChange($event)">
     </mat-paginator>
 </div>
+

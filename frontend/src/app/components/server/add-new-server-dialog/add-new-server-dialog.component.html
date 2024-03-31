@@ -1,0 +1,42 @@
+<div>
+    <header class="dialog-header">
+        <h2 class="dialog-header-title">Добавить новый сервер</h2>
+    </header>
+
+    <mat-dialog-content class="dialog-content">
+        <mat-card>
+            <mat-card-content>
+                <mat-form-field class="input-field" appearance="outline">
+                    <mat-label>Имя сервера</mat-label>
+                    <input matInput [formControl]="serverNameControl" [defaultValue]="">
+                    <mat-error *ngIf="serverNameControl.hasError('required')">Поле обязательно к заполнению</mat-error>
+                </mat-form-field>
+                <mat-form-field class="input-field" appearance="outline">
+                    <mat-label>jdbc:postgresql://localhost:5432/serverName</mat-label>
+                    <input matInput [formControl]="serverUrlControl" [defaultValue]="">
+                    <mat-error *ngIf="serverUrlControl.hasError('required')">Поле обязательно к заполнению</mat-error>
+                </mat-form-field>
+                <mat-form-field class="input-field" appearance="outline">
+                    <mat-label>UserName</mat-label>
+                    <input matInput [formControl]="serverUserNameControl" [defaultValue]="">
+                    <mat-error *ngIf="serverUserNameControl.hasError('required')">Поле обязательно к заполнению
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="input-field" appearance="outline">
+                    <mat-label>password</mat-label>
+                    <input matInput [formControl]="serverPasswordControl" [defaultValue]="" type="password">
+                    <mat-error *ngIf="serverPasswordControl.hasError('required')">Поле обязательно к заполнению
+                    </mat-error>
+                </mat-form-field>
+            </mat-card-content>
+        </mat-card>
+    </mat-dialog-content>
+    <!--<mat-dialog-actions align="start">-->
+    <!--    <button class="cancel-button" mat-button mat-dialog-close>Отмена</button>-->
+    <!--    <button class="ok-button" mat-button (click)="addNewServer()" [disabled]="!isFormValid()" mat-dialog-close>Сохранить</button>-->
+    <!--</mat-dialog-actions>-->
+    <mat-dialog-actions align="center">
+        <button class="dialog-button" mat-button (click)="isFormValid() ? addNewServer() : {}">СОХРАНИТЬ</button>
+        <button class="dialog-button" mat-button mat-dialog-close>ЗАКРЫТЬ</button>
+    </mat-dialog-actions>
+</div>

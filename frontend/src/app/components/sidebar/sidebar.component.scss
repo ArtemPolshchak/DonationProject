@@ -78,19 +78,22 @@
 }
 
 .logout-button {
-  background-color: transparent;
-  position: absolute;
-  bottom: 20px;
-  left: 60px;
-  color: #C5CCD3;
-  border: none;
-  padding: 5px 10px;
+  width: fit-content;
+  border-radius: 4px;
+  background-color: #9cacbaff;
+  color: #41556466;
+  border: 1px solid #415564;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px 16px;
   cursor: pointer;
+  letter-spacing: 1.25px;
+  position: fixed;
+  bottom: 20px;
+  left: 52px;
+  z-index: 1000;
+  &:hover {
+    background-color: #41556466;
+    color: #C5CCD3;
+  }
 }
-
-.logout-button:hover {
-  background-color: #344451;
-  color: #C5CCD3;
-}
-
-
