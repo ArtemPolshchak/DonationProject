@@ -28,6 +28,12 @@
                     </div>
                 </th>
                 <th>
+                    <p>Количество донатов</p>
+                    <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}" (click)="sort('totalCompletedTransactions')">
+                        <mat-icon>filter_list</mat-icon>
+                    </button>
+                </th>
+                <th>
                     <p>Общая сумма доната</p>
                     <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}" (click)="sort('totalDonations')">
                         <mat-icon>filter_list</mat-icon>
@@ -38,6 +44,7 @@
             <tbody>
             <tr *ngFor="let donator of donators">
                 <td> {{ donator.email }}</td>
+                <td> {{ donator.totalCompletedTransactions }}</td>
                 <td> {{ donator.totalDonations }}</td>
                 <td><button class="custom-button-history" (click)="goToDonatorStory(donator.id, donator.email, donator.totalDonations)">История</button></td>
 
