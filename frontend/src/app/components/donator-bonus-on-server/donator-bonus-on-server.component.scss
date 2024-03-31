@@ -2,6 +2,10 @@ body {
   font-family: Arial, sans-serif;
 }
 
+.page-container {
+  padding-top: 112px;
+}
+
 .section {
   margin-bottom: 20px;
 }
@@ -24,34 +28,6 @@ h1, h2 {
   color: #333;
 }
 
-.search {
-  margin-top: 15px;
-  & input {
-    font-size: 16px;
-    display: block;
-    &.search-input {
-      width: 100%;
-      border-radius: 4px;
-      padding: 12px;
-      font-size: 16px;
-      font-weight: 400;
-      outline: none;
-      border: none
-    }
-    &.search-button {
-      padding: 13px 68px;
-      height: 100%;
-      letter-spacing: 1.25px;
-      font-size: 14px;
-      font-weight: 500;
-      border: none;
-      background: #f5f5f5;
-      border-radius: 4px;
-      outline: none;
-    }
-  }
-}
-
 .button {
   background: #425565;
   color: #C5CCD3;
@@ -59,21 +35,6 @@ h1, h2 {
   font-size: 14px;
   font-weight: 500;
   margin-left: 4px;
-}
-
-.back-button {
-  display: inline-block;
-  padding: 10px 20px;
-  background: #425565;
-  color: #C5CCD3;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.back-button:hover {
-  background: #425565;
 }
 
 .custom-button-settings {

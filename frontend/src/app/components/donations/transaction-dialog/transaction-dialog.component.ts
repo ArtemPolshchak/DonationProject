@@ -50,8 +50,7 @@ export class TransactionDialog implements OnInit {
     transaction: Transaction;
     serverControl = new FormControl<Server | null>(null, Validators.required);
     contributionControl = new FormControl('',
-        [Validators.required,
-            Validators.pattern(/\d/)]
+        [Validators.required, Validators.pattern(/^\d+$/)]
     )
     emailControl = new FormControl('',
         [Validators.required,
@@ -132,6 +131,7 @@ export class TransactionDialog implements OnInit {
         this.transaction.id ?
             this.updateTransaction(this.transaction) :
             this.createTransaction(this.transaction);
+        this.dialogRef.close();
     }
 
     openSnackBar(message: string) {

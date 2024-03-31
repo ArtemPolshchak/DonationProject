@@ -1,40 +1,57 @@
-<body>
-<h1>Донаторы</h1>
-<button class="back-button" (click)="goToServers()">НАЗАД</button>
-<div class="search">
-    <div class="row">
-        <div class="col">
-            <input type="text" name="search" class="search-input" placeholder="Почта донатора" matInput [(ngModel)]="donatorsMail">
+<div class="page-header">
+    <h1 class="page-header-title">Донаторы</h1>
+        <div class="back-button" (click)="goToServers()">
+            <div class="row">
+                <div class="col-auto pe-0">
+                    <img src="assets/images/previous-button-icon.svg" alt="">
+                </div>
+                <div class="col-auto my-auto ps-0">
+                    НАЗАД
+                </div>
+            </div>
         </div>
-        <div class="col-auto">
-            <input type="button" class="search-button" value="ПОИСК" (click)="applySearch()">
-        </div>
-    </div>
 </div>
-<div>
-    <div class="section">
-        <table>
-            <thead>
-            <tr>
-                <th>Почта Донатора</th>
-                <th>Персональный бонус</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let donator of donatorBonus">
-                <td> {{ donator.email  }} </td>
-                <td> {{ donator.personalBonus + "%" }}</td>
-                <td> <button class="custom-button-settings" (click)="openSetupBonusDialog(donator.id)">Изменить бонус</button></td>
-            </tr>
-            </tbody>
-        </table>
+
+<div class="page-navbar">
+    <div class="search">
+        <input type="text" name="search" class="search-input" placeholder="Почта донатора" matInput
+               [(ngModel)]="donatorsMail">
+        <input type="button" class="search-button" value="ПОИСК" (click)="applySearch()">
     </div>
 </div>
 
-<mat-paginator [length]="totalElements"
-               [pageSize]="pageSize"
-               [pageSizeOptions]="[5, 10, 25, 100]"
-               [showFirstLastButtons]="true"
-               (page)="onPageChange($event)">
-</mat-paginator>
-</body>
+<div class="page-container">
+    <div>
+        <div class="section">
+            <table>
+                <thead>
+                <tr>
+                    <th>Почта Донатора</th>
+                    <th>Персональный бонус</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let donator of donatorBonus">
+                    <td> {{ donator.email  }} </td>
+                    <td> {{ donator.personalBonus + "%" }}</td>
+                    <td>
+                        <button class="custom-button-settings" (click)="openSetupBonusDialog(donator.id)">Изменить
+                            бонус
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div class="paginator-container">
+    <mat-paginator [length]="totalElements"
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   [showFirstLastButtons]="true"
+                   (page)="onPageChange($event)">
+    </mat-paginator>
+</div>
