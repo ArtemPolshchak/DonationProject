@@ -1,6 +1,6 @@
 HELP.md
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/
+!**/src/main/**/target/
 !**/src/test/**/target/
 
 backend/target/
@@ -15,6 +15,7 @@ frontend/dist
 frontend/tmp
 frontend/out-tsc
 frontend/bazel-out
+frontend/src/main
 
 #Node
 frontend/node_modules
