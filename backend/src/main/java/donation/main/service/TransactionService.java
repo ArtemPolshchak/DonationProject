@@ -119,7 +119,7 @@ public class TransactionService {
                     .getTotalDonations()
                     .add(transaction.getContributionAmount());
 
-            Long count = transaction.getDonator().getTotalCompletedTransactions() + 1;
+            Integer count = transaction.getDonator().getTotalCompletedTransactions() + 1;
 
             transaction.getDonator().setTotalCompletedTransactions(count);
             transaction.getDonator().setTotalDonations(amount);
