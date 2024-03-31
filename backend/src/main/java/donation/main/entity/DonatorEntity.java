@@ -38,7 +38,7 @@ public class DonatorEntity {
     @Builder.Default
     private BigDecimal totalDonations = BigDecimal.ZERO;
 
-    @Column(name = "total_completed_transactions", columnDefinition = "int default 0")
+    @Column(name = "total_completed_transactions")
     @Builder.Default
     private Integer totalCompletedTransactions = 0;
 }
