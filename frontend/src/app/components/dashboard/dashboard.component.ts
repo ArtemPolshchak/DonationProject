@@ -10,13 +10,13 @@ import {MatInputModule} from "@angular/material/input";
 import { FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
 import {NO_IMG_PATH} from "../../enums/app-constans";
 import { NgxColorsModule} from 'ngx-colors';
 import {Server} from "../../common/server";
 import {StorageService} from "../../services/storage.service";
 import {ToasterService} from "../../services/toaster.service";
+import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
     selector: 'app-dashboard',
@@ -34,18 +34,20 @@ import {ToasterService} from "../../services/toaster.service";
         NgxColorsModule,
         NgIf,
         ReactiveFormsModule,
-        NgStyle
+        NgStyle,
+        MatCard,
+        MatCardContent
     ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-
+    donatorsMail: string = '';
     servers: Server[] = [];
     transactionState: string[] = [TransactionState.IN_PROGRESS];
     transactions: Transaction[] = [];
     pageNumber: number = 0;
-    pageSize: number = 5;
+    pageSize: number = 10;
     totalElements: number = 0;
     sortState: string = "dateCreated,desc";
     durationInSeconds: number = 5;

@@ -43,13 +43,13 @@ export class DonatorsComponent implements OnInit {
     servers: Server[] = [];
     donators: Donator[] = [];
     pageNumber: number = 0;
-    pageSize: number = 10;
+    pageSize: number = 25;
     totalElements: number = 0;
     selectedItem: any;
     donatorsMail?: string;
     ascOrder: string = "asc";
     descOrder: string = "desc";
-    defaultSortField: string = "email"
+    defaultSortField: string = "totalDonations"
     sortOrder: string = this.descOrder;
     sortState: string = this.defaultSortField + ',' + this.sortOrder;
 

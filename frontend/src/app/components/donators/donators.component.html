@@ -1,66 +1,90 @@
-<body>
-<h1>Список всех донаторов</h1>
-<div class="search">
-    <div class="row">
-        <div class="col">
-            <input type="text" name="search" class="search-input" placeholder="Почта донатора" matInput [(ngModel)]="donatorsMail">
-        </div>
-        <div class="col-auto">
-            <input type="button" class="search-button" value="ПОИСК" (click)="getAll()">
+<div class="page-header">
+    <h1 class="page-header-title">Список донаторов</h1>
+    <div class="buttons">
+        <div class="button" (click)="createDonatorDialog()">
+            <div class="row">
+                <div class="col-auto pe-0">
+                    <img src="assets/images/add.svg" alt="">
+                </div>
+                <div class="col-auto my-auto ps-0">
+                    ДОБАВИТЬ
+                </div>
+            </div>
         </div>
     </div>
+</div>
+<div class="page-navbar">
+    <div class="search">
+        <input type="text" name="search" class="search-input" placeholder="Почта донатора" matInput
+               [(ngModel)]="donatorsMail">
+        <input type="button" class="search-button" value="ПОИСК" (click)="getAll()">
+    </div>
+</div>
 
-</div>
-<div class="d-flex">
-    <button class="custom-button" (click)="createDonatorDialog()">Добавить донатора</button>
-</div>
-<div>
-    <div class="section">
-        <table>
-            <thead>
-            <tr>
-                <th>
-                    <div class="row">
-                        <p>Почта Донатора</p>
-                        <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}" (click)="sort('email')">
-                            <mat-icon>filter_list</mat-icon>
+<div class="page-container">
+    <div>
+        <div class="section">
+            <table>
+                <thead>
+                <tr>
+                    <th>
+                        <div style="display: flex">
+                            <p style="margin-top: auto">Почта Донатора</p>
+                            <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}"
+                                    (click)="sort('email')">
+                                <mat-icon>filter_list</mat-icon>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <div style="display: flex">
+                            <p style="margin-top: auto">Количество донатов</p>
+                            <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}"
+                                    (click)="sort('totalCompletedTransactions')">
+                                <mat-icon>filter_list</mat-icon>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <div style="display: flex">
+                            <p style="margin-top: auto">Общая сумма доната</p>
+                            <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}"
+                                    (click)="sort('totalDonations')">
+                                <mat-icon>filter_list</mat-icon>
+                            </button>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let donator of donators">
+                    <td> {{ donator.email }}</td>
+                    <td> {{ donator.totalCompletedTransactions }}</td>
+                    <td> {{ donator.totalDonations }}</td>
+                    <td>
+                        <button class="custom-button-history"
+                                (click)="goToDonatorStory(donator.id, donator.email, donator.totalDonations)">История
                         </button>
-                    </div>
-                </th>
-                <th>
-                    <p>Количество донатов</p>
-                    <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}" (click)="sort('totalCompletedTransactions')">
-                        <mat-icon>filter_list</mat-icon>
-                    </button>
-                </th>
-                <th>
-                    <p>Общая сумма доната</p>
-                    <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}" (click)="sort('totalDonations')">
-                        <mat-icon>filter_list</mat-icon>
-                    </button>
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let donator of donators">
-                <td> {{ donator.email }}</td>
-                <td> {{ donator.totalCompletedTransactions }}</td>
-                <td> {{ donator.totalDonations }}</td>
-                <td><button class="custom-button-history" (click)="goToDonatorStory(donator.id, donator.email, donator.totalDonations)">История</button></td>
+                    </td>
 
-                <td><button class="custom-button-history" (click)="openPersonalBonusDialog(donator.id)">Настройки персональных бонусов</button></td>
+                    <td>
+                        <button class="custom-button-history" (click)="openPersonalBonusDialog(donator.id)">Настройки
+                            персональных бонусов
+                        </button>
+                    </td>
 
-            </tr>
-            </tbody>
-        </table>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
 
-<mat-paginator [length]="totalElements"
-               [pageSize]="pageSize"
-               [pageSizeOptions]="[5, 10, 25, 100]"
-               [showFirstLastButtons]="true"
-               (page)="onPageChange($event)">
-</mat-paginator>
-</body>
+<div class="paginator-container">
+    <mat-paginator [length]="totalElements"
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   [showFirstLastButtons]="true"
+                   (page)="onPageChange($event)">
+    </mat-paginator>
+</div>

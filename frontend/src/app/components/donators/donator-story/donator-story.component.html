@@ -1,115 +1,127 @@
-<button class="back-button" (click)="goToDonators()">НАЗАД</button>
-
-<div>
-    <h1>История донатов:  {{ email }}</h1>
-    <div class="search">
-        <div>
-            <div class="d-flex">
-                <select class="form-select me-2" aria-label="Сорт" [(ngModel)]="sortState"
-                        (change)="applyFilterSort()">
-                    <option selected disabled hidden>СОРТИРОВКА</option>
-                    <option value="dateCreated,asc">ПО ДАТЕ ОТ СТАРЫХ К НОВЫМ</option>
-                    <option value="dateCreated,desc">ПО ДАТЕ ОТ НОВЫХ К СТАРЫМ</option>
-                </select>
-                <select class="form-select me-2" aria-label="Сервер" [(ngModel)]="selectedServer"
-                        (change)="applyFilterSort()">
-                    <option value="">ВСЕ СЕРВЕРА</option>
-                    <option selected disabled hidden>Оберіть сервер</option>
-                    <option *ngFor="let server of servers" [value]="server.serverName">{{ server.serverName }}</option>
-                </select>
+<div class="page-header">
+    <h1 class="page-header-title">История донатов:  {{ email }}</h1>
+    <div class="back-button" (click)="goToDonators()">
+        <div class="row">
+            <div class="col-auto pe-0">
+                <img src="assets/images/previous-button-icon.svg" alt="">
+            </div>
+            <div class="col-auto my-auto ps-0">
+                НАЗАД
             </div>
         </div>
     </div>
 </div>
-<h1>Общая сумма донатов: {{ totalDonations }}</h1>
-<div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
-    <div class="item" ngbAccordionItem="{{transaction.id}}">
-<!--        <h2 ngbAccordionHeader>-->
-<!--            <button ngbAccordionButton>-->
-<!--                [ Дата создания {{transaction.dateCreated | date: 'dd MMMM yyyy'}}]-->
-<!--                [ Дата подтверждения {{transaction.dateApproved | date: 'dd MMMM yyyy'}}]-->
-<!--                [ Айди сервера {{ transaction.serverName}}]-->
-<!--                [ Почта донатора {{transaction.donatorEmail}}]-->
-<!--                [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]-->
-<!--            </button>-->
-<!--        </h2>-->
-        <h2 ngbAccordionHeader>
-            <button ngbAccordionButton>
+<div class="page-navbar">
+    <div class="search">
+        <select class="form-select me-2" aria-label="Сорт" [(ngModel)]="sortState"
+                (change)="applyFilterSort()">
+            <option selected disabled hidden>СОРТИРОВКА</option>
+            <option value="dateCreated,asc">ПО ДАТЕ ОТ СТАРЫХ К НОВЫМ</option>
+            <option value="dateCreated,desc">ПО ДАТЕ ОТ НОВЫХ К СТАРЫМ</option>
+        </select>
+        <select class="form-select me-2" aria-label="Сервер" [(ngModel)]="selectedServer"
+                (change)="applyFilterSort()">
+            <option value="">ВСЕ СЕРВЕРА</option>
+            <option selected disabled hidden>Оберіть сервер</option>
+            <option *ngFor="let server of servers"
+                    [value]="server.serverName">{{ server.serverName }}</option>
+        </select>
+    </div>
+</div>
+
+<div class="page-container">
+    <h1>Общая сумма донатов: {{ totalDonations }}</h1>
+    <div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
+        <div class="item" ngbAccordionItem="{{transaction.id}}">
+            <!--        <h2 ngbAccordionHeader>-->
+            <!--            <button ngbAccordionButton>-->
+            <!--                [ Дата создания {{transaction.dateCreated | date: 'dd MMMM yyyy'}}]-->
+            <!--                [ Дата подтверждения {{transaction.dateApproved | date: 'dd MMMM yyyy'}}]-->
+            <!--                [ Айди сервера {{ transaction.serverName}}]-->
+            <!--                [ Почта донатора {{transaction.donatorEmail}}]-->
+            <!--                [ Общая сумма Доната {{transaction.totalAmount | currency: 'USD'}}]-->
+            <!--            </button>-->
+            <!--        </h2>-->
+            <h2 ngbAccordionHeader>
+                <button ngbAccordionButton>
                     <span *ngIf="transaction.dateCreated">
                         Дата создания: <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</strong>
                     </span>
-                <span *ngIf="transaction.dateCreated">
+                    <span *ngIf="transaction.dateCreated">
                         Дата подтверждения: <strong>{{transaction.dateApproved | date: 'dd MMMM yyyy'}}</strong>
                     </span>
-                <span *ngIf="transaction.serverName">
+                    <span *ngIf="transaction.serverName">
                         Имя сервера: <strong>{{ transaction.serverName}}</strong>
                     </span>
-                <span *ngIf="transaction.donatorEmail">
+                    <span *ngIf="transaction.donatorEmail">
                         Почта донатора: <strong>{{transaction.donatorEmail}}</strong>
                     </span>
-                <span *ngIf="transaction.totalAmount">
+                    <span *ngIf="transaction.totalAmount">
                         Общая сумма Доната: <strong>{{transaction.totalAmount | currency: 'USD'}}</strong>
                     </span>
-            </button>
-        </h2>
-        <div ngbAccordionCollapse>
-            <div ngbAccordionBody>
-<!--                <ng-template>-->
-<!--                    [Кто создал {{transaction.createdBy}}]-->
-<!--                    [Кто подтвердил {{transaction.approvedBy}}]-->
-<!--                    [бонусы Сервера {{transaction.serverBonusPercentage}}%]-->
-<!--                    [Бонысы Донатора {{transaction.personalBonusPercentage}}%]-->
-<!--                    [сумма зачисления  {{transaction.contributionAmount}}]-->
-<!--                    [Общая сумма доната  {{transaction.totalAmount}}]-->
-<!--                    [Состояние заявки {{transaction.state}}]-->
-<!--                    [Комментарий {{transaction.comment}}]-->
-<!--                    <div class="image-container">-->
-<!--                        <img #image  [src]="transaction.image" alt="img"-->
-<!--                             onerror="this.src='s../../assets/images/no-image.jpg'"-->
-<!--                             width="20%" style="cursor:pointer"-->
-<!--                             (click)="openImageDialog(image.src)"/>-->
-<!--                    </div>-->
-<!--                </ng-template>-->
+                </button>
+            </h2>
+            <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                    <!--                <ng-template>-->
+                    <!--                    [Кто создал {{transaction.createdBy}}]-->
+                    <!--                    [Кто подтвердил {{transaction.approvedBy}}]-->
+                    <!--                    [бонусы Сервера {{transaction.serverBonusPercentage}}%]-->
+                    <!--                    [Бонысы Донатора {{transaction.personalBonusPercentage}}%]-->
+                    <!--                    [сумма зачисления  {{transaction.contributionAmount}}]-->
+                    <!--                    [Общая сумма доната  {{transaction.totalAmount}}]-->
+                    <!--                    [Состояние заявки {{transaction.state}}]-->
+                    <!--                    [Комментарий {{transaction.comment}}]-->
+                    <!--                    <div class="image-container">-->
+                    <!--                        <img #image  [src]="transaction.image" alt="img"-->
+                    <!--                             onerror="this.src='s../../assets/images/no-image.jpg'"-->
+                    <!--                             width="20%" style="cursor:pointer"-->
+                    <!--                             (click)="openImageDialog(image.src)"/>-->
+                    <!--                    </div>-->
+                    <!--                </ng-template>-->
 
-                <div class="container">
-                <div class="image-container">
-                <img #image [src]="transaction.image" alt="img"
-                     onerror="this.src='s../../assets/images/no-image.jpg'"
-                     width="100%" style="cursor:pointer"
-                     (click)="openImageDialog(image.src)"/>
-                </div>
+                    <div class="container">
+                        <div class="image-container">
+                            <img #image [src]="transaction.image" alt="img"
+                                 onerror="this.src='s../../assets/images/no-image.jpg'"
+                                 width="100%" style="cursor:pointer"
+                                 (click)="openImageDialog(image.src)"/>
+                        </div>
 
-                <div class="info-block">
-                <div>
-                    Кто создал: <strong>{{transaction.createdBy}}</strong> (Дата создания <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy, HH:mm'}})</strong>
-                </div>
-                <div>
-                    Кто подтвердил: <strong>{{transaction.approvedBy}}</strong> (Дата подтверждения <strong>{{transaction.dateApproved | date: 'dd MMMM yyyy, HH:mm'}})</strong>
-                </div>
-                <div>
-                    Комментарий: <strong>{{transaction.comment}}</strong>
-                </div>
-                <div>
-                    Состояние заявки: <strong>{{transaction.state}}</strong>
-                </div>
-                </div>
+                        <div class="info-block">
+                            <div>
+                                Кто создал: <strong>{{transaction.createdBy}}</strong> (Дата создания
+                                <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy, HH:mm'}})</strong>
+                            </div>
+                            <div>
+                                Кто подтвердил: <strong>{{transaction.approvedBy}}</strong> (Дата подтверждения
+                                <strong>{{transaction.dateApproved | date: 'dd MMMM yyyy, HH:mm'}})</strong>
+                            </div>
+                            <div>
+                                Комментарий: <strong>{{transaction.comment}}</strong>
+                            </div>
+                            <div>
+                                Состояние заявки: <strong>{{transaction.state}}</strong>
+                            </div>
+                        </div>
 
-                <div class="amounts-block">
-                <div>
-                    Бонус сервера: <strong>{{transaction.serverBonusPercentage}}%</strong>
-                </div>
-                <div>
-                    Персональный бонус: <strong>{{transaction.personalBonusPercentage}}%</strong>
-                </div>
-                <div>
-                    Бонысы Админа: <strong>{{transaction.adminBonus}}</strong>
-                </div>
-                <div>
-                    Сумма доната: <strong>{{transaction.contributionAmount}}</strong>
-                </div>
-                <div>
-                    Сумма к зачислению: <strong>{{transaction.totalAmount}}</strong>
-                </div>
+                        <div class="amounts-block">
+                            <div>
+                                Бонус сервера: <strong>{{transaction.serverBonusPercentage}}%</strong>
+                            </div>
+                            <div>
+                                Персональный бонус: <strong>{{transaction.personalBonusPercentage}}%</strong>
+                            </div>
+                            <div>
+                                Бонысы Админа: <strong>{{transaction.adminBonus}}</strong>
+                            </div>
+                            <div>
+                                Сумма доната: <strong>{{transaction.contributionAmount}}</strong>
+                            </div>
+                            <div>
+                                Сумма к зачислению: <strong>{{transaction.totalAmount}}</strong>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -117,10 +129,12 @@
     </div>
 </div>
 
-<mat-paginator [length]="totalElements"
-               [pageSize]="pageSize"
-               [pageSizeOptions]="[5, 10, 25, 100]"
-               [showFirstLastButtons]="true"
-               (page)="onPageChange($event)">
-</mat-paginator>
+<div class="paginator-container">
+    <mat-paginator [length]="totalElements"
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   [showFirstLastButtons]="true"
+                   (page)="onPageChange($event)">
+    </mat-paginator>
+</div>
 

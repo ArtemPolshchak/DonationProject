@@ -3,24 +3,25 @@ import {ServerService} from "../../services/server.service";
 import {Server} from "../../common/server";
 import {NgClass, NgForOf} from "@angular/common";
 import {MatDialog} from "@angular/material/dialog";
-import {AddNewServerDialogComponent} from "./server.add-new-server-dialog/add-new-server-dialog.component";
-import {ServerBonusComponent} from "./server.server-bonus-dialog/server-bonus.component";
+import {AddNewServerDialogComponent} from "./add-new-server-dialog/add-new-server-dialog.component";
+import {ServerBonusComponent} from "./server-bonus-dialog/server-bonus.component";
 import {Router} from "@angular/router";
 import {SetupServerDialogComponent} from "./setup-server-dialog/setup-server-dialog.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatButton} from "@angular/material/button";
-import {HttpEventType} from "@angular/common/http";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {MatFooterRow} from "@angular/material/table";
 
 @Component({
   selector: 'app-server',
   standalone: true,
-  imports: [
-    NgForOf,
-    NgClass,
-    MatButton,
-    MatPaginator
-  ],
+    imports: [
+        NgForOf,
+        NgClass,
+        MatButton,
+        MatPaginator,
+        MatFooterRow
+    ],
   templateUrl: './server.component.html',
   styleUrl: './server.component.scss'
 })

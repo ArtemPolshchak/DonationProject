@@ -8,7 +8,6 @@ import {FormsModule} from "@angular/forms";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {User} from "../../common/user";
 import {UserService} from "../../services/user.service";
-import {StorageService} from "../../services/storage.service";
 
 @Component({
   selector: 'app-user',
@@ -26,10 +25,10 @@ import {StorageService} from "../../services/storage.service";
     MatLabel,
     NgIf,
   ],
-  templateUrl: './user.component.html',
-  styleUrl: './user.component.scss'
+  templateUrl: './users.component.html',
+  styleUrl: './users.component.scss'
 })
-export class UserComponent implements OnInit {
+export class UsersComponent implements OnInit {
   users: User[] = [];
   pageNumber: number = 0;
   pageSize: number = 10;
@@ -37,10 +36,15 @@ export class UserComponent implements OnInit {
 
   constructor(private userService: UserService) {
   }
+
   ngOnInit(): void {
     this.userService.getAll(this.pageNumber, this.pageSize)
         .subscribe(data => {
           this.users = data.content
         })
+  }
+
+  createUser() {
+
   }
 }
