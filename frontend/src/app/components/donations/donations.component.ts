@@ -50,7 +50,7 @@ import {NO_IMG_PATH} from "../../enums/app-constans";
 export class DonationsComponent implements OnInit {
     transactions: Transaction[] = [];
     pageNumber: number = 0;
-    pageSize: number = 5;
+    pageSize: number = 10;
     totalElements: number = 0;
     transactionState: string[] = ["IN_PROGRESS", "CANCELLED", "COMPLETED"];
     serverNames?: string[];

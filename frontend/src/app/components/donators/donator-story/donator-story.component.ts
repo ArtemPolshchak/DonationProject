@@ -56,7 +56,7 @@ export class DonatorStoryComponent implements OnInit {
     servers: Server[] = [];
     serverNames?: string[];
     pageNumber: number = 0;
-    pageSize: number = 5;
+    pageSize: number = 10;
     totalElements: number = 0;
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;

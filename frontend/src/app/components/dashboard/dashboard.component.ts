@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit {
     transactionState: string[] = [TransactionState.IN_PROGRESS];
     transactions: Transaction[] = [];
     pageNumber: number = 0;
-    pageSize: number = 5;
+    pageSize: number = 10;
     totalElements: number = 0;
     sortState: string = "dateCreated,desc";
     durationInSeconds: number = 5;
