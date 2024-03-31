@@ -18,8 +18,8 @@ public interface TransactionMapper {
 
     @Mapping(source = "server.serverName", target = "serverName")
     @Mapping(source = "donator.email", target = "donatorEmail")
-    @Mapping(source = "createdByUser.email", target = "createdBy")
-    @Mapping(source = "approvedByUser.email", target = "approvedBy")
+    @Mapping(source = "createdByUser.username", target = "createdBy")
+    @Mapping(source = "approvedByUser.username", target = "approvedBy")
     TransactionResponseDto toDto(TransactionEntity entity);
 
     @Mapping(target = "color", expression = "java(Color.decode(dto.color()))")
