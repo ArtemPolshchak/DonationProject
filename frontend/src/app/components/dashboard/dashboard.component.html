@@ -75,7 +75,7 @@
                                         Комментарий: <strong>{{transaction.comment}}</strong>
                                     </div>
                                     <mat-form-field appearance="outline"
-                                                    style="margin-top: 12px; margin-bottom: -20px; width: max-content">
+                                                    style="margin-top: 12px; margin-bottom: -20px; width: max-content; max-width: 100%">
                                         <mat-label>Бонус Админа</mat-label>
                                         <input matInput [(ngModel)]="transaction.adminBonus"
                                                [disabled]="transaction.state === TransactionState.CANCELLED">

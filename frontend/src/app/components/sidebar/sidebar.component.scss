@@ -79,9 +79,10 @@
 
 .logout-button {
   width: fit-content;
+  min-width: fit-content;
   border-radius: 4px;
   background-color: #9cacbaff;
-  color: #41556466;
+  color: #425565;
   border: 1px solid #415564;
   font-size: 16px;
   font-weight: 500;
@@ -90,8 +91,10 @@
   letter-spacing: 1.25px;
   position: fixed;
   bottom: 20px;
-  left: 52px;
-  z-index: 1000;
+  left: 36px;
+  & img {
+    margin-right: 12px;
+  }
   &:hover {
     background-color: #41556466;
     color: #C5CCD3;

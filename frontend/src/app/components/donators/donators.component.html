@@ -1,12 +1,12 @@
 <div class="page-header">
     <h1 class="page-header-title">Список донаторов</h1>
     <div class="buttons">
-        <div class="button">
+        <div class="button" (click)="createDonatorDialog()">
             <div class="row">
                 <div class="col-auto pe-0">
                     <img src="assets/images/add.svg" alt="">
                 </div>
-                <div class="col-auto my-auto ps-0" (click)="createDonatorDialog()">
+                <div class="col-auto my-auto ps-0">
                     ДОБАВИТЬ
                 </div>
             </div>
@@ -38,6 +38,15 @@
                     </th>
                     <th>
                         <div style="display: flex">
+                            <p style="margin-top: auto">Количество донатов</p>
+                            <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}"
+                                    (click)="sort('totalCompletedTransactions')">
+                                <mat-icon>filter_list</mat-icon>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <div style="display: flex">
                             <p style="margin-top: auto">Общая сумма доната</p>
                             <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}"
                                     (click)="sort('totalDonations')">
@@ -50,6 +59,7 @@
                 <tbody>
                 <tr *ngFor="let donator of donators">
                     <td> {{ donator.email }}</td>
+                    <td> {{ donator.totalCompletedTransactions }}</td>
                     <td> {{ donator.totalDonations }}</td>
                     <td>
                         <button class="custom-button-history"

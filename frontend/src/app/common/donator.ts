@@ -1,7 +1,6 @@
 export class Donator {
-
     id!: number;
     email!: string;
-    totalDonations?: number;
-
+    totalDonations!: number;
+    totalCompletedTransactions!: number;
 }

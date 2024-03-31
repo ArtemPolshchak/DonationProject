@@ -87,7 +87,8 @@ public class TransactionService {
         setTransactionState(transaction, dto.state());
         setTransactionAdminBonus(transaction, dto.adminBonus());
         setDonatorTotalDonation(transaction.getState(), transaction);
-        transaction = transaction.toBuilder().dateApproved(LocalDateTime.now())
+        transaction = transaction.toBuilder()
+                .dateApproved(LocalDateTime.now())
                 .approvedByUser(userService.getCurrentUser()).build();
         return transactionMapper.toDto(transactionRepository.save(transaction));
     }
@@ -116,9 +117,13 @@ public class TransactionService {
             BigDecimal amount = transaction
                     .getDonator()
                     .getTotalDonations()
-                    .add(transaction
-                            .getContributionAmount());
+                    .add(transaction.getContributionAmount());
+
+            Integer count = transaction.getDonator().getTotalCompletedTransactions() + 1;
+
+            transaction.getDonator().setTotalCompletedTransactions(count);
             transaction.getDonator().setTotalDonations(amount);
+
         }
     }
 

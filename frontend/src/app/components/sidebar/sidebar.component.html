@@ -16,5 +16,15 @@
                 </mat-button-toggle-group>
         </nav>
     </div>
-    <button class="logout-button" mat-button (click)="logout()">Logout</button>
+    <div class="logout-button" (click)="logout()">
+        <div class="row">
+            <div class="col-auto pe-0">
+                <img src="assets/images/logout-button.svg" alt="">
+            </div>
+            <div class="col-auto my-auto ps-0">
+                Logout
+            </div>
+        </div>
+    </div>
+<!--    <button class="logout-button" mat-button (click)="logout()">Logout</button>-->
 </aside>

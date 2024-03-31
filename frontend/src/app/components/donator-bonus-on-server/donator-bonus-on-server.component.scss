@@ -2,6 +2,10 @@ body {
   font-family: Arial, sans-serif;
 }
 
+.page-container {
+  padding-top: 112px;
+}
+
 .section {
   margin-bottom: 20px;
 }
@@ -31,21 +35,6 @@ h1, h2 {
   font-size: 14px;
   font-weight: 500;
   margin-left: 4px;
-}
-
-.back-button {
-  display: inline-block;
-  padding: 10px 20px;
-  background: #425565;
-  color: #C5CCD3;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.back-button:hover {
-  background: #425565;
 }
 
 .custom-button-settings {

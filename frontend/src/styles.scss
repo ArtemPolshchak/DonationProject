@@ -41,7 +41,7 @@ body {
   margin-left: 202px;
 
   mat-paginator {
-    --mat-paginator-container-background-color: rgba(197, 204, 212, 0.87);
+    --mat-paginator-container-background-color: rgba(197, 204, 212, 0.92);
     --mat-paginator-container-text-size: 14px;
     --mat-paginator-container-text-weight: 500;
     width: fit-content;
@@ -160,6 +160,34 @@ body {
   cursor: pointer;
   user-select: none;
   margin-right: 16px;
+  letter-spacing: 1.25px;
+  & img {
+    margin-right: 12px;
+  }
+  &:last-child {
+    margin-right: 0;
+  }
+  &:hover {
+    background-color: #41556466;
+  }
+}
+
+.back-button {
+  width: fit-content;
+  min-width: fit-content;
+  border-radius: 4px;
+  background-color: #b7bec6;
+  border: 1px solid #415564;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 16px;
+  cursor: pointer;
+  user-select: none;
+  margin-right: 16px;
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translate(0, -50%);
   letter-spacing: 1.25px;
   & img {
     margin-right: 12px;

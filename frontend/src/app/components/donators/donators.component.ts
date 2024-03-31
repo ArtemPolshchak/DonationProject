@@ -43,7 +43,7 @@ export class DonatorsComponent implements OnInit {
     servers: Server[] = [];
     donators: Donator[] = [];
     pageNumber: number = 0;
-    pageSize: number = 5;
+    pageSize: number = 10;
     totalElements: number = 0;
     selectedItem: any;
     donatorsMail?: string;
@@ -93,7 +93,7 @@ export class DonatorsComponent implements OnInit {
     }
 
     getAll(): void {
-        this.sortState = this.defaultSortField + ',' + this.sortOrder;
+       // this.sortState = this.defaultSortField + ',' + this.sortOrder;
         this.donatorService.search(this.pageNumber, this.pageSize, this.sortState, this.donatorsMail)
             .subscribe((data) => {
                 this.donators = data.content;
