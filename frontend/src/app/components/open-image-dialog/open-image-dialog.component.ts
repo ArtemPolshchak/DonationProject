@@ -30,7 +30,7 @@ export class OpenImageDialogComponent implements OnInit{
 
     ngOnInit(): void {
         this.transactionService.getImage(this.transactionId).subscribe({
-            next: (response) => this.image = response.image,
+            next: (response) => this.image = response.data,
             error: (err) => this.toaster.openSnackBar(`Can't get image! ${err}`)
         })
     }

@@ -59,5 +59,5 @@ export interface GetTransactionResponse {
 }
 
 export interface ImageResponse {
-    image: string;
+    data: string;
 }

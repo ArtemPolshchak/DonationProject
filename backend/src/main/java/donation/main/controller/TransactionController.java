@@ -1,7 +1,9 @@
 package donation.main.controller;
 
-import donation.main.dto.transactiondto.TransactionConfirmRequestDto;
+import jakarta.validation.Valid;
 import donation.main.dto.transactiondto.CreateTransactionDto;
+import donation.main.dto.transactiondto.ImageResponseDto;
+import donation.main.dto.transactiondto.TransactionConfirmRequestDto;
 import donation.main.dto.transactiondto.TransactionImageDto;
 import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
@@ -9,7 +11,6 @@ import donation.main.dto.transactiondto.UpdateTransactionDto;
 import donation.main.enumeration.TransactionState;
 import donation.main.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,15 +39,6 @@ public class TransactionController {
     public ResponseEntity<Page<TransactionResponseDto>> getAll(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(transactionService.getAll(pageable));
-    }
-
-    // TODO: 01.04.2024 delete?
-    @Operation(summary = "get all transactions by State")
-    @GetMapping("/state")
-    public ResponseEntity<Page<TransactionResponseDto>> getAllTransactionsByState(
-            @RequestParam TransactionState state, Pageable page) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(transactionService.findAllByState(state, page));
     }
 
     @Operation(summary = "get all transactions from one Donator")
@@ -90,7 +82,7 @@ public class TransactionController {
 
     @Operation(summary = "return full size transaction image")
     @GetMapping("/{transactionId}/img")
-    public ResponseEntity<TransactionImageDto> getImage(@PathVariable Long transactionId) {
+    public ResponseEntity<ImageResponseDto> getImage(@PathVariable Long transactionId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(transactionService.getImage(transactionId));
     }

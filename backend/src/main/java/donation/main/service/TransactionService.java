@@ -1,15 +1,11 @@
 package donation.main.service;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.List;
 import java.util.SortedSet;
 import donation.main.dto.transactiondto.CreateTransactionDto;
+import donation.main.dto.transactiondto.ImageResponseDto;
 import donation.main.dto.transactiondto.TransactionConfirmRequestDto;
-import donation.main.dto.transactiondto.TransactionImageDto;
 import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
 import donation.main.dto.transactiondto.UpdateTransactionDto;
@@ -23,13 +19,14 @@ import donation.main.exception.AccessForbiddenException;
 import donation.main.exception.InvalidTransactionState;
 import donation.main.exception.TransactionNotFoundException;
 import donation.main.exception.UserNotFoundException;
+import donation.main.mapper.ImageMapper;
 import donation.main.mapper.TransactionMapper;
+import donation.main.repository.ImageRepository;
 import donation.main.repository.TransactionRepository;
 import donation.main.repository.spec.SpecificationBuilder;
 import donation.main.util.ImageProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
@@ -47,6 +44,8 @@ public class TransactionService {
     private final ServerService serverService;
     private final TransactionStateManager transactionStateManager;
     private final UserService userService;
+    private final ImageRepository imageRepository;
+    private final ImageMapper imageMapper;
 
     @Transactional
     public TransactionResponseDto create(CreateTransactionDto dto) {
@@ -78,10 +77,6 @@ public class TransactionService {
         return transactionRepository.findAllByDonatorId(donatorId, pageable).map(transactionMapper::toDto);
     }
 
-    public Page<TransactionResponseDto> findAllByState(TransactionState state, Pageable pageable) {
-        return transactionRepository.findAllByState(state, pageable).map(transactionMapper::toDto);
-    }
-
     public Page<TransactionResponseDto> search(TransactionSpecDto specDto, Pageable pageable) {
         Specification<TransactionEntity> spec = specificationBuilder.build(specDto);
         return transactionRepository.findAll(spec, pageable).map(transactionMapper::toDto);
@@ -100,10 +95,9 @@ public class TransactionService {
     }
 
     @Transactional(readOnly = true)
-    public TransactionImageDto getImage(Long id) {
-        String base64Image = transactionRepository.findImageByTransactionId(id).map(t -> new String(t.getImage())).
-                orElseThrow(() -> new TransactionNotFoundException("Can't find transaction by id: " + id));
-        return new TransactionImageDto(base64Image);
+    public ImageResponseDto getImage(Long id) {
+        return imageRepository.findByTransactionId(id).map(imageMapper::toDto)
+                .orElseThrow(() -> new TransactionNotFoundException("Can't find transaction by id: " + id));
     }
 
     private TransactionEntity findById(Long transactionId) {
@@ -150,6 +144,7 @@ public class TransactionService {
             throw new UserNotFoundException("Unable to retrieve user information from Security Context.");
         }
         if (image != null) {
+            imageRepository.save(transaction.getImage());
             transaction.setImagePreview(ImageProcessor.resizeImage(image));
         }
         BigDecimal donatorBonus = server.getDonatorsBonuses().getOrDefault(donatorEntity, BigDecimal.ZERO);

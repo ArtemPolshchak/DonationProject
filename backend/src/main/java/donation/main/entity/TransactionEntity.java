@@ -6,12 +6,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import java.awt.*;
@@ -49,9 +51,8 @@ public class TransactionEntity {
     @Builder.Default
     private LocalDateTime dateCreated = LocalDateTime.now();
 
-    @Lob
-    @Column(name = "image")
-    private byte[] image;
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    private ImageEntity image;
 
     @Lob
     @Column(name = "image_preview")

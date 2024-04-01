@@ -75,7 +75,7 @@
                             <div class="image-container">
                                 <img #image [src]="transaction.imagePreview ? transaction.imagePreview : NO_IMG_PATH" alt="img"
                                      width="100%" style="cursor:pointer"
-                                     (click)="transaction.imagePreview ? openImageDialog(image.src) : {}"/>
+                                     (click)="transaction.imagePreview ? openImageDialog(transaction.id) : {}"/>
                             </div>
 
                             <div class="info-block">
