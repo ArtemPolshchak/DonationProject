@@ -2,7 +2,7 @@ package donation.main.dto.serverbonusdto;
 
 import java.math.BigDecimal;
 
-public record CreateServerBonusesDto(
+public record ServerBonusDto(
          BigDecimal fromAmount,
 
          BigDecimal toAmount,
