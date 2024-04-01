@@ -2,6 +2,7 @@ package donation.main.mapper;
 
 import donation.main.config.MapperConfig;
 import donation.main.dto.transactiondto.CreateTransactionDto;
+import donation.main.dto.transactiondto.TransactionConfirmRequestDto;
 import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.UpdateTransactionDto;
 import donation.main.entity.TransactionEntity;
@@ -14,6 +15,7 @@ import java.awt.*;
 @Mapper(config = MapperConfig.class, imports = Color.class)
 public interface TransactionMapper {
 
+    @Mapping(target = "color", expression = "java(Color.decode(dto.color()))")
     TransactionEntity toEntity(CreateTransactionDto dto);
 
     @Mapping(source = "server.serverName", target = "serverName")
