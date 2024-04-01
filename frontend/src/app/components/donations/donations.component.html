@@ -73,9 +73,9 @@
                     <div ngbAccordionBody>
                         <div class="container">
                             <div class="image-container">
-                                <img #image [src]="transaction.image ? transaction.image : NO_IMG_PATH" alt="img"
+                                <img #image [src]="transaction.imagePreview ? transaction.imagePreview : NO_IMG_PATH" alt="img"
                                      width="100%" style="cursor:pointer"
-                                     (click)="transaction.image ? openImageDialog(image.src) : {}"/>
+                                     (click)="transaction.imagePreview ? openImageDialog(image.src) : {}"/>
                             </div>
 
                             <div class="info-block">

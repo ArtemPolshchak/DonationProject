@@ -82,7 +82,7 @@
 
                     <div class="container">
                         <div class="image-container">
-                            <img #image [src]="transaction.image" alt="img"
+                            <img #image [src]="transaction.imagePreview" alt="img"
                                  onerror="this.src='s../../assets/images/no-image.jpg'"
                                  width="100%" style="cursor:pointer"
                                  (click)="openImageDialog(image.src)"/>

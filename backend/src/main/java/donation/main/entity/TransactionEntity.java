@@ -53,6 +53,10 @@ public class TransactionEntity {
     @Column(name = "image")
     private byte[] image;
 
+    @Lob
+    @Column(name = "image_preview")
+    private byte[] imagePreview;
+
     @Column(name = "state", nullable = false)
     @Enumerated(EnumType.STRING)
     @Builder.Default

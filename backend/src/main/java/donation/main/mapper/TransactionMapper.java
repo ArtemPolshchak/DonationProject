@@ -23,7 +23,6 @@ public interface TransactionMapper {
     TransactionResponseDto toDto(TransactionEntity entity);
 
     @Mapping(target = "color", expression = "java(Color.decode(dto.color()))")
-    @Mapping(target = "image", expression = "java(imageBase64ToByteArray(dto.image()))")
     TransactionEntity update(@MappingTarget TransactionEntity entity, UpdateTransactionDto dto);
 
     default byte[] imageBase64ToByteArray(String image) {

@@ -58,9 +58,9 @@
                 <div ngbAccordionBody style="display: flex; align-items: center; justify-content: center">
                     <div class="transaction-container">
                         <div class="image-container">
-                            <img #image [src]="transaction.image ? transaction.image : NO_IMG_PATH" alt="img"
+                            <img #image [src]="transaction.imagePreview ? transaction.imagePreview : NO_IMG_PATH" alt="img"
                                  width="100%" style="cursor:pointer"
-                                 (click)="transaction.image ? openImageDialog(image.src) : {}"/>
+                                 (click)="openImageDialog(transaction.id)"/>
                         </div>
                         <div style="width: 100%; padding-left: 40px; padding-right: 40px;  display: flex; justify-content: start">
                             <mat-card style="margin-right: 12px; width: 30%">

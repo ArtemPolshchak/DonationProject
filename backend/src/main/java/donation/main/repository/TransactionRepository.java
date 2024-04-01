@@ -1,5 +1,8 @@
 package donation.main.repository;
 
+import java.util.List;
+import java.util.Optional;
+import donation.main.dto.transactiondto.TransactionImageView;
 import donation.main.entity.TransactionEntity;
 import donation.main.enumeration.TransactionState;
 import org.springframework.data.domain.Page;
@@ -18,7 +21,12 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
     @Query("FROM TransactionEntity t WHERE t.donator.id = :donatorId AND t.state = 'COMPLETED'")
     Page<TransactionEntity> findAllByDonatorId(Long donatorId, Pageable pageable);
 
-    @NonNull
     @EntityGraph(attributePaths = {"approvedByUser", "createdByUser", "donator", "server"})
-    Page<TransactionEntity> findAll(@NonNull Specification<TransactionEntity> spec, @NonNull Pageable pageable);
+    List<TransactionEntity> findAllByIdIn(List<Long> ids);
+
+    @Query("SELECT t.image as image FROM TransactionEntity t WHERE t.id = :id")
+    Optional<TransactionImageView> findImageByTransactionId(Long id);
+
+    @Query("SELECT id FROM TransactionEntity")
+    Page<Long> findAllIds(Specification<TransactionEntity> spec, Pageable pageable);
 }

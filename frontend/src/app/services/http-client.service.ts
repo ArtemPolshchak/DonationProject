@@ -2,6 +2,7 @@ import {HttpClient, HttpHandler, HttpHeaders, HttpParams} from "@angular/common/
 import {StorageService} from "./storage.service";
 import {Injectable} from "@angular/core";
 import {HttpMethod} from "../enums/http-method";
+import {Observable} from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -15,14 +16,14 @@ export class HttpClientService extends HttpClient {
         super(handler);
     }
 
-    fetch<T>(url: string, auth: boolean, params?: HttpParams) {
+    fetch<T>(url: string, auth: boolean, params?: HttpParams): Observable<T> {
         let options: any = {};
         params ? options.params = params : options;
         auth ? options.headers = this.getHeaders() : options;
         return this.request<T>(HttpMethod.GET, url, <Object>options);
     }
 
-    load<T>(method: HttpMethod, url: string, auth: boolean, body?: any) {
+    load<T>(method: HttpMethod, url: string, auth: boolean, body?: any): Observable<T> {
         let options: any = {};
         body ? options.body = body : options;
         auth ? options.headers = this.getHeaders() : options;

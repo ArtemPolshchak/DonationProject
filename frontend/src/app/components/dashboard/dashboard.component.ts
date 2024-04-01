@@ -91,6 +91,7 @@ export class DashboardComponent implements OnInit {
     getAll(): void {
         this.transactionService.getAllWithSearch(this.pageNumber, this.pageSize, this.sortState, this.transactionState)
             .subscribe((data) => {
+                console.log(data.content)
                     this.transactions = data.content;
                     this.totalElements = data.totalElements;
             });
@@ -123,10 +124,9 @@ export class DashboardComponent implements OnInit {
         this.toasterService.openSnackBar(message);
     }
 
-
-    openImageDialog(image: string) {
+    openImageDialog(transactionId: number) {
         this.dialog.open(OpenImageDialogComponent, {
-            data: image,
+            data: transactionId,
         });
     }
 

@@ -2,6 +2,7 @@ package donation.main.controller;
 
 import donation.main.dto.transactiondto.TransactionConfirmRequestDto;
 import donation.main.dto.transactiondto.CreateTransactionDto;
+import donation.main.dto.transactiondto.TransactionImageDto;
 import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
 import donation.main.dto.transactiondto.UpdateTransactionDto;
@@ -39,6 +40,7 @@ public class TransactionController {
                 .body(transactionService.getAll(pageable));
     }
 
+    // TODO: 01.04.2024 delete?
     @Operation(summary = "get all transactions by State")
     @GetMapping("/state")
     public ResponseEntity<Page<TransactionResponseDto>> getAllTransactionsByState(
@@ -56,7 +58,8 @@ public class TransactionController {
 
     @Operation(summary = "search transaction")
     @GetMapping("/search")
-    public ResponseEntity<Page<TransactionResponseDto>> search(TransactionSpecDto specDto, Pageable page) {
+    public ResponseEntity<Page<TransactionResponseDto>> search(
+            TransactionSpecDto specDto, Pageable page) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(transactionService.search(specDto, page));
     }
@@ -83,5 +86,12 @@ public class TransactionController {
             @PathVariable Long transactionId, @RequestBody TransactionConfirmRequestDto dto) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(transactionService.changeState(transactionId, dto));
+    }
+
+    @Operation(summary = "return full size transaction image")
+    @GetMapping("/{transactionId}/img")
+    public ResponseEntity<TransactionImageDto> getImage(@PathVariable Long transactionId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(transactionService.getImage(transactionId));
     }
 }
