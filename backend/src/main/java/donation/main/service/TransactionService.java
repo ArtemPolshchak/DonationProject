@@ -138,15 +138,14 @@ public class TransactionService {
             TransactionEntity transaction, DonatorEntity donatorEntity,
             ServerEntity server, BigDecimal contributionAmount, String image) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof UserEntity user) {
-            transaction.setCreatedByUser(user);
-        } else {
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserEntity user)) {
             throw new UserNotFoundException("Unable to retrieve user information from Security Context.");
         }
         if (image != null) {
             imageRepository.save(transaction.getImage());
             transaction.setImagePreview(ImageProcessor.resizeImage(image));
         }
+        transaction.setCreatedByUser(user);
         BigDecimal donatorBonus = server.getDonatorsBonuses().getOrDefault(donatorEntity, BigDecimal.ZERO);
         BigDecimal serverBonus = getServerBonus(contributionAmount, server);
         BigDecimal totalBonus = donatorBonus.add(serverBonus);

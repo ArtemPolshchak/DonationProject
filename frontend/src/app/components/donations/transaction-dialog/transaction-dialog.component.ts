@@ -18,6 +18,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {StorageService} from "../../../services/storage.service";
 import {LAST_SERVER_KEY} from "../../../enums/app-constans";
 import {ImageProcessorService} from "../../../services/image-processor.service";
+import {NgxColorsModule} from "ngx-colors";
 
 @Component({
     selector: 'app-transaction-dialog',
@@ -37,6 +38,7 @@ import {ImageProcessorService} from "../../../services/image-processor.service";
         MatSelect,
         MatOption,
         MatIcon,
+        NgxColorsModule,
     ],
     templateUrl: './transaction-dialog.component.html',
     styleUrl: './transaction-dialog.component.scss'
@@ -59,6 +61,17 @@ export class TransactionDialog implements OnInit {
     imageForm = this.fb.group({
         photo: [],
     });
+    color!: string;
+    hideColorPicker: boolean = true;
+    hideTextInput: boolean = true;
+    colors: Array<any> = [
+        "#D3D3D3",
+        "#fd8888",
+        "#9dfc9e",
+        "#84d4ff",
+        "#ffeb8a",
+    ];
+
 
     constructor(private fb: UntypedFormBuilder,
                 private dialogRef: MatDialogRef<TransactionDialog>,
@@ -141,9 +154,14 @@ export class TransactionDialog implements OnInit {
     }
 
     private createTransaction(transaction: Transaction) {
+        if(this.color) {
+            transaction.color = this.color;
+        }
+
         this.transactionService.create(transaction).subscribe({
                 next: (result) => {
                     this.transactionResponse.emit(result)
+
                     StorageService.addItem(LAST_SERVER_KEY, JSON.stringify(this.serverControl.value?.id));
                     this.openSnackBar("Транзакция успешно создана")
                 },
@@ -155,6 +173,10 @@ export class TransactionDialog implements OnInit {
     }
 
     private updateTransaction(transaction: Transaction) {
+        if(this.color) {
+            transaction.color = this.color;
+        }
+
         this.transactionService.update(transaction).subscribe({
                 next: (result) => {
                     this.transactionResponse.emit(result)
