@@ -1,6 +1,17 @@
 <div>
     <header class="dialog-header">
         <h2 class="dialog-header-title">Create Transaction</h2>
+        <div class="btn">
+            <ngx-colors
+                    colorsAnimation="popup"
+                    [hideTextInput]="hideTextInput"
+                    [hideColorPicker]="hideColorPicker"
+                    [palette]="colors"
+                    ngx-colors-trigger
+                    style="display: inline-block; margin:5px;"
+                    (change)="color = $event">
+            </ngx-colors>
+        </div>
     </header>
 
     <mat-dialog-content>

@@ -13,5 +13,6 @@ public record CreateTransactionDto(
         String image,
         String comment,
         @NotNull
-        Long serverId
+        Long serverId,
+        String color
 ) { }
