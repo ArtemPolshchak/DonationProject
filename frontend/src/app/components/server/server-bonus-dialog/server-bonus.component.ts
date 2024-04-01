@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, Output} from '@angular/core';
+import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions, MatDialogClose,
@@ -11,11 +11,12 @@ import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {NgForOf, NgIf} from "@angular/common";
 import {
-  AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule,
+  AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule,
   ValidatorFn, Validators
 } from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
 import {ServerBonusService} from "../../../services/server-bonus.service";
+import {ServerBonuses} from "../../../common/server-bonuses";
 
 
 function noOverlapBonusValidator(): ValidatorFn {
@@ -102,9 +103,15 @@ function validBonusRangeValidator(): ValidatorFn {
   templateUrl: './server-bonus.component.html',
   styleUrl: './server-bonus.component.scss'
 })
-export class ServerBonusComponent {
+export class ServerBonusComponent implements OnInit{
   bonusesForm: FormGroup;
   @Output() componentResponse = new EventEmitter();
+  serverBonuses: ServerBonuses[] = [];
+  serverId!: number;
+  fromAmount = new FormControl('');
+  toAmount = new FormControl('');
+  bonusPercentage = new FormControl('');
+
 
   constructor(
       public dialogRef: MatDialogRef<ServerBonusComponent>,
@@ -117,7 +124,11 @@ export class ServerBonusComponent {
     }, {
       validators: [noOverlapBonusValidator(), validBonusRangeValidator()]
     });
+    this.serverId = data.serverId;
+  }
 
+  ngOnInit(): void {
+    this.getServerBonuses();
   }
 
   isButtonDisabled(): boolean {
@@ -145,10 +156,9 @@ export class ServerBonusComponent {
 
   save(): void {
     if (this.bonusesForm.valid) {
-      const serverId = this.data.serverId; // Отримати ідентифікатор сервера з вхідних даних
-      const serverBonuses = this.bonusesForm.value.bonuses; // Отримати список бонусів для відправки на бекенд
+      const serverId = this.data.serverId;
+      const serverBonuses = this.bonusesForm.value.bonuses;
 
-      // Перетворення форми в відповідний формат для відправки на бекенд
       const createServerBonusesDtoArray = serverBonuses.map((bonus: any) => ({
         fromAmount: bonus.from,
         toAmount: bonus.to,
@@ -173,4 +183,11 @@ export class ServerBonusComponent {
     }
   }
 
+  getServerBonuses(): void {
+    this.serverBonusService.getServerBonusesFromServerById(this.serverId)
+        .subscribe((data) => {
+          this.serverBonuses = data.content;
+          // this.bonusesForm.get('bonuses')?.setValue(this.serverBonuses);
+        });
+  }
 }
