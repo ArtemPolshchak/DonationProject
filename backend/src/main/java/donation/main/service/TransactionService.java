@@ -51,9 +51,9 @@ public class TransactionService {
     public TransactionResponseDto create(CreateTransactionDto dto) {
         //todo I temporoarily turn off the validation of external DB
         //donatorService.validateDonatorEmail(dto.donatorEmail());
-        TransactionEntity transaction = transactionMapper.toEntity(dto);
         ServerEntity server = serverService.findById(dto.serverId());
         DonatorEntity donator = donatorService.getByEmailOrCreate(dto.donatorEmail());
+        TransactionEntity transaction = transactionMapper.toEntity(dto);
         transaction = updateTransactionFields(
                 transaction, donator, server, dto.contributionAmount(), dto.image());
         return transactionMapper.toDto(transactionRepository.save(transaction));
@@ -138,7 +138,6 @@ public class TransactionService {
             ServerEntity server, BigDecimal contributionAmount, String image) {
         UserEntity user = authService.getAuthenticatedUser().orElseThrow(() ->
                 new UserNotFoundException("Unable to retrieve user information from Security Context."));
-        setImage(transaction, image);
         BigDecimal donatorBonus = server.getDonatorsBonuses().getOrDefault(donatorEntity, BigDecimal.ZERO);
         BigDecimal serverBonus = getServerBonus(contributionAmount, server);
         BigDecimal totalBonus = donatorBonus.add(serverBonus);
@@ -154,7 +153,6 @@ public class TransactionService {
 
     private void setImage(TransactionEntity transaction, String image) {
         if (image != null) {
-            transaction.getImage().setData(image.getBytes());
             if (transaction.getImage().getId() == null) {
                 imageRepository.save(transaction.getImage());
             }

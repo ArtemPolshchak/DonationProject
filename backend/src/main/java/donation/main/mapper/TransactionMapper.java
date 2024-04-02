@@ -24,6 +24,7 @@ public interface TransactionMapper {
     @Mapping(source = "approvedByUser.username", target = "approvedBy")
     TransactionResponseDto toDto(TransactionEntity entity);
 
+    @Mapping(target = "image", expression = "java(imageMapper.update(entity.getImage(), dto.image()))")
     TransactionEntity update(@MappingTarget TransactionEntity entity, UpdateTransactionDto dto);
 
     default String convertHexToString(Color color) {
