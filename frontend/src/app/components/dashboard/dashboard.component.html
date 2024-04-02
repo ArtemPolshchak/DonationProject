@@ -19,8 +19,16 @@
 <div class="page-container">
     <div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
         <div class="item" ngbAccordionItem="{{transaction.id}}">
-
             <div ngbAccordionHeader style="display: flex; align-items: center">
+                <div class="button cancel-button" style="padding-bottom: 2px; padding-left: 12px; padding-right: 12px"
+                     colorsAnimation="popup"
+                     [hideTextInput]="hideTextInput"
+                     [hideColorPicker]="hideColorPicker"
+                     [palette]="colors"
+                     ngx-colors-trigger
+                     (close)="updateTransactionColor($event, transaction)">
+                    <mat-icon fontIcon="palette" [ngStyle]="{'color':'#425565'}"></mat-icon>
+                </div>
                 <button ngbAccordionButton [ngStyle]="{'background-color': transaction.color}">
                     <div style="width: 100%;  display: flex; align-items: center; justify-content: space-between">
                         <div *ngIf="transaction.dateCreated">
@@ -56,20 +64,6 @@
                             ОТМЕНИТЬ
                         </div>
                     </div>
-                </div>
-                <div class="btn">
-                    <mat-icon
-                            aria-hidden="false"
-                            aria-label="Example home icon"
-                            fontIcon="palette"
-                            colorsAnimation="popup"
-                            [hideTextInput]="hideTextInput"
-                            [hideColorPicker]="hideColorPicker"
-                            [palette]="colors"
-                            ngx-colors-trigger
-                            style="display: inline-block; margin:5px;"
-                            (close)="updateTransactionColor($event, transaction)">
-                    </mat-icon>
                 </div>
             </div>
 
