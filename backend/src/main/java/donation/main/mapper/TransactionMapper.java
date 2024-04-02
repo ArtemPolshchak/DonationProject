@@ -26,9 +26,10 @@ public interface TransactionMapper {
     TransactionResponseDto toDto(TransactionEntity entity);
 
     @Mapping(target = "color", expression = "java(Color.decode(dto.color()))")
+    @Mapping(target = "image", expression = "java(imageMapper.update(entity.getImage(), dto.image()))")
     TransactionEntity update(@MappingTarget TransactionEntity entity, UpdateTransactionDto dto);
 
-    default String convertHexToString(Color color) {
+    default String convertColorToHexString(Color color) {
         String hex = Integer.toHexString(color.getRGB() & 0xffffff);
         if (hex.length() < 6) {
             hex = "0" + hex;

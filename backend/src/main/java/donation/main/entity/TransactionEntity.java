@@ -98,5 +98,5 @@ public class TransactionEntity {
 
     @Column(name = "color")
     @Builder.Default
-    private Color color = Color.decode("#D3D3D3");
+    private Color color = Color.decode("#f5f5f5");
 }

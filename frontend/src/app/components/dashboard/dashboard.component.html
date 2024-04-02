@@ -21,26 +21,6 @@
         <div class="item" ngbAccordionItem="{{transaction.id}}">
 
             <div ngbAccordionHeader style="display: flex; align-items: center">
-                <div class="button" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">
-                    <div class="row">
-                        <div class="col-auto pe-0">
-                            <img src="assets/images/confirm.svg" alt="">
-                        </div>
-                        <div class="col-auto my-auto ps-0">
-                            ПОДТВЕРДИТЬ
-                        </div>
-                    </div>
-                </div>
-                <div class="button cancel-button" style="padding-bottom: 2px; padding-left: 12px; padding-right: 12px"
-                     colorsAnimation="popup"
-                     [hideTextInput]="hideTextInput"
-                     [hideColorPicker]="hideColorPicker"
-                     [palette]="colors"
-                     ngx-colors-trigger
-                     (close)="updateTransactionColor($event, transaction)">
-                    <mat-icon fontIcon="palette" [ngStyle]="{'color':'#425565'}"></mat-icon>
-                </div>
-
                 <button ngbAccordionButton [ngStyle]="{'background-color': transaction.color}">
                     <div style="width: 100%;  display: flex; align-items: center; justify-content: space-between">
                         <div *ngIf="transaction.dateCreated">
@@ -57,6 +37,16 @@
                         </div>
                     </div>
                 </button>
+                <div class="button" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">
+                    <div class="row">
+                        <div class="col-auto pe-0">
+                            <img src="assets/images/confirm.svg" alt="">
+                        </div>
+                        <div class="col-auto my-auto ps-0">
+                            ПОДТВЕРДИТЬ
+                        </div>
+                    </div>
+                </div>
                 <div class="button cancel-button" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">
                     <div class="row">
                         <div class="col-auto pe-0">
@@ -66,6 +56,15 @@
                             ОТМЕНИТЬ
                         </div>
                     </div>
+                </div>
+                <div class="button cancel-button" style="margin-left: 0; padding-bottom: 2px; padding-left: 12px; padding-right: 12px"
+                     colorsAnimation="popup"
+                     [hideTextInput]="hideTextInput"
+                     [hideColorPicker]="hideColorPicker"
+                     [palette]="colors"
+                     ngx-colors-trigger
+                     (close)="updateTransactionColor($event, transaction)">
+                    <mat-icon fontIcon="palette" [ngStyle]="{'color':'#425565'}"></mat-icon>
                 </div>
             </div>
 

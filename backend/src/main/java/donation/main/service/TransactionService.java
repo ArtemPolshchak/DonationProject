@@ -24,13 +24,12 @@ import donation.main.mapper.TransactionMapper;
 import donation.main.repository.ImageRepository;
 import donation.main.repository.TransactionRepository;
 import donation.main.repository.spec.SpecificationBuilder;
+import donation.main.security.AuthenticationService;
 import donation.main.util.ImageProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +43,7 @@ public class TransactionService {
     private final ServerService serverService;
     private final TransactionStateManager transactionStateManager;
     private final UserService userService;
+    private final AuthenticationService authService;
     private final ImageRepository imageRepository;
     private final ImageMapper imageMapper;
 
@@ -61,7 +61,7 @@ public class TransactionService {
 
     @Transactional
     public TransactionResponseDto updateTransaction(Long transactionId, UpdateTransactionDto dto) {
-        TransactionEntity updatedTransaction = transactionMapper.update(findById(transactionId), dto);
+        TransactionEntity updatedTransaction = transactionMapper.update(getById(transactionId), dto);
         ServerEntity server = serverService.findById(dto.serverId());
         DonatorEntity donator = donatorService.getByEmailOrCreate(dto.donatorEmail());
         updatedTransaction = updateTransactionFields(
@@ -73,6 +73,11 @@ public class TransactionService {
         return transactionRepository.findAll(pageable).map(transactionMapper::toDto);
     }
 
+    public TransactionEntity getById(Long transactionId) {
+        return transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new TransactionNotFoundException("Can't find transaction by id: " + transactionId));
+    }
+
     public Page<TransactionResponseDto> findAllTransactionsByDonatorId(Long donatorId, Pageable pageable) {
         return transactionRepository.findAllByDonatorId(donatorId, pageable).map(transactionMapper::toDto);
     }
@@ -82,11 +87,19 @@ public class TransactionService {
         return transactionRepository.findAll(spec, pageable).map(transactionMapper::toDto);
     }
 
+    @Transactional(readOnly = true)
+    public ImageResponseDto getImage(Long id) {
+        return imageRepository.findByTransactionId(id).map(imageMapper::toDto)
+                .orElseThrow(() -> new TransactionNotFoundException("Can't find transaction by id: " + id));
+    }
+
     public TransactionResponseDto changeState(Long id, TransactionConfirmRequestDto dto) {
-        checkUserPermission();
-        TransactionEntity transaction = findById(id);
-        setTransactionState(transaction, dto.state());
-        setTransactionAdminBonus(transaction, dto.adminBonus());
+        if (!authService.hasAdminPermission()) {
+            throw new AccessForbiddenException("Access forbidden. Admin permissions required");
+        }
+        TransactionEntity transaction = getById(id);
+        setState(transaction, dto.state());
+        setAdminBonus(transaction, dto.adminBonus());
         setDonatorTotalDonation(transaction.getState(), transaction);
         transaction = transaction.toBuilder()
                 .dateApproved(LocalDateTime.now())
@@ -94,25 +107,14 @@ public class TransactionService {
         return transactionMapper.toDto(transactionRepository.save(transaction));
     }
 
-    @Transactional(readOnly = true)
-    public ImageResponseDto getImage(Long id) {
-        return imageRepository.findByTransactionId(id).map(imageMapper::toDto)
-                .orElseThrow(() -> new TransactionNotFoundException("Can't find transaction by id: " + id));
-    }
-
-    private TransactionEntity findById(Long transactionId) {
-        return transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new TransactionNotFoundException("Can't find transaction by id: " + transactionId));
-    }
-
-    private void setTransactionAdminBonus(TransactionEntity transaction, BigDecimal adminBonus) {
+    private void setAdminBonus(TransactionEntity transaction, BigDecimal adminBonus) {
         if (adminBonus != null) {
             transaction.setAdminBonus(adminBonus);
             transaction.setTotalAmount(transaction.getTotalAmount().add(adminBonus));
         }
     }
 
-    private void setTransactionState(TransactionEntity transaction, TransactionState newState) {
+    private void setState(TransactionEntity transaction, TransactionState newState) {
         if (!transactionStateManager.isAllowedTransitionState(transaction.getState(), newState)) {
             throw new InvalidTransactionState("This state can't be set up, check state", newState);
         }
@@ -125,37 +127,39 @@ public class TransactionService {
                     .getDonator()
                     .getTotalDonations()
                     .add(transaction.getContributionAmount());
-
             Integer count = transaction.getDonator().getTotalCompletedTransactions() + 1;
-
             transaction.getDonator().setTotalCompletedTransactions(count);
             transaction.getDonator().setTotalDonations(amount);
-
         }
     }
 
     private TransactionEntity updateTransactionFields(
             TransactionEntity transaction, DonatorEntity donatorEntity,
             ServerEntity server, BigDecimal contributionAmount, String image) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !(authentication.getPrincipal() instanceof UserEntity user)) {
-            throw new UserNotFoundException("Unable to retrieve user information from Security Context.");
-        }
-        if (image != null) {
-            imageRepository.save(transaction.getImage());
-            transaction.setImagePreview(ImageProcessor.resizeImage(image));
-        }
-        transaction.setCreatedByUser(user);
+        UserEntity user = authService.getAuthenticatedUser().orElseThrow(() ->
+                new UserNotFoundException("Unable to retrieve user information from Security Context."));
+        setImage(transaction, image);
         BigDecimal donatorBonus = server.getDonatorsBonuses().getOrDefault(donatorEntity, BigDecimal.ZERO);
         BigDecimal serverBonus = getServerBonus(contributionAmount, server);
         BigDecimal totalBonus = donatorBonus.add(serverBonus);
         BigDecimal totalAmount = getTotalAmount(contributionAmount, totalBonus);
         return transaction.toBuilder().donator(donatorEntity)
+                .createdByUser(user)
                 .server(server)
                 .totalAmount(totalAmount)
                 .personalBonusPercentage(donatorBonus)
                 .serverBonusPercentage(serverBonus)
                 .build();
+    }
+
+    private void setImage(TransactionEntity transaction, String image) {
+        if (image != null) {
+            transaction.getImage().setData(image.getBytes());
+            if (transaction.getImage().getId() == null) {
+                imageRepository.save(transaction.getImage());
+            }
+            transaction.setImagePreview(ImageProcessor.resizeImage(image));
+        }
     }
 
     private BigDecimal getTotalAmount(BigDecimal incomingAmount, BigDecimal totalBonus) {
@@ -180,14 +184,5 @@ public class TransactionService {
 
     private BigDecimal countResult(BigDecimal contributionAmount, BigDecimal totalBonus) {
         return contributionAmount.multiply(BigDecimal.ONE.add(totalBonus.divide(BigDecimal.valueOf(100.0))));
-    }
-
-    private void checkUserPermission() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        authentication.getAuthorities().stream()
-                .filter(a -> a.getAuthority().equals("ADMIN"))
-                .findFirst()
-                .orElseThrow(() -> new AccessForbiddenException(
-                        "Access forbidden for the current user. Admin access required"));
     }
 }

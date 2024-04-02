@@ -16,6 +16,14 @@ public interface ImageMapper {
                 : ImageEntity.builder().data(base64Image.getBytes(StandardCharsets.UTF_8)).build();
     }
 
+    default ImageEntity update(ImageEntity entity, String data) {
+        if (entity != null && data != null) {
+            entity.setData(data.getBytes(StandardCharsets.UTF_8));
+            return entity;
+        }
+        return base64ToImage(data);
+    }
+
     default String byteArrayToBase64(byte[] image) {
         return new String(image);
     }
