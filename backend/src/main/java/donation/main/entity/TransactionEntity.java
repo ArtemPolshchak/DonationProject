@@ -51,7 +51,7 @@ public class TransactionEntity {
     @Builder.Default
     private LocalDateTime dateCreated = LocalDateTime.now();
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private ImageEntity image;
 
     @Lob
@@ -88,7 +88,7 @@ public class TransactionEntity {
     @JoinColumn(name = "created_by_user_id")
     private UserEntity createdByUser;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "donator_id")
     private DonatorEntity donator;
 

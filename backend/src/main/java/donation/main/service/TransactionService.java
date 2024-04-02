@@ -80,6 +80,7 @@ public class TransactionService {
         return transactionRepository.findAll(spec, pageable).map(transactionMapper::toDto);
     }
 
+    @Transactional(readOnly = true)
     public ImageResponseDto getImage(Long id) {
         return imageRepository.findByTransactionId(id).map(imageMapper::toDto).orElse(null);
     }
@@ -127,7 +128,7 @@ public class TransactionService {
     private TransactionEntity updateTransactionFields(TransactionEntity transaction, RequestTransactionDto dto) {
         UserEntity user = authService.getAuthenticatedUser().orElseThrow(() ->
                 new UserNotFoundException("Unable to retrieve user information from Security Context."));
-        setImage(transaction, dto.image());
+        setPreviewImage(transaction, dto.image());
         ServerEntity server = serverService.findById(dto.serverId());
         DonatorEntity donator = donatorService.getByEmailOrCreate(dto.donatorEmail());
         BigDecimal donatorBonus = server.getDonatorsBonuses().getOrDefault(donator, BigDecimal.ZERO);
@@ -143,11 +144,8 @@ public class TransactionService {
                 .build();
     }
 
-    private void setImage(TransactionEntity transaction, String image) {
+    private void setPreviewImage(TransactionEntity transaction, String image) {
         if (image != null) {
-            if (transaction.getImage().getId() == null) {
-                imageRepository.save(transaction.getImage());
-            }
             transaction.setImagePreview(ImageProcessor.resizeImage(image));
         } else {
             transaction.setImagePreview(null);
