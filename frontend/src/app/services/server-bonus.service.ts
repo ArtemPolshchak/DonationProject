@@ -19,7 +19,7 @@ export class ServerBonusService {
 
     public getServerBonusesFromServerById(serverId: number) {
         const url: string = `api/server-bonus-settings/${serverId}`;
-        return this.httpClient.fetch<GetServerBonusesResponse>(url, true)
+        return this.httpClient.fetch<ServerBonuses[]>(url, true)
     }
 }
 
@@ -27,8 +27,4 @@ export interface ServerBonusDto {
     fromAmount: number;
     toAmount: number;
     bonusPercentage: number;
-}
-
-export interface GetServerBonusesResponse {
-    content: ServerBonuses[];
 }

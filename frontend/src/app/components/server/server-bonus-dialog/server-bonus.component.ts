@@ -104,13 +104,13 @@ function validBonusRangeValidator(): ValidatorFn {
   styleUrl: './server-bonus.component.scss'
 })
 export class ServerBonusComponent implements OnInit{
-  bonusesForm: FormGroup;
-  @Output() componentResponse = new EventEmitter();
   serverBonuses: ServerBonuses[] = [];
   serverId!: number;
-  fromAmount = new FormControl('');
-  toAmount = new FormControl('');
-  bonusPercentage = new FormControl('');
+  bonusesForm: FormGroup = this.fb.group({
+    bonuses: this.fb.array(this.serverBonuses, Validators.required)
+  }, {
+    validators: [noOverlapBonusValidator(), validBonusRangeValidator()]
+  });
 
 
   constructor(
@@ -119,11 +119,6 @@ export class ServerBonusComponent implements OnInit{
       private fb: FormBuilder,
       private serverBonusService: ServerBonusService
   ) {
-    this.bonusesForm = this.fb.group({
-      bonuses: this.fb.array([], Validators.required)
-    }, {
-      validators: [noOverlapBonusValidator(), validBonusRangeValidator()]
-    });
     this.serverId = data.serverId;
   }
 
@@ -135,13 +130,13 @@ export class ServerBonusComponent implements OnInit{
     return this.bonusesForm.invalid;
   }
 
-  addBonus(): void {
+  addBonus(bonuses?: ServerBonuses): void {
     this.bonuses.push(
         this.fb.group({
           enable: [false, Validators.required],
-          from: [0, [Validators.required, Validators.pattern(/\d/)]],
-          to: [0, [Validators.required, Validators.pattern(/\d/)]],
-          percentage: [0, [Validators.required, Validators.pattern(/^\d+$/), Validators.min(1), Validators.max(100)]]
+          from: [bonuses?.fromAmount || 0, [Validators.required, Validators.pattern(/\d/)]],
+          to: [bonuses?.toAmount || 0, [Validators.required, Validators.pattern(/\d/)]],
+          percentage: [bonuses?.bonusPercentage || 0, [Validators.required, Validators.pattern(/^\d+$/), Validators.min(1), Validators.max(100)]]
         })
     );
   }
@@ -168,14 +163,12 @@ export class ServerBonusComponent implements OnInit{
 
       this.serverBonusService.createOrRecreateBonuses(createServerBonusesDtoArray, serverId).subscribe({
         next: (response) => {
-          this.componentResponse.emit(response);
-          console.log('Server bonuses created or recreated successfully:', response);
           this.dialogRef.close(response); // Закрити діалогове вікно після успішного створення або перестворення бонусів
         },
         error: (error) => {
           // Обробити помилку від бекенда
-          console.error('Error creating or recreating server bonuses:', error);
           // Додати обробку помилки або повідомлення користувачу
+          // + toaster
         }
       });
     } else {
@@ -186,8 +179,8 @@ export class ServerBonusComponent implements OnInit{
   getServerBonuses(): void {
     this.serverBonusService.getServerBonusesFromServerById(this.serverId)
         .subscribe((data) => {
-          this.serverBonuses = data.content;
-          // this.bonusesForm.get('bonuses')?.setValue(this.serverBonuses);
+          this.serverBonuses = data;
+          data.forEach(bonuses => this.addBonus(bonuses));
         });
   }
 }
