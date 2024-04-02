@@ -17,6 +17,7 @@ import {Server} from "../../common/server";
 import {StorageService} from "../../services/storage.service";
 import {ToasterService} from "../../services/toaster.service";
 import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
     selector: 'app-dashboard',
@@ -36,7 +37,8 @@ import {MatCard, MatCardContent} from "@angular/material/card";
         ReactiveFormsModule,
         NgStyle,
         MatCard,
-        MatCardContent
+        MatCardContent,
+        MatIcon
     ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'

@@ -42,8 +42,12 @@
             <button class="btn secondary-button ms-2"
                     (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">Отменить
             </button>
+
             <div class="btn">
-                <ngx-colors
+                <mat-icon
+                        aria-hidden="false"
+                        aria-label="Example home icon"
+                        fontIcon="palette"
                         colorsAnimation="popup"
                         [hideTextInput]="hideTextInput"
                         [hideColorPicker]="hideColorPicker"
@@ -51,7 +55,7 @@
                         ngx-colors-trigger
                         style="display: inline-block; margin:5px;"
                         (close)="updateTransactionColor($event, transaction)">
-                </ngx-colors>
+                </mat-icon>
             </div>
 
             <div ngbAccordionCollapse>
