@@ -1,10 +1,10 @@
 package donation.main.service;
 
-import java.awt.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.SortedSet;
 import donation.main.dto.transactiondto.CreateTransactionDto;
+import donation.main.dto.transactiondto.ImageResponseDto;
 import donation.main.dto.transactiondto.TransactionConfirmRequestDto;
 import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
@@ -16,14 +16,15 @@ import donation.main.entity.TransactionEntity;
 import donation.main.entity.UserEntity;
 import donation.main.enumeration.TransactionState;
 import donation.main.exception.AccessForbiddenException;
-import donation.main.exception.EmailNotFoundException;
 import donation.main.exception.InvalidTransactionState;
 import donation.main.exception.TransactionNotFoundException;
 import donation.main.exception.UserNotFoundException;
-import donation.main.externaldb.service.ExternalDonatorService;
+import donation.main.mapper.ImageMapper;
 import donation.main.mapper.TransactionMapper;
+import donation.main.repository.ImageRepository;
 import donation.main.repository.TransactionRepository;
 import donation.main.repository.spec.SpecificationBuilder;
+import donation.main.util.ImageProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +44,8 @@ public class TransactionService {
     private final ServerService serverService;
     private final TransactionStateManager transactionStateManager;
     private final UserService userService;
+    private final ImageRepository imageRepository;
+    private final ImageMapper imageMapper;
 
     @Transactional
     public TransactionResponseDto create(CreateTransactionDto dto) {
@@ -51,7 +54,8 @@ public class TransactionService {
         TransactionEntity transaction = transactionMapper.toEntity(dto);
         ServerEntity server = serverService.findById(dto.serverId());
         DonatorEntity donator = donatorService.getByEmailOrCreate(dto.donatorEmail());
-        transaction = updateTransactionFields(transaction, donator, server, dto.contributionAmount());
+        transaction = updateTransactionFields(
+                transaction, donator, server, dto.contributionAmount(), dto.image());
         return transactionMapper.toDto(transactionRepository.save(transaction));
     }
 
@@ -60,7 +64,8 @@ public class TransactionService {
         TransactionEntity updatedTransaction = transactionMapper.update(findById(transactionId), dto);
         ServerEntity server = serverService.findById(dto.serverId());
         DonatorEntity donator = donatorService.getByEmailOrCreate(dto.donatorEmail());
-        updatedTransaction = updateTransactionFields(updatedTransaction, donator, server, dto.contributionAmount());
+        updatedTransaction = updateTransactionFields(
+                updatedTransaction, donator, server, dto.contributionAmount(), dto.image());
         return transactionMapper.toDto(transactionRepository.save(updatedTransaction));
     }
 
@@ -70,10 +75,6 @@ public class TransactionService {
 
     public Page<TransactionResponseDto> findAllTransactionsByDonatorId(Long donatorId, Pageable pageable) {
         return transactionRepository.findAllByDonatorId(donatorId, pageable).map(transactionMapper::toDto);
-    }
-
-    public Page<TransactionResponseDto> findAllByState(TransactionState state, Pageable pageable) {
-        return transactionRepository.findAllByState(state, pageable).map(transactionMapper::toDto);
     }
 
     public Page<TransactionResponseDto> search(TransactionSpecDto specDto, Pageable pageable) {
@@ -93,9 +94,15 @@ public class TransactionService {
         return transactionMapper.toDto(transactionRepository.save(transaction));
     }
 
+    @Transactional(readOnly = true)
+    public ImageResponseDto getImage(Long id) {
+        return imageRepository.findByTransactionId(id).map(imageMapper::toDto)
+                .orElseThrow(() -> new TransactionNotFoundException("Can't find transaction by id: " + id));
+    }
+
     private TransactionEntity findById(Long transactionId) {
         return transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new TransactionNotFoundException("Transaction not found with id: " + transactionId));
+                .orElseThrow(() -> new TransactionNotFoundException("Can't find transaction by id: " + transactionId));
     }
 
     private void setTransactionAdminBonus(TransactionEntity transaction, BigDecimal adminBonus) {
@@ -127,14 +134,18 @@ public class TransactionService {
         }
     }
 
-    private TransactionEntity updateTransactionFields(TransactionEntity transaction, DonatorEntity donatorEntity,
-                                                      ServerEntity server, BigDecimal contributionAmount) {
+    private TransactionEntity updateTransactionFields(
+            TransactionEntity transaction, DonatorEntity donatorEntity,
+            ServerEntity server, BigDecimal contributionAmount, String image) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof UserEntity user) {
-            transaction.setCreatedByUser(user);
-        } else {
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserEntity user)) {
             throw new UserNotFoundException("Unable to retrieve user information from Security Context.");
         }
+        if (image != null) {
+            imageRepository.save(transaction.getImage());
+            transaction.setImagePreview(ImageProcessor.resizeImage(image));
+        }
+        transaction.setCreatedByUser(user);
         BigDecimal donatorBonus = server.getDonatorsBonuses().getOrDefault(donatorEntity, BigDecimal.ZERO);
         BigDecimal serverBonus = getServerBonus(contributionAmount, server);
         BigDecimal totalBonus = donatorBonus.add(serverBonus);

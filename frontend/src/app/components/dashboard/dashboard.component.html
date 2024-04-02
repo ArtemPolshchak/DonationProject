@@ -20,51 +20,67 @@
     <div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
         <div class="item" ngbAccordionItem="{{transaction.id}}">
 
-            <h2 ngbAccordionHeader [ngStyle]="{'background-color': transaction.color}">
-                <button ngbAccordionButton>
-        <span *ngIf="transaction.dateCreated">
-          Дата создания: <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</strong>
-        </span>
-                    <span *ngIf="transaction.serverName">
-          Имя сервера: <strong>{{ transaction.serverName}}</strong>
-        </span>
-                    <span *ngIf="transaction.donatorEmail">
-          Почта донатора: <strong>{{transaction.donatorEmail}}</strong>
-        </span>
-                    <span *ngIf="transaction.totalAmount">
-          Общая сумма Доната: <strong>{{transaction.totalAmount | currency: 'USD'}}</strong>
-        </span>
+            <div ngbAccordionHeader style="display: flex; align-items: center">
+                <button ngbAccordionButton [ngStyle]="{'background-color': transaction.color}">
+                    <div style="width: 100%;  display: flex; align-items: center; justify-content: space-between">
+                        <div *ngIf="transaction.dateCreated">
+                            Дата создания: <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</strong>
+                        </div>
+                        <div *ngIf="transaction.serverName">
+                            Имя сервера: <strong>{{ transaction.serverName}}</strong>
+                        </div>
+                        <div *ngIf="transaction.donatorEmail">
+                            Почта донатора: <strong>{{transaction.donatorEmail}}</strong>
+                        </div>
+                        <div *ngIf="transaction.totalAmount">
+                            Общая сумма Доната: <strong>{{transaction.totalAmount | currency: 'USD'}}</strong>
+                        </div>
+                    </div>
                 </button>
-            </h2>
-            <button class="btn primary-button ms-2"
-                    (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">Подтвердить
-            </button>
-            <button class="btn secondary-button ms-2"
-                    (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">Отменить
-            </button>
-
-            <div class="btn">
-                <mat-icon
-                        aria-hidden="false"
-                        aria-label="Example home icon"
-                        fontIcon="palette"
-                        colorsAnimation="popup"
-                        [hideTextInput]="hideTextInput"
-                        [hideColorPicker]="hideColorPicker"
-                        [palette]="colors"
-                        ngx-colors-trigger
-                        style="display: inline-block; margin:5px;"
-                        (close)="updateTransactionColor($event, transaction)">
-                </mat-icon>
+                <div class="button" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">
+                    <div class="row">
+                        <div class="col-auto pe-0">
+                            <img src="assets/images/confirm.svg" alt="">
+                        </div>
+                        <div class="col-auto my-auto ps-0">
+                            ПОДТВЕРДИТЬ
+                        </div>
+                    </div>
+                </div>
+                <div class="button cancel-button" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">
+                    <div class="row">
+                        <div class="col-auto pe-0">
+                            <img src="assets/images/cancel.svg" alt="">
+                        </div>
+                        <div class="col-auto my-auto ps-0">
+                            ОТМЕНИТЬ
+                        </div>
+                    </div>
+                </div>
+                <div class="btn">
+                    <mat-icon
+                            aria-hidden="false"
+                            aria-label="Example home icon"
+                            fontIcon="palette"
+                            colorsAnimation="popup"
+                            [hideTextInput]="hideTextInput"
+                            [hideColorPicker]="hideColorPicker"
+                            [palette]="colors"
+                            ngx-colors-trigger
+                            style="display: inline-block; margin:5px;"
+                            (close)="updateTransactionColor($event, transaction)">
+                    </mat-icon>
+                </div>
             </div>
 
             <div ngbAccordionCollapse>
                 <div ngbAccordionBody style="display: flex; align-items: center; justify-content: center">
                     <div class="transaction-container">
                         <div class="image-container">
-                            <img #image [src]="transaction.image ? transaction.image : NO_IMG_PATH" alt="img"
+                            <img #image [src]="transaction.imagePreview ? transaction.imagePreview : NO_IMG_PATH"
+                                 alt="img"
                                  width="100%" style="cursor:pointer"
-                                 (click)="transaction.image ? openImageDialog(image.src) : {}"/>
+                                 (click)="openImageDialog(transaction.id)"/>
                         </div>
                         <div style="width: 100%; padding-left: 40px; padding-right: 40px;  display: flex; justify-content: start">
                             <mat-card style="margin-right: 12px; width: 30%">
@@ -73,7 +89,8 @@
                                         Кто создал: <strong>{{transaction.createdBy}}</strong>
                                     </div>
                                     <div>
-                                        Дата создания:<strong>{{transaction.dateCreated | date: 'dd MMMM yyyy, HH:mm'}}</strong>
+                                        Дата
+                                        создания:<strong>{{transaction.dateCreated | date: 'dd MMMM yyyy, HH:mm'}}</strong>
                                     </div>
                                     <div>
                                         Комментарий: <strong>{{transaction.comment}}</strong>

@@ -132,7 +132,7 @@ export class TransactionDialog implements OnInit {
 
     onCancel(){
         if(this.tempImg) {
-            this.transaction.image = this.tempImg;
+            this.transaction.imagePreview = this.tempImg;
         }
         this.dialogRef.close();
     }

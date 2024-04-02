@@ -1,14 +1,16 @@
 package donation.main.controller;
 
-import donation.main.dto.transactiondto.TransactionConfirmRequestDto;
+import jakarta.validation.Valid;
 import donation.main.dto.transactiondto.CreateTransactionDto;
+import donation.main.dto.transactiondto.ImageResponseDto;
+import donation.main.dto.transactiondto.TransactionConfirmRequestDto;
+import donation.main.dto.transactiondto.TransactionImageDto;
 import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
 import donation.main.dto.transactiondto.UpdateTransactionDto;
 import donation.main.enumeration.TransactionState;
 import donation.main.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,14 +41,6 @@ public class TransactionController {
                 .body(transactionService.getAll(pageable));
     }
 
-    @Operation(summary = "get all transactions by State")
-    @GetMapping("/state")
-    public ResponseEntity<Page<TransactionResponseDto>> getAllTransactionsByState(
-            @RequestParam TransactionState state, Pageable page) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(transactionService.findAllByState(state, page));
-    }
-
     @Operation(summary = "get all transactions from one Donator")
     @GetMapping("/donators/{id}")
     public ResponseEntity<Page<TransactionResponseDto>> findAllByDonatorId(@PathVariable Long id, Pageable page) {
@@ -56,7 +50,8 @@ public class TransactionController {
 
     @Operation(summary = "search transaction")
     @GetMapping("/search")
-    public ResponseEntity<Page<TransactionResponseDto>> search(TransactionSpecDto specDto, Pageable page) {
+    public ResponseEntity<Page<TransactionResponseDto>> search(
+            TransactionSpecDto specDto, Pageable page) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(transactionService.search(specDto, page));
     }
@@ -83,5 +78,12 @@ public class TransactionController {
             @PathVariable Long transactionId, @RequestBody TransactionConfirmRequestDto dto) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(transactionService.changeState(transactionId, dto));
+    }
+
+    @Operation(summary = "return full size transaction image")
+    @GetMapping("/{transactionId}/img")
+    public ResponseEntity<ImageResponseDto> getImage(@PathVariable Long transactionId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(transactionService.getImage(transactionId));
     }
 }
