@@ -3,12 +3,11 @@ package donation.main.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.SortedSet;
-import donation.main.dto.transactiondto.CreateTransactionDto;
+import donation.main.dto.transactiondto.RequestTransactionDto;
 import donation.main.dto.transactiondto.ImageResponseDto;
 import donation.main.dto.transactiondto.TransactionConfirmRequestDto;
 import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
-import donation.main.dto.transactiondto.UpdateTransactionDto;
 import donation.main.entity.DonatorEntity;
 import donation.main.entity.ServerBonusSettingsEntity;
 import donation.main.entity.ServerEntity;
@@ -48,25 +47,19 @@ public class TransactionService {
     private final ImageMapper imageMapper;
 
     @Transactional
-    public TransactionResponseDto create(CreateTransactionDto dto) {
+    public TransactionResponseDto create(RequestTransactionDto dto) {
         //todo I temporoarily turn off the validation of external DB
         //donatorService.validateDonatorEmail(dto.donatorEmail());
-        ServerEntity server = serverService.findById(dto.serverId());
-        DonatorEntity donator = donatorService.getByEmailOrCreate(dto.donatorEmail());
         TransactionEntity transaction = transactionMapper.toEntity(dto);
-        transaction = updateTransactionFields(
-                transaction, donator, server, dto.contributionAmount(), dto.image());
+        transaction = updateTransactionFields(transaction, dto);
         return transactionMapper.toDto(transactionRepository.save(transaction));
     }
 
     @Transactional
-    public TransactionResponseDto updateTransaction(Long transactionId, UpdateTransactionDto dto) {
-        TransactionEntity updatedTransaction = transactionMapper.update(getById(transactionId), dto);
-        ServerEntity server = serverService.findById(dto.serverId());
-        DonatorEntity donator = donatorService.getByEmailOrCreate(dto.donatorEmail());
-        updatedTransaction = updateTransactionFields(
-                updatedTransaction, donator, server, dto.contributionAmount(), dto.image());
-        return transactionMapper.toDto(transactionRepository.save(updatedTransaction));
+    public TransactionResponseDto updateTransaction(Long transactionId, RequestTransactionDto dto) {
+        TransactionEntity transaction = transactionMapper.update(getById(transactionId), dto);
+        transaction = updateTransactionFields(transaction, dto);
+        return transactionMapper.toDto(transactionRepository.save(transaction));
     }
 
     public Page<TransactionResponseDto> getAll(Pageable pageable) {
@@ -87,10 +80,8 @@ public class TransactionService {
         return transactionRepository.findAll(spec, pageable).map(transactionMapper::toDto);
     }
 
-    @Transactional(readOnly = true)
     public ImageResponseDto getImage(Long id) {
-        return imageRepository.findByTransactionId(id).map(imageMapper::toDto)
-                .orElseThrow(() -> new TransactionNotFoundException("Can't find transaction by id: " + id));
+        return imageRepository.findByTransactionId(id).map(imageMapper::toDto).orElse(null);
     }
 
     public TransactionResponseDto changeState(Long id, TransactionConfirmRequestDto dto) {
@@ -133,16 +124,17 @@ public class TransactionService {
         }
     }
 
-    private TransactionEntity updateTransactionFields(
-            TransactionEntity transaction, DonatorEntity donatorEntity,
-            ServerEntity server, BigDecimal contributionAmount, String image) {
+    private TransactionEntity updateTransactionFields(TransactionEntity transaction, RequestTransactionDto dto) {
         UserEntity user = authService.getAuthenticatedUser().orElseThrow(() ->
                 new UserNotFoundException("Unable to retrieve user information from Security Context."));
-        BigDecimal donatorBonus = server.getDonatorsBonuses().getOrDefault(donatorEntity, BigDecimal.ZERO);
-        BigDecimal serverBonus = getServerBonus(contributionAmount, server);
+        setImage(transaction, dto.image());
+        ServerEntity server = serverService.findById(dto.serverId());
+        DonatorEntity donator = donatorService.getByEmailOrCreate(dto.donatorEmail());
+        BigDecimal donatorBonus = server.getDonatorsBonuses().getOrDefault(donator, BigDecimal.ZERO);
+        BigDecimal serverBonus = getServerBonus(dto.contributionAmount(), server);
         BigDecimal totalBonus = donatorBonus.add(serverBonus);
-        BigDecimal totalAmount = getTotalAmount(contributionAmount, totalBonus);
-        return transaction.toBuilder().donator(donatorEntity)
+        BigDecimal totalAmount = getTotalAmount(dto.contributionAmount(), totalBonus);
+        return transaction.toBuilder().donator(donator)
                 .createdByUser(user)
                 .server(server)
                 .totalAmount(totalAmount)
@@ -157,6 +149,8 @@ public class TransactionService {
                 imageRepository.save(transaction.getImage());
             }
             transaction.setImagePreview(ImageProcessor.resizeImage(image));
+        } else {
+            transaction.setImagePreview(null);
         }
     }
 

@@ -1,14 +1,11 @@
 package donation.main.controller;
 
 import jakarta.validation.Valid;
-import donation.main.dto.transactiondto.CreateTransactionDto;
+import donation.main.dto.transactiondto.RequestTransactionDto;
 import donation.main.dto.transactiondto.ImageResponseDto;
 import donation.main.dto.transactiondto.TransactionConfirmRequestDto;
-import donation.main.dto.transactiondto.TransactionImageDto;
 import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
-import donation.main.dto.transactiondto.UpdateTransactionDto;
-import donation.main.enumeration.TransactionState;
 import donation.main.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -58,7 +54,7 @@ public class TransactionController {
 
     @Operation(summary = "create new transaction")
     @PostMapping
-    public ResponseEntity<TransactionResponseDto> create(@Valid @RequestBody CreateTransactionDto formDto) {
+    public ResponseEntity<TransactionResponseDto> create(@Valid @RequestBody RequestTransactionDto formDto) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(transactionService.create(formDto));
     }
@@ -66,7 +62,7 @@ public class TransactionController {
     @Operation(summary = "update an existing transaction")
     @PutMapping("/{transactionId}")
     public ResponseEntity<TransactionResponseDto> update(
-            @PathVariable Long transactionId, @RequestBody UpdateTransactionDto transactionDto) {
+            @PathVariable Long transactionId, @RequestBody RequestTransactionDto transactionDto) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(transactionService.updateTransaction(transactionId, transactionDto));
     }

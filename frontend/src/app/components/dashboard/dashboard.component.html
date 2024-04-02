@@ -74,7 +74,7 @@
                             <img #image [src]="transaction.imagePreview ? transaction.imagePreview : NO_IMG_PATH"
                                  alt="img"
                                  width="100%" style="cursor:pointer"
-                                 (click)="openImageDialog(transaction.id)"/>
+                                 (click)="transaction.imagePreview ? openImageDialog(transaction.id) : {}"/>
                         </div>
                         <div style="width: 100%; padding-left: 40px; padding-right: 40px;  display: flex; justify-content: start">
                             <mat-card style="margin-right: 12px; width: 30%">
