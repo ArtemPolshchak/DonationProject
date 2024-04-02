@@ -16,5 +16,5 @@ export class Transaction {
     totalAmount!: number;
     comment!: string;
     adminBonus: number = 0;
-    color: string = '#D3D3D3';
+    color?: string ;
 }
