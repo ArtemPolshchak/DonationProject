@@ -2,7 +2,10 @@
     <header class="dialog-header">
         <h2 class="dialog-header-title">Create Transaction</h2>
         <div class="btn">
-            <ngx-colors
+            <mat-icon
+                    aria-hidden="false"
+                    aria-label="Example home icon"
+                    fontIcon="palette"
                     colorsAnimation="popup"
                     [hideTextInput]="hideTextInput"
                     [hideColorPicker]="hideColorPicker"
@@ -10,7 +13,7 @@
                     ngx-colors-trigger
                     style="display: inline-block; margin:5px;"
                     (change)="color = $event">
-            </ngx-colors>
+            </mat-icon>
         </div>
     </header>
 
