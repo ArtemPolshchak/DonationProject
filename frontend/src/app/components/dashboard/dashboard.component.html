@@ -45,16 +45,6 @@
                         </div>
                     </div>
                 </button>
-                <div class="button" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">
-                    <div class="row">
-                        <div class="col-auto pe-0">
-                            <img src="assets/images/confirm.svg" alt="">
-                        </div>
-                        <div class="col-auto my-auto ps-0">
-                            ПОДТВЕРДИТЬ
-                        </div>
-                    </div>
-                </div>
                 <div class="button cancel-button" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">
                     <div class="row">
                         <div class="col-auto pe-0">
@@ -62,6 +52,16 @@
                         </div>
                         <div class="col-auto my-auto ps-0">
                             ОТМЕНИТЬ
+                        </div>
+                    </div>
+                </div>
+                <div class="button" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">
+                    <div class="row">
+                        <div class="col-auto pe-0">
+                            <img src="assets/images/confirm.svg" alt="">
+                        </div>
+                        <div class="col-auto my-auto ps-0">
+                            ПОДТВЕРДИТЬ
                         </div>
                     </div>
                 </div>
