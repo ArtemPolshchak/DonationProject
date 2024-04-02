@@ -16,7 +16,6 @@ import java.awt.*;
 @Mapper(config = MapperConfig.class, uses = ImageMapper.class, imports = Color.class)
 public interface TransactionMapper {
 
-    @Mapping(target = "color", expression = "java(Color.decode(dto.color()))")
     TransactionEntity toEntity(CreateTransactionDto dto);
 
     @Mapping(source = "server.serverName", target = "serverName")
@@ -25,15 +24,17 @@ public interface TransactionMapper {
     @Mapping(source = "approvedByUser.username", target = "approvedBy")
     TransactionResponseDto toDto(TransactionEntity entity);
 
-    @Mapping(target = "color", expression = "java(Color.decode(dto.color()))")
-    @Mapping(target = "image", expression = "java(imageMapper.update(entity.getImage(), dto.image()))")
     TransactionEntity update(@MappingTarget TransactionEntity entity, UpdateTransactionDto dto);
 
-    default String convertColorToHexString(Color color) {
+    default String convertHexToString(Color color) {
         String hex = Integer.toHexString(color.getRGB() & 0xffffff);
         if (hex.length() < 6) {
             hex = "0" + hex;
         }
         return "#" + hex;
+    }
+
+    default Color convertHexStringToColor(String hexString) {
+        return Color.decode(hexString);
     }
 }
