@@ -31,18 +31,18 @@
                 </div>
                 <button ngbAccordionButton [ngStyle]="{'background-color': transaction.color}">
                     <div style="width: 100%;  display: flex; align-items: center; justify-content: space-between">
-                        <div *ngIf="transaction.dateCreated">
+                        <span *ngIf="transaction.dateCreated">
                             Дата создания: <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</strong>
-                        </div>
-                        <div *ngIf="transaction.serverName">
+                        </span>
+                        <span *ngIf="transaction.serverName">
                             Имя сервера: <strong>{{ transaction.serverName}}</strong>
-                        </div>
-                        <div *ngIf="transaction.donatorEmail">
+                        </span>
+                        <span *ngIf="transaction.donatorEmail">
                             Почта донатора: <strong>{{transaction.donatorEmail}}</strong>
-                        </div>
-                        <div *ngIf="transaction.totalAmount">
+                        </span>
+                        <span *ngIf="transaction.totalAmount">
                             Общая сумма Доната: <strong>{{transaction.totalAmount | currency: 'USD'}}</strong>
-                        </div>
+                        </span>
                     </div>
                 </button>
                 <div class="button cancel-button" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">
@@ -121,7 +121,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="paginator-container">
     <mat-paginator [length]="totalElements"
