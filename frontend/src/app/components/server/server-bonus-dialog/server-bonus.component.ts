@@ -134,9 +134,9 @@ export class ServerBonusComponent implements OnInit{
     this.bonuses.push(
         this.fb.group({
           enable: [false, Validators.required],
-          from: [bonuses?.fromAmount || 0, [Validators.required, Validators.pattern(/\d/)]],
-          to: [bonuses?.toAmount || 0, [Validators.required, Validators.pattern(/\d/)]],
-          percentage: [bonuses?.bonusPercentage || 0, [Validators.required, Validators.pattern(/^\d+$/), Validators.min(1), Validators.max(100)]]
+          from: [bonuses?.fromAmount ?? 0, [Validators.required, Validators.pattern(/\d/)]],
+          to: [bonuses?.toAmount ?? 0, [Validators.required, Validators.pattern(/\d/)]],
+          percentage: [bonuses?.bonusPercentage ?? 0, [Validators.required, Validators.pattern(/^\d+$/), Validators.min(0), Validators.max(100)]]
         })
     );
   }
