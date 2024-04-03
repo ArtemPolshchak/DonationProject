@@ -70,9 +70,6 @@ export class ServerComponent implements OnInit {
         serverId: serverId
       }
     });
-    dialogRef.componentInstance.componentResponse.subscribe( () => {
-      this.getAllServers()
-    });
   }
 
 

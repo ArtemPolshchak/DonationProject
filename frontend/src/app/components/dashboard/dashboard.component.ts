@@ -7,12 +7,12 @@ import {SidebarComponent} from "../sidebar/sidebar.component";
 import {TransactionState} from "../../enums/transaction-state";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
-import { FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatDialog} from "@angular/material/dialog";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
 import {NO_IMG_PATH} from "../../enums/app-constans";
-import { NgxColorsModule} from 'ngx-colors';
+import {NgxColorsModule} from 'ngx-colors';
 import {Server} from "../../common/server";
 import {StorageService} from "../../services/storage.service";
 import {ToasterService} from "../../services/toaster.service";
@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
     hideColorPicker: boolean = true;
     hideTextInput: boolean = true;
     colors: Array<any> = [
-        "#D3D3D3",
+        "#f5f5f5",
         "#fd8888",
         "#9dfc9e",
         "#84d4ff",
@@ -75,7 +75,7 @@ export class DashboardComponent implements OnInit {
     }
 
     updateTransactionColor(newColor: string, transaction: Transaction) {
-        if(newColor && newColor != transaction.color) {
+        if (newColor && newColor != transaction.color) {
             transaction.color = newColor;
             transaction.serverId = this.findServerByName(transaction.serverName).id;
             this.transactionService.update(transaction).subscribe({
@@ -93,8 +93,8 @@ export class DashboardComponent implements OnInit {
     getAll(): void {
         this.transactionService.getAllWithSearch(this.pageNumber, this.pageSize, this.sortState, this.transactionState)
             .subscribe((data) => {
-                    this.transactions = data.content;
-                    this.totalElements = data.totalElements;
+                this.transactions = data.content;
+                this.totalElements = data.totalElements;
             });
     }
 
@@ -110,10 +110,10 @@ export class DashboardComponent implements OnInit {
         }
         this.transactionService.confirmById(transaction.id!, state, transaction.adminBonus)
             .subscribe(() => {
-                this.getAll();
-                this.transactionResponse(state);
-            }
-        );
+                    this.getAll();
+                    this.transactionResponse(state);
+                }
+            );
     }
 
     openSnackBar(message: string) {
@@ -125,10 +125,9 @@ export class DashboardComponent implements OnInit {
         this.toasterService.openSnackBar(message);
     }
 
-
-    openImageDialog(image: string) {
+    openImageDialog(transactionId: number) {
         this.dialog.open(OpenImageDialogComponent, {
-            data: image,
+            data: transactionId,
         });
     }
 

@@ -94,7 +94,12 @@ export class TransactionDialog implements OnInit {
             this.serverControl.setValue(this.findServerByName(this.data.transaction.serverName));
             this.contributionControl.setValue(this.data.transaction.contributionAmount);
             this.emailControl.setValue(this.data.transaction.donatorEmail);
-            this.imageForm.get('photo')?.setValue(this.data.transaction.image);
+            this.transactionService.getImage(this.transaction.id).subscribe( {
+                next: (res) => {
+                    this.transaction.image = res.data;
+                    this.imageForm.get('photo')?.setValue(this.data.transaction.image);
+                }
+            })
         }
     }
 
@@ -132,7 +137,7 @@ export class TransactionDialog implements OnInit {
 
     onCancel(){
         if(this.tempImg) {
-            this.transaction.image = this.tempImg;
+            this.transaction.imagePreview = this.tempImg;
         }
         this.dialogRef.close();
     }

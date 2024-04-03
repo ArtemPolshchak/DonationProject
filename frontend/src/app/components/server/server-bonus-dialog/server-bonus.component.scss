@@ -3,11 +3,6 @@
   flex-direction: column;
 }
 
-h2 {
-  padding: 0 16px 16px;
-  margin: 0;
-}
-
 mat-dialog-content {
   display: flex;
   flex-direction: column;
@@ -22,4 +17,19 @@ mat-dialog-actions {
   padding: 16px;
   display: flex;
   justify-content: flex-end;
+}
+
+.button {
+  background-color: rgba(183, 190, 198, 0.35);
+}
+
+.button:hover {
+  background-color: #41556466;
+}
+
+.dialog-button {
+  width: 20%;
+  min-width: fit-content;
+  border-radius: 4px;
+  border: 1px solid #c5ccd4;
 }

@@ -6,12 +6,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import java.awt.*;
@@ -49,9 +51,12 @@ public class TransactionEntity {
     @Builder.Default
     private LocalDateTime dateCreated = LocalDateTime.now();
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private ImageEntity image;
+
     @Lob
-    @Column(name = "image")
-    private byte[] image;
+    @Column(name = "image_preview")
+    private byte[] imagePreview;
 
     @Column(name = "state", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -83,7 +88,7 @@ public class TransactionEntity {
     @JoinColumn(name = "created_by_user_id")
     private UserEntity createdByUser;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "donator_id")
     private DonatorEntity donator;
 
@@ -93,5 +98,5 @@ public class TransactionEntity {
 
     @Column(name = "color")
     @Builder.Default
-    private Color color = Color.decode("#D3D3D3");
+    private Color color = Color.decode("#f5f5f5");
 }

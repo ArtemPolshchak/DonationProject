@@ -1,14 +1,13 @@
 package donation.main.service;
 
-import java.awt.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.SortedSet;
-import donation.main.dto.transactiondto.CreateTransactionDto;
+import donation.main.dto.transactiondto.RequestTransactionDto;
+import donation.main.dto.transactiondto.ImageResponseDto;
 import donation.main.dto.transactiondto.TransactionConfirmRequestDto;
 import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
-import donation.main.dto.transactiondto.UpdateTransactionDto;
 import donation.main.entity.DonatorEntity;
 import donation.main.entity.ServerBonusSettingsEntity;
 import donation.main.entity.ServerEntity;
@@ -16,20 +15,20 @@ import donation.main.entity.TransactionEntity;
 import donation.main.entity.UserEntity;
 import donation.main.enumeration.TransactionState;
 import donation.main.exception.AccessForbiddenException;
-import donation.main.exception.EmailNotFoundException;
 import donation.main.exception.InvalidTransactionState;
 import donation.main.exception.TransactionNotFoundException;
 import donation.main.exception.UserNotFoundException;
-import donation.main.externaldb.service.ExternalDonatorService;
+import donation.main.mapper.ImageMapper;
 import donation.main.mapper.TransactionMapper;
+import donation.main.repository.ImageRepository;
 import donation.main.repository.TransactionRepository;
 import donation.main.repository.spec.SpecificationBuilder;
+import donation.main.security.AuthenticationService;
+import donation.main.util.ImageProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,37 +42,37 @@ public class TransactionService {
     private final ServerService serverService;
     private final TransactionStateManager transactionStateManager;
     private final UserService userService;
+    private final AuthenticationService authService;
+    private final ImageRepository imageRepository;
+    private final ImageMapper imageMapper;
 
     @Transactional
-    public TransactionResponseDto create(CreateTransactionDto dto) {
+    public TransactionResponseDto create(RequestTransactionDto dto) {
         //todo I temporoarily turn off the validation of external DB
         //donatorService.validateDonatorEmail(dto.donatorEmail());
         TransactionEntity transaction = transactionMapper.toEntity(dto);
-        ServerEntity server = serverService.findById(dto.serverId());
-        DonatorEntity donator = donatorService.getByEmailOrCreate(dto.donatorEmail());
-        transaction = updateTransactionFields(transaction, donator, server, dto.contributionAmount());
+        transaction = updateTransactionFields(transaction, dto);
         return transactionMapper.toDto(transactionRepository.save(transaction));
     }
 
     @Transactional
-    public TransactionResponseDto updateTransaction(Long transactionId, UpdateTransactionDto dto) {
-        TransactionEntity updatedTransaction = transactionMapper.update(findById(transactionId), dto);
-        ServerEntity server = serverService.findById(dto.serverId());
-        DonatorEntity donator = donatorService.getByEmailOrCreate(dto.donatorEmail());
-        updatedTransaction = updateTransactionFields(updatedTransaction, donator, server, dto.contributionAmount());
-        return transactionMapper.toDto(transactionRepository.save(updatedTransaction));
+    public TransactionResponseDto updateTransaction(Long transactionId, RequestTransactionDto dto) {
+        TransactionEntity transaction = transactionMapper.update(getById(transactionId), dto);
+        transaction = updateTransactionFields(transaction, dto);
+        return transactionMapper.toDto(transactionRepository.save(transaction));
     }
 
     public Page<TransactionResponseDto> getAll(Pageable pageable) {
         return transactionRepository.findAll(pageable).map(transactionMapper::toDto);
     }
 
-    public Page<TransactionResponseDto> findAllTransactionsByDonatorId(Long donatorId, Pageable pageable) {
-        return transactionRepository.findAllByDonatorId(donatorId, pageable).map(transactionMapper::toDto);
+    public TransactionEntity getById(Long transactionId) {
+        return transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new TransactionNotFoundException("Can't find transaction by id: " + transactionId));
     }
 
-    public Page<TransactionResponseDto> findAllByState(TransactionState state, Pageable pageable) {
-        return transactionRepository.findAllByState(state, pageable).map(transactionMapper::toDto);
+    public Page<TransactionResponseDto> findAllTransactionsByDonatorId(Long donatorId, Pageable pageable) {
+        return transactionRepository.findAllByDonatorId(donatorId, pageable).map(transactionMapper::toDto);
     }
 
     public Page<TransactionResponseDto> search(TransactionSpecDto specDto, Pageable pageable) {
@@ -81,11 +80,18 @@ public class TransactionService {
         return transactionRepository.findAll(spec, pageable).map(transactionMapper::toDto);
     }
 
+    @Transactional(readOnly = true)
+    public ImageResponseDto getImage(Long id) {
+        return imageRepository.findByTransactionId(id).map(imageMapper::toDto).orElse(null);
+    }
+
     public TransactionResponseDto changeState(Long id, TransactionConfirmRequestDto dto) {
-        checkUserPermission();
-        TransactionEntity transaction = findById(id);
-        setTransactionState(transaction, dto.state());
-        setTransactionAdminBonus(transaction, dto.adminBonus());
+        if (!authService.hasAdminPermission()) {
+            throw new AccessForbiddenException("Access forbidden. Admin permissions required");
+        }
+        TransactionEntity transaction = getById(id);
+        setState(transaction, dto.state());
+        setAdminBonus(transaction, dto.adminBonus());
         setDonatorTotalDonation(transaction.getState(), transaction);
         transaction = transaction.toBuilder()
                 .dateApproved(LocalDateTime.now())
@@ -93,19 +99,14 @@ public class TransactionService {
         return transactionMapper.toDto(transactionRepository.save(transaction));
     }
 
-    private TransactionEntity findById(Long transactionId) {
-        return transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new TransactionNotFoundException("Transaction not found with id: " + transactionId));
-    }
-
-    private void setTransactionAdminBonus(TransactionEntity transaction, BigDecimal adminBonus) {
+    private void setAdminBonus(TransactionEntity transaction, BigDecimal adminBonus) {
         if (adminBonus != null) {
             transaction.setAdminBonus(adminBonus);
             transaction.setTotalAmount(transaction.getTotalAmount().add(adminBonus));
         }
     }
 
-    private void setTransactionState(TransactionEntity transaction, TransactionState newState) {
+    private void setState(TransactionEntity transaction, TransactionState newState) {
         if (!transactionStateManager.isAllowedTransitionState(transaction.getState(), newState)) {
             throw new InvalidTransactionState("This state can't be set up, check state", newState);
         }
@@ -118,33 +119,37 @@ public class TransactionService {
                     .getDonator()
                     .getTotalDonations()
                     .add(transaction.getContributionAmount());
-
             Integer count = transaction.getDonator().getTotalCompletedTransactions() + 1;
-
             transaction.getDonator().setTotalCompletedTransactions(count);
             transaction.getDonator().setTotalDonations(amount);
-
         }
     }
 
-    private TransactionEntity updateTransactionFields(TransactionEntity transaction, DonatorEntity donatorEntity,
-                                                      ServerEntity server, BigDecimal contributionAmount) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof UserEntity user) {
-            transaction.setCreatedByUser(user);
-        } else {
-            throw new UserNotFoundException("Unable to retrieve user information from Security Context.");
-        }
-        BigDecimal donatorBonus = server.getDonatorsBonuses().getOrDefault(donatorEntity, BigDecimal.ZERO);
-        BigDecimal serverBonus = getServerBonus(contributionAmount, server);
+    private TransactionEntity updateTransactionFields(TransactionEntity transaction, RequestTransactionDto dto) {
+        UserEntity user = authService.getAuthenticatedUser().orElseThrow(() ->
+                new UserNotFoundException("Unable to retrieve user information from Security Context."));
+        setPreviewImage(transaction, dto.image());
+        ServerEntity server = serverService.findById(dto.serverId());
+        DonatorEntity donator = donatorService.getByEmailOrCreate(dto.donatorEmail());
+        BigDecimal donatorBonus = server.getDonatorsBonuses().getOrDefault(donator, BigDecimal.ZERO);
+        BigDecimal serverBonus = getServerBonus(dto.contributionAmount(), server);
         BigDecimal totalBonus = donatorBonus.add(serverBonus);
-        BigDecimal totalAmount = getTotalAmount(contributionAmount, totalBonus);
-        return transaction.toBuilder().donator(donatorEntity)
+        BigDecimal totalAmount = getTotalAmount(dto.contributionAmount(), totalBonus);
+        return transaction.toBuilder().donator(donator)
+                .createdByUser(user)
                 .server(server)
                 .totalAmount(totalAmount)
                 .personalBonusPercentage(donatorBonus)
                 .serverBonusPercentage(serverBonus)
                 .build();
+    }
+
+    private void setPreviewImage(TransactionEntity transaction, String image) {
+        if (image != null) {
+            transaction.setImagePreview(ImageProcessor.resizeImage(image));
+        } else {
+            transaction.setImagePreview(null);
+        }
     }
 
     private BigDecimal getTotalAmount(BigDecimal incomingAmount, BigDecimal totalBonus) {
@@ -169,14 +174,5 @@ public class TransactionService {
 
     private BigDecimal countResult(BigDecimal contributionAmount, BigDecimal totalBonus) {
         return contributionAmount.multiply(BigDecimal.ONE.add(totalBonus.divide(BigDecimal.valueOf(100.0))));
-    }
-
-    private void checkUserPermission() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        authentication.getAuthorities().stream()
-                .filter(a -> a.getAuthority().equals("ADMIN"))
-                .findFirst()
-                .orElseThrow(() -> new AccessForbiddenException(
-                        "Access forbidden for the current user. Admin access required"));
     }
 }
