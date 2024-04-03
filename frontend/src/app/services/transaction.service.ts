@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Transaction} from "../common/transaction";
 import {HttpClientService} from "./http-client.service";
 import {HttpMethod} from "../enums/http-method";
+import {HttpParams} from "@angular/common/http";
 
 @Injectable({
     providedIn: 'root'
@@ -14,12 +15,6 @@ export class TransactionService {
     public getAllWithSearch(pageNumber?: number, pageSize?: number, sort?: string, transactionState?: string[], serverNames?: string[], donatorMails?: string) {
         let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort, donatorMails, serverNames, transactionState);
         const url: string = 'api/transactions/search';
-        return this.httpClient.fetch<GetTransactionResponse>(url, true, params);
-    }
-
-    public getAll(pageNumber?: number, pageSize?: number, sort?: string) {
-        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort);
-        const url: string = `api/transactions`
         return this.httpClient.fetch<GetTransactionResponse>(url, true, params);
     }
 
@@ -47,6 +42,11 @@ export class TransactionService {
         const url: string = `api/transactions/donators/${donatorId}`;
         return this.httpClient.fetch<GetTransactionResponse>(url, true, params);
     }
+
+    public getImage(transactionId: number) {
+        const url: string = `api/transactions/${transactionId}/img`
+        return this.httpClient.fetch<ImageResponse>(url, true);
+    }
 }
 
 export interface GetTransactionResponse {
@@ -58,3 +58,6 @@ export interface GetTransactionResponse {
     totalElements: number;
 }
 
+export interface ImageResponse {
+    data: string;
+}

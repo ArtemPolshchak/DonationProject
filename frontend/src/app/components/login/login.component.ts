@@ -9,6 +9,7 @@ import {Router} from "@angular/router";
 import {StorageService} from "../../services/storage.service";
 import {ServerService} from "../../services/server.service";
 import {take} from "rxjs";
+import {MatDialogContent} from "@angular/material/dialog";
 
 
 @Component({
@@ -25,7 +26,8 @@ import {take} from "rxjs";
         MatCardModule,
         MatInputModule,
         MatButtonModule,
-        FormsModule
+        FormsModule,
+        MatDialogContent
     ],
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss'

@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Inject, Output} from '@angular/core';
 import {
-    MAT_DIALOG_DATA,
     MatDialogActions,
     MatDialogClose,
     MatDialogContent,
@@ -19,8 +18,6 @@ import {Server} from "../../../common/server";
 import {CreateServerDto, ServerService} from "../../../services/server.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {StorageService} from "../../../services/storage.service";
-import {HttpEventType} from "@angular/common/http";
-
 @Component({
     selector: 'app-server.dialog',
     standalone: true,

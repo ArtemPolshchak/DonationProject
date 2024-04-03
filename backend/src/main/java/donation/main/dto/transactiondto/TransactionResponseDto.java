@@ -12,7 +12,7 @@ public record TransactionResponseDto(
         int personalBonusPercentage,
         int adminBonus,
         String dateApproved,
-        String image,
+        String imagePreview,
         String createdBy,
         String approvedBy,
         TransactionState state,

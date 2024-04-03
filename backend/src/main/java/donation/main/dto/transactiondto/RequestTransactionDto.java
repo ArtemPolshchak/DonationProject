@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-public record CreateTransactionDto(
+public record RequestTransactionDto(
         @NotEmpty
         String donatorEmail,
         @DecimalMin("1")

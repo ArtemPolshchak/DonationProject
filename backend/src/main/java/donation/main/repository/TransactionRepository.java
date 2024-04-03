@@ -12,9 +12,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 
 public interface TransactionRepository extends JpaRepository<TransactionEntity, Long>, JpaSpecificationExecutor<TransactionEntity> {
-    @EntityGraph(attributePaths = {"approvedByUser", "createdByUser", "donator", "server"})
-    Page<TransactionEntity> findAllByState(TransactionState state, Pageable pageable);
-
     @Query("FROM TransactionEntity t WHERE t.donator.id = :donatorId AND t.state = 'COMPLETED'")
     Page<TransactionEntity> findAllByDonatorId(Long donatorId, Pageable pageable);
 

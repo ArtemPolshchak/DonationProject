@@ -130,9 +130,9 @@ export class DonationsComponent implements OnInit {
         });
     }
 
-    openImageDialog(image: string) {
+    openImageDialog(transactionId: number) {
         this.dialog.open(OpenImageDialogComponent, {
-            data: image,
+            data: transactionId,
         });
     }
 
