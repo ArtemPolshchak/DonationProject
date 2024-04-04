@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="button" id="settings_server" [ngClass]="{ 'disabled': isButtonDisabled }"
-             (click)="openSetUpServerDialog()">
+             (click)="openSetUpServerDialog(selectedServerId)">
             <div class="row">
                 <div class="col-auto pe-0">
                     <img src="assets/images/settings.svg" alt="">

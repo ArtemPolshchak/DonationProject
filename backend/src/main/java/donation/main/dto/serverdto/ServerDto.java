@@ -1,6 +1,6 @@
 package donation.main.dto.serverdto;
 
-public record CreateServerDto(
+public record ServerDto(
         String serverName,
         String serverUrl,
         String serverUserName,

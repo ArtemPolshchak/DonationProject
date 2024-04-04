@@ -20,6 +20,7 @@ import {TransactionState} from "../../../enums/transaction-state";
 import {OpenImageDialogComponent} from "../../open-image-dialog/open-image-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {StorageService} from "../../../services/storage.service";
+import {ToasterService} from "../../../services/toaster.service";
 
 @Component({
     selector: 'app-donatorstory',
@@ -65,7 +66,8 @@ export class DonatorStoryComponent implements OnInit {
         private transactionService: TransactionService,
         private route: ActivatedRoute,
         private router: Router,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private toasterService: ToasterService
     ) {
     }
 
@@ -96,6 +98,10 @@ export class DonatorStoryComponent implements OnInit {
         this.pageNumber = 0;
         this.paginator.pageIndex = this.pageNumber;
         this.getDonatorTransactions();
+    }
+
+    openSnackBar(message: string) {
+        this.toasterService.openSnackBar(message);
     }
 
     getDonatorTransactions(): void {

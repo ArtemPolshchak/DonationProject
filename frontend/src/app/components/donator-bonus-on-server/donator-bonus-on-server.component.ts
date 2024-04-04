@@ -9,6 +9,7 @@ import {SetupBonusDialogComponent} from "./setup-bonus-dialog/setup-bonus-dialog
 import {DonatorBonus} from "../../common/donatorBonus";
 import {ServerService} from "../../services/server.service";
 import {HttpEventType} from "@angular/common/http";
+import {ToasterService} from "../../services/toaster.service";
 
 @Component({
   selector: 'app-donator-bonus-on-server',
@@ -35,6 +36,7 @@ export class DonatorBonusOnServer implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private serverService: ServerService,
+              private toasterService: ToasterService,
               private router: Router,
               private dialog: MatDialog,
               private route: ActivatedRoute
@@ -85,6 +87,10 @@ export class DonatorBonusOnServer implements OnInit {
     } else {
       this.search();
     }
+  }
+
+  openSnackBar(message: string) {
+    this.toasterService.openSnackBar(message);
   }
 
   openSetupBonusDialog(donatorId: number): void {

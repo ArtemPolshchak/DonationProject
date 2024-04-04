@@ -15,6 +15,7 @@ import {NgIf} from "@angular/common";
 import {LoadDonatorBonus} from "../../../common/load-donator-bonus";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {CreateDonator, DonatorService} from "../../../services/donator.service";
+import {ToasterService} from "../../../services/toaster.service";
 
 @Component({
   selector: 'app-create-donator-dialog',
@@ -47,7 +48,7 @@ export class CreateDonatorDialogComponent implements OnInit {
       @Inject(MAT_DIALOG_DATA) public data: any,
       private donatorService: DonatorService,
       private dialogRef: MatDialogRef<CreateDonatorDialogComponent>,
-      private _snackBar: MatSnackBar,
+      private toasterService: ToasterService,
   ) {}
 
   isFormValid() {
@@ -89,8 +90,6 @@ export class CreateDonatorDialogComponent implements OnInit {
   );
 
   openSnackBar(message: string) {
-    this._snackBar.open(message, 'Закрыть', {
-      duration: this.durationInSeconds * 1000,
-    });
+    this.toasterService.openSnackBar(message);
   }
 }

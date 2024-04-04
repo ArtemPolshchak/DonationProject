@@ -19,6 +19,7 @@ import {StorageService} from "../../../services/storage.service";
 import {LAST_SERVER_KEY} from "../../../enums/app-constans";
 import {ImageProcessorService} from "../../../services/image-processor.service";
 import {NgxColorsModule} from "ngx-colors";
+import {ToasterService} from "../../../services/toaster.service";
 
 @Component({
     selector: 'app-transaction-dialog',
@@ -74,6 +75,7 @@ export class TransactionDialog implements OnInit {
 
 
     constructor(private fb: UntypedFormBuilder,
+                private toasterService: ToasterService,
                 private dialogRef: MatDialogRef<TransactionDialog>,
                 private transactionService: TransactionService,
                 private imageProcessor: ImageProcessorService,
@@ -153,9 +155,7 @@ export class TransactionDialog implements OnInit {
     }
 
     openSnackBar(message: string) {
-        this._snackBar.open(message, 'Закрыть', {
-            duration: this.durationInSeconds * 1000,
-        });
+        this.toasterService.openSnackBar(message);
     }
 
     private createTransaction(transaction: Transaction) {
