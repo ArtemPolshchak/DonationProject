@@ -3,13 +3,12 @@ package donation.main.controller;
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
 import donation.main.dto.donatorsdto.DonatorBonusDto;
 import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
-import donation.main.dto.serverdto.CreateServerDto;
+import donation.main.dto.serverdto.ServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
 import donation.main.entity.ServerEntity;
 import donation.main.service.ServerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -48,8 +48,21 @@ public class ServerController {
 
     @Operation(summary = "create new server")
     @PostMapping
-    public ResponseEntity<ServerEntity> createServer(@RequestBody CreateServerDto serverDto) {
+    public ResponseEntity<ServerEntity> createServer(@RequestBody ServerDto serverDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(serverService.create(serverDto));
+    }
+
+    @Operation(summary = "update server")
+    @PatchMapping("/{serverId}")
+    public ResponseEntity<Void> updateServer(@PathVariable Long serverId, @RequestBody ServerDto serverDto) {
+        serverService.updateServer(serverId, serverDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "get server info by serverID")
+    @GetMapping("/{serverId}")
+    public ResponseEntity<ServerDto> getServerById(@PathVariable Long serverId) {
+        return ResponseEntity.status(HttpStatus.OK).body(serverService.getServerById(serverId));
     }
 
     @Operation(summary = "create bonuses for donators on server")

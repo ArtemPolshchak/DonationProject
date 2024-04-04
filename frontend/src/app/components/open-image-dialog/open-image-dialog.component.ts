@@ -24,14 +24,14 @@ export class OpenImageDialogComponent implements OnInit{
 
     constructor(@Inject(MAT_DIALOG_DATA) public data: any,
                 private transactionService: TransactionService,
-                private toaster: ToasterService) {
+                private toasterService: ToasterService) {
         this.transactionId = data;
     }
 
     ngOnInit(): void {
         this.transactionService.getImage(this.transactionId).subscribe({
             next: (response) => this.image = response.data,
-            error: (err) => this.toaster.openSnackBar(`Can't get image! ${err}`)
+            error: (err) => this.toasterService.openSnackBar(`Can't get image! ${err}`)
         })
     }
 }

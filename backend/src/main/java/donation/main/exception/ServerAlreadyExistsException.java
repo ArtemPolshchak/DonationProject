@@ -10,8 +10,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ServerAlreadyExistsException extends RuntimeException {
     private final String serverName;
 
+    private final long id;
+
+    public ServerAlreadyExistsException(String message, long id) {
+        super(String.format("%s  %s", message, id));
+        this.id = id;
+        this.serverName = null;
+    }
+
     public ServerAlreadyExistsException(String message, String serverName) {
         super(String.format("%s  %s", message, serverName));
         this.serverName = serverName;
+        this.id = 0;
     }
 }

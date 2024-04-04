@@ -20,6 +20,7 @@ import {Server} from "../../common/server";
 import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.component";
 import {StorageService} from "../../services/storage.service";
 import {NO_IMG_PATH} from "../../enums/app-constans";
+import {ToasterService} from "../../services/toaster.service";
 
 @Component({
     selector: 'app-transaction',
@@ -69,6 +70,7 @@ export class DonationsComponent implements OnInit {
     });
 
     constructor(
+        private toasterService: ToasterService,
         private transactionService: TransactionService,
         private dialog: MatDialog,
         private _formBuilder: FormBuilder
@@ -134,6 +136,10 @@ export class DonationsComponent implements OnInit {
         this.dialog.open(OpenImageDialogComponent, {
             data: transactionId,
         });
+    }
+
+    openSnackBar(message: string) {
+        this.toasterService.openSnackBar(message);
     }
 
     protected readonly NO_IMG_PATH = NO_IMG_PATH;
