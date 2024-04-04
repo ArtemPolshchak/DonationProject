@@ -17,6 +17,7 @@ import {NgForOf, NgIf} from "@angular/common";
 import {Server} from "../../../common/server";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ServerService} from "../../../services/server.service";
+import {ToasterService} from "../../../services/toaster.service";
 
 
 @Component({
@@ -57,7 +58,7 @@ export class DonatorBonusDialogComponent {
 
     constructor(
         private serverService: ServerService,
-        private _snackBar: MatSnackBar,
+        private toasterService: ToasterService,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {
         this.servers = data.servers;
@@ -81,8 +82,6 @@ export class DonatorBonusDialogComponent {
     }
 
     openSnackBar(message: string) {
-        this._snackBar.open(message, 'Закрыть', {
-            duration: this.durationInSeconds * 1000,
-        });
+        this.toasterService.openSnackBar(message);
     }
 }

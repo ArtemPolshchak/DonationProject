@@ -20,7 +20,7 @@ export class ServerService {
         return this.httpClient.fetch<GetServerResponse>(url, true, params)
     }
 
-    public create(newServer: CreateServerDto) {
+    public create(newServer: ServerDto) {
         const url: string = `api/servers`
         return this.httpClient.load<void>(HttpMethod.POST, url, true, newServer);
     }
@@ -46,6 +46,17 @@ export class ServerService {
         const url: string = `api/servers/${serverId}/donators/${donatorId}/bonus`;
         return this.httpClient.load<CreateDonatorBonus>(HttpMethod.POST, url, true, dto);
     }
+
+    public updateServerById(serverId: number, dto: ServerDto) {
+        const url: string = `api/servers/${serverId}`;
+        return this.httpClient.load<ServerDto>(HttpMethod.PATCH, url, true, dto);
+    }
+
+    public getServerById(ServerId: number) {
+        const url: string = `api/servers/${ServerId}`;
+        return this.httpClient.fetch<ServerDto>(url, true);
+    }
+
 }
 
 export interface DonatorsBonusResponse {
@@ -72,7 +83,7 @@ interface GetDonatorBonuses {
     totalElements: number;
 }
 
-export interface CreateServerDto {
+export interface ServerDto {
     serverName: string;
     serverUrl: string;
     serverUserName: string;

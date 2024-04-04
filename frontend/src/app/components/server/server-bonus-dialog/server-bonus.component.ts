@@ -17,6 +17,7 @@ import {
 import {MatIcon} from "@angular/material/icon";
 import {ServerBonusService} from "../../../services/server-bonus.service";
 import {ServerBonuses} from "../../../common/server-bonuses";
+import {ToasterService} from "../../../services/toaster.service";
 
 
 function noOverlapBonusValidator(): ValidatorFn {
@@ -103,7 +104,7 @@ function validBonusRangeValidator(): ValidatorFn {
   templateUrl: './server-bonus.component.html',
   styleUrl: './server-bonus.component.scss'
 })
-export class ServerBonusComponent implements OnInit{
+export class ServerBonusComponent implements OnInit {
   serverBonuses: ServerBonuses[] = [];
   serverId!: number;
   bonusesForm: FormGroup = this.fb.group({
@@ -117,7 +118,8 @@ export class ServerBonusComponent implements OnInit{
       public dialogRef: MatDialogRef<ServerBonusComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any,
       private fb: FormBuilder,
-      private serverBonusService: ServerBonusService
+      private serverBonusService: ServerBonusService,
+      private toasterService: ToasterService
   ) {
     this.serverId = data.serverId;
   }
@@ -182,5 +184,9 @@ export class ServerBonusComponent implements OnInit{
           this.serverBonuses = data;
           data.forEach(bonuses => this.addBonus(bonuses));
         });
+  }
+
+  openSnackBar(message: string) {
+    this.toasterService.openSnackBar(message);
   }
 }

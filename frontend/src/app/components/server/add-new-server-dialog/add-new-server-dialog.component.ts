@@ -15,9 +15,10 @@ import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {NgForOf, NgIf} from "@angular/common";
 import {Server} from "../../../common/server";
-import {CreateServerDto, ServerService} from "../../../services/server.service";
+import {ServerDto, ServerService} from "../../../services/server.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {StorageService} from "../../../services/storage.service";
+import {ToasterService} from "../../../services/toaster.service";
 @Component({
     selector: 'app-server.dialog',
     standalone: true,
@@ -49,7 +50,7 @@ export class AddNewServerDialogComponent {
     @Output() componentResponse = new EventEmitter();
 
     constructor(
-        private _snackBar: MatSnackBar,
+        private toasterService: ToasterService,
         public dialogRef: MatDialogRef<AddNewServerDialogComponent>,
         private serverService: ServerService) {
         this.servers = StorageService.getServers();
@@ -83,7 +84,7 @@ export class AddNewServerDialogComponent {
             if (lastServer) {
                 this.openSnackBar("Сервер с таким именем уже существует, смените имя сервера")
             } else {
-                const newServer: CreateServerDto = {
+                const newServer: ServerDto = {
                     serverName: this.serverNameControl.value!,
                     serverUrl: this.serverUrlControl.value!,
                     serverUserName: this.serverUserNameControl.value!,
@@ -126,9 +127,7 @@ export class AddNewServerDialogComponent {
     }
 
     openSnackBar(message: string) {
-        this._snackBar.open(message, 'Закрыть', {
-            duration: this.durationInSeconds * 1000,
-        });
+        this.toasterService.openSnackBar(message);
     }
 }
 

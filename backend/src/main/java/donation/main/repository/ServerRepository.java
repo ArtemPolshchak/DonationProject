@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import donation.main.dto.donatorsdto.DonatorBonusDto;
+import donation.main.dto.serverdto.ServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
 import donation.main.entity.ServerEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -34,4 +36,17 @@ public interface ServerRepository extends JpaRepository<ServerEntity, Long> {
             Long id, @Param("email") String email, Sort sort);
 
     boolean existsServerEntitiesByServerName(String serverName);
+
+    @Query("SELECT new donation.main.dto.serverdto.ServerDto("
+            + " s.serverName as serverName, "
+            + " s.serverUrl as serverUrl, "
+            + "s.serverUserName as serverUserName, "
+            + " s.serverPassword as serverPassword) FROM ServerEntity s WHERE s.id = :id ")
+    Optional<ServerDto> findServerById(Long id);
+
+    @Modifying
+    @Query("UPDATE ServerEntity s SET s.serverName = :#{#dto.serverName}, s.serverUrl = :#{#dto.serverUrl}, "
+            + "s.serverUserName = :#{#dto.serverUserName}, s.serverPassword = :#{#dto.serverPassword} "
+            + "WHERE s.id = :serverId")
+    int updateServerByDto(@Param("serverId") Long serverId, @Param("dto") ServerDto dto);
 }

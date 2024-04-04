@@ -16,6 +16,7 @@ import {CreateDonatorDialogComponent} from "./create-donator-dialog/create-donat
 
 import {Server} from "../../common/server";
 import {StorageService} from "../../services/storage.service";
+import {ToasterService} from "../../services/toaster.service";
 
 @Component({
     selector: 'app-donators',
@@ -56,6 +57,7 @@ export class DonatorsComponent implements OnInit {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
     constructor(private donatorService: DonatorService,
+                private toasterService: ToasterService,
                 private dialog: MatDialog,
                 private router: Router) {
     }
@@ -124,5 +126,9 @@ export class DonatorsComponent implements OnInit {
         dialogRef.componentInstance.response.subscribe(() => {
             this.getAll();
         });
+    }
+
+    openSnackBar(message: string) {
+        this.toasterService.openSnackBar(message);
     }
 }

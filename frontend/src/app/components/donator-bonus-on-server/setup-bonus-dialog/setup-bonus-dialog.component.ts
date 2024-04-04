@@ -17,6 +17,7 @@ import {NgForOf, NgIf} from "@angular/common";
 import {ServerService} from "../../../services/server.service";
 import {LoadDonatorBonus} from "../../../common/load-donator-bonus";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {ToasterService} from "../../../services/toaster.service";
 
 @Component({
     selector: 'app-setup-bonus-dialog',
@@ -51,7 +52,7 @@ export class SetupBonusDialogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any,
         private serverService: ServerService,
         private dialogRef: MatDialogRef<SetupBonusDialogComponent>,
-        private _snackBar: MatSnackBar,
+        private toasterService: ToasterService,
     ) {
     }
 
@@ -94,9 +95,7 @@ export class SetupBonusDialogComponent implements OnInit {
     ]);
 
     openSnackBar(message: string) {
-        this._snackBar.open(message, 'Закрыть', {
-            duration: this.durationInSeconds * 1000,
-        });
+        this.toasterService.openSnackBar(message);
     }
 }
 

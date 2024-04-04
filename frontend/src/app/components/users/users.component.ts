@@ -8,6 +8,7 @@ import {FormsModule} from "@angular/forms";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {User} from "../../common/user";
 import {UserService} from "../../services/user.service";
+import {ToasterService} from "../../services/toaster.service";
 
 @Component({
   selector: 'app-user',
@@ -34,7 +35,7 @@ export class UsersComponent implements OnInit {
   pageSize: number = 10;
   selectedItem: any;
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private toasterService: ToasterService) {
   }
 
   ngOnInit(): void {
@@ -46,5 +47,9 @@ export class UsersComponent implements OnInit {
 
   createUser() {
 
+  }
+
+  openSnackBar(message: string) {
+    this.toasterService.openSnackBar(message);
   }
 }

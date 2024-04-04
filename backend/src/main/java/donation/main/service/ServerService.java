@@ -1,23 +1,21 @@
 package donation.main.service;
 
 import java.util.List;
-import java.util.Optional;
-
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
 import donation.main.dto.donatorsdto.DonatorBonusDto;
 import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
-import donation.main.dto.serverdto.CreateServerDto;
+import donation.main.dto.serverdto.ServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
 import donation.main.entity.DonatorEntity;
 import donation.main.entity.ServerBonusSettingsEntity;
 import donation.main.entity.ServerEntity;
-import donation.main.exception.PageNotFoundException;
 import donation.main.exception.ServerAlreadyExistsException;
 import donation.main.exception.ServerNotFoundException;
 import donation.main.mapper.DonatorMapper;
 import donation.main.mapper.ServerMapper;
 import donation.main.repository.DonatorRepository;
 import donation.main.repository.ServerRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.SoftDelete;
 import org.springframework.data.domain.Page;
@@ -42,13 +40,33 @@ public class ServerService {
         return serverRepository.getAllByServerNameAndId(pageable);
     }
 
-    public ServerEntity create(CreateServerDto dto) {
+    public ServerEntity create(ServerDto dto) {
         if (serverRepository.existsServerEntitiesByServerName(dto.serverName())) {
             throw new ServerAlreadyExistsException("Server already exists with name:", dto.serverName());
         }
         ServerEntity server = serverMapper.toEntity(dto);
         server.getServerBonusSettings().add(ServerBonusSettingsEntity.builder().server(server).build());
         return serverRepository.save(server);
+    }
+
+    public ServerDto getServerById(Long serverId) {
+        ServerDto serverEntity = serverRepository.findServerById(serverId).orElseThrow(
+                () -> new ServerNotFoundException("Server not found by Id= ", serverId)
+        );
+
+        return serverMapper.toDto(serverEntity);
+    }
+
+    @Transactional
+    public void updateServer(Long serverId, ServerDto dto) {
+        if (serverRepository.existsServerEntitiesByServerName(dto.serverName())) {
+            throw new ServerAlreadyExistsException("Server already exists with name:", dto.serverName());
+        }
+
+        int rowsUpdated = serverRepository.updateServerByDto(serverId, dto);
+        if (rowsUpdated == 0) {
+            throw new ServerNotFoundException("Server not found by Id=", serverId);
+        }
     }
 
     public ServerEntity findById(Long id) {

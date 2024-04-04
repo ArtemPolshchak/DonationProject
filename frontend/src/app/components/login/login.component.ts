@@ -10,6 +10,7 @@ import {StorageService} from "../../services/storage.service";
 import {ServerService} from "../../services/server.service";
 import {take} from "rxjs";
 import {MatDialogContent} from "@angular/material/dialog";
+import {ToasterService} from "../../services/toaster.service";
 
 
 @Component({
@@ -39,7 +40,8 @@ export class LoginComponent {
     constructor(private fb: FormBuilder,
                 private loginService: LoginService,
                 private serverService: ServerService,
-                private router: Router
+                private router: Router,
+                private toasterService: ToasterService
     ) {
         this.form = this.fb.group({
             email: ['', Validators.required],
@@ -86,6 +88,10 @@ export class LoginComponent {
             default:
                 this.router.navigateByUrl('/app-guest-page');
         }
+    }
+
+    openSnackBar(message: string) {
+        this.toasterService.openSnackBar(message);
     }
 }
 
