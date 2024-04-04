@@ -35,6 +35,15 @@
             <option value="COMPLETED">Подтверждены</option>
             <option value="CANCELLED">Отменены</option>
         </select>
+        <select class="form-select" aria-label="Способ оплаты" [(ngModel)]="paymentMethod"
+                (change)="applyFilterSortSearch()">
+            <option selected disabled hidden>фИЛЬТР</option>
+            <option value="">Фильтр - Cпособ оплаты</option>
+            <option value="PAYPAL">PAYPAL</option>
+            <option value="CARD_RU">CARD_RU</option>
+            <option value="CARD_UA">CARD_UA</option>
+            <option value="ETC">etc.</option>
+        </select>
 
         <select class="form-select" aria-label="Сервер" [(ngModel)]="selectedServer"
                 (change)="applyFilterSortSearch()">
@@ -52,13 +61,16 @@
                 <h2 ngbAccordionHeader>
                     <button ngbAccordionButton>
                     <span *ngIf="transaction.dateCreated">
-                        Дата создания: <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</strong>
+                        Дата: <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</strong>
                     </span>
                         <span *ngIf="transaction.serverName">
-                        Имя сервера: <strong>{{ transaction.serverName}}</strong>
+                        Сервер: <strong>{{ transaction.serverName}}</strong>
                     </span>
                         <span *ngIf="transaction.donatorEmail">
-                        Почта донатора: <strong>{{transaction.donatorEmail}}</strong>
+                        Почта: <strong>{{transaction.donatorEmail}}</strong>
+                    </span>
+                        <span *ngIf="transaction.paymentMethod">
+                        Способ оплаты: <strong>{{transaction.paymentMethod}}</strong>
                     </span>
                         <span *ngIf="transaction.totalAmount">
                         Общая сумма Доната: <strong>{{transaction.totalAmount | currency: 'USD'}}</strong>
@@ -73,7 +85,8 @@
                     <div ngbAccordionBody>
                         <div class="container">
                             <div class="image-container">
-                                <img #image [src]="transaction.imagePreview ? transaction.imagePreview : NO_IMG_PATH" alt="img"
+                                <img #image [src]="transaction.imagePreview ? transaction.imagePreview : NO_IMG_PATH"
+                                     alt="img"
                                      width="100%" style="cursor:pointer"
                                      (click)="transaction.imagePreview ? openImageDialog(transaction.id) : {}"/>
                             </div>
@@ -111,6 +124,10 @@
                                 <div>
                                     Сумма к зачислению: <strong>{{transaction.totalAmount}}</strong>
                                 </div>
+                                <div>
+                                    Способ оплаты: <strong>{{transaction.paymentMethod}}</strong>
+                                </div>
+
                             </div>
                         </div>
                     </div>

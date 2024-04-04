@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Transaction} from "../common/transaction";
 import {HttpClientService} from "./http-client.service";
 import {HttpMethod} from "../enums/http-method";
-import {HttpParams} from "@angular/common/http";
 
 @Injectable({
     providedIn: 'root'
@@ -12,8 +11,14 @@ export class TransactionService {
     constructor(private httpClient: HttpClientService) {
     }
 
-    public getAllWithSearch(pageNumber?: number, pageSize?: number, sort?: string, transactionState?: string[], serverNames?: string[], donatorMails?: string) {
-        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort, donatorMails, serverNames, transactionState);
+    public getAllWithSearch(pageNumber?: number, pageSize?: number, sort?: string, transactionState?: string[], paymentMethod?: string[], serverNames?: string[], donatorMails?: string) {
+        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort, donatorMails, serverNames,  transactionState, paymentMethod);
+        const url: string = 'api/transactions/search';
+        return this.httpClient.fetch<GetTransactionResponse>(url, true, params);
+    }
+
+    public getDonatorsFromDashboard(pageNumber?: number, pageSize?: number, sort?: string,  donatorMails?: string) {
+        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort, donatorMails);
         const url: string = 'api/transactions/search';
         return this.httpClient.fetch<GetTransactionResponse>(url, true, params);
     }

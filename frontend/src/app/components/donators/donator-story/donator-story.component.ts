@@ -59,6 +59,8 @@ export class DonatorStoryComponent implements OnInit {
     pageNumber: number = 0;
     pageSize: number = 10;
     totalElements: number = 0;
+    paymentMethods?: string[] = ["PAYPAL", "CARD_RU", "CARD_UA", "USDT", "ETC"];
+    paymentMethod: string = "";
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -76,6 +78,7 @@ export class DonatorStoryComponent implements OnInit {
             this.donatorId = +params['id'];
             this.email = params['email'];
             this.totalDonations = +params['totalDonations'];
+            this.paymentMethod = params['paymentMethod'];
             this.servers = StorageService.getServers()
             if (this.servers.length === 0) {
                 StorageService.watchServers().subscribe({
@@ -111,8 +114,10 @@ export class DonatorStoryComponent implements OnInit {
                 this.pageSize,
                 this.sortState,
                 this.state,
+                this.paymentMethods,
                 this.selectedServer ? [this.selectedServer] : [],
                 this.email,
+
             )
             .subscribe(data => {
                 this.transactions = data.content;
