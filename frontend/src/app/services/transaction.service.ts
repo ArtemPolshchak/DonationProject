@@ -17,12 +17,6 @@ export class TransactionService {
         return this.httpClient.fetch<GetTransactionResponse>(url, true, params);
     }
 
-    public getDonatorsFromDashboard(pageNumber?: number, pageSize?: number, sort?: string,  donatorMails?: string) {
-        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort, donatorMails);
-        const url: string = 'api/transactions/search';
-        return this.httpClient.fetch<GetTransactionResponse>(url, true, params);
-    }
-
     public confirmById(transactionId: number, state: string, adminBonus: number) {
         const url: string = `api/transactions/${transactionId}/confirm`;
         let transaction = new Transaction();
