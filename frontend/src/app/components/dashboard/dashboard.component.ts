@@ -47,6 +47,8 @@ export class DashboardComponent implements OnInit {
     donatorsMail: string = '';
     servers: Server[] = [];
     transactionState: string[] = [TransactionState.IN_PROGRESS];
+    paymentMethod: string[] = [];
+    serverNames: string[] = [];
     transactions: Transaction[] = [];
     pageNumber: number = 0;
     pageSize: number = 10;
@@ -97,8 +99,8 @@ export class DashboardComponent implements OnInit {
     }
 
     getAll(): void {
-        this.transactionService.getDonatorsFromDashboard(
-            this.pageNumber, this.pageSize, this.sortState,
+        this.transactionService.getAllWithSearch(
+            this.pageNumber, this.pageSize, this.sortState,  this.transactionState, this.paymentMethod, this.serverNames,
              this.donatorsMail)
             .subscribe((data) => {
                 this.transactions = data.content;
