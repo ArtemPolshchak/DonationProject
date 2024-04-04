@@ -5,11 +5,11 @@
     <div class="search">
         <input type="text" name="search" class="search-input" placeholder="Почта донатора" matInput
                [(ngModel)]="donatorsMail">
-        <input type="button" class="search-button" value="ПОИСК" (click)="getAll()">
+        <input type="button" class="search-button" value="ПОИСК" (click)="applyFilterSortSearch()">
     </div>
     <div class="search">
         <select class="form-select" aria-label="Сорт" [(ngModel)]="sortState"
-                (change)="sort()">
+                (change)="applyFilterSortSearch()">
             <option selected disabled hidden>СОРТИРОВКА</option>
             <option value="dateCreated,asc">Сортировка по дате от старых к новым</option>
             <option value="dateCreated,desc">Сортировка по дате от новых к старым</option>
@@ -32,14 +32,17 @@
                 <button ngbAccordionButton [ngStyle]="{'background-color': transaction.color}">
                     <div style="width: 100%;  display: flex; align-items: center; justify-content: space-between">
                         <span *ngIf="transaction.dateCreated">
-                            Дата создания: <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</strong>
+                            Дата: <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</strong>
                         </span>
                         <span *ngIf="transaction.serverName">
-                            Имя сервера: <strong>{{ transaction.serverName}}</strong>
+                            Сервер: <strong>{{ transaction.serverName}}</strong>
                         </span>
                         <span *ngIf="transaction.donatorEmail">
-                            Почта донатора: <strong>{{transaction.donatorEmail}}</strong>
+                            Почта: <strong>{{transaction.donatorEmail}}</strong>
                         </span>
+                        <span *ngIf="transaction.paymentMethod">
+                        Способ оплаты: <strong>{{transaction.paymentMethod}}</strong>
+                    </span>
                         <span *ngIf="transaction.totalAmount">
                             Общая сумма Доната: <strong>{{transaction.totalAmount | currency: 'USD'}}</strong>
                         </span>
@@ -110,6 +113,9 @@
                                     </div>
                                     <div>
                                         Сумма к зачислению: <strong>{{transaction.totalAmount}}</strong>
+                                    </div>
+                                    <div>
+                                        Способ оплаты: <strong>{{transaction.paymentMethod}}</strong>
                                     </div>
                                 </mat-card-content>
                             </mat-card>

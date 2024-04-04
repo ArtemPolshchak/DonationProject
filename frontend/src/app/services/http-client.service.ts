@@ -30,11 +30,12 @@ export class HttpClientService extends HttpClient {
         return this.request<T>(method, url, <Object>options);
     }
 
-    getHttpParams(pageNumber?: number, pageSize?: number, sort?: string, donatorMails?: string, serverNames?: string[], state?: string[]) {
+    getHttpParams(pageNumber?: number, pageSize?: number, sort?: string, donatorMails?: string, serverNames?: string[], state?: string[], paymentMethod?: string[]) {
         let params = new HttpParams();
         params = (serverNames && serverNames.length > 0) ? params.set('serverNames', serverNames.join(',')) : params;
         params = (donatorMails && donatorMails.length > 0) ? params.set('donatorMails', donatorMails) : params;
         params = (state && state.length > 0) ? params.set('state', state.join(',')) : params;
+        params = (paymentMethod && paymentMethod.length > 0) ? params.set('paymentMethod', paymentMethod.join(',')) : params;
         params = (pageNumber) ? params.set('page', pageNumber.toString()) : params;
         params = (pageSize) ? params.set('size', pageSize.toString()) : params;
         params = (sort) ? params.set('sort', sort) : params;

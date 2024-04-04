@@ -14,7 +14,6 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import {TransactionService} from "../../../services/transaction.service";
 import {Server} from "../../../common/server";
 import {MatIcon} from "@angular/material/icon";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {StorageService} from "../../../services/storage.service";
 import {LAST_SERVER_KEY} from "../../../enums/app-constans";
 import {ImageProcessorService} from "../../../services/image-processor.service";
@@ -48,9 +47,11 @@ export class TransactionDialog implements OnInit {
     tempImg?: string | null;
     @Output() transactionResponse = new EventEmitter();
     maxImgSideSize = 800;
-    durationInSeconds: number = 5;
     servers: Server[];
+    paymentMethods: string[] = ["PAYPAL", "CARD_RU", "CARD_UA", "USDT", "ETC"];
+    payment: string = "PAYPAL";
     transaction: Transaction;
+    paymentControl = new FormControl("", Validators.required);
     serverControl = new FormControl<Server | null>(null, Validators.required);
     contributionControl = new FormControl('',
         [Validators.required, Validators.pattern(/^\d+$/)]
@@ -73,13 +74,11 @@ export class TransactionDialog implements OnInit {
         "#ffeb8a",
     ];
 
-
     constructor(private fb: UntypedFormBuilder,
                 private toasterService: ToasterService,
                 private dialogRef: MatDialogRef<TransactionDialog>,
                 private transactionService: TransactionService,
                 private imageProcessor: ImageProcessorService,
-                private _snackBar: MatSnackBar,
                 @Inject(MAT_DIALOG_DATA) public data: any) {
         this.servers = this.data.servers;
         this.transaction = this.data.transaction ? this.data.transaction : new Transaction();
@@ -87,19 +86,24 @@ export class TransactionDialog implements OnInit {
 
     ngOnInit(): void {
         let tempServer = StorageService.getItem(LAST_SERVER_KEY);
+        this.paymentControl.setValue(this.payment)
         if (tempServer) {
             const serverId = +(JSON.parse(tempServer))
             const lastServer = this.servers.find(server => server.id === serverId) ?? null;
             this.serverControl.setValue(lastServer);
         }
+
         if (this.data.transaction) {
             this.serverControl.setValue(this.findServerByName(this.data.transaction.serverName));
             this.contributionControl.setValue(this.data.transaction.contributionAmount);
             this.emailControl.setValue(this.data.transaction.donatorEmail);
+            this.paymentControl.setValue(this.data.transaction.paymentMethod);
             this.transactionService.getImage(this.transaction.id).subscribe( {
                 next: (res) => {
-                    this.transaction.image = res.data;
-                    this.imageForm.get('photo')?.setValue(this.data.transaction.image);
+                    if(res?.data) {
+                        this.transaction.image = res.data;
+                        this.imageForm.get('photo')?.setValue(this.data.transaction.image);
+                    }
                 }
             })
         }
@@ -147,6 +151,7 @@ export class TransactionDialog implements OnInit {
     proceedTransaction() {
         this.transaction.serverId = this.serverControl.value!.id
         this.transaction.contributionAmount = Number(this.contributionControl.value!);
+        this.transaction.paymentMethod = this.paymentControl.value!;
         this.transaction.donatorEmail = this.emailControl.value!;
         this.transaction.id ?
             this.updateTransaction(this.transaction) :

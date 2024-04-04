@@ -1,3 +1,4 @@
+
 export class Transaction {
     id!: number;
     donatorEmail!: string;
@@ -10,6 +11,7 @@ export class Transaction {
     createdBy!: string;
     approvedBy?: number;
     state!: string;
+    paymentMethod!: string;
     contributionAmount!: number;
     serverBonusPercentage!: number;
     personalBonusPercentage!: number;

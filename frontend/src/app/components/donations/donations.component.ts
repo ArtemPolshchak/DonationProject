@@ -13,7 +13,7 @@ import {Transaction} from "../../common/transaction";
 import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatCheckbox, MatCheckboxModule} from "@angular/material/checkbox";
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TransactionDialog} from "./transaction-dialog/transaction-dialog.component";
 import {MatInput} from "@angular/material/input";
 import {Server} from "../../common/server";
@@ -55,25 +55,19 @@ export class DonationsComponent implements OnInit {
     totalElements: number = 0;
     transactionState: string[] = ["IN_PROGRESS", "CANCELLED", "COMPLETED"];
     serverNames?: string[];
-    donatorsMail?: string;
+    paymentMethods?: string[] = ["PAYPAL", "CARD_RU", "CARD_UA", "USDT", "ETC"];
+    donatorsMail!: string;
     sortState?: string = "dateCreated,desc";
     stateFilter: string = "";
     selectedServer: string = "";
+    paymentMethod: string = "";
     servers: Server[] = [];
-
-
     @ViewChild(MatPaginator) paginator!: MatPaginator;
-    toppings = this._formBuilder.group({
-        pepperoni: false,
-        extracheese: false,
-        mushroom: false,
-    });
 
     constructor(
         private toasterService: ToasterService,
         private transactionService: TransactionService,
         private dialog: MatDialog,
-        private _formBuilder: FormBuilder
     ) {
     }
 
@@ -97,6 +91,7 @@ export class DonationsComponent implements OnInit {
             this.transactionState.push(this.stateFilter);
         }
         this.serverNames = this.selectedServer ? [this.selectedServer] : undefined;
+        this.paymentMethods = this.paymentMethod ? [this.paymentMethod] : undefined;
         this.pageNumber = 0
         this.paginator.pageIndex = this.pageNumber;
         this.getTransactionPage();
@@ -106,7 +101,7 @@ export class DonationsComponent implements OnInit {
     getTransactionPage(): void {
         this.transactionService.getAllWithSearch(
             this.pageNumber, this.pageSize, this.sortState,
-            this.transactionState, this.serverNames, this.donatorsMail)
+            this.transactionState, this.paymentMethods, this.serverNames,  this.donatorsMail)
             .subscribe((data) => {
                 this.transactions = data.content;
                 this.totalElements = data.totalElements;

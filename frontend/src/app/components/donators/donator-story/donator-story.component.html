@@ -51,14 +51,18 @@
                         Дата подтверждения: <strong>{{transaction.dateApproved | date: 'dd MMMM yyyy'}}</strong>
                     </span>
                     <span *ngIf="transaction.serverName">
-                        Имя сервера: <strong>{{ transaction.serverName}}</strong>
+                        Сервер: <strong>{{ transaction.serverName}}</strong>
                     </span>
                     <span *ngIf="transaction.donatorEmail">
-                        Почта донатора: <strong>{{transaction.donatorEmail}}</strong>
+                        Почта: <strong>{{transaction.donatorEmail}}</strong>
+                    </span>
+                    <span *ngIf="transaction.paymentMethod">
+                        Способ оплаты: <strong>{{transaction.paymentMethod}}</strong>
                     </span>
                     <span *ngIf="transaction.totalAmount">
                         Общая сумма Доната: <strong>{{transaction.totalAmount | currency: 'USD'}}</strong>
                     </span>
+
                 </button>
             </h2>
             <div ngbAccordionCollapse>
@@ -120,6 +124,9 @@
                             </div>
                             <div>
                                 Сумма к зачислению: <strong>{{transaction.totalAmount}}</strong>
+                            </div>
+                            <div>
+                                Способ оплаты: <strong>{{transaction.paymentMethod}}</strong>
                             </div>
                         </div>
                     </div>

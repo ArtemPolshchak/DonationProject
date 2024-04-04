@@ -34,6 +34,13 @@
                     <mat-error *ngIf="contributionControl.hasError('pattern')">Numbers only!</mat-error>
                 </mat-form-field>
                 <mat-form-field class="input-field">
+                    <mat-label>Payment Method</mat-label>
+                    <mat-select [formControl]="paymentControl" required>
+                        <mat-option *ngFor="let paymentMethod of paymentMethods" [value]="paymentMethod">{{paymentMethod}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="serverControl.hasError('required')">Server required</mat-error>
+                </mat-form-field>
+                <mat-form-field class="input-field">
                     <mat-label>Server</mat-label>
                     <mat-select [formControl]="serverControl" required>
                         <mat-option *ngFor="let server of servers" [value]="server">{{server.serverName}}</mat-option>
