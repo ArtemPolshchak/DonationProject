@@ -1,6 +1,8 @@
 package donation.main.entity;
 
 import static java.math.BigDecimal.ZERO;
+
+import donation.main.enumeration.PaymentMethod;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -62,6 +64,11 @@ public class TransactionEntity {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private TransactionState state = TransactionState.IN_PROGRESS;
+
+    @Column(name = "payment_method", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private PaymentMethod paymentMethod = PaymentMethod.PAYPAL;
 
     @Column(name = "total_amount")
     private BigDecimal totalAmount;

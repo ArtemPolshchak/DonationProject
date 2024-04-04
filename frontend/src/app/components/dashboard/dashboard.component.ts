@@ -90,8 +90,16 @@ export class DashboardComponent implements OnInit {
         }
     }
 
+    applyFilterSortSearch(): void {
+        this.pageNumber = 0
+        this.paginator.pageIndex = this.pageNumber;
+        this.getAll();
+    }
+
     getAll(): void {
-        this.transactionService.getAllWithSearch(this.pageNumber, this.pageSize, this.sortState, this.transactionState)
+        this.transactionService.getDonatorsFromDashboard(
+            this.pageNumber, this.pageSize, this.sortState,
+             this.donatorsMail)
             .subscribe((data) => {
                 this.transactions = data.content;
                 this.totalElements = data.totalElements;
@@ -131,11 +139,7 @@ export class DashboardComponent implements OnInit {
         });
     }
 
-    sort() {
-        this.pageNumber = 0;
-        this.paginator.pageIndex = this.pageNumber;
-        this.getAll();
-    }
+
 
     private findServerByName(serverName: string): Server {
         return this.servers.find(s => s.serverName === serverName)!;

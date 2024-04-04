@@ -1,5 +1,6 @@
 package donation.main.dto.transactiondto;
 
+import donation.main.enumeration.PaymentMethod;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -14,5 +15,6 @@ public record RequestTransactionDto(
         String comment,
         @NotNull
         Long serverId,
+        PaymentMethod paymentMethod,
         String color
 ) { }

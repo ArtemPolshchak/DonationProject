@@ -1,6 +1,8 @@
 package donation.main.dto.transactiondto;
 
 import java.math.BigDecimal;
+
+import donation.main.enumeration.PaymentMethod;
 import donation.main.enumeration.TransactionState;
 
 public record TransactionResponseDto(
@@ -16,6 +18,7 @@ public record TransactionResponseDto(
         String createdBy,
         String approvedBy,
         TransactionState state,
+        PaymentMethod paymentMethod,
         BigDecimal contributionAmount,
         BigDecimal totalAmount,
         String comment,
