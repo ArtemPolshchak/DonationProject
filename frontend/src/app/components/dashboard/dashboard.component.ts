@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgbAccordionModule} from "@ng-bootstrap/ng-bootstrap";
-import {CurrencyPipe, DatePipe, NgForOf, NgIf, NgStyle} from "@angular/common";
+import {CurrencyPipe, DatePipe, DecimalPipe, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {TransactionService} from "../../services/transaction.service";
 import {Transaction} from "../../common/transaction";
 import {SidebarComponent} from "../sidebar/sidebar.component";
@@ -38,7 +38,8 @@ import {MatIcon} from "@angular/material/icon";
         NgStyle,
         MatCard,
         MatCardContent,
-        MatIcon
+        MatIcon,
+        DecimalPipe
     ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'
@@ -54,7 +55,6 @@ export class DashboardComponent implements OnInit {
     pageSize: number = 10;
     totalElements: number = 0;
     sortState: string = "dateCreated,desc";
-    durationInSeconds: number = 5;
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     hideColorPicker: boolean = true;
     hideTextInput: boolean = true;
@@ -100,8 +100,8 @@ export class DashboardComponent implements OnInit {
 
     getAll(): void {
         this.transactionService.getAllWithSearch(
-            this.pageNumber, this.pageSize, this.sortState,  this.transactionState, this.paymentMethod, this.serverNames,
-             this.donatorsMail)
+            this.pageNumber, this.pageSize, this.sortState, this.transactionState, this.paymentMethod, this.serverNames,
+            this.donatorsMail)
             .subscribe((data) => {
                 this.transactions = data.content;
                 this.totalElements = data.totalElements;
@@ -141,12 +141,11 @@ export class DashboardComponent implements OnInit {
         });
     }
 
-
-
     private findServerByName(serverName: string): Server {
         return this.servers.find(s => s.serverName === serverName)!;
     }
 
     protected readonly TransactionState = TransactionState;
     protected readonly NO_IMG_PATH = NO_IMG_PATH;
+    protected readonly Number = Number;
 }
