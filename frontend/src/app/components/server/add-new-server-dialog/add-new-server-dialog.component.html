@@ -36,7 +36,7 @@
     <!--    <button class="ok-button" mat-button (click)="addNewServer()" [disabled]="!isFormValid()" mat-dialog-close>Сохранить</button>-->
     <!--</mat-dialog-actions>-->
     <mat-dialog-actions align="center">
-        <button class="dialog-button" mat-button (click)="isFormValid() ? addNewServer() : {}">СОХРАНИТЬ</button>
         <button class="dialog-button" mat-button mat-dialog-close>ЗАКРЫТЬ</button>
+        <button class="dialog-button" mat-button (click)="isFormValid() ? addNewServer() : {}">СОХРАНИТЬ</button>
     </mat-dialog-actions>
 </div>

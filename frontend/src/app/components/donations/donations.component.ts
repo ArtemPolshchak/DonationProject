@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {CurrencyPipe, DatePipe, JsonPipe, NgForOf, NgIf, NgStyle} from "@angular/common";
+import {CurrencyPipe, DatePipe, DecimalPipe, JsonPipe, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {
     NgbAccordionBody,
     NgbAccordionButton,
@@ -43,7 +43,8 @@ import {ToasterService} from "../../services/toaster.service";
         JsonPipe,
         MatInput,
         NgIf,
-        NgStyle
+        NgStyle,
+        DecimalPipe
     ],
     templateUrl: './donations.component.html',
     styleUrl: './donations.component.scss'

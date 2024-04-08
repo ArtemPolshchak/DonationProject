@@ -6,14 +6,15 @@
         </a>
         </ng-container>
     </div>
-
     <div class="menu-sidebar-content js-scrollbar1">
         <nav class="navbar-sidebar">
-                <mat-button-toggle-group appearance="legacy" vertical="true">
-                    <ng-container *ngFor="let item of menuItems">
-                        <mat-button-toggle *ngIf="!authService.isGuest()" routerLink="/{{item}}">{{item.toUpperCase()}}</mat-button-toggle>
-                    </ng-container>
-                </mat-button-toggle-group>
+            <mat-button-toggle-group appearance="legacy" vertical="true">
+                <ng-container *ngFor="let item of menuItems | keyvalue">
+                    <mat-button-toggle *ngIf="!authService.isGuest()" routerLink="/{{item.key}}">
+                        {{ item.value.toUpperCase()}}
+                    </mat-button-toggle>
+                </ng-container>
+            </mat-button-toggle-group>
         </nav>
     </div>
     <div class="logout-button" (click)="logout()">
@@ -22,7 +23,7 @@
                 <img src="assets/images/logout-button.svg" alt="">
             </div>
             <div class="col-auto my-auto ps-0">
-                Logout
+                Выйти
             </div>
         </div>
     </div>
