@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {Transaction} from "../../../common/transaction";
 import {TransactionService} from "../../../services/transaction.service";
-import {CurrencyPipe, DatePipe, NgForOf, NgIf} from "@angular/common";
+import {CurrencyPipe, DatePipe, DecimalPipe, NgForOf, NgIf} from "@angular/common";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {
@@ -21,6 +21,7 @@ import {OpenImageDialogComponent} from "../../open-image-dialog/open-image-dialo
 import {MatDialog} from "@angular/material/dialog";
 import {StorageService} from "../../../services/storage.service";
 import {ToasterService} from "../../../services/toaster.service";
+import {TransactionPaymentMethod} from "../../../enums/transactoin-pamyent-method";
 
 @Component({
     selector: 'app-donatorstory',
@@ -41,7 +42,8 @@ import {ToasterService} from "../../../services/toaster.service";
         NgbAccordionItem,
         ReactiveFormsModule,
         FormsModule,
-        NgIf
+        NgIf,
+        DecimalPipe
     ],
     templateUrl: './donator-story.component.html',
     styleUrl: './donator-story.component.scss'
@@ -59,7 +61,7 @@ export class DonatorStoryComponent implements OnInit {
     pageNumber: number = 0;
     pageSize: number = 10;
     totalElements: number = 0;
-    paymentMethods?: string[] = ["PAYPAL", "CARD_RU", "CARD_UA", "USDT", "ETC"];
+    paymentMethods?: TransactionPaymentMethod[];
     paymentMethod: string = "";
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;

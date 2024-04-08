@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink, RouterLinkActive} from "@angular/router";
-import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {NgbNavModule} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../services/auth.service";
 import {ADMIN_MENU_ITEMS, MODERATOR_MENU_ITEMS} from "../../enums/app-constans";
@@ -20,13 +20,14 @@ import {StorageService} from "../../services/storage.service";
     NgIf,
     MatButtonToggle,
     MatButtonToggleGroup,
-    MatButton
+    MatButton,
+    KeyValuePipe
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent implements OnInit{
-  menuItems: string[] = [];
+  menuItems: { [key: string]: string } = {};
 
   constructor(public authService: AuthService, private router: Router) {}
 

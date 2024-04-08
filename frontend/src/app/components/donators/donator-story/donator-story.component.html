@@ -117,13 +117,13 @@
                                 Персональный бонус: <strong>{{transaction.personalBonusPercentage}}%</strong>
                             </div>
                             <div>
-                                Бонысы Админа: <strong>{{transaction.adminBonus}}</strong>
+                                Бонысы Админа: <strong>{{transaction.adminBonus | number: '1.2-2'}}</strong>
                             </div>
                             <div>
-                                Сумма доната: <strong>{{transaction.contributionAmount}}</strong>
+                                Сумма доната: <strong>{{transaction.contributionAmount | number: '1.2-2'}}</strong>
                             </div>
                             <div>
-                                Сумма к зачислению: <strong>{{transaction.totalAmount}}</strong>
+                                Сумма к зачислению: <strong>{{transaction.totalAmount | number: '1.2-2'}}</strong>
                             </div>
                             <div>
                                 Способ оплаты: <strong>{{transaction.paymentMethod}}</strong>
