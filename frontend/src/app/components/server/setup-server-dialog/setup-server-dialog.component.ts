@@ -40,6 +40,7 @@ import {ToasterService} from "../../../services/toaster.service";
 export class SetupServerDialogComponent implements OnInit {
     servers: Server[];
     serverId: number;
+    lastServerName!: string;
     @Output() componentResponse = new EventEmitter();
 
     constructor(
@@ -49,10 +50,11 @@ export class SetupServerDialogComponent implements OnInit {
         private serverService: ServerService) {
         this.servers = StorageService.getServers();
         this.serverId = data.serverId;
+
     }
 
     ngOnInit(): void {
-        this.getServerById();
+        this.setServerFields();
     }
 
     serverNameControl = new FormControl('',
@@ -76,11 +78,15 @@ export class SetupServerDialogComponent implements OnInit {
         ]
     );
 
+    findServerByName(serverName: string) {
+        return this.servers.find(server => server.serverName === serverName) ?? null;
+    }
+
     updateServer() {
         if (this.isFormValid()) {
             const serverName = this.serverNameControl.value;
-            const lastServer = this.servers.find(server => server.serverName === serverName) ?? null;
-            if (lastServer) {
+            const lastServer = this.findServerByName(serverName!);
+            if (lastServer && lastServer.serverName != this.lastServerName) {
                 this.openSnackBar("Сервер с таким именем уже существует, смените имя сервера")
             } else {
                 const newServer: ServerDto = {
@@ -105,12 +111,13 @@ export class SetupServerDialogComponent implements OnInit {
         }
     }
 
-    public getServerById(): void {
+    public setServerFields(): void {
         this.serverService.getServerById(this.serverId).subscribe({
             next: (data) => {
+                this.lastServerName = data.serverName;
                 this.serverNameControl.setValue(data.serverName);
                 this.serverUrlControl.setValue(data.serverUrl);
-                this.serverUserNameControl.setValue(data.serverName);
+                this.serverUserNameControl.setValue(data.serverUserName);
                 this.serverPasswordControl.setValue(data.serverPassword);
             }
         });

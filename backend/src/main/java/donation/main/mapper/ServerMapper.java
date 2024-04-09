@@ -26,6 +26,4 @@ public interface ServerMapper {
 
     ServerIdNameDto toDto(ServerEntity entity);
 
-    ServerEntity update(@MappingTarget ServerEntity entity, ServerIdNameDto dto);
-
 }
