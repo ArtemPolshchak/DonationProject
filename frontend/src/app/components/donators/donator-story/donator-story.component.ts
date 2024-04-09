@@ -133,10 +133,10 @@ export class DonatorStoryComponent implements OnInit {
         this.getDonatorTransactions();
     }
 
-    openImageDialog(image: string) {
+    openImageDialog(transactionId: number) {
         this.dialog.open(OpenImageDialogComponent, {
             width: '50%',
-            data: image,
+            data: transactionId,
         });
     }
 }
