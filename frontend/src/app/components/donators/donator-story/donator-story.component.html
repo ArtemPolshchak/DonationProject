@@ -89,7 +89,7 @@
                             <img #image [src]="transaction.imagePreview" alt="img"
                                  onerror="this.src='s../../assets/images/no-image.jpg'"
                                  width="100%" style="cursor:pointer"
-                                 (click)="openImageDialog(image.src)"/>
+                                 (click)="openImageDialog(transaction.id)"/>
                         </div>
 
                         <div class="info-block">
