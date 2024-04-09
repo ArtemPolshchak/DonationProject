@@ -5,6 +5,7 @@ import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,26 +37,26 @@ public class ServerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "server_name")
+    @Column(name = "server_name", unique = true, nullable = false)
     private String serverName;
 
-    @Column(name = "server_password")
+    @Column(name = "server_password", nullable = false)
     private String serverPassword;
 
-    @Column(name = "server_url")
+    @Column(name = "server_url", unique = true, nullable = false)
     private String serverUrl;
 
-    @Column(name = "server_user_name")
+    @Column(name = "server_user_name", nullable = false)
     private String serverUserName;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "servers_donators_bonuses", joinColumns = @JoinColumn(name = "server_id", referencedColumnName = "id"))
     @MapKeyJoinColumn(name = "donator_id", referencedColumnName = "id")
     @Column(name = "donators_bonuses")
     @BatchSize(size = 50)
     private Map<DonatorEntity, BigDecimal> donatorsBonuses = new HashMap<>();
 
-    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @BatchSize(size = 50)
     private SortedSet<ServerBonusSettingsEntity> serverBonusSettings = new TreeSet<>();
 

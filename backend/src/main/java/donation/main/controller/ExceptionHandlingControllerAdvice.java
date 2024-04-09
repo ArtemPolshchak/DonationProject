@@ -1,5 +1,6 @@
 package donation.main.controller;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import donation.main.exception.AccessForbiddenException;
@@ -131,6 +132,13 @@ public class ExceptionHandlingControllerAdvice {
     @ExceptionHandler(ServerNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     Map<String, String> handleServerNotFoundException(ServerNotFoundException exception) {
+        return Map.of(MESSAGE, exception.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(SQLException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    Map<String, String> handleSqlException(SQLException exception) {
         return Map.of(MESSAGE, exception.getMessage());
     }
 }
