@@ -53,20 +53,13 @@ public class ServerService {
         ServerDto serverEntity = serverRepository.findServerById(serverId).orElseThrow(
                 () -> new ServerNotFoundException("Server not found by Id= ", serverId)
         );
-
         return serverMapper.toDto(serverEntity);
     }
 
     @Transactional
     public void updateServer(Long serverId, ServerDto dto) {
-        if (serverRepository.existsServerEntitiesByServerName(dto.serverName())) {
-            throw new ServerAlreadyExistsException("Server already exists with name:", dto.serverName());
-        }
-
-        int rowsUpdated = serverRepository.updateServerByDto(serverId, dto);
-        if (rowsUpdated == 0) {
-            throw new ServerNotFoundException("Server not found by Id=", serverId);
-        }
+        ServerEntity server = findById(serverId);
+        serverMapper.update(server, dto);
     }
 
     public ServerEntity findById(Long id) {

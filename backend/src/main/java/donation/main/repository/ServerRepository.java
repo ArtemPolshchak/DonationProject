@@ -44,9 +44,4 @@ public interface ServerRepository extends JpaRepository<ServerEntity, Long> {
             + " s.serverPassword as serverPassword) FROM ServerEntity s WHERE s.id = :id ")
     Optional<ServerDto> findServerById(Long id);
 
-    @Modifying
-    @Query("UPDATE ServerEntity s SET s.serverName = :#{#dto.serverName}, s.serverUrl = :#{#dto.serverUrl}, "
-            + "s.serverUserName = :#{#dto.serverUserName}, s.serverPassword = :#{#dto.serverPassword} "
-            + "WHERE s.id = :serverId")
-    int updateServerByDto(@Param("serverId") Long serverId, @Param("dto") ServerDto dto);
 }
