@@ -16,6 +16,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -95,6 +96,7 @@ public class ServerController {
         return ResponseEntity.status(HttpStatus.OK).body(donatorsBonuses);
     }
 
+    @Operation(summary = "Find donator by email")
     @GetMapping("/{serverId}/donators/search")
     public ResponseEntity<Page<DonatorBonusDto>> searchDonatorsByEmailContains(
             @PathVariable Long serverId,
@@ -103,5 +105,12 @@ public class ServerController {
     ) {
         Page<DonatorBonusDto> donatorsPage = serverService.searchDonatorsByEmailLike(serverId, donatorMails, pageable);
         return ResponseEntity.ok(donatorsPage);
+    }
+
+    @Operation(summary = "delete server by ID")
+    @DeleteMapping("/{serverId}")
+    public ResponseEntity<Void> deleteServerByID(@PathVariable Long serverId) {
+        serverService.deleteServerById(serverId);
+        return ResponseEntity.ok().build();
     }
 }

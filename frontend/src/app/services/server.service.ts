@@ -5,13 +5,14 @@ import {CreateDonatorBonus} from "../common/create-donator-bonus";
 import {HttpClientService} from "./http-client.service";
 import {LoadDonatorBonus} from "../common/load-donator-bonus";
 import {HttpMethod} from "../enums/http-method";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
     providedIn: 'root'
 })
 export class ServerService {
 
-    constructor(private httpClient: HttpClientService) {
+    constructor(private httpClient: HttpClientService, private http: HttpClient) {
     }
 
     public getAllServerNames(pageNumber?: number, pageSize?: number, sortState?: string) {
@@ -57,6 +58,10 @@ export class ServerService {
         return this.httpClient.fetch<ServerDto>(url, true);
     }
 
+    public deleteServerById(ServerId: number) {
+        const url: string = `api/servers/${ServerId}`;
+        return this.httpClient.load<void>(HttpMethod.DELETE, url, true);
+    }
 }
 
 export interface DonatorsBonusResponse {

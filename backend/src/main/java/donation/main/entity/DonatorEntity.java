@@ -14,6 +14,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
+import org.hibernate.type.TrueFalseConverter;
 
 import java.math.BigDecimal;
 
@@ -25,6 +28,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SoftDelete(strategy = SoftDeleteType.DELETED, converter = TrueFalseConverter.class)
 public class DonatorEntity {
 
     @Id
