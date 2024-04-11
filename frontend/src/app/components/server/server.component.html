@@ -2,7 +2,7 @@
     <h1 class="page-header-title">Сервера</h1>
     <div class="buttons">
         <div class="button" id="remove_server" [ngClass]="{ 'disabled': isButtonDisabled }"
-             (click)="removeServer()">
+             (click)="removeServer(selectedServerId)">
             <div class="row">
                 <div class="col-auto pe-0">
                     <img src="assets/images/trash.svg" alt="">

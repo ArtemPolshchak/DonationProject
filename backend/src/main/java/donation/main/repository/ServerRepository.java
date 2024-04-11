@@ -44,4 +44,5 @@ public interface ServerRepository extends JpaRepository<ServerEntity, Long> {
             + " s.serverPassword as serverPassword) FROM ServerEntity s WHERE s.id = :id ")
     Optional<ServerDto> findServerById(Long id);
 
+    void deleteServerEntityById(Long id);
 }

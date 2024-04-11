@@ -14,8 +14,8 @@ import {MatFooterRow} from "@angular/material/table";
 import {ToasterService} from "../../services/toaster.service";
 
 @Component({
-  selector: 'app-server',
-  standalone: true,
+    selector: 'app-server',
+    standalone: true,
     imports: [
         NgForOf,
         NgClass,
@@ -23,101 +23,104 @@ import {ToasterService} from "../../services/toaster.service";
         MatPaginator,
         MatFooterRow
     ],
-  templateUrl: './server.component.html',
-  styleUrl: './server.component.scss'
+    templateUrl: './server.component.html',
+    styleUrl: './server.component.scss'
 })
 export class ServerComponent implements OnInit {
-  servers: Server[] = [];
-  selectedServerId: number = 0;
-  isButtonDisabled: boolean = true;
-  pageNumber: number = 0;
-  totalElements: number = 0;
-  pageSize: number = 6;
-  sortState: string = "asc";
+    servers: Server[] = [];
+    selectedServerId: number = 0;
+    isButtonDisabled: boolean = true;
+    pageNumber: number = 0;
+    totalElements: number = 0;
+    pageSize: number = 6;
+    sortState: string = "asc";
 
-  constructor(
-
-      private toasterService: ToasterService,
-      private serverService: ServerService,
-      private dialog: MatDialog,
-      private router: Router) {
-  }
-
-  ngOnInit(): void {
-    this.getAllServers();
-  }
-
-  getAllServers(): void {
-    this.serverService.getAllServerNames(this.pageNumber, this.pageSize, this.sortState)
-        .subscribe(data => {
-            this.servers = data.content;
-            this.totalElements = data.totalElements;
-        })
-  }
-
-  openAddServerDialog(): void {
-    const dialogRef = this.dialog.open(AddNewServerDialogComponent, {
-      width: '50%',
-    });
-    dialogRef.componentInstance.componentResponse.subscribe( () => {
-      this.getAllServers()
-    });
-  }
-
-  openSetUpServerDialog(serverId: number): void {
-    const dialogRef = this.dialog.open(SetupServerDialogComponent, {
-      width: '50%',
-      data: {
-        serverId: serverId
-      }
-    });
-    dialogRef.componentInstance.componentResponse.subscribe( () => {
-      this.getAllServers()
-    });
-  }
-
-  openServerBonusDialog(serverId: number): void {
-    this.dialog.open(ServerBonusComponent, {
-      width: '50%',
-      data: {
-        serverId: serverId
-      }
-    });
-  }
-
-  goToDonatorBonusOnServer(serverId: number): void {
-    this.router.navigate(['./donator-bonus-on-server', serverId]);
-  }
-
-  updateButtonStatus(): void {
-    this.isButtonDisabled = this.selectedServerId === 0;
-  }
-
-  handleRadioChange(serverId: number): void {
-    this.selectedServerId = serverId;
-    this.updateButtonStatus();
-
-
-  }
-
-  handleServerClick(serverId: number): void {
-    if (this.selectedServerId === serverId) {
-      this.selectedServerId = 0;
-      this.updateButtonStatus();
+    constructor(
+        private toasterService: ToasterService,
+        private serverService: ServerService,
+        private dialog: MatDialog,
+        private router: Router) {
     }
-  }
 
-  removeServer(): void {
-    this.openSnackBar("Удаление Сервера еще не реализовано")
-  }
+    ngOnInit(): void {
+        this.getAllServers();
+    }
 
-  onPageChange(event: PageEvent) {
-      this.pageSize = event.pageSize;
-      this.pageNumber = event.pageIndex;
-      this.getAllServers();
-  }
+    getAllServers(): void {
+        this.serverService.getAllServerNames(this.pageNumber, this.pageSize, this.sortState)
+            .subscribe(data => {
+                this.servers = data.content;
+                this.totalElements = data.totalElements;
+            })
+    }
 
-  openSnackBar(message: string) {
-    this.toasterService.openSnackBar(message);
-  }
+    openAddServerDialog(): void {
+        const dialogRef = this.dialog.open(AddNewServerDialogComponent, {
+            width: '50%',
+        });
+        dialogRef.componentInstance.componentResponse.subscribe(() => {
+            this.getAllServers()
+        });
+    }
+
+    openSetUpServerDialog(serverId: number): void {
+        const dialogRef = this.dialog.open(SetupServerDialogComponent, {
+            width: '50%',
+            data: {
+                serverId: serverId
+            }
+        });
+        dialogRef.componentInstance.componentResponse.subscribe(() => {
+            this.getAllServers()
+        });
+    }
+
+    openServerBonusDialog(serverId: number): void {
+        this.dialog.open(ServerBonusComponent, {
+            width: '50%',
+            data: {
+                serverId: serverId
+            }
+        });
+    }
+
+    goToDonatorBonusOnServer(serverId: number): void {
+        this.router.navigate(['./donator-bonus-on-server', serverId]);
+    }
+
+    updateButtonStatus(): void {
+        this.isButtonDisabled = this.selectedServerId === 0;
+    }
+
+    handleRadioChange(serverId: number): void {
+        this.selectedServerId = serverId;
+        this.updateButtonStatus();
+    }
+
+    handleServerClick(serverId: number): void {
+        if (this.selectedServerId === serverId) {
+            this.selectedServerId = 0;
+            this.updateButtonStatus();
+        }
+    }
+
+    removeServer(serverId: number): void {
+        this.serverService.deleteServerById(serverId).subscribe({
+            next:() => {
+                this.getAllServers();
+                this.openSnackBar("Сервер успешно удален")
+            },
+            error: (err) => this.openSnackBar("Ошибка при удалении сервера: " + err.message),
+        });
+    }
+
+    onPageChange(event: PageEvent) {
+        this.pageSize = event.pageSize;
+        this.pageNumber = event.pageIndex;
+        this.getAllServers();
+    }
+
+    openSnackBar(message: string) {
+        this.toasterService.openSnackBar(message);
+    }
 }

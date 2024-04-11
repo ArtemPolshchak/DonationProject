@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions, MatDialogClose,
@@ -11,7 +11,7 @@ import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {NgForOf, NgIf} from "@angular/common";
 import {
-  AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule,
+  AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule,
   ValidatorFn, Validators
 } from "@angular/forms";
 import {MatIcon} from "@angular/material/icon";
