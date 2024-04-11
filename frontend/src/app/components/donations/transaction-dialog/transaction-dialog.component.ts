@@ -49,9 +49,8 @@ export class TransactionDialog implements OnInit {
     maxImgSideSize = 800;
     servers: Server[];
     paymentMethods: string[] = ["PAYPAL", "CARD_RU", "CARD_UA", "USDT", "ETC"];
-    payment: string = "PAYPAL";
     transaction: Transaction;
-    paymentControl = new FormControl("", Validators.required);
+    paymentControl = new FormControl("PAYPAL", Validators.required);
     serverControl = new FormControl<Server | null>(null, Validators.required);
     contributionControl = new FormControl('',
         [Validators.required, Validators.pattern(/^\d+$/)]
@@ -86,7 +85,6 @@ export class TransactionDialog implements OnInit {
 
     ngOnInit(): void {
         let tempServer = StorageService.getItem(LAST_SERVER_KEY);
-        this.paymentControl.setValue(this.payment)
         if (tempServer) {
             const serverId = +(JSON.parse(tempServer))
             const lastServer = this.servers.find(server => server.id === serverId) ?? null;
@@ -171,7 +169,6 @@ export class TransactionDialog implements OnInit {
         this.transactionService.create(transaction).subscribe({
                 next: (result) => {
                     this.transactionResponse.emit(result)
-
                     StorageService.addItem(LAST_SERVER_KEY, JSON.stringify(this.serverControl.value?.id));
                     this.openSnackBar("Транзакция успешно создана")
                 },
@@ -186,7 +183,6 @@ export class TransactionDialog implements OnInit {
         if(this.color) {
             transaction.color = this.color;
         }
-
         this.transactionService.update(transaction).subscribe({
                 next: (result) => {
                     this.transactionResponse.emit(result)

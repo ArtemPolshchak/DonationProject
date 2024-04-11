@@ -1,0 +1,60 @@
+<div>
+    <header class="dialog-header">
+        <h2 class="dialog-header-title">Create User</h2>
+    </header>
+
+    <mat-dialog-content>
+        <mat-card>
+            <mat-card-content>
+                <div>
+                    <mat-form-field class="input-field" appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input matInput [formControl]="emailControl">
+                    <mat-error *ngIf="emailControl.hasError('required')">Field is required</mat-error>
+                    <mat-error *ngIf="emailControl.hasError('email')">Wrong email format</mat-error>
+                </mat-form-field>
+                    <mat-form-field class="input-field" appearance="outline">
+                        <mat-label>Username</mat-label>
+                        <input matInput [formControl]="usernameControl"/>
+                        <mat-error *ngIf="usernameControl.hasError('required')">Field is required</mat-error>
+                        <mat-error *ngIf="usernameControl.hasError('minLength')">Min length is 5</mat-error>
+                        <mat-error *ngIf="usernameControl.hasError('maxLength')">Max length is 50</mat-error>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field class="input-field" appearance="outline">
+                        <mat-label>Password</mat-label>
+                        <input matInput [type]="passwordFieldHide ? 'password' : 'text'" [formControl]="passwordControl">
+                        <button mat-icon-button matSuffix
+                                (click)="passwordFieldHide = !passwordFieldHide"
+                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="passwordFieldHide">
+                            <mat-icon>{{passwordFieldHide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                        <mat-error style="margin-top: -20px" *ngIf="(!user) || (user && passwordControl.value!.length > 0)">
+                            <mat-error *ngIf="usernameControl.hasError('required')">Field is required</mat-error>
+                            <mat-error *ngIf="usernameControl.hasError('minLength')">Min length is 5</mat-error>
+                            <mat-error *ngIf="usernameControl.hasError('maxLength')">Max length is 50</mat-error>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="input-field" appearance="outline">
+                        <mat-label>Repeated Password</mat-label>
+                        <input matInput [type]="passwordFieldHide ? 'password' : 'text'" [formControl]="repeatedPasswordControl">
+                        <mat-error>Passwords doesn't match</mat-error>
+                    </mat-form-field>
+                </div>
+                <mat-form-field class="input-select" appearance="outline">
+                    <mat-label>Role</mat-label>
+                    <mat-select [formControl]="roleControl" required>
+                        <mat-option *ngFor="let role of Object.keys(Role)" [value]="role">{{role}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="roleControl.hasError('required')">Server required</mat-error>
+                </mat-form-field>
+            </mat-card-content>
+        </mat-card>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="dialog-action-buttons" align="center">
+        <button class="dialog-button" mat-button mat-dialog-close>Отменить</button>
+        <button class="dialog-button" mat-button (click)="isFormsValid() ? proceedUser() : {}">{{data ? 'Update' : 'Create'}}</button>
+    </mat-dialog-actions>
+</div>
