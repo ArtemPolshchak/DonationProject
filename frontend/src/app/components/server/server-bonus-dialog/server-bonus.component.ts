@@ -25,6 +25,17 @@ function noOverlapBonusValidator(): ValidatorFn {
     const bonusesArray = control.get('bonuses') as FormArray;
     const bonusesCount = bonusesArray.length;
 
+    // Якщо кількість бонусів 1 і значення "від" та "до" дорівнюють 0, валідатор пройде
+    if (bonusesCount === 1) {
+      const currentBonus = bonusesArray.at(0) as FormGroup;
+      const fromValue = currentBonus.get('from')?.value;
+      const toValue = currentBonus.get('to')?.value;
+
+      if (fromValue === 0 && toValue === 0) {
+        return null; // Валідатор пройшов
+      }
+    }
+
     // Проходимося по кожному бонусу та перевіряємо, чи є накладення
     for (let i = 0; i < bonusesCount; i++) {
       const currentBonus = bonusesArray.at(i) as FormGroup;
@@ -165,16 +176,13 @@ export class ServerBonusComponent implements OnInit {
 
       this.serverBonusService.createOrRecreateBonuses(createServerBonusesDtoArray, serverId).subscribe({
         next: (response) => {
-          this.dialogRef.close(response); // Закрити діалогове вікно після успішного створення або перестворення бонусів
+          this.dialogRef.close(response); 
+          this.openSnackBar("Бонусы сервера успешно доданы")
         },
         error: (error) => {
-          // Обробити помилку від бекенда
-          // Додати обробку помилки або повідомлення користувачу
-          // + toaster
+         this.openSnackBar("Произошла ошибка: " + error.message)
         }
       });
-    } else {
-      // Handle form validation errors
     }
   }
 

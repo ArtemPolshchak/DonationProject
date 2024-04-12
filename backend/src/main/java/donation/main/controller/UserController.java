@@ -1,9 +1,9 @@
 package donation.main.controller;
 
+import donation.main.dto.userdto.UserCreateRequestDto;
 import jakarta.validation.Valid;
 import donation.main.dto.userdto.UserResponseDto;
 import donation.main.dto.userdto.UserUpdateRequestDto;
-import donation.main.entity.UserEntity;
 import donation.main.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -28,6 +29,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+
+    @Operation(summary = "Registration new user")
+    @PostMapping("/sign-up")
+    public ResponseEntity<UserResponseDto> signUp(@RequestBody @Valid UserCreateRequestDto request) {
+        return ResponseEntity.ok(userService.signUp(request));
+    }
 
     @Operation(summary = "get all users")
     @GetMapping()

@@ -1,5 +1,6 @@
 package donation.main.service;
 
+import donation.main.dto.userdto.UserCreateRequestDto;
 import donation.main.dto.userdto.UserResponseDto;
 import donation.main.dto.userdto.UserUpdateRequestDto;
 import donation.main.entity.UserEntity;
@@ -23,6 +24,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+
+    public UserResponseDto signUp(UserCreateRequestDto dto) {
+        checkIsExist(dto.username(), dto.email());
+        UserEntity user = userMapper.toEntity(dto);
+        return userMapper.toDto(save(user));
+    }
 
     public UserEntity save(UserEntity entity) {
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
