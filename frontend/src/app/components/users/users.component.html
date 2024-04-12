@@ -1,7 +1,7 @@
 <div class="page-header">
     <h1 class="page-header-title">Пользователи</h1>
     <div class="buttons">
-        <div class="button" (click)="createUser()">
+        <div class="button" (click)="openCreateUserDialog()">
             <div class="row">
                 <div class="col-auto pe-0">
                     <img src="assets/images/add.svg" alt="">
@@ -30,7 +30,9 @@
                 <td> {{ user.email }}</td>
                 <td> {{ user.username }}</td>
                 <td> {{ user.role }}</td>
-
+                <td>
+                    <button (click)="openUpdateUserDialog(user)">Update</button>
+                </td>
             </tr>
             </tbody>
         </table>

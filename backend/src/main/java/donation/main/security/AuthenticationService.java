@@ -2,9 +2,9 @@ package donation.main.security;
 
 
 import java.util.Optional;
+import donation.main.dto.userdto.UserCreateRequestDto;
 import donation.main.dto.userdto.JwtAuthenticationResponseDto;
 import donation.main.dto.userdto.SignInRequestDto;
-import donation.main.dto.userdto.SignUpRequestDto;
 import donation.main.dto.userdto.UserResponseDto;
 import donation.main.entity.UserEntity;
 import donation.main.mapper.UserMapper;
@@ -28,7 +28,7 @@ public class AuthenticationService {
 
     private final UserMapper userMapper;
 
-    public UserResponseDto signUp(SignUpRequestDto dto) {
+    public UserResponseDto signUp(UserCreateRequestDto dto) {
         userService.checkIsExist(dto.username(), dto.email());
         UserEntity user = userMapper.toEntity(dto);
         return userMapper.toDto(userService.save(user));

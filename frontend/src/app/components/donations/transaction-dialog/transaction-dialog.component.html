@@ -78,6 +78,8 @@
 
     <mat-dialog-actions class="dialog-action-buttons" align="center">
         <button class="dialog-button" mat-button (click)="onCancel()">Отменить</button>
-        <button class="dialog-button" mat-button (click)="isFormValid() ? proceedTransaction() : {}">Создать</button>
+        <button class="dialog-button" mat-button (click)="isFormValid() ? proceedTransaction() : {}">
+            {{data.transaction ? 'Update' : 'Create'}}
+        </button>
     </mat-dialog-actions>
 </div>
