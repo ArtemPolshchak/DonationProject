@@ -45,6 +45,13 @@ public class ServerBonusSettingsService {
     }
 
     private boolean isBonusRangesValid(List<ServerBonusDto> serverBonusesDtos) {
+
+        if (serverBonusesDtos.size() == 1
+                && (serverBonusesDtos.get(0).fromAmount().equals(BigDecimal.ZERO))
+                && (serverBonusesDtos.get(0).toAmount()).equals(BigDecimal.ZERO)) {
+            return true;
+        }
+
         boolean fromToValid = serverBonusesDtos.stream()
                 .allMatch(bonus -> bonus.fromAmount() == null || bonus.toAmount() == null || bonus.fromAmount().compareTo(bonus.toAmount()) < 0);
 
