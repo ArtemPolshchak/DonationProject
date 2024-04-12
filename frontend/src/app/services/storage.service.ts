@@ -12,8 +12,8 @@ export abstract class StorageService {
 
     static storage: Storage = localStorage;
 
-    static serversSub = new Subject<Server[]>();
-    static tokenSub = new Subject<string>();
+    static serversSub: Subject<Server[]> = new Subject<Server[]>();
+    static tokenSub: Subject<string> = new Subject<string>();
 
     static addToken(token: string) {
         this.storage.setItem(TOKEN_KEY, token);
@@ -64,7 +64,12 @@ export abstract class StorageService {
         const token = this.getToken();
         if (token) {
             const tokenInfo = this.getDecodedAccessToken(token);
-            return new User(tokenInfo.id, tokenInfo.sub, tokenInfo.email, tokenInfo.role);
+            const user = new User();
+            user.id = tokenInfo.id;
+            user.username = tokenInfo.sub;
+            user.email = tokenInfo.email;
+            user.role = tokenInfo.role;
+            return user;
         }
         return undefined;
     }

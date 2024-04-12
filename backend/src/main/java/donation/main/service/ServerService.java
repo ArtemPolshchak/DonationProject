@@ -93,9 +93,9 @@ public class ServerService {
                 .getBonusesByServerIdAndDonatorsEmail(serverId, email, pageable.getSort()), pageable);
     }
 
-    @SoftDelete
-    public ServerEntity delete() {
-        return null;
+    @Transactional
+    public void deleteServerById(Long id) {
+        serverRepository.deleteServerEntityById(id);
     }
 
     private Page<DonatorBonusDto> getPage(List<DonatorBonusDto> donatorBonuses, Pageable pageable) {

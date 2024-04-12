@@ -27,6 +27,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
+import org.hibernate.type.TrueFalseConverter;
 
 @Entity
 @Table(name = "transactions")
@@ -35,6 +38,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@SoftDelete(strategy = SoftDeleteType.DELETED, converter = TrueFalseConverter.class)
 public class TransactionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

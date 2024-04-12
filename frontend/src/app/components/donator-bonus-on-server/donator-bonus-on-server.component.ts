@@ -10,6 +10,7 @@ import {DonatorBonus} from "../../common/donatorBonus";
 import {ServerService} from "../../services/server.service";
 import {HttpEventType} from "@angular/common/http";
 import {ToasterService} from "../../services/toaster.service";
+import {Donator} from "../../common/donator";
 
 @Component({
   selector: 'app-donator-bonus-on-server',
@@ -25,6 +26,7 @@ import {ToasterService} from "../../services/toaster.service";
 })
 export class DonatorBonusOnServer implements OnInit {
   donatorBonus: DonatorBonus[] = [];
+  donator!: DonatorBonus;
   pageNumber: number = 0;
   pageSize: number = 5;
   totalElements: number = 0;
@@ -93,12 +95,12 @@ export class DonatorBonusOnServer implements OnInit {
     this.toasterService.openSnackBar(message);
   }
 
-  openSetupBonusDialog(donatorId: number): void {
+  openSetupBonusDialog(donator: DonatorBonus): void {
     const dialogRef = this.dialog.open(SetupBonusDialogComponent, {
       width: '50%',
       data: {
         serverId: this.serverId,
-        donatorId: donatorId
+        donator: donator,
       }
     });
     dialogRef.afterClosed().subscribe(result => {

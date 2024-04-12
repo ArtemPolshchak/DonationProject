@@ -17,6 +17,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
+import org.hibernate.type.TrueFalseConverter;
 
 @Entity
 @Table(name = "server_bonus_settings")
@@ -25,6 +28,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@SoftDelete(strategy = SoftDeleteType.DELETED, converter = TrueFalseConverter.class)
 public class ServerBonusSettingsEntity implements Comparable<ServerBonusSettingsEntity> {
 
     @Id

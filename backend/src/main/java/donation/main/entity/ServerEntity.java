@@ -19,6 +19,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
+import org.hibernate.type.TrueFalseConverter;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -31,6 +34,7 @@ import java.util.TreeSet;
 @Table(name = "servers")
 @Getter
 @Setter
+@SoftDelete(strategy = SoftDeleteType.DELETED, converter = TrueFalseConverter.class)
 public class ServerEntity {
 
     @Id
@@ -54,6 +58,7 @@ public class ServerEntity {
     @MapKeyJoinColumn(name = "donator_id", referencedColumnName = "id")
     @Column(name = "donators_bonuses")
     @BatchSize(size = 50)
+    @SoftDelete(strategy = SoftDeleteType.DELETED, converter = TrueFalseConverter.class)
     private Map<DonatorEntity, BigDecimal> donatorsBonuses = new HashMap<>();
 
     @OneToMany(mappedBy = "server", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
