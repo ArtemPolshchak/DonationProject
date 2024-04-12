@@ -2,7 +2,7 @@ package donation.main.controller;
 
 import donation.main.dto.userdto.JwtAuthenticationResponseDto;
 import donation.main.dto.userdto.SignInRequestDto;
-import donation.main.dto.userdto.SignUpRequestDto;
+import donation.main.dto.userdto.UserCreateRequestDto;
 import donation.main.dto.userdto.UserResponseDto;
 import donation.main.security.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +24,7 @@ public class AuthController {
 
     @Operation(summary = "Registration new user")
     @PostMapping("/sign-up")
-    public ResponseEntity<UserResponseDto> signUp(@RequestBody @Valid SignUpRequestDto request) {
+    public ResponseEntity<UserResponseDto> signUp(@RequestBody @Valid UserCreateRequestDto request) {
         return ResponseEntity.ok(authenticationService.signUp(request));
     }
 

@@ -15,9 +15,8 @@ import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {NgForOf, NgIf} from "@angular/common";
 import {ServerService} from "../../../services/server.service";
-import {LoadDonatorBonus} from "../../../common/load-donator-bonus";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {ToasterService} from "../../../services/toaster.service";
+import {DonatorBonus} from "../../../common/donatorBonus";
 
 @Component({
     selector: 'app-setup-bonus-dialog',
@@ -44,9 +43,13 @@ import {ToasterService} from "../../../services/toaster.service";
     styleUrl: './setup-bonus-dialog.component.scss'
 })
 export class SetupBonusDialogComponent implements OnInit {
-    personalBonus: number = 0;
-    updateDonatorBonus!: LoadDonatorBonus;
-    durationInSeconds: number = 5;
+    donator!: DonatorBonus;
+    serverId!: number;
+    contributionControl = new FormControl(0, [
+        Validators.required,
+        Validators.pattern(/^\d*\.?\d*$/)
+    ]);
+
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -54,6 +57,8 @@ export class SetupBonusDialogComponent implements OnInit {
         private dialogRef: MatDialogRef<SetupBonusDialogComponent>,
         private toasterService: ToasterService,
     ) {
+        this.donator = data.donator;
+        this.serverId = data.serverId;
     }
 
     isFormValid() {
@@ -63,36 +68,25 @@ export class SetupBonusDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        console.log('Server ID:', this.data.serverId);
-        console.log('Donator ID:', this.data.donatorId);
-    }
-
-    saveBonus(): void {
-        const inputValue: string | null = this.contributionControl.value;
-        if (inputValue !== null && !isNaN(parseFloat(inputValue))) {
-            this.personalBonus = parseFloat(inputValue);
-            this.serverService.updateDonatorsBonusOnServer(
-                this.data.serverId, this.data.donatorId, {personalBonus: this.personalBonus})
-                .subscribe({
-                    next: () => {
-                        this.dialogRef.close()
-                        this.openSnackBar("Бонус успешно изменен")
-                    },
-                    error: (error) => {
-                        this.openSnackBar("Произошла ошибка")
-                        console.error('Error updating bonus', error);
-                    }
-                });
-        } else {
-            this.openSnackBar("Произошла ошибка")
-            console.error('Input value is not a valid number');
+        if (this.data.donator) {
+            this.contributionControl.setValue(this.data.donator.personalBonus)
         }
     }
 
-    contributionControl = new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^\d*\.?\d*$/)
-    ]);
+    saveBonus(): void {
+        this.serverService.updateDonatorsBonusOnServer(
+            this.serverId, this.donator.id, {personalBonus: Number(this.contributionControl.value!)})
+            .subscribe({
+                next: () => {
+                    this.dialogRef.close()
+                    this.openSnackBar("Бонус успешно изменен")
+                },
+                error: (error) => {
+                    this.openSnackBar("Произошла ошибка")
+                    console.error('Error updating bonus', error);
+                }
+            });
+    }
 
     openSnackBar(message: string) {
         this.toasterService.openSnackBar(message);

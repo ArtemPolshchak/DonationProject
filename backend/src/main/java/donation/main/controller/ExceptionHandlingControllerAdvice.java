@@ -1,6 +1,8 @@
 package donation.main.controller;
 
-import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.HashMap;
 import java.util.Map;
 import donation.main.exception.AccessForbiddenException;
@@ -17,6 +19,8 @@ import donation.main.exception.UnauthorizedActionException;
 import donation.main.exception.UserNotFoundException;
 import donation.main.exception.UserWithDataExistsException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -38,16 +42,18 @@ public class ExceptionHandlingControllerAdvice {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ProblemDetail> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((ObjectError error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
+            if (error instanceof FieldError fieldError) {
+                String fieldName = fieldError.getField();
+                String errorMessage = error.getDefaultMessage();
+                errors.put(fieldName, errorMessage);
+            } else {
+                errors.put(error.getObjectName(), error.getDefaultMessage());
+            }
         });
-        return errors;
+        return ResponseEntity.of(getProblemDetail(HttpStatus.BAD_REQUEST, errors)).build();
     }
 
     @ExceptionHandler(ErrorResponse.class)
@@ -101,7 +107,7 @@ public class ExceptionHandlingControllerAdvice {
     @ResponseBody
     @ExceptionHandler(
             {InvalidTransactionState.class,
-            PageNotFoundException.class})
+                    PageNotFoundException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     Map<String, String> handleUserWithDataExistsException(RuntimeException exception) {
         return Map.of(MESSAGE, exception.getMessage());
@@ -136,9 +142,15 @@ public class ExceptionHandlingControllerAdvice {
     }
 
     @ResponseBody
-    @ExceptionHandler(SQLException.class)
+    @ExceptionHandler({RuntimeException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    Map<String, String> handleSqlException(SQLException exception) {
+    Map<String, String> handleRuntimeException(RuntimeException exception) {
         return Map.of(MESSAGE, exception.getMessage());
+    }
+
+    private ProblemDetail getProblemDetail(HttpStatus status, Map<String, String> errors) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, errors.toString());
+        problemDetail.setProperty("timestamp", LocalDateTime.now());
+        return problemDetail;
     }
 }
