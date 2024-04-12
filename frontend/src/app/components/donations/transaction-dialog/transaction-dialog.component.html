@@ -38,14 +38,14 @@
                     <mat-select [formControl]="paymentControl" required>
                         <mat-option *ngFor="let paymentMethod of paymentMethods" [value]="paymentMethod">{{paymentMethod}}</mat-option>
                     </mat-select>
-                    <mat-error *ngIf="serverControl.hasError('required')">Server required</mat-error>
+                    <mat-error *ngIf="serverControl.hasError('required')">Обязательное поле!</mat-error>
                 </mat-form-field>
                 <mat-form-field class="input-field">
                     <mat-label>Сервер</mat-label>
                     <mat-select [formControl]="serverControl" required>
                         <mat-option *ngFor="let server of servers" [value]="server">{{server.serverName}}</mat-option>
                     </mat-select>
-                    <mat-error *ngIf="serverControl.hasError('required')">Server required</mat-error>
+                    <mat-error *ngIf="serverControl.hasError('required')">Обязательное поле!</mat-error>
                 </mat-form-field>
                 <form id="editForm" name="editForm" [formGroup]="imageForm">
                     <mat-form-field class="img-input-field">
@@ -79,7 +79,7 @@
     <mat-dialog-actions class="dialog-action-buttons" align="center">
         <button class="dialog-button" mat-button (click)="onCancel()">Отменить</button>
         <button class="dialog-button" mat-button (click)="isFormValid() ? proceedTransaction() : {}">
-            {{data.transaction ? 'Update' : 'Create'}}
+            {{data.transaction ? 'Обновить' : 'Создать'}}
         </button>
     </mat-dialog-actions>
 </div>
