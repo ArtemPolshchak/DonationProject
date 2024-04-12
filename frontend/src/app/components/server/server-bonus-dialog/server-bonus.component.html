@@ -43,7 +43,7 @@
             </mat-form-field>
 
 
-            <button mat-icon-button (click)="removeBonus(i)">
+            <button mat-icon-button *ngIf="i !== 0" (click)="removeBonus(i)">
                 <mat-icon>close</mat-icon>
             </button>
         </div>
