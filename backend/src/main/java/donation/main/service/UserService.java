@@ -41,6 +41,7 @@ public class UserService {
     public UserResponseDto getById(Long id) {
         return userMapper.toDto(this.findById(id));
     }
+
     public void delete(Long id) {
         userRepository.deleteById(id);
     }
