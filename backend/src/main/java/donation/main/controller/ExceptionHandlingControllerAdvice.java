@@ -140,13 +140,13 @@ public class ExceptionHandlingControllerAdvice {
     Map<String, String> handleServerNotFoundException(ServerNotFoundException exception) {
         return Map.of(MESSAGE, exception.getMessage());
     }
-
-    @ResponseBody
-    @ExceptionHandler({RuntimeException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    Map<String, String> handleRuntimeException(RuntimeException exception) {
-        return Map.of(MESSAGE, exception.getMessage());
-    }
+//
+//    @ResponseBody
+//    @ExceptionHandler({RuntimeException.class})
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    Map<String, String> handleRuntimeException(RuntimeException exception) {
+//        return Map.of(MESSAGE, exception.getMessage());
+//    }
 
     private ProblemDetail getProblemDetail(HttpStatus status, Map<String, String> errors) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, errors.toString());

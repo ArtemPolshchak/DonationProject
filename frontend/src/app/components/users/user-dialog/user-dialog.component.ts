@@ -1,48 +1,66 @@
 import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {
+    AbstractControl,
+    FormBuilder,
+    FormGroup,
+    ReactiveFormsModule,
+    ValidationErrors,
+    ValidatorFn,
+    Validators
+} from '@angular/forms';
+import {
     MAT_DIALOG_DATA,
     MatDialogActions,
     MatDialogClose,
     MatDialogContent,
     MatDialogRef
-} from "@angular/material/dialog";
-import {MatButton, MatIconButton} from "@angular/material/button";
+} from '@angular/material/dialog';
+import {Role} from '../../../enums/role';
+import {User} from '../../../common/user';
+import {UserService} from '../../../services/user.service';
+import {ToasterService} from '../../../services/toaster.service';
 import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatError, MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
-import {MatInput} from "@angular/material/input";
 import {MatOption, MatSelect} from "@angular/material/select";
+import {MatButton, MatIconButton} from "@angular/material/button";
+import {MatInput} from "@angular/material/input";
 import {NgForOf, NgIf} from "@angular/common";
-import {NgxColorsModule} from "ngx-colors";
-import {AbstractControl, FormControl, ReactiveFormsModule, ValidationErrors, Validators} from "@angular/forms";
-import {Role} from "../../../enums/role";
-import {User} from "../../../common/user";
-import {UserService} from "../../../services/user.service";
-import {ToasterService} from "../../../services/toaster.service";
+
+export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const password = control?.value.password;
+    const repeatedPassword = control?.value.repeatedPassword;
+    if (password !== repeatedPassword) {
+        control.get('repeatedPassword')?.setErrors({passwordMatch: true})
+        return {passwordMatch: true};
+    }
+    control.get('repeatedPassword')?.setErrors(null);
+    return null;
+};
 
 @Component({
     selector: 'app-user-dialog',
     standalone: true,
     imports: [
-        MatButton,
+        MatDialogContent,
         MatCard,
         MatCardContent,
-        MatDialogActions,
-        MatDialogContent,
-        MatError,
+        ReactiveFormsModule,
         MatFormField,
-        MatIcon,
-        MatInput,
         MatLabel,
-        MatOption,
+        MatIconButton,
+        MatSuffix,
         MatSelect,
+        MatOption,
+        MatDialogActions,
+        MatButton,
+        MatDialogClose,
+        MatInput,
+        MatIconButton,
+        MatError,
         NgForOf,
         NgIf,
-        NgxColorsModule,
-        ReactiveFormsModule,
-        MatDialogClose,
-        MatIconButton,
-        MatSuffix
+        MatIcon
     ],
     templateUrl: './user-dialog.component.html',
     styleUrl: './user-dialog.component.scss'
@@ -51,77 +69,50 @@ export class UserDialogComponent implements OnInit {
     @Output() dialogResponse = new EventEmitter();
     user: User = new User();
     passwordFieldHide = true;
-
-    emailControl = new FormControl('',
-        [Validators.required,
-            Validators.email]
-    );
-
-    usernameControl = new FormControl('',
-        [Validators.required,
-            Validators.minLength(5),
-            Validators.maxLength(50)]
-    );
-
-    passwordControl = new FormControl('',
-        [Validators.required,
-            Validators.minLength(5),
-            Validators.maxLength(50)]
-    );
-
-    repeatedPasswordControl = new FormControl('',
-        [
-            (control: AbstractControl): ValidationErrors | null => {
-                const password = this.passwordControl.value as string;
-                const passwordConfirm = control.value as string;
-                if (password !== passwordConfirm) {
-                    return {passwordMatch: true};
-                }
-                return null;
-            }
-        ]
-    );
-
-    roleControl = new FormControl<Role | null>(Role.GUEST,
-        [Validators.required]);
+    form: FormGroup;
 
     constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+                private fb: FormBuilder,
                 private dialogRef: MatDialogRef<UserDialogComponent>,
                 private userService: UserService,
                 private toasterService: ToasterService,
     ) {
-        if (data) {
-            this.user.id = data.id;
-            this.user.role = data.role;
-            this.user.username = data.username;
-            this.user.email = data.email;
-        }
-    }
+        this.form = this.fb.group({
+            email: ['', [Validators.required, Validators.email]],
+            username: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
+            role: [Role.GUEST, [Validators.required]],
+            password: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
+            repeatedPassword: ['']
+        }, {validators: passwordMatchValidator})
+    };
+
 
     ngOnInit(): void {
-        if (this.user) {
-            this.emailControl.setValue(this.user.email)
-            this.roleControl.setValue(this.user.role)
-            this.usernameControl.setValue(this.user.username)
+        if (this.data) {
+            this.user.id = this.data.id;
+            this.user.role = this.data.role;
+            this.user.username = this.data.username;
+            this.user.email = this.data.email;
+            this.form.get('password')?.setValidators([Validators.minLength(5), Validators.maxLength(50)])
+            this.form.patchValue({
+                email: this.user.email,
+                role: this.user.role,
+                username: this.user.username,
+            });
         }
     }
 
     proceedUser() {
-        this.user.email = this.emailControl.value!;
-        this.user.username = this.usernameControl.value!;
-        this.user.role = this.roleControl.value!
-        if (this.passwordControl.value) {
-            this.user.password = this.passwordControl.value!
-            this.user.repeatedPassword = this.repeatedPasswordControl.value!
+        const formValue = this.form.value;
+        this.user.email = formValue.email;
+        this.user.username = formValue.username;
+        this.user.role = formValue.role;
+        if (formValue.password) {
+            this.user.password = formValue.password;
+            this.user.repeatedPassword = formValue.repeatedPassword;
         }
         this.user.id ? this.updateUser(this.user) : this.createUser(this.user);
         this.dialogRef.close();
-    }
-
-    public isFormsValid() {
-        return this.emailControl.valid && this.usernameControl.valid
-            && (this.passwordControl.valid && this.repeatedPasswordControl.valid
-                || this.user.id && !this.passwordControl.value && !this.repeatedPasswordControl.value);
     }
 
     private createUser(user: User) {
@@ -148,6 +139,15 @@ export class UserDialogComponent implements OnInit {
         });
     }
 
-    protected readonly Object = Object;
     protected readonly Role = Role;
+    protected readonly Object = Object;
+
+    isFormValid() {
+        if (this.user.id && this.form.get('password')?.value!.length === 0) {
+            this.form.get('password')?.setErrors(null);
+            this.form.get('repeatedPassword')?.setErrors(null);
+            this.form.updateValueAndValidity();
+        }
+        return this.form.valid;
+    }
 }
