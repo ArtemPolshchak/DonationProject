@@ -6,55 +6,57 @@
     <mat-dialog-content>
         <mat-card>
             <mat-card-content>
-                <div>
-                    <mat-form-field class="input-field" appearance="outline">
-                    <mat-label>Почта</mat-label>
-                    <input matInput [formControl]="emailControl">
-                    <mat-error *ngIf="emailControl.hasError('required')">Обязательное поле!</mat-error>
-                    <mat-error *ngIf="emailControl.hasError('email')">Неверный формат почты</mat-error>
-                </mat-form-field>
-                    <mat-form-field class="input-field" appearance="outline">
-                        <mat-label>Имя пользователя</mat-label>
-                        <input matInput [formControl]="usernameControl"/>
-                        <mat-error *ngIf="usernameControl.hasError('required')">Обязательное поле!</mat-error>
-                        <mat-error *ngIf="usernameControl.hasError('minLength')">Размер минимум 5</mat-error>
-                        <mat-error *ngIf="usernameControl.hasError('maxLength')">Размер максимум 50</mat-error>
+                <form [formGroup]="form">
+                    <div>
+                        <mat-form-field class="input-field" appearance="outline">
+                            <mat-label>Почта</mat-label>
+                            <input matInput formControlName='email'>
+                            <mat-error *ngIf="form.get('email')?.hasError('required')">Обязательное поле!</mat-error>
+                            <mat-error *ngIf="form.get('email')?.hasError('email')">Неверный формат почты</mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="input-field" appearance="outline">
+                            <mat-label>Имя пользователя</mat-label>
+                            <input matInput formControlName="username"/>
+                            <mat-error *ngIf="form.get('username')?.hasError('required')">Обязательное поле!</mat-error>
+                            <mat-error *ngIf="form.get('username')?.hasError('minlength')">Размер минимум 5</mat-error>
+                            <mat-error *ngIf="form.get('username')?.hasError('maxlength')">Размер максимум 50
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field class="input-field" appearance="outline">
+                            <mat-label>Пароль</mat-label>
+                            <input matInput [type]="passwordFieldHide ? 'password' : 'text'" formControlName="password">
+                            <button mat-icon-button matSuffix
+                                    (click)="passwordFieldHide = !passwordFieldHide"
+                                    [attr.aria-label]="'Hide password'" [attr.aria-pressed]="passwordFieldHide">
+                                <mat-icon>{{passwordFieldHide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                                <mat-error *ngIf="form.get('password')?.hasError('required')">Обязательное поле!</mat-error>
+                                <mat-error *ngIf="form.get('password')?.hasError('minlength')">Размер минимум 5</mat-error>
+                                <mat-error *ngIf="form.get('password')?.hasError('maxlength')">Размер максимум 50</mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="input-field" appearance="outline">
+                            <mat-label>Повторить пароль</mat-label>
+                            <input matInput [type]="passwordFieldHide ? 'password' : 'text'" formControlName="repeatedPassword">
+                            <mat-error *ngIf="form.hasError('passwordMatch')">Пароли не совпадают</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <mat-form-field class="input-select" appearance="outline">
+                        <mat-label>Роль</mat-label>
+                        <mat-select formControlName="role" required>
+                            <mat-option  *ngFor="let role of Object.keys(Role)" [value]="role">{{role}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="form.get('role')?.hasError('required')">Обязательное поле!</mat-error>
                     </mat-form-field>
-                </div>
-                <div>
-                    <mat-form-field class="input-field" appearance="outline">
-                        <mat-label>Пароль</mat-label>
-                        <input matInput [type]="passwordFieldHide ? 'password' : 'text'" [formControl]="passwordControl">
-                        <button mat-icon-button matSuffix
-                                (click)="passwordFieldHide = !passwordFieldHide"
-                                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="passwordFieldHide">
-                            <mat-icon>{{passwordFieldHide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                        </button>
-                        <mat-error style="margin-top: -20px" *ngIf="(!user) || (user && passwordControl.value!.length > 0)">
-                            <mat-error *ngIf="usernameControl.hasError('required')">Обязательное поле!</mat-error>
-                            <mat-error *ngIf="usernameControl.hasError('minLength')">Размер минимум 5</mat-error>
-                            <mat-error *ngIf="usernameControl.hasError('maxLength')">Размер максимум 50</mat-error>
-                        </mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="input-field" appearance="outline">
-                        <mat-label>Повторить пароль</mat-label>
-                        <input matInput [type]="passwordFieldHide ? 'password' : 'text'" [formControl]="repeatedPasswordControl">
-                        <mat-error>Пароли не совпадают</mat-error>
-                    </mat-form-field>
-                </div>
-                <mat-form-field class="input-select" appearance="outline">
-                    <mat-label>Роль</mat-label>
-                    <mat-select [formControl]="roleControl" required>
-                        <mat-option *ngFor="let role of Object.keys(Role)" [value]="role">{{role}}</mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="roleControl.hasError('required')">Обязательное поле!</mat-error>
-                </mat-form-field>
+                </form>
             </mat-card-content>
         </mat-card>
     </mat-dialog-content>
 
     <mat-dialog-actions class="dialog-action-buttons" align="center">
         <button class="dialog-button" mat-button mat-dialog-close>Отменить</button>
-        <button class="dialog-button" mat-button (click)="isFormsValid() ? proceedUser() : {}">{{data ? 'Обновить' : 'Создать'}}</button>
+        <button class="dialog-button" type="submit" mat-button
+                (click)="isFormValid() ? proceedUser() : {}">{{data ? 'Обновить' : 'Создать'}}</button>
     </mat-dialog-actions>
 </div>

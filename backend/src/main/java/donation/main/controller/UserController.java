@@ -31,9 +31,9 @@ public class UserController {
     private final UserService userService;
 
     @Operation(summary = "Registration new user")
-    @PostMapping("/sign-up")
-    public ResponseEntity<UserResponseDto> signUp(@RequestBody @Valid UserCreateRequestDto request) {
-        return ResponseEntity.ok(userService.signUp(request));
+    @PostMapping()
+    public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserCreateRequestDto request) {
+        return ResponseEntity.ok(userService.create(request));
     }
 
     @Operation(summary = "get all users")
