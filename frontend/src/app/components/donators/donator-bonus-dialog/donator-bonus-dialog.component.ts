@@ -17,7 +17,6 @@ import {Server} from "../../../common/server";
 import {ServerService} from "../../../services/server.service";
 import {ToasterService} from "../../../services/toaster.service";
 import {DonatorsBonusesFromAllServers} from "../../../common/donators-bonuses-from-all-servers";
-import {StorageService} from "../../../services/storage.service";
 
 
 @Component({
@@ -47,9 +46,10 @@ import {StorageService} from "../../../services/storage.service";
 })
 export class DonatorBonusDialogComponent implements OnInit {
     donatorsBonuses: DonatorsBonusesFromAllServers[] = [];
-    donator!: DonatorsBonusesFromAllServers;
     servers: Server[];
+    bonusesMap: { [serverId: number]: number } = {};
     donatorId: number;
+    donatorEmail: string;
     response = new EventEmitter()
     serverControl = new FormControl<Server | null>(null, Validators.required);
     contributionControl = new FormControl('', [
@@ -64,12 +64,13 @@ export class DonatorBonusDialogComponent implements OnInit {
     ) {
         this.servers = data.servers;
         this.donatorId = data.donatorId;
+        this.donatorEmail = data.donatorEmail;
     }
 
     ngOnInit(): void {
-       this.getAllBonusesForDonatorFromAllServers(this.donatorId)
-
+        this.getAllBonusesForDonatorFromAllServers(this.donatorId);
     }
+
     isFormValid() {
         return this.serverControl.valid && this.contributionControl.valid;
     }
@@ -77,14 +78,15 @@ export class DonatorBonusDialogComponent implements OnInit {
     getAllBonusesForDonatorFromAllServers(donatorId: number) {
         this.serverService.getAllDonatorsBonusesFromAllServers(donatorId)
             .subscribe((data) => {
-                this.donatorsBonuses = [data];
+                this.donatorsBonuses = data;
                 this.donatorsBonuses.forEach(bonus => {
-
-                    console.log(this.donatorId + " donatorId");
-                    console.log(bonus);
-                    console.log(JSON.stringify(this.donatorsBonuses));
+                    this.bonusesMap[bonus.serverId] = bonus.personalBonus;
                 });
             });
+    }
+
+    getBonusForServer(serverId: number): number {
+        return this.bonusesMap[serverId] || 0;
     }
 
 

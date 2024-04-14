@@ -3,7 +3,7 @@ package donation.main.service;
 import java.util.List;
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
 import donation.main.dto.donatorsdto.DonatorBonusDto;
-import donation.main.dto.donatorsdto.DonatorsBonusesOnServers;
+import donation.main.dto.donatorsdto.DonatorBonusOnServer;
 import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
 import donation.main.dto.serverdto.ServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
@@ -36,8 +36,8 @@ public class ServerService {
         return serverRepository.findAll(pageable);
     }
 
-    public List<DonatorsBonusesOnServers> findAllDonatorsBonusesOnServers(Long id) {
-        return serverRepository.findAllDonatorsBonusesFromServersByDonatorId(id);
+    public List<DonatorBonusOnServer> findAllBonusesOnServersByDonatorId(Long id) {
+        return serverRepository.findAllBonusesFromServersByDonatorId(id);
     }
 
     public Page<ServerIdNameDto> getAllServersNames(Pageable pageable) {

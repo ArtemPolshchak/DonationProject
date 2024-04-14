@@ -2,7 +2,7 @@ package donation.main.controller;
 
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
 import donation.main.dto.donatorsdto.DonatorBonusDto;
-import donation.main.dto.donatorsdto.DonatorsBonusesOnServers;
+import donation.main.dto.donatorsdto.DonatorBonusOnServer;
 import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
 import donation.main.dto.serverdto.ServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
@@ -71,8 +71,8 @@ public class ServerController {
 
     @Operation(summary = "get all bonuses from all servers for Donator by donatorID")
     @GetMapping("/donator-bonuses/{donatorId}")
-    public ResponseEntity<List<DonatorsBonusesOnServers>> getDonatorsBonusesOnServers(@PathVariable Long donatorId) {
-        return ResponseEntity.status(HttpStatus.OK).body(serverService.findAllDonatorsBonusesOnServers(donatorId));
+    public ResponseEntity<List<DonatorBonusOnServer>> getDonatorsBonusesOnServers(@PathVariable Long donatorId) {
+        return ResponseEntity.status(HttpStatus.OK).body(serverService.findAllBonusesOnServersByDonatorId(donatorId));
     }
 
     @Operation(summary = "create bonuses for donators on server")

@@ -1,11 +1,10 @@
 package donation.main.repository;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 import donation.main.dto.donatorsdto.DonatorBonusDto;
-import donation.main.dto.donatorsdto.DonatorsBonusesOnServers;
+import donation.main.dto.donatorsdto.DonatorBonusOnServer;
 import donation.main.dto.serverdto.ServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
 import donation.main.entity.ServerEntity;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -48,10 +46,10 @@ public interface ServerRepository extends JpaRepository<ServerEntity, Long> {
 
     void deleteServerEntityById(Long id);
 
-    @Query("SELECT NEW donation.main.dto.donatorsdto.DonatorsBonusesOnServers(s.id, VALUE(b)) " +
+    @Query("SELECT NEW donation.main.dto.donatorsdto.DonatorBonusOnServer(s.id, VALUE(b)) " +
             "FROM ServerEntity s JOIN s.donatorsBonuses b " +
             "WHERE KEY(b).id = :donatorId " +
             "GROUP BY s.id, VALUE(b)")
-    List<DonatorsBonusesOnServers> findAllDonatorsBonusesFromServersByDonatorId(@Param("donatorId") Long donatorId);
+    List<DonatorBonusOnServer> findAllBonusesFromServersByDonatorId(@Param("donatorId") Long donatorId);
 
 }
