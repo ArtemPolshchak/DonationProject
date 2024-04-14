@@ -3,8 +3,8 @@ package donation.main.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.SortedSet;
-import donation.main.dto.transactiondto.RequestTransactionDto;
 import donation.main.dto.transactiondto.ImageResponseDto;
+import donation.main.dto.transactiondto.RequestTransactionDto;
 import donation.main.dto.transactiondto.TransactionConfirmRequestDto;
 import donation.main.dto.transactiondto.TransactionResponseDto;
 import donation.main.dto.transactiondto.TransactionSpecDto;
@@ -92,7 +92,6 @@ public class TransactionService {
         TransactionEntity transaction = getById(id);
         setState(transaction, dto.state());
         setAdminBonus(transaction, dto.adminBonus());
-        setDonatorTotalDonation(transaction.getState(), transaction);
         transaction = transaction.toBuilder()
                 .dateApproved(LocalDateTime.now())
                 .approvedByUser(userService.getCurrentUser()).build();
@@ -111,18 +110,6 @@ public class TransactionService {
             throw new InvalidTransactionState("This state can't be set up, check state", newState);
         }
         transaction.setState(newState);
-    }
-
-    private void setDonatorTotalDonation(TransactionState newState, TransactionEntity transaction) {
-        if (newState.equals(TransactionState.COMPLETED)) {
-            BigDecimal amount = transaction
-                    .getDonator()
-                    .getTotalDonations()
-                    .add(transaction.getContributionAmount());
-            Integer count = transaction.getDonator().getTotalCompletedTransactions() + 1;
-            transaction.getDonator().setTotalCompletedTransactions(count);
-            transaction.getDonator().setTotalDonations(amount);
-        }
     }
 
     private TransactionEntity updateTransactionFields(TransactionEntity transaction, RequestTransactionDto dto) {

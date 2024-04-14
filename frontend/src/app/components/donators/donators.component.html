@@ -31,7 +31,7 @@
                         <div style="display: flex">
                             <p style="margin-top: auto">Почта Донатора</p>
                             <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}"
-                                    (click)="sort('email')">
+                                    (click)="sort('donator.email')">
                                 <mat-icon>filter_list</mat-icon>
                             </button>
                         </div>
@@ -53,6 +53,13 @@
                                 <mat-icon>filter_list</mat-icon>
                             </button>
                         </div>
+                    </th>
+                    <th></th>
+                    <th>
+                        <select class="form-select" aria-label="Сервер" [(ngModel)]="selectedServer" (change)="getAll()">
+                            <option value="">Фильтр - Все сервера</option>
+                            <option *ngFor="let server of servers" [value]="server.serverName">{{ server.serverName }}</option>
+                        </select>
                     </th>
                 </tr>
                 </thead>

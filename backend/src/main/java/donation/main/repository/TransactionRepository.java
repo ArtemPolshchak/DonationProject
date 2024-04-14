@@ -1,7 +1,7 @@
 package donation.main.repository;
 
+import donation.main.dto.donatorsdto.DonatorTotalDonationsView;
 import donation.main.entity.TransactionEntity;
-import donation.main.enumeration.TransactionState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,4 +18,12 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
     @NonNull
     @EntityGraph(attributePaths = {"approvedByUser", "createdByUser", "donator", "server"})
     Page<TransactionEntity> findAll(@NonNull Specification<TransactionEntity> spec, @NonNull Pageable pageable);
+
+    @Query("SELECT t.donator AS donator, " +
+            "COUNT(t.contributionAmount) AS totalCompletedTransactions , " +
+            "SUM (t.contributionAmount) AS totalDonations " +
+            "FROM TransactionEntity t WHERE t.donator.email LIKE LOWER(CONCAT('%', :email, '%')) " +
+            "AND (:serverName IS NULL OR t.server.serverName = :serverName) " +
+            "GROUP BY donator")
+    Page<DonatorTotalDonationsView> findTotalDonationsByEmailLikeAndServerName(String email, String serverName, Pageable pageable);
 }

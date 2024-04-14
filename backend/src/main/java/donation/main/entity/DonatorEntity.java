@@ -24,7 +24,6 @@ import java.math.BigDecimal;
 @Table(name = "donators")
 @Getter
 @Setter
-@ToString(of = {"email", "totalDonations"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,12 +36,4 @@ public class DonatorEntity {
 
     @Column(name = "email", unique = true, length = 32)
     private String email;
-
-    @Column(name = "total_donations")
-    @Builder.Default
-    private BigDecimal totalDonations = BigDecimal.ZERO;
-
-    @Column(name = "total_completed_transactions")
-    @Builder.Default
-    private Integer totalCompletedTransactions = 0;
 }

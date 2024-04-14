@@ -17,6 +17,7 @@ import {CreateDonatorDialogComponent} from "./create-donator-dialog/create-donat
 import {Server} from "../../common/server";
 import {StorageService} from "../../services/storage.service";
 import {ToasterService} from "../../services/toaster.service";
+import {map} from "rxjs";
 
 @Component({
     selector: 'app-donators',
@@ -53,7 +54,8 @@ export class DonatorsComponent implements OnInit {
     defaultSortField: string = "totalDonations"
     sortOrder: string = this.descOrder;
     sortState: string = this.defaultSortField + ',' + this.sortOrder;
-
+    selectedServer: string = "";
+    serverNames?: string[];
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
     constructor(private donatorService: DonatorService,
@@ -95,9 +97,15 @@ export class DonatorsComponent implements OnInit {
     }
 
     getAll(): void {
-        this.donatorService.search(this.pageNumber, this.pageSize, this.sortState, this.donatorsMail)
+        this.serverNames = this.selectedServer ? [this.selectedServer] : undefined;
+        this.donatorService.search(this.pageNumber, this.pageSize, this.sortState, this.donatorsMail, this.serverNames)
             .subscribe((data) => {
-                this.donators = data.content;
+                this.donators = data.content.map( data => {
+                        const donator = data.donator;
+                        donator.totalDonations = data.totalDonations;
+                        donator.totalCompletedTransactions = data.totalCompletedTransactions;
+                        return donator;
+                    });
                 this.totalElements = data.totalElements;
             });
     }
