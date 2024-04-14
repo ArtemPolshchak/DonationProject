@@ -3,6 +3,7 @@ package donation.main.service;
 import java.util.List;
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
 import donation.main.dto.donatorsdto.DonatorBonusDto;
+import donation.main.dto.donatorsdto.DonatorsBonusesOnServers;
 import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
 import donation.main.dto.serverdto.ServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
@@ -17,7 +18,6 @@ import donation.main.repository.DonatorRepository;
 import donation.main.repository.ServerRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.SoftDelete;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +34,10 @@ public class ServerService {
 
     public Page<ServerEntity> getAll(Pageable pageable) {
         return serverRepository.findAll(pageable);
+    }
+
+    public List<DonatorsBonusesOnServers> findAllDonatorsBonusesOnServers(Long id) {
+        return serverRepository.findAllDonatorsBonusesFromServersByDonatorId(id);
     }
 
     public Page<ServerIdNameDto> getAllServersNames(Pageable pageable) {

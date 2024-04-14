@@ -1,9 +1,11 @@
 package donation.main.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 import donation.main.dto.donatorsdto.DonatorBonusDto;
+import donation.main.dto.donatorsdto.DonatorsBonusesOnServers;
 import donation.main.dto.serverdto.ServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
 import donation.main.entity.ServerEntity;
@@ -45,4 +47,11 @@ public interface ServerRepository extends JpaRepository<ServerEntity, Long> {
     Optional<ServerDto> findServerById(Long id);
 
     void deleteServerEntityById(Long id);
+
+    @Query("SELECT NEW donation.main.dto.donatorsdto.DonatorsBonusesOnServers(s.id, VALUE(b)) " +
+            "FROM ServerEntity s JOIN s.donatorsBonuses b " +
+            "WHERE KEY(b).id = :donatorId " +
+            "GROUP BY s.id, VALUE(b)")
+    List<DonatorsBonusesOnServers> findAllDonatorsBonusesFromServersByDonatorId(@Param("donatorId") Long donatorId);
+
 }
