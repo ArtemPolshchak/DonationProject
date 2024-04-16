@@ -27,7 +27,6 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@SoftDelete(strategy = SoftDeleteType.DELETED, converter = TrueFalseConverter.class)
 public class DonatorEntity {
 
     @Id
