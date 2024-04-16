@@ -17,7 +17,9 @@ import {CreateDonatorDialogComponent} from "./create-donator-dialog/create-donat
 import {Server} from "../../common/server";
 import {StorageService} from "../../services/storage.service";
 import {ToasterService} from "../../services/toaster.service";
-import {map} from "rxjs";
+import {MatOption} from "@angular/material/autocomplete";
+import {MatSelect} from "@angular/material/select";
+import {TransactionState} from "../../enums/transaction-state";
 
 @Component({
     selector: 'app-donators',
@@ -37,6 +39,8 @@ import {map} from "rxjs";
         MatIconButton,
         MatMiniFabButton,
         NgStyle,
+        MatOption,
+        MatSelect,
     ],
     templateUrl: './donators.component.html',
     styleUrl: './donators.component.scss'
@@ -54,8 +58,7 @@ export class DonatorsComponent implements OnInit {
     defaultSortField: string = "totalDonations"
     sortOrder: string = this.descOrder;
     sortState: string = this.defaultSortField + ',' + this.sortOrder;
-    selectedServer: string = "";
-    serverNames?: string[];
+    selectedServerId: string = "";
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
     constructor(private donatorService: DonatorService,
@@ -74,16 +77,12 @@ export class DonatorsComponent implements OnInit {
         this.getAll();
     }
 
-    goToDonatorStory(donatorId: number, email: string, totalDonations: number | undefined): void {
+    goToDonatorStory(donatorId: number, email: string, totalDonations?: number): void {
         if (typeof totalDonations !== 'undefined') {
             this.router.navigate(['/donator-story', donatorId, email, totalDonations]);
         } else {
             console.error('Total donations is undefined.');
         }
-    }
-
-    handleClick($event: any) {
-        $event.stopPropagation();
     }
 
     select(item: any) {
@@ -97,15 +96,9 @@ export class DonatorsComponent implements OnInit {
     }
 
     getAll(): void {
-        this.serverNames = this.selectedServer ? [this.selectedServer] : undefined;
-        this.donatorService.search(this.pageNumber, this.pageSize, this.sortState, this.donatorsMail, this.serverNames)
+        this.donatorService.search(this.pageNumber, this.pageSize, this.sortState, this.donatorsMail, this.selectedServerId)
             .subscribe((data) => {
-                this.donators = data.content.map( data => {
-                        const donator = data.donator;
-                        donator.totalDonations = data.totalDonations;
-                        donator.totalCompletedTransactions = data.totalCompletedTransactions;
-                        return donator;
-                    });
+                this.donators = data.content;
                 this.totalElements = data.totalElements;
             });
     }
@@ -119,7 +112,7 @@ export class DonatorsComponent implements OnInit {
     openPersonalBonusDialog(donatorId: number): void {
         const dialogRef = this.dialog.open(DonatorBonusDialogComponent, {
             width: '50%',
-            data: {donatorId: donatorId, servers: this.servers},
+            data: {donatorId: donatorId, servers: this.servers, server: this.getSelectedServer()},
         });
         dialogRef.componentInstance.response.subscribe(() => {
             this.getAll();
@@ -139,4 +132,10 @@ export class DonatorsComponent implements OnInit {
     openSnackBar(message: string) {
         this.toasterService.openSnackBar(message);
     }
+
+    private getSelectedServer() {
+        return this.selectedServerId ? this.servers.find(s => s.id == +this.selectedServerId) : undefined;
+    }
+
+    protected readonly TransactionState = TransactionState;
 }

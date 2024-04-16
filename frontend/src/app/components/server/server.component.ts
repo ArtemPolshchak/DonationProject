@@ -47,7 +47,7 @@ export class ServerComponent implements OnInit {
     }
 
     getAllServers(): void {
-        this.serverService.getAllServerNames(this.pageNumber, this.pageSize, this.sortState)
+        this.serverService.getAll(this.pageNumber, this.pageSize, this.sortState)
             .subscribe(data => {
                 this.servers = data.content;
                 this.totalElements = data.totalElements;

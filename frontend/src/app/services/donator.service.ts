@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Donator} from "../common/donator";
 import {HttpClientService} from "./http-client.service";
 import {HttpMethod} from "../enums/http-method";
-import {map} from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -12,9 +11,17 @@ export class DonatorService {
     constructor(private httpClient: HttpClientService) {
     }
 
-    public search(pageNumber?: number, pageSize?: number, sort?: string, donatorsMail?: string, serverNames?: string[]) {
-        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort, donatorsMail, serverNames);
+    public search(pageNumber?: number, pageSize?: number, sort?: string, donatorsMail?: string, serverId?: number | string) {
         const url: string = `api/donators/donations`;
+        const params = this.httpClient.getHttpParams(
+            {
+                page: pageNumber,
+                size: pageSize,
+                sort: sort,
+                donatorsMail: donatorsMail,
+                serverId: serverId,
+            }
+        );
         return this.httpClient.fetch<GetDonatorTotalDonationsResponse>(url, true, params);
     }
 
@@ -25,11 +32,7 @@ export class DonatorService {
 }
 
 interface GetDonatorTotalDonationsResponse {
-    content: {
-        donator: Donator;
-        totalDonations: number;
-        totalCompletedTransactions: number;
-    }[];
+    content: Donator[];
     pageable: {
         pageNumber: number;
         pageSize: number

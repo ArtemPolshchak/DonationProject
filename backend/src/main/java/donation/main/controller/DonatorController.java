@@ -35,10 +35,10 @@ public class DonatorController {
     @Operation(summary = "get donator by id with information about donations")
     @GetMapping("/donations")
     public ResponseEntity<Page<DonatorTotalDonationsView>> getTotalDonationsByEmailLikeAndServerName(
-            @RequestParam(required = false) String serverNames,
-            @RequestParam(defaultValue = "") String donatorMails, Pageable  pageable) {
+            @RequestParam(required = false) Long serverId,
+            @RequestParam(defaultValue = "") String donatorsMail, Pageable  pageable) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(donatorService.getTotalDonationsByEmailLikeAndServerName(donatorMails, serverNames, pageable));
+                .body(donatorService.getTotalDonationsByEmailLikeAndServerName(donatorsMail, serverId, pageable));
     }
 
     @Deprecated

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DonatorService {
     private final DonatorRepository donatorRepository;
-    private final TransactionRepository transactionRepository;
     private final DonatorMapper donatorMapper;
     private final ExternalDonatorService externalDonatorService;
 
@@ -31,8 +30,8 @@ public class DonatorService {
     }
 
     public Page<DonatorTotalDonationsView> getTotalDonationsByEmailLikeAndServerName(
-            String email, String serverName, Pageable pageable) {
-        return transactionRepository.findTotalDonationsByEmailLikeAndServerName(email, serverName, pageable);
+            String email, Long serverId, Pageable pageable) {
+        return donatorRepository.findTotalDonationsByEmailLikeAndServerName(email, serverId, pageable);
     }
 
     private DonatorEntity getById(Long id) {

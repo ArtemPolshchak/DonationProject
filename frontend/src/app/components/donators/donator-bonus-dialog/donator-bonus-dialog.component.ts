@@ -1,24 +1,16 @@
-import {Component, EventEmitter, Inject} from '@angular/core';
+import {Component, EventEmitter, Inject, OnInit} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {MatCard, MatCardContent} from "@angular/material/card";
-import {
-    MAT_DIALOG_DATA,
-    MatDialogActions,
-    MatDialogClose,
-    MatDialogContent,
-    MatDialogRef
-} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent} from "@angular/material/dialog";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {NgForOf, NgIf} from "@angular/common";
 import {Server} from "../../../common/server";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {ServerService} from "../../../services/server.service";
 import {ToasterService} from "../../../services/toaster.service";
-
 
 @Component({
     selector: 'app-donator-bonus-dialog',
@@ -45,8 +37,8 @@ import {ToasterService} from "../../../services/toaster.service";
     templateUrl: './donator-bonus-dialog.component.html',
     styleUrl: './donator-bonus-dialog.component.scss'
 })
-export class DonatorBonusDialogComponent {
-    durationInSeconds: number = 5;
+export class DonatorBonusDialogComponent implements OnInit {
+    selectedServer?: Server;
     servers: Server[];
     donatorId: number;
     response = new EventEmitter()
@@ -63,6 +55,11 @@ export class DonatorBonusDialogComponent {
     ) {
         this.servers = data.servers;
         this.donatorId = data.donatorId;
+        this.selectedServer = data.server;
+    }
+
+    ngOnInit(): void {
+        this.selectedServer ? this.serverControl.setValue(this.selectedServer) : {};
     }
 
     isFormValid() {

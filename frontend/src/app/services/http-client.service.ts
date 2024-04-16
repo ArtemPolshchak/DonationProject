@@ -9,8 +9,7 @@ import {Observable} from "rxjs";
 })
 export class HttpClientService extends HttpClient {
     headers?: HttpHeaders
-    token: string | undefined;
-
+    token?: string;
 
     constructor(handler: HttpHandler) {
         super(handler);
@@ -18,8 +17,8 @@ export class HttpClientService extends HttpClient {
 
     fetch<T>(url: string, auth: boolean, params?: HttpParams): Observable<T> {
         let options: any = {};
-        params ? options.params = params : options;
-        auth ? options.headers = this.getHeaders() : options;
+        params ? options.params = params : {};
+        auth ? options.headers = this.getHeaders() : {};
         return this.request<T>(HttpMethod.GET, url, <Object>options);
     }
 
@@ -30,19 +29,14 @@ export class HttpClientService extends HttpClient {
         return this.request<T>(method, url, <Object>options);
     }
 
-    getHttpParams(pageNumber?: number, pageSize?: number, sort?: string, donatorMails?: string, serverNames?: string[], state?: string[], paymentMethod?: string[]) {
+    getHttpParams(options: Record<string, any>) {
         let params = new HttpParams();
-        params = (serverNames && serverNames.length > 0) ? params.set('serverNames', serverNames.join(',')) : params;
-        params = (donatorMails && donatorMails.length > 0) ? params.set('donatorMails', donatorMails) : params;
-        params = (state && state.length > 0) ? params.set('state', state.join(',')) : params;
-        params = (paymentMethod && paymentMethod.length > 0) ? params.set('paymentMethod', paymentMethod.join(',')) : params;
-        params = (pageNumber) ? params.set('page', pageNumber.toString()) : params;
-        params = (pageSize) ? params.set('size', pageSize.toString()) : params;
-        params = (sort) ? params.set('sort', sort) : params;
+        Object.keys(options)
+            .forEach(k => options[k] ? params = params.set(k, options[k] as string) : {})
         return params;
     }
 
     private getHeaders() {
-        return  new HttpHeaders({'Authorization': `Bearer ${StorageService.getToken()}`});
+        return new HttpHeaders({'Authorization': `Bearer ${StorageService.getToken()}`});
     }
 }
