@@ -1,12 +1,14 @@
 package donation.main.service;
 
 import donation.main.dto.donatorsdto.CreateDonatorDto;
+import donation.main.dto.donatorsdto.DonatorTotalDonationsView;
 import donation.main.entity.DonatorEntity;
 import donation.main.exception.EmailNotFoundException;
 import donation.main.exception.UserNotFoundException;
 import donation.main.externaldb.service.ExternalDonatorService;
 import donation.main.mapper.DonatorMapper;
 import donation.main.repository.DonatorRepository;
+import donation.main.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +26,16 @@ public class DonatorService {
     }
 
     public DonatorEntity findById(Long id) {
-        return donatorRepository.findById(id)
+        return getById(id);
+    }
+
+    public Page<DonatorTotalDonationsView> getTotalDonationsByEmailLikeAndServerName(
+            String email, Long serverId, Pageable pageable) {
+        return donatorRepository.findTotalDonationsByEmailLikeAndServerName(email, serverId, pageable);
+    }
+
+    private DonatorEntity getById(Long id) {
+       return donatorRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Can't find Donator by id " + id));
     }
 

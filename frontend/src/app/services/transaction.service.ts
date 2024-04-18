@@ -11,19 +11,24 @@ export class TransactionService {
     constructor(private httpClient: HttpClientService) {
     }
 
-    public getAllWithSearch(pageNumber?: number, pageSize?: number, sort?: string, transactionState?: string[], paymentMethod?: string[], serverNames?: string[], donatorMails?: string) {
-        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort, donatorMails, serverNames,  transactionState, paymentMethod);
+    public getAllWithSearch(pageNumber?: number, pageSize?: number, sort?: string, state?: string[], paymentMethod?: string[], serverNames?: string[], donatorMails?: string) {
         const url: string = 'api/transactions/search';
+        const params = this.httpClient.getHttpParams({
+            page: pageNumber,
+            size: pageSize,
+            sort: sort,
+            donatorMails: donatorMails,
+            serverNames: serverNames?.join(','),
+            state: state?.join(','),
+            paymentMethod: paymentMethod?.join(','),
+        });
         return this.httpClient.fetch<GetTransactionResponse>(url, true, params);
     }
 
     public confirmById(transactionId: number, state: string, adminBonus: number) {
         const url: string = `api/transactions/${transactionId}/confirm`;
-        let transaction = new Transaction();
-        transaction.adminBonus = adminBonus;
-        transaction.state = state;
-        return this.httpClient.load<GetTransactionResponse>(HttpMethod.PUT, url, true, transaction);
-
+        return this.httpClient.load<GetTransactionResponse>(
+            HttpMethod.PUT, url, true, {adminBonus: adminBonus, state: state});
     }
 
     public update(transaction: Transaction) {
@@ -34,12 +39,6 @@ export class TransactionService {
     public create(transaction: Transaction) {
         const url: string = `api/transactions`;
         return this.httpClient.load<GetTransactionResponse>(HttpMethod.POST, url, true, transaction);
-    }
-
-    public getAllTransactionsFromOneDonator(donatorId: number, pageNumber?: number, pageSize?: number, sort?: string) {
-        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort);
-        const url: string = `api/transactions/donators/${donatorId}`;
-        return this.httpClient.fetch<GetTransactionResponse>(url, true, params);
     }
 
     public getImage(transactionId: number) {

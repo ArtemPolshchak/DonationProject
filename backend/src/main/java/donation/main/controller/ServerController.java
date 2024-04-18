@@ -2,6 +2,7 @@ package donation.main.controller;
 
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
 import donation.main.dto.donatorsdto.DonatorBonusDto;
+import donation.main.dto.donatorsdto.DonatorBonusOnServer;
 import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
 import donation.main.dto.serverdto.ServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/servers")
@@ -60,10 +63,24 @@ public class ServerController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "update donator bonuses for servers")
+    @PatchMapping("/donator-bonuses/{donatorId}")
+    public ResponseEntity<Void> updateDonatorServerBonuses(@PathVariable Long donatorId,
+                                                           @RequestBody List<DonatorBonusOnServer> dto) {
+        serverService.updateDonatorServerBonuses(dto, donatorId);
+        return ResponseEntity.ok().build();
+    }
+
     @Operation(summary = "get server info by serverID")
     @GetMapping("/{serverId}")
     public ResponseEntity<ServerDto> getServerById(@PathVariable Long serverId) {
         return ResponseEntity.status(HttpStatus.OK).body(serverService.getServerById(serverId));
+    }
+
+    @Operation(summary = "get all bonuses from all servers for Donator by donatorID")
+    @GetMapping("/donator-bonuses/{donatorId}")
+    public ResponseEntity<List<DonatorBonusOnServer>> getDonatorsBonusesOnServers(@PathVariable Long donatorId) {
+        return ResponseEntity.status(HttpStatus.OK).body(serverService.findAllBonusesOnServersByDonatorId(donatorId));
     }
 
     @Operation(summary = "create bonuses for donators on server")

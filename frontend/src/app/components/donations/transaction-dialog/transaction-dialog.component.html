@@ -36,7 +36,7 @@
                 <mat-form-field class="input-field">
                     <mat-label>Способ оплаты</mat-label>
                     <mat-select [formControl]="paymentControl" required>
-                        <mat-option *ngFor="let paymentMethod of paymentMethods" [value]="paymentMethod">{{paymentMethod}}</mat-option>
+                        <mat-option *ngFor="let paymentMethod of Object.keys(PaymentMethod)" [value]="paymentMethod">{{paymentMethod}}</mat-option>
                     </mat-select>
                     <mat-error *ngIf="serverControl.hasError('required')">Обязательное поле!</mat-error>
                 </mat-form-field>

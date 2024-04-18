@@ -124,7 +124,7 @@ export class SetupServerDialogComponent implements OnInit {
     }
 
     private getServerList(): void {
-        this.serverService.getAllServerNames().subscribe({
+        this.serverService.getAll().subscribe({
             next: (data) => {
                 StorageService.addServers(JSON.stringify(data.content));
             },

@@ -25,7 +25,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserResponseDto signUp(UserCreateRequestDto dto) {
+    public UserResponseDto create(UserCreateRequestDto dto) {
         checkIsExist(dto.username(), dto.email());
         UserEntity user = userMapper.toEntity(dto);
         return userMapper.toDto(save(user));

@@ -21,7 +21,7 @@ import {OpenImageDialogComponent} from "../../open-image-dialog/open-image-dialo
 import {MatDialog} from "@angular/material/dialog";
 import {StorageService} from "../../../services/storage.service";
 import {ToasterService} from "../../../services/toaster.service";
-import {TransactionPaymentMethod} from "../../../enums/transactoin-pamyent-method";
+import {PaymentMethod} from "../../../enums/payment-method";
 
 @Component({
     selector: 'app-donatorstory',
@@ -61,7 +61,7 @@ export class DonatorStoryComponent implements OnInit {
     pageNumber: number = 0;
     pageSize: number = 10;
     totalElements: number = 0;
-    paymentMethods?: TransactionPaymentMethod[];
+    paymentMethods?: PaymentMethod[];
     paymentMethod: string = "";
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -116,7 +116,7 @@ export class DonatorStoryComponent implements OnInit {
                 this.pageSize,
                 this.sortState,
                 this.state,
-                this.paymentMethods,
+                undefined,
                 this.selectedServer ? [this.selectedServer] : [],
                 this.email,
 

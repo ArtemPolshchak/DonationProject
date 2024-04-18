@@ -1,17 +1,17 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ServerService} from "../../services/server.service";
 import {Server} from "../../common/server";
 import {NgClass, NgForOf} from "@angular/common";
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {AddNewServerDialogComponent} from "./add-new-server-dialog/add-new-server-dialog.component";
 import {ServerBonusComponent} from "./server-bonus-dialog/server-bonus.component";
 import {Router} from "@angular/router";
 import {SetupServerDialogComponent} from "./setup-server-dialog/setup-server-dialog.component";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatButton} from "@angular/material/button";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatFooterRow} from "@angular/material/table";
 import {ToasterService} from "../../services/toaster.service";
+import {StorageService} from "../../services/storage.service";
 
 @Component({
     selector: 'app-server',
@@ -43,12 +43,14 @@ export class ServerComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.getAllServers();
+        this.servers = StorageService.getServers();
+        this.totalElements = this.servers.length;
     }
 
     getAllServers(): void {
-        this.serverService.getAllServerNames(this.pageNumber, this.pageSize, this.sortState)
+        this.serverService.getAll(this.pageNumber, this.pageSize, this.sortState)
             .subscribe(data => {
+                StorageService.addServers(JSON.stringify(data.content));
                 this.servers = data.content;
                 this.totalElements = data.totalElements;
             })
@@ -63,7 +65,7 @@ export class ServerComponent implements OnInit {
         });
     }
 
-    openSetUpServerDialog(serverId: number): void {
+    openUpdateServerDialog(serverId: number): void {
         const dialogRef = this.dialog.open(SetupServerDialogComponent, {
             width: '50%',
             data: {
@@ -106,7 +108,7 @@ export class ServerComponent implements OnInit {
 
     removeServer(serverId: number): void {
         this.serverService.deleteServerById(serverId).subscribe({
-            next:() => {
+            next: () => {
                 this.getAllServers();
                 this.openSnackBar("Сервер успешно удален")
             },

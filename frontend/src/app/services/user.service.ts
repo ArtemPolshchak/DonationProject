@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {User} from "../common/user";
 import {HttpClientService} from "./http-client.service";
 import {HttpMethod} from "../enums/http-method";
-import {HttpClient} from "@angular/common/http";
 
 @Injectable({
     providedIn: 'root'
@@ -13,13 +12,13 @@ export class UserService {
     }
 
     public getAll(pageNumber?: number, pageSize?: number) {
-        let params = this.httpClient.getHttpParams(pageNumber, pageSize);
         const url: string = `api/users`
+        const params = this.httpClient.getHttpParams({page: pageNumber, size: pageSize});
         return this.httpClient.fetch<GetUsersResponse>(url, true, params);
     }
 
     public create(user: User) {
-        const url: string = `api/auth/sign-up`
+        const url: string = `api/users/sign-up`
         return this.httpClient.load<User>(HttpMethod.POST, url, true, user);
     }
 
