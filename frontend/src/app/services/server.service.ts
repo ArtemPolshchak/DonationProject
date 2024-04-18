@@ -6,19 +6,31 @@ import {HttpClientService} from "./http-client.service";
 import {LoadDonatorBonus} from "../common/load-donator-bonus";
 import {HttpMethod} from "../enums/http-method";
 import {HttpClient} from "@angular/common/http";
+import {DonatorsBonusesFromAllServers} from "../common/donators-bonuses-from-all-servers";
 
 @Injectable({
     providedIn: 'root'
 })
 export class ServerService {
 
-    constructor(private httpClient: HttpClientService, private http: HttpClient) {
+    constructor(private httpClient: HttpClientService) {
     }
 
-    public getAllServerNames(pageNumber?: number, pageSize?: number, sortState?: string) {
-        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sortState);
+    public getAll(pageNumber?: number, pageSize?: number, sort?: string) {
         const url: string = `api/servers/names`
+        const params = this.httpClient
+            .getHttpParams({page: pageNumber, size: pageSize, sort: sort});
         return this.httpClient.fetch<GetServerResponse>(url, true, params)
+    }
+
+    public getAllDonatorsBonusesFromAllServers(donatorId: number) {
+        const url: string = `api/servers/donator-bonuses/${donatorId}`;
+        return this.httpClient.fetch<DonatorsBonusesFromAllServers[]>( url, true)
+    }
+
+    public updateAllDonatorsBonusesFromAllServers(bonuses: DonatorsBonusesFromAllServers[], donatorId: number) {
+        const url: string = `api/servers/donator-bonuses/${donatorId}`;
+        return this.httpClient.load<DonatorsBonusesFromAllServers[]>(HttpMethod.PATCH, url, true, bonuses);
     }
 
     public create(newServer: ServerDto) {
@@ -26,15 +38,10 @@ export class ServerService {
         return this.httpClient.load<void>(HttpMethod.POST, url, true, newServer);
     }
 
-    public getDonatorsBonusesByServerId(serverId: number, pageNumber?: number, pageSize?: number, sort?: string) {
-        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort);
-        const url: string = `api/servers/${serverId}/donators/bonus`;
-        return this.httpClient.fetch<GetDonatorBonuses>(url, true, params);
-    }
-
     public searchDonatorsByEmailContains(serverId: number, email?: string, pageNumber?: number, pageSize?: number, sort?: string) {
-        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort, email);
         const url: string = `api/servers/${serverId}/donators/search`;
+        const params = this.httpClient
+            .getHttpParams({page: pageNumber, size: pageSize, sort: sort, email: email});
         return this.httpClient.fetch<GetDonatorBonuses>(url, true, params);
     }
 
@@ -63,6 +70,7 @@ export class ServerService {
         return this.httpClient.load<void>(HttpMethod.DELETE, url, true);
     }
 }
+
 
 export interface DonatorsBonusResponse {
     id: number;

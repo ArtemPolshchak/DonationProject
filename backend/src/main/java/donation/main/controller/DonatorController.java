@@ -1,6 +1,7 @@
 package donation.main.controller;
 
 import donation.main.dto.donatorsdto.CreateDonatorDto;
+import donation.main.dto.donatorsdto.DonatorTotalDonationsView;
 import donation.main.entity.DonatorEntity;
 import donation.main.service.DonatorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +24,7 @@ public class DonatorController {
 
     private final DonatorService donatorService;
 
+    @Deprecated
     @Operation(summary = "get all donators")
     @GetMapping()
     //@PreAuthorize("hasRole('ADMIN')")
@@ -30,6 +32,16 @@ public class DonatorController {
         return ResponseEntity.status(HttpStatus.OK).body(donatorService.findAll(pageable));
     }
 
+    @Operation(summary = "get donator by id with information about donations")
+    @GetMapping("/donations")
+    public ResponseEntity<Page<DonatorTotalDonationsView>> getTotalDonationsByEmailLikeAndServerName(
+            @RequestParam(required = false) Long serverId,
+            @RequestParam(defaultValue = "") String donatorsMail, Pageable  pageable) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(donatorService.getTotalDonationsByEmailLikeAndServerName(donatorsMail, serverId, pageable));
+    }
+
+    @Deprecated
     @Operation(summary = "find donator by donators email")
     @GetMapping("/search")
     public ResponseEntity<Page<DonatorEntity>> searchDonatorByMail(

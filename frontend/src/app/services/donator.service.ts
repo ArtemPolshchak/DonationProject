@@ -11,30 +11,32 @@ export class DonatorService {
     constructor(private httpClient: HttpClientService) {
     }
 
-    public getAll(pageNumber?: number, pageSize?: number, sort?: string) {
-        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort);
-        const url: string = `api/donators`;
-        return this.httpClient.fetch<GetTransactionResponse>(url, true, params);
-    }
-
-    public search(pageNumber?: number, pageSize?: number, sort?: string, donatorMails?: string) {
-        let params = this.httpClient.getHttpParams(pageNumber, pageSize, sort, donatorMails);
-        const url: string = `api/donators/search`;
-        return this.httpClient.fetch<GetTransactionResponse>(url, true, params);
+    public search(pageNumber?: number, pageSize?: number, sort?: string, donatorsMail?: string, serverId?: number | string) {
+        const url: string = `api/donators/donations`;
+        const params = this.httpClient.getHttpParams(
+            {
+                page: pageNumber,
+                size: pageSize,
+                sort: sort,
+                donatorsMail: donatorsMail,
+                serverId: serverId,
+            }
+        );
+        return this.httpClient.fetch<GetDonatorTotalDonationsResponse>(url, true, params);
     }
 
     public createDonator(email: CreateDonator) {
         const url: string = `api/donators`
-        return this.httpClient.load<GetTransactionResponse>(HttpMethod.POST, url, true, email);
+        return this.httpClient.load<Donator>(HttpMethod.POST, url, true, email);
     }
 }
 
-interface GetTransactionResponse {
+interface GetDonatorTotalDonationsResponse {
     content: Donator[];
     pageable: {
         pageNumber: number;
         pageSize: number
-    }
+    };
     totalElements: number;
 }
 

@@ -1,7 +1,7 @@
 package donation.main.repository;
 
+import donation.main.dto.donatorsdto.DonatorTotalDonationsView;
 import donation.main.entity.TransactionEntity;
-import donation.main.enumeration.TransactionState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;

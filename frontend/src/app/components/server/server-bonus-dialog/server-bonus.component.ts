@@ -91,8 +91,6 @@ function validBonusRangeValidator(): ValidatorFn {
   };
 }
 
-
-
 @Component({
   selector: 'app-server-bonus',
   standalone: true,

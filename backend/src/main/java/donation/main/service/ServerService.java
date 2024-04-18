@@ -1,8 +1,10 @@
 package donation.main.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
 import donation.main.dto.donatorsdto.DonatorBonusDto;
+import donation.main.dto.donatorsdto.DonatorBonusOnServer;
 import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
 import donation.main.dto.serverdto.ServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
@@ -17,7 +19,6 @@ import donation.main.repository.DonatorRepository;
 import donation.main.repository.ServerRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.SoftDelete;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,10 @@ public class ServerService {
 
     public Page<ServerEntity> getAll(Pageable pageable) {
         return serverRepository.findAll(pageable);
+    }
+
+    public List<DonatorBonusOnServer> findAllBonusesOnServersByDonatorId(Long id) {
+        return serverRepository.findAllBonusesFromServersByDonatorId(id);
     }
 
     public Page<ServerIdNameDto> getAllServersNames(Pageable pageable) {
@@ -60,6 +65,17 @@ public class ServerService {
     public void updateServer(Long serverId, ServerDto dto) {
         ServerEntity server = findById(serverId);
         serverMapper.update(server, dto);
+    }
+
+    @Transactional
+    public void updateDonatorServerBonuses(List<DonatorBonusOnServer> bonuses, Long donatorId) {
+        bonuses.forEach(b -> {
+            if (b.personalBonus().equals(BigDecimal.ZERO)) {
+                serverRepository.deleteDonatorServerBonuses(donatorId, b.serverId());
+            } else {
+                serverRepository.updateDonatorServerBonuses(donatorId, b.serverId(), b.personalBonus().intValue());
+            }
+        });
     }
 
     public ServerEntity findById(Long id) {
