@@ -23,9 +23,13 @@ export class ServerService {
     }
 
     public getAllDonatorsBonusesFromAllServers(donatorId: number) {
-        let params = this.httpClient.getHttpParams(donatorId)
         const url: string = `api/servers/donator-bonuses/${donatorId}`;
-        return this.httpClient.load<DonatorsBonusesFromAllServers[]>(HttpMethod.GET, url, true, params)
+        return this.httpClient.fetch<DonatorsBonusesFromAllServers[]>( url, true)
+    }
+
+    public updateAllDonatorsBonusesFromAllServers(bonuses: DonatorsBonusesFromAllServers[], donatorId: number) {
+        const url: string = `api/servers/donator-bonuses/${donatorId}`;
+        return this.httpClient.load<DonatorsBonusesFromAllServers[]>(HttpMethod.PATCH, url, true, bonuses);
     }
 
     public create(newServer: ServerDto) {
@@ -71,10 +75,6 @@ export class ServerService {
     }
 }
 
-export class ServersWithBonusesForDonator {
-    serverId!: number;
-    personalBonus!: number;
-}
 
 export interface DonatorsBonusResponse {
     id: number;

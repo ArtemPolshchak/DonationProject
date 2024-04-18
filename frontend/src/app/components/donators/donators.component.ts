@@ -111,7 +111,7 @@ export class DonatorsComponent implements OnInit {
     openPersonalBonusDialog(donatorId: number, donatorEmail: string): void {
         const dialogRef = this.dialog.open(DonatorBonusDialogComponent, {
             width: '50%',
-            data: {donatorId: donatorId, donatorEmail: donatorEmail, servers: this.servers},
+            data: {donatorId: donatorId, donatorEmail: donatorEmail},
         });
         dialogRef.componentInstance.response.subscribe(() => {
             this.getAll();

@@ -63,6 +63,14 @@ public class ServerController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "update donator bonuses for servers")
+    @PatchMapping("/donator-bonuses/{donatorId}")
+    public ResponseEntity<Void> updateDonatorServerBonuses(@PathVariable Long donatorId,
+                                                           @RequestBody List<DonatorBonusOnServer> dto) {
+        serverService.updateDonatorServerBonuses(dto, donatorId);
+        return ResponseEntity.ok().build();
+    }
+
     @Operation(summary = "get server info by serverID")
     @GetMapping("/{serverId}")
     public ResponseEntity<ServerDto> getServerById(@PathVariable Long serverId) {

@@ -1,5 +1,6 @@
 package donation.main.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
 import donation.main.dto.donatorsdto.DonatorBonusDto;
@@ -64,6 +65,17 @@ public class ServerService {
     public void updateServer(Long serverId, ServerDto dto) {
         ServerEntity server = findById(serverId);
         serverMapper.update(server, dto);
+    }
+
+    @Transactional
+    public void updateDonatorServerBonuses(List<DonatorBonusOnServer> bonuses, Long donatorId) {
+        bonuses.forEach(b -> {
+            if (b.personalBonus().equals(BigDecimal.ZERO)) {
+                serverRepository.deleteDonatorServerBonuses(donatorId, b.serverId());
+            } else {
+                serverRepository.updateDonatorServerBonuses(donatorId, b.serverId(), b.personalBonus().intValue());
+            }
+        });
     }
 
     public ServerEntity findById(Long id) {

@@ -19,6 +19,7 @@ export class HttpClientService extends HttpClient {
     fetch<T>(url: string, auth: boolean, params?: HttpParams): Observable<T> {
         let options: any = {};
         params ? options.params = params : options;
+        console.log("params:  " + params)
         auth ? options.headers = this.getHeaders() : options;
         return this.request<T>(HttpMethod.GET, url, <Object>options);
     }
