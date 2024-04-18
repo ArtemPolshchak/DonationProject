@@ -65,7 +65,7 @@ export class LoginComponent {
     }
 
     private getServerList(): void {
-        this.serverService.getAllServerNames().subscribe({
+        this.serverService.getAll().subscribe({
             next: (data) => {
                 StorageService.addServers(JSON.stringify(data.content));
                 this.redirectBasedOnRole(StorageService.getUser()?.role)

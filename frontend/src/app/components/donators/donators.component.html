@@ -54,6 +54,14 @@
                             </button>
                         </div>
                     </th>
+                    <th>
+                        <select class="form-select" aria-label="Сервер" [(ngModel)]="selectedServerId"
+                                (change)="getAll()">
+                            <option value=''>Фильтр - Все сервера</option>
+                            <option *ngFor="let server of servers"
+                                    [value]="(server.id.toString())">{{ server.serverName }}</option>
+                        </select>
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -62,17 +70,30 @@
                     <td> {{ donator.totalCompletedTransactions }}</td>
                     <td> {{ donator.totalDonations }}</td>
                     <td>
-                        <button class="custom-button-history"
-                                (click)="goToDonatorStory(donator.id, donator.email, donator.totalDonations)">История
-                        </button>
+                        <div class="bonus-buttons-container">
+                            <div class="button table-button"
+                                 (click)="goToDonatorStory(donator.id, donator.email, donator.totalDonations)">
+                                <div class="row">
+                                    <div class="col-auto pe-0">
+                                        <img src="assets/images/history.svg" alt="">
+                                    </div>
+                                    <div class="col-auto my-auto ps-0">
+                                        HISTORY
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="button table-button" (click)="openPersonalBonusDialog(donator.id)">
+                                <div class="row">
+                                    <div class="col-auto pe-0">
+                                        <img src="assets/images/settings.svg" alt="">
+                                    </div>
+                                    <div class="col-auto my-auto ps-0">
+                                        BONUSES
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </td>
-
-                    <td>
-                        <button class="custom-button-history" (click)="openPersonalBonusDialog(donator.id, donator.email)">
-                            Персональные бонусы
-                        </button>
-                    </td>
-
                 </tr>
                 </tbody>
             </table>

@@ -16,6 +16,24 @@
   object-fit: cover;
 }
 
+.update-button {
+  background-color: transparent;
+  width: fit-content;
+  max-width: fit-content;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  margin: -8px 0px -8px -8px;
+  & img {
+    margin: 8px;
+  }
+  &:hover {
+    background-color: #41556466;
+  }
+}
+
 h2 {
   background: #f5f5f5;
   border: 1px solid #ddd;

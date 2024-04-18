@@ -19,6 +19,7 @@ import {LAST_SERVER_KEY} from "../../../enums/app-constans";
 import {ImageProcessorService} from "../../../services/image-processor.service";
 import {NgxColorsModule} from "ngx-colors";
 import {ToasterService} from "../../../services/toaster.service";
+import {PaymentMethod} from "../../../enums/payment-method";
 
 @Component({
     selector: 'app-transaction-dialog',
@@ -46,11 +47,9 @@ import {ToasterService} from "../../../services/toaster.service";
 export class TransactionDialog implements OnInit {
     tempImg?: string | null;
     @Output() transactionResponse = new EventEmitter();
-    maxImgSideSize = 800;
     servers: Server[];
-    paymentMethods: string[] = ["PAYPAL", "CARD_RU", "CARD_UA", "USDT", "ETC"];
     transaction: Transaction;
-    paymentControl = new FormControl("PAYPAL", Validators.required);
+    paymentControl = new FormControl(PaymentMethod.PAYPAL, Validators.required);
     serverControl = new FormControl<Server | null>(null, Validators.required);
     contributionControl = new FormControl('',
         [Validators.required, Validators.pattern(/^\d+$/)]
@@ -198,4 +197,7 @@ export class TransactionDialog implements OnInit {
     private findServerByName(serverName: string): Server {
         return this.servers.find(s => s.serverName === serverName)!;
     }
+
+    protected readonly Object = Object;
+    protected readonly PaymentMethod = PaymentMethod;
 }

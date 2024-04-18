@@ -54,11 +54,11 @@ export class DonationsComponent implements OnInit {
     pageNumber: number = 0;
     pageSize: number = 10;
     totalElements: number = 0;
-    transactionState: string[] = ["IN_PROGRESS", "CANCELLED", "COMPLETED"];
+    transactionState?: string[];
     serverNames?: string[];
-    paymentMethods?: string[] = ["PAYPAL", "CARD_RU", "CARD_UA", "USDT", "ETC"];
-    donatorsMail!: string;
-    sortState?: string = "dateCreated,desc";
+    paymentMethods?: string[];
+    donatorsMail?: string;
+    sortState: string = "dateCreated,desc";
     stateFilter: string = "";
     selectedServer: string = "";
     paymentMethod: string = "";
@@ -87,10 +87,7 @@ export class DonationsComponent implements OnInit {
     }
 
     applyFilterSortSearch(): void {
-        this.transactionState = [];
-        if (this.stateFilter !== '') {
-            this.transactionState.push(this.stateFilter);
-        }
+        this.transactionState = this.stateFilter ? [this.stateFilter] : undefined;
         this.serverNames = this.selectedServer ? [this.selectedServer] : undefined;
         this.paymentMethods = this.paymentMethod ? [this.paymentMethod] : undefined;
         this.pageNumber = 0

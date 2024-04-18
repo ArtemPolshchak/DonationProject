@@ -2,59 +2,38 @@
   padding-top: 108px;
 }
 
-.section {
-  margin-bottom: 20px;
-}
-
 table {
-  border-collapse: collapse;
+  table-layout: fixed;
   width: 100%;
+  margin-top: 8px;
+
+  thead{
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  th, td {
+    text-align: left;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
 }
 
-th, td {
-  text-align: left;
-  padding: 8px;
+.bonus-buttons-container{
+  padding: 4px;
+  display: flex;
 }
 
-tr:nth-child(even) {
-  background-color: #f2f2f2;
+.table-button {
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  &:hover {
+    background-color: #41556466;
+  }
 }
 
-h1, h2 {
-  color: #333;
-}
 
-.custom-button-history {
-  background-color: #425565;
-  color: #C5CCD3;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.custom-button-history:hover {
-  background-color: #344451;
-  color: #C5CCD3;
-}
-
-.custom-button {
-  background-color: #425565;
-  color: #C5CCD3;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-}
-
-.custom-button:hover {
-  background-color: #344451;
-  color: #C5CCD3;
-}
-.d-flex {
-  top: 10px;
-  right: 10px;
-  padding: 10px;
-  z-index: 1000;
-  border-bottom: 1px solid #ccc;
-  width: 300px;
-  max-width: calc(100% - 340px); /* Максимальна ширина віджета сортування + відступ */
-}
