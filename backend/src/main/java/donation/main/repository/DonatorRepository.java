@@ -26,6 +26,7 @@ public interface DonatorRepository extends JpaRepository<DonatorEntity, Long> {
                     + "LEFT JOIN transactions AS t ON t.donator_id = d.id "
                     + "WHERE d.email LIKE LOWER(CONCAT('%', :email, '%')) "
                     + "AND (:serverId IS NULL OR t.server_id = :serverId) "
+                    + "AND (t.state LIKE 'COMPLETED') "
                     + "GROUP BY d.id) AS sub",
             countQuery = "SELECT COUNT(1) FROM donators as d "
                     + "LEFT JOIN transactions AS t ON t.donator_id = d.id "
