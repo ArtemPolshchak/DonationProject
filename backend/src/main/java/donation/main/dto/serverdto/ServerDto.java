@@ -4,6 +4,7 @@ public record ServerDto(
         String serverName,
         String serverUrl,
         String serverUserName,
-        String serverPassword
-) {
+        String serverPassword,
+        String publicKey,
+        String secretKey) {
 }

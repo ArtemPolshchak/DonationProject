@@ -53,6 +53,12 @@ public class ServerEntity {
     @Column(name = "server_user_name", nullable = false)
     private String serverUserName;
 
+    @Column(name = "public_key")
+    private String publicKey;
+
+    @Column(name = "secret_key")
+    private String secretKey;
+
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "servers_donators_bonuses", joinColumns = @JoinColumn(name = "server_id", referencedColumnName = "id"))
     @MapKeyJoinColumn(name = "donator_id", referencedColumnName = "id")
