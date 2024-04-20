@@ -53,10 +53,10 @@ public class ServerEntity {
     @Column(name = "server_user_name", nullable = false)
     private String serverUserName;
 
-    @Column(name = "public_key")
+    @Column(name = "public_key", nullable = false)
     private String publicKey;
 
-    @Column(name = "secret_key")
+    @Column(name = "secret_key", nullable = false)
     private String secretKey;
 
     @ElementCollection(fetch = FetchType.LAZY)
