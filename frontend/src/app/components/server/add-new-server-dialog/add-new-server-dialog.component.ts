@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, Output} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {
     MatDialogActions,
     MatDialogClose,
@@ -16,7 +16,6 @@ import {MatSelect} from "@angular/material/select";
 import {NgForOf, NgIf} from "@angular/common";
 import {Server} from "../../../common/server";
 import {ServerDto, ServerService} from "../../../services/server.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {StorageService} from "../../../services/storage.service";
 import {ToasterService} from "../../../services/toaster.service";
 @Component({
@@ -77,6 +76,18 @@ export class AddNewServerDialogComponent {
         ]
     );
 
+    publicKeyControl = new FormControl('',
+        [Validators.required,
+            Validators.pattern(/^\S+$/)
+        ]
+    );
+
+    secretKeyControl = new FormControl('',
+        [Validators.required,
+            Validators.pattern(/^\S+$/)
+        ]
+    );
+
     addNewServer() {
         if (this.isFormValid()) {
             const serverName = this.serverNameControl.value;
@@ -89,6 +100,8 @@ export class AddNewServerDialogComponent {
                     serverUrl: this.serverUrlControl.value!,
                     serverUserName: this.serverUserNameControl.value!,
                     serverPassword: this.serverPasswordControl.value!,
+                    publicKey: this.publicKeyControl.value!,
+                    secretKey: this.secretKeyControl.value!
                 };
 
                 this.serverService.create(newServer).subscribe({
@@ -119,7 +132,9 @@ export class AddNewServerDialogComponent {
         return this.serverNameControl.valid
             && this.serverUrlControl.valid
             && this.serverUserNameControl.valid
-            && this.serverPasswordControl.valid;
+            && this.serverPasswordControl.valid
+            && this.publicKeyControl.valid
+            && this.secretKeyControl.valid;
     }
 
     onNoClick(): void {
@@ -136,4 +151,6 @@ export interface DialogData {
     serverUrl: string;
     serverUserName: string;
     serverPassword: string;
+    publicKey: string;
+    secretKey: string;
 }

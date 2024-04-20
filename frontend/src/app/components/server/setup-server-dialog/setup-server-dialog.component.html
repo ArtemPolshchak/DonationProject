@@ -27,6 +27,18 @@
                     <mat-error *ngIf="serverPasswordControl.hasError('required')">Поле обязательно к заполнению
                     </mat-error>
                 </mat-form-field>
+                <mat-form-field class="input-field" appearance="outline">
+                    <mat-label>publicKey</mat-label>
+                    <input matInput [formControl]="publicKeyControl" [defaultValue]="" type="password">
+                    <mat-error *ngIf="publicKeyControl.hasError('required')">Поле обязательно к заполнению
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="input-field" appearance="outline">
+                    <mat-label>secretKey</mat-label>
+                    <input matInput [formControl]="secretKeyControl" [defaultValue]="" type="password">
+                    <mat-error *ngIf="secretKeyControl.hasError('required')">Поле обязательно к заполнению
+                    </mat-error>
+                </mat-form-field>
             </mat-card-content>
         </mat-card>
     </mat-dialog-content>
