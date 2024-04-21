@@ -70,10 +70,10 @@
                     <div ngbAccordionBody>
                         <div class="container">
                             <div class="image-container">
-                                <img #image [src]="transaction.imagePreview" alt="img"
-                                     onerror="this.src='s../../assets/images/no-image.jpg'"
+                                <img [src]="transaction.imagePreview ? transaction.imagePreview : NO_IMG_PATH"
+                                     alt="img"
                                      width="100%" style="cursor:pointer"
-                                     (click)="openImageDialog(transaction.id)"/>
+                                     (click)="transaction.imagePreview ? openImageDialog(transaction.id) : {}"/>
                             </div>
 
                             <div class="info-block">

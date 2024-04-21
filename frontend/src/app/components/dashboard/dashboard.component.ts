@@ -18,6 +18,7 @@ import {StorageService} from "../../services/storage.service";
 import {ToasterService} from "../../services/toaster.service";
 import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatIcon} from "@angular/material/icon";
+import {MatIconButton} from "@angular/material/button";
 
 @Component({
     selector: 'app-dashboard',
@@ -39,7 +40,8 @@ import {MatIcon} from "@angular/material/icon";
         MatCard,
         MatCardContent,
         MatIcon,
-        DecimalPipe
+        DecimalPipe,
+        MatIconButton
     ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss'

@@ -21,6 +21,7 @@ import {OpenImageDialogComponent} from "../open-image-dialog/open-image-dialog.c
 import {StorageService} from "../../services/storage.service";
 import {NO_IMG_PATH} from "../../enums/app-constans";
 import {ToasterService} from "../../services/toaster.service";
+import {MatIconButton} from "@angular/material/button";
 
 @Component({
     selector: 'app-transaction',
@@ -44,7 +45,8 @@ import {ToasterService} from "../../services/toaster.service";
         MatInput,
         NgIf,
         NgStyle,
-        DecimalPipe
+        DecimalPipe,
+        MatIconButton
     ],
     templateUrl: './donations.component.html',
     styleUrl: './donations.component.scss'
