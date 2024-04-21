@@ -9,6 +9,8 @@ import {SetupBonusDialogComponent} from "./setup-bonus-dialog/setup-bonus-dialog
 import {DonatorBonus} from "../../../common/donatorBonus";
 import {ServerService} from "../../../services/server.service";
 import {ToasterService} from "../../../services/toaster.service";
+import {MatIcon} from "@angular/material/icon";
+import {MatMiniFabButton} from "@angular/material/button";
 
 @Component({
     selector: 'app-donator-bonus-on-server',
@@ -17,7 +19,9 @@ import {ToasterService} from "../../../services/toaster.service";
         FormsModule,
         MatInput,
         MatPaginator,
-        NgForOf
+        NgForOf,
+        MatIcon,
+        MatMiniFabButton
     ],
     templateUrl: './donator-bonus-on-server.component.html',
     styleUrl: './donator-bonus-on-server.component.scss'
@@ -28,9 +32,12 @@ export class DonatorBonusOnServer implements OnInit {
     pageNumber: number = 0;
     pageSize: number = 5;
     totalElements: number = 0;
-    selectedItem: any;
     donatorsMail?: string;
-    sortState?: string = "email,asc";
+    ascOrder: string = "asc";
+    descOrder: string = "desc";
+    defaultSortField: string = "email"
+    sortOrder: string = this.descOrder;
+    sortState: string = this.defaultSortField + ',' + this.sortOrder;
     serverId!: number;
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -51,16 +58,8 @@ export class DonatorBonusOnServer implements OnInit {
         this.router.navigate(['/servers']);
     }
 
-    select(item: any) {
-        this.selectedItem = item;
-    }
-
     ngOnInit(): void {
-        this.getDonatorsPage();
-    }
-
-    getDonatorsPage(): void {
-        this.search();
+        this.search()
     }
 
     search(): void {
@@ -75,7 +74,7 @@ export class DonatorBonusOnServer implements OnInit {
     onPageChange(event: PageEvent): void {
         this.pageNumber = event.pageIndex;
         this.pageSize = event.pageSize;
-        this.getDonatorsPage();
+        this.search();
     }
 
     applySearch(): void {
@@ -101,5 +100,11 @@ export class DonatorBonusOnServer implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
             this.search();
         });
+    }
+
+    sort(sortField: string) {
+        this.sortOrder = this.sortOrder === this.descOrder ? this.ascOrder : this.descOrder;
+        this.sortState = `${sortField},${this.sortOrder}`;
+        this.search();
     }
 }

@@ -85,10 +85,6 @@ export class DonatorsComponent implements OnInit {
         }
     }
 
-    select(item: any) {
-        this.selectedItem = item;
-    }
-
     sort(sortField: string) {
         this.sortOrder = this.sortOrder === this.descOrder ? this.ascOrder : this.descOrder;
         this.sortState = `${sortField},${this.sortOrder}`;

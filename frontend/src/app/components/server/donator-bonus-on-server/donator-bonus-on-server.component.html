@@ -24,10 +24,26 @@
 
         <div class="table-header">
             <table>
-                <thead style="position: sticky">
+                <thead>
                 <tr>
-                    <th>Почта Донатора</th>
-                    <th>Персональный бонус</th>
+                    <th>
+                        <div class="table-header-item">
+                            <p>Почта Донатора</p>
+                            <button class="sort-button" mat-mini-fab color="basic"
+                                    (click)="sort('email')">
+                                <mat-icon>filter_list</mat-icon>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="table-header-item">
+                            <p>Персональный бонус</p>
+                            <button class="sort-button" mat-mini-fab color="basic"
+                                    (click)="sort('personalBonus')">
+                                <mat-icon>filter_list</mat-icon>
+                            </button>
+                        </div>
+                    </th>
                     <th></th>
                 </tr>
                 </thead>
@@ -36,13 +52,13 @@
     </div>
 
     <div class="main-content">
-            <table>
-                <tbody>
-                <tr *ngFor="let donator of donatorBonus">
-                    <td> {{ donator.email  }} </td>
-                    <td> {{ donator.personalBonus + "%" }}</td>
-                    <td>
-                        <div class="buttons-container">
+        <table>
+            <tbody>
+            <tr *ngFor="let donator of donatorBonus">
+                <td> {{ donator.email  }} </td>
+                <td> {{ donator.personalBonus + "%" }}</td>
+                <td>
+                    <div class="buttons-container">
                         <button class="button table-button" (click)="openSetupBonusDialog(donator)">
                             <div class="col-auto pe-0">
                                 <img src="assets/images/edit.svg" alt="">
@@ -51,11 +67,11 @@
                                 CHANGE BONUS
                             </div>
                         </button>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
     <div class="paginator-container">

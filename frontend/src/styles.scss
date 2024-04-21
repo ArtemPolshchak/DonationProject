@@ -39,7 +39,7 @@ body {
   position: sticky;
   align-items: center;
   top: 0;
-  height:56px;
+  height: 56px;
   z-index: 9999;
   width: 100%;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.14);
@@ -83,6 +83,7 @@ body {
     & input {
       font-size: 16px;
       display: block;
+
       &.search-input {
         width: 100%;
         border-radius: 4px;
@@ -93,6 +94,7 @@ body {
         outline: none;
         border: none
       }
+
       &.search-button {
         width: 20%;
         min-width: fit-content;
@@ -104,16 +106,19 @@ body {
         cursor: pointer;
         user-select: none;
         letter-spacing: 1.25px;
+
         &:hover {
           background-color: #41556466;
         }
       }
     }
   }
+
   .form-select-group {
     width: 100%;
     display: flex;
     justify-content: flex-start;
+
     .form-select {
       max-width: 25vw;
       flex-grow: 1;
@@ -147,9 +152,11 @@ body {
     padding: 10px 16px;
     margin-right: 16px;
     letter-spacing: 1.25px;
+
     & img {
       margin-right: 12px;
     }
+
     &:last-child {
       margin-right: 0;
     }
@@ -181,12 +188,15 @@ body {
   user-select: none;
   margin-right: 16px;
   letter-spacing: 1.25px;
+
   & img {
     margin-right: 12px;
   }
+
   &:last-child {
     margin-right: 0;
   }
+
   &:hover {
     background-color: rgb(140, 157, 173);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.14), 0 0 14px rgba(0, 0, 0, 0.12);
@@ -214,6 +224,7 @@ body {
 table {
   table-layout: fixed;
   width: 100%;
+
   th {
     background-color: #C5CCD3;
   }
@@ -229,7 +240,7 @@ table {
   }
 }
 
-.buttons-container  {
+.buttons-container {
   padding: 4px;
   display: flex;
   justify-content: flex-end;
@@ -244,8 +255,13 @@ table {
 
 .table-header-item {
   display: flex;
+
   p {
     margin-top: auto;
+  }
+
+  .sort-button {
+    transform: scale(0.7);
   }
 }
 
@@ -254,6 +270,7 @@ table {
   display: flex;
   justify-content: center;
   width: 50%;
+
   &:hover {
     background-color: #41556466;
   }

@@ -31,7 +31,7 @@
                     <th>
                         <div class="table-header-item">
                             <p>Почта Донатора</p>
-                            <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}"
+                            <button class="sort-button" mat-mini-fab color="basic"
                                     (click)="sort('email')">
                                 <mat-icon>filter_list</mat-icon>
                             </button>
@@ -40,7 +40,7 @@
                     <th>
                         <div class="table-header-item">
                             <p>Количество донатов</p>
-                            <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}"
+                            <button class="sort-button" mat-mini-fab color="basic"
                                     (click)="sort('totalCompletedTransactions')">
                                 <mat-icon>filter_list</mat-icon>
                             </button>
@@ -49,7 +49,7 @@
                     <th>
                         <div class="table-header-item">
                             <p>Общая сумма доната</p>
-                            <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}"
+                            <button class="sort-button" mat-mini-fab color="basic"
                                     (click)="sort('totalDonations')">
                                 <mat-icon>filter_list</mat-icon>
                             </button>
