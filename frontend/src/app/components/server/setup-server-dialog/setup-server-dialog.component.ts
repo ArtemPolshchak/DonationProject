@@ -38,25 +38,10 @@ import {ToasterService} from "../../../services/toaster.service";
     styleUrl: './setup-server-dialog.component.scss'
 })
 export class SetupServerDialogComponent implements OnInit {
-    servers: Server[];
+    servers?: Server[];
     serverId: number;
     lastServerName!: string;
     @Output() componentResponse = new EventEmitter();
-
-    constructor(
-        @Inject(MAT_DIALOG_DATA) public data: any,
-        private toasterService: ToasterService,
-        public dialogRef: MatDialogRef<SetupServerDialogComponent>,
-        private serverService: ServerService) {
-        this.servers = StorageService.getServers();
-        this.serverId = data.serverId;
-
-    }
-
-    ngOnInit(): void {
-        this.setServerFields();
-    }
-
     serverNameControl = new FormControl('',
         [Validators.required,
             Validators.pattern(/^\S+$/)
@@ -90,8 +75,22 @@ export class SetupServerDialogComponent implements OnInit {
         ]
     );
 
+    constructor(
+        @Inject(MAT_DIALOG_DATA) public data: any,
+        private toasterService: ToasterService,
+        public dialogRef: MatDialogRef<SetupServerDialogComponent>,
+        private serverService: ServerService) {
+        this.servers = StorageService.getServers();
+        this.serverId = data.serverId;
+
+    }
+
+    ngOnInit(): void {
+        this.setServerFields();
+    }
+
     findServerByName(serverName: string) {
-        return this.servers.find(server => server.serverName === serverName) ?? null;
+        return this.servers!.find(server => server.serverName === serverName) ?? null;
     }
 
     updateServer() {
@@ -114,10 +113,10 @@ export class SetupServerDialogComponent implements OnInit {
                         next: (result) => {
                             this.componentResponse.emit(result)
                             this.getServerList();
-                            this.dialogRef.close();
                             this.openSnackBar("Сервер успешно обновлен")
                         },
                         error: (err) => this.openSnackBar("Ошибка при обновлении сервера: " + err.message),
+                        complete: () => this.dialogRef.close()
                     },
                 );
             }
@@ -157,20 +156,7 @@ export class SetupServerDialogComponent implements OnInit {
             && this.secretKeyControl.valid;
     }
 
-    onNoClick(): void {
-        this.dialogRef.close();
-    }
-
     openSnackBar(message: string) {
         this.toasterService.openSnackBar(message);
     }
-}
-
-export interface DialogData {
-    serverName: string;
-    serverUrl: string;
-    serverUserName: string;
-    serverPassword: string;
-    publicKey: string;
-    secretKey: string;
 }

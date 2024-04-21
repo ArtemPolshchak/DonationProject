@@ -57,11 +57,9 @@ export class DonatorStoryComponent implements OnInit {
     state: string[] = [TransactionState.COMPLETED];
     selectedServer: string = '';
     servers: Server[] = [];
-    serverNames?: string[];
     pageNumber: number = 0;
     pageSize: number = 10;
     totalElements: number = 0;
-    paymentMethods?: PaymentMethod[];
     paymentMethod: string = "";
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;

@@ -60,7 +60,6 @@ export class DonatorBonusDialogComponent implements OnInit {
     response = new EventEmitter()
     bonusesGroup: FormGroup = this.fb.group({
         bonuses: this.fb.array(this.donatorsBonuses, Validators.required)
-
     });
 
     constructor(
@@ -113,12 +112,12 @@ export class DonatorBonusDialogComponent implements OnInit {
 
             this.serverService.updateAllDonatorsBonusesFromAllServers(createDonatorBonusDtoArray, this.donatorId).subscribe({
                 next: (response) => {
-                    this.dialogRef.close(response);
                     this.openSnackBar("Бонусы сервера успешно доданы")
                 },
                 error: (error) => {
                     this.openSnackBar("Произошла ошибка: " + error.message)
-                }
+                },
+                complete: () => this.dialogRef.close()
             });
         }
 

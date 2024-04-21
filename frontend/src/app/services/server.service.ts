@@ -24,12 +24,12 @@ export class ServerService {
     }
 
     public getAllDonatorsBonusesFromAllServers(donatorId: number) {
-        const url: string = `api/servers/donator-bonuses/${donatorId}`;
+        const url: string = `api/servers/donators/${donatorId}/bonus`;
         return this.httpClient.fetch<DonatorsBonusesFromAllServers[]>( url, true)
     }
 
     public updateAllDonatorsBonusesFromAllServers(bonuses: DonatorsBonusesFromAllServers[], donatorId: number) {
-        const url: string = `api/servers/donator-bonuses/${donatorId}`;
+        const url: string = `api/servers/donators/${donatorId}/bonus`;
         return this.httpClient.load<DonatorsBonusesFromAllServers[]>(HttpMethod.PATCH, url, true, bonuses);
     }
 

@@ -1,54 +1,55 @@
-<div class="page-header">
-    <h1 class="page-header-title">Список донаторов</h1>
-    <div class="buttons">
-        <div class="button" (click)="createDonatorDialog()">
-            <div class="row">
-                <div class="col-auto pe-0">
-                    <img src="assets/images/add.svg" alt="">
-                </div>
-                <div class="col-auto my-auto ps-0">
-                    ДОБАВИТЬ
+<div class="page-container">
+
+    <div class="page-header">
+        <h1 class="page-header-title">Список донаторов</h1>
+        <div class="header-buttons">
+            <div class="button" (click)="createDonatorDialog()">
+                <div class="row">
+                    <div class="col-auto pe-0">
+                        <img src="assets/images/add.svg" alt="">
+                    </div>
+                    <div class="col-auto my-auto ps-0">
+                        ДОБАВИТЬ
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="page-navbar">
-    <div class="search">
-        <input type="text" name="search" class="search-input" placeholder="Почта донатора" matInput
-               [(ngModel)]="donatorsMail">
-        <input type="button" class="search-button" value="ПОИСК" (click)="getAll()">
-    </div>
-</div>
 
-<div class="page-container">
-    <div>
-        <div class="section">
+    <div class="page-navbar">
+
+        <div class="search">
+            <input type="text" name="search" class="search-input" placeholder="Почта донатора" matInput
+                   [(ngModel)]="donatorsMail">
+            <input type="button" class="search-button" value="ПОИСК" (click)="getAll()">
+        </div>
+
+        <div class="table-header">
             <table>
                 <thead>
                 <tr>
                     <th>
-                        <div style="display: flex">
-                            <p style="margin-top: auto">Почта Донатора</p>
-                            <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}"
+                        <div class="table-header-item">
+                            <p>Почта Донатора</p>
+                            <button class="sort-button" mat-mini-fab color="basic"
                                     (click)="sort('email')">
                                 <mat-icon>filter_list</mat-icon>
                             </button>
                         </div>
                     </th>
                     <th>
-                        <div style="display: flex">
-                            <p style="margin-top: auto">Количество донатов</p>
-                            <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}"
+                        <div class="table-header-item">
+                            <p>Количество донатов</p>
+                            <button class="sort-button" mat-mini-fab color="basic"
                                     (click)="sort('totalCompletedTransactions')">
                                 <mat-icon>filter_list</mat-icon>
                             </button>
                         </div>
                     </th>
                     <th>
-                        <div style="display: flex">
-                            <p style="margin-top: auto">Общая сумма доната</p>
-                            <button mat-mini-fab color="basic" [ngStyle]="{transform: 'scale(0.7)'}"
+                        <div class="table-header-item">
+                            <p>Общая сумма доната</p>
+                            <button class="sort-button" mat-mini-fab color="basic"
                                     (click)="sort('totalDonations')">
                                 <mat-icon>filter_list</mat-icon>
                             </button>
@@ -64,48 +65,54 @@
                     </th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr *ngFor="let donator of donators">
-                    <td> {{ donator.email }}</td>
-                    <td> {{ donator.totalCompletedTransactions }}</td>
-                    <td> {{ donator.totalDonations }}</td>
-                    <td>
-                        <div class="bonus-buttons-container">
-                            <div class="button table-button"
-                                 (click)="goToDonatorStory(donator.id, donator.email, donator.totalDonations)">
-                                <div class="row">
-                                    <div class="col-auto pe-0">
-                                        <img src="assets/images/history.svg" alt="">
-                                    </div>
-                                    <div class="col-auto my-auto ps-0">
-                                        HISTORY
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="button table-button" (click)="openPersonalBonusDialog(donator.id, donator.email)">
-                                <div class="row">
-                                    <div class="col-auto pe-0">
-                                        <img src="assets/images/settings.svg" alt="">
-                                    </div>
-                                    <div class="col-auto my-auto ps-0">
-                                        BONUSES
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
             </table>
         </div>
     </div>
-</div>
 
-<div class="paginator-container">
-    <mat-paginator [length]="totalElements"
-                   [pageSize]="pageSize"
-                   [pageSizeOptions]="[5, 10, 25, 100]"
-                   [showFirstLastButtons]="true"
-                   (page)="onPageChange($event)">
-    </mat-paginator>
+    <div class="main-content">
+
+        <table>
+            <tbody>
+            <tr *ngFor="let donator of donators">
+                <td> {{ donator.email }}</td>
+                <td> {{ donator.totalCompletedTransactions }}</td>
+                <td> {{ donator.totalDonations }}</td>
+                <td>
+                    <div class="buttons-container">
+                        <div class="button table-button"
+                             (click)="goToDonatorStory(donator.id, donator.email, donator.totalDonations)">
+                            <div class="row">
+                                <div class="col-auto pe-0">
+                                    <img src="assets/images/history.svg" alt="">
+                                </div>
+                                <div class="col-auto my-auto ps-0">
+                                    История
+                                </div>
+                            </div>
+                        </div>
+                        <div class="button table-button" (click)="openPersonalBonusDialog(donator.id, donator.email)">
+                            <div class="row">
+                                <div class="col-auto pe-0">
+                                    <img src="assets/images/settings.svg" alt="">
+                                </div>
+                                <div class="col-auto my-auto ps-0">
+                                    Бонусы
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="paginator-container">
+        <mat-paginator [length]="totalElements"
+                       [pageSize]="pageSize"
+                       [pageSizeOptions]="[5, 10, 25, 100]"
+                       [showFirstLastButtons]="true"
+                       (page)="onPageChange($event)">
+        </mat-paginator>
+    </div>
 </div>

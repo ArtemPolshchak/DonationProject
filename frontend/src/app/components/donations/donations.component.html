@@ -1,31 +1,32 @@
-<div class="page-header">
-    <h1 class="page-header-title">Донаты</h1>
-    <div class="buttons">
-        <div class="button" (click)="openTransactionDialog()">
-            <div class="row">
-                <div class="col-auto pe-0">
-                    <img src="assets/images/add.svg" alt="">
-                </div>
-                <div class="col-auto my-auto ps-0">
-                    ДОБАВИТЬ
+<div class="page-container">
+    <div class="page-header">
+        <h1 class="page-header-title">Донаты</h1>
+        <div class="header-buttons">
+            <div class="button" (click)="openTransactionDialog()">
+                <div class="row">
+                    <div class="col-auto pe-0">
+                        <img src="assets/images/add.svg" alt="">
+                    </div>
+                    <div class="col-auto my-auto ps-0">
+                        ДОБАВИТЬ
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="page-navbar">
-    <div class="search">
-        <input type="text" name="search" class="search-input" placeholder="Почта донатора" matInput
-               [(ngModel)]="donatorsMail">
-        <input type="button" class="search-button" value="ПОИСК" (click)="applyFilterSortSearch()">
-    </div>
-    <div class="search">
-        <select class="form-select" aria-label="Сорт" [(ngModel)]="sortState"
-                (change)="applyFilterSortSearch()">
-            <option value="dateCreated,asc">Сортировка по дате от старых к новым</option>
-            <option value="dateCreated,desc">Сортировка по дате от новых к старым</option>
-        </select>
-        <label>
+
+    <div class="page-navbar">
+        <div class="search">
+            <input type="text" name="search" class="search-input" placeholder="Почта донатора" matInput
+                   [(ngModel)]="donatorsMail">
+            <input type="button" class="search-button" value="ПОИСК" (click)="applyFilterSortSearch()">
+        </div>
+        <div class="form-select-group">
+            <select class="form-select" aria-label="Сорт" [(ngModel)]="sortState"
+                    (change)="applyFilterSortSearch()">
+                <option value="dateCreated,asc">Сортировка по дате от старых к новым</option>
+                <option value="dateCreated,desc">Сортировка по дате от новых к старым</option>
+            </select>
 
             <select class="form-select" aria-label="Фильтр" [(ngModel)]="stateFilter"
                     (change)="applyFilterSortSearch()">
@@ -34,32 +35,30 @@
                 <option value="COMPLETED">Подтверждены</option>
                 <option value="CANCELLED">Отменены</option>
             </select>
-        </label>
 
-        <select class="form-select" aria-label="Способ оплаты" [(ngModel)]="paymentMethod"
-                (change)="applyFilterSortSearch()">
-            <option value="">Фильтр - Cпособ оплаты</option>
-            <option value="PAYPAL">PAYPAL</option>
-            <option value="CARD_RU">CARD_RU</option>
-            <option value="CARD_UA">CARD_UA</option>
-            <option value="ETC">etc.</option>
-        </select>
+            <select class="form-select" aria-label="Способ оплаты" [(ngModel)]="paymentMethod"
+                    (change)="applyFilterSortSearch()">
+                <option value="">Фильтр - Cпособ оплаты</option>
+                <option value="PAYPAL">PAYPAL</option>
+                <option value="CARD_RU">CARD_RU</option>
+                <option value="CARD_UA">CARD_UA</option>
+                <option value="ETC">etc.</option>
+            </select>
 
-        <select class="form-select" aria-label="Сервер" [(ngModel)]="selectedServer"
-                (change)="applyFilterSortSearch()">
-            <option value="">Фильтр - Все сервера</option>
-            <option *ngFor="let server of servers" [value]="server.serverName">{{ server.serverName }}</option>
-        </select>
+            <select class="form-select" aria-label="Сервер" [(ngModel)]="selectedServer"
+                    (change)="applyFilterSortSearch()">
+                <option value="">Фильтр - Все сервера</option>
+                <option *ngFor="let server of servers" [value]="server.serverName">{{ server.serverName }}</option>
+            </select>
+        </div>
     </div>
-</div>
 
-<div class="page-container">
-    <div class="transactions-list">
-        <div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
+    <div class="main-content">
+        <div ngbAccordion *ngFor="let transaction of transactions">
             <div class="item" ngbAccordionItem="{{transaction.id}}">
                 <h2 ngbAccordionHeader>
-                    <button class="update-button" [hidden]="transaction.state === 'IN_PROGRESS' ? false : true"
-                            (click)="openTransactionDialog(transaction)" >
+                    <button class="button update-button" [hidden]="transaction.state!=='IN_PROGRESS'"
+                            (click)="openTransactionDialog(transaction)">
                         <img src="assets/images/edit.svg" alt="">
                     </button>
                     <button ngbAccordionButton>
@@ -84,7 +83,7 @@
                     <div ngbAccordionBody>
                         <div class="container">
                             <div class="image-container">
-                                <img #image [src]="transaction.imagePreview ? transaction.imagePreview : NO_IMG_PATH"
+                                <img [src]="transaction.imagePreview ? transaction.imagePreview : NO_IMG_PATH"
                                      alt="img"
                                      width="100%" style="cursor:pointer"
                                      (click)="transaction.imagePreview ? openImageDialog(transaction.id) : {}"/>
@@ -134,13 +133,13 @@
             </div>
         </div>
     </div>
-</div>
 
-<div class="paginator-container">
-    <mat-paginator [length]="totalElements"
-                   [pageSize]="pageSize"
-                   [pageSizeOptions]="[5, 10, 25, 100]"
-                   [showFirstLastButtons]="true"
-                   (page)="onPageChange($event)">
-    </mat-paginator>
+    <div class="paginator-container">
+        <mat-paginator [length]="totalElements"
+                       [pageSize]="pageSize"
+                       [pageSizeOptions]="[5, 10, 25, 100]"
+                       [showFirstLastButtons]="true"
+                       (page)="onPageChange($event)">
+        </mat-paginator>
+    </div>
 </div>

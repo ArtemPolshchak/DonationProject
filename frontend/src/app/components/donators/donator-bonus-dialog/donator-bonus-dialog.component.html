@@ -1,8 +1,10 @@
 <header class="dialog-header">
-    <h2 class="dialog-header-title">Персональные бонусы {{ donatorEmail }}</h2>
+    <h2 class="dialog-header-title">Персональные бонусы</h2>
+    <h2 class="dialog-header-title">{{ donatorEmail }}</h2>
 </header>
-<mat-dialog-content>
-    <mat-card class="card-container">
+
+<mat-dialog-content class="dialog-content">
+    <mat-card>
         <div [formGroup]="bonusesGroup">
             <div formArrayName="bonuses">
                 <mat-card-content class="server-bonuses-content"
@@ -24,9 +26,10 @@
         </div>
     </mat-card>
 </mat-dialog-content>
+
 <mat-dialog-actions class="dialog-action-buttons" align="center">
-    <button class="dialog-button" mat-flat-button mat-dialog-close>Отменить</button>
-    <button class="dialog-button" mat-flat-button (click)="bonusesGroup.valid ? save() : {}">
+    <button class="button dialog-button" mat-flat-button mat-dialog-close>Отменить</button>
+    <button class="button dialog-button" mat-flat-button (click)="bonusesGroup.valid ? save() : {}">
         Сохранить
     </button>
 </mat-dialog-actions>
