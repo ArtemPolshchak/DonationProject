@@ -1,40 +1,61 @@
-<div class="page-header">
-    <h1 class="page-header-title">Пользователи</h1>
-    <div class="buttons">
-        <div class="button" (click)="openCreateUserDialog()">
-            <div class="row">
-                <div class="col-auto pe-0">
-                    <img src="assets/images/add.svg" alt="">
-                </div>
-                <div class="col-auto my-auto ps-0">
-                    ДОБАВИТЬ
+<div class="page-container">
+    <div class="page-header">
+        <h1 class="page-header-title">Пользователи</h1>
+        <div class="header-buttons">
+            <div class="buttons">
+                <div class="button" (click)="openCreateUserDialog()">
+                    <div class="row">
+                        <div class="col-auto pe-0">
+                            <img src="assets/images/add.svg" alt="">
+                        </div>
+                        <div class="col-auto my-auto ps-0">
+                            ДОБАВИТЬ
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="page-container">
-    <div class="section">
+    <div class="page-navbar">
+        <div class="table-header">
+            <table>
+                <thead>
+                <tr>
+                    <th>Почта Пользователя</th>
+                    <th>Имя Пользователя</th>
+                    <th>Роль Пользователя</th>
+                    <th></th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="main-content">
         <table>
-            <thead>
-            <tr>
-                <th>Почта Пользователя</th>
-                <th>Имя Пользователя</th>
-                <th>Роль Пользователя</th>
-            </tr>
-            </thead>
             <tbody>
-
             <tr *ngFor="let user of users">
                 <td> {{ user.email }}</td>
                 <td> {{ user.username }}</td>
                 <td> {{ user.role }}</td>
                 <td>
-                    <button (click)="openUpdateUserDialog(user)">Update</button>
+                    <div class="buttons-container">
+                        <button class="button table-button" (click)="openUpdateUserDialog(user)">
+                            <div class="row">
+                                <div class="col-auto pe-0">
+                                    <img src="assets/images/update.svg" alt="">
+                                </div>
+                                <div class="col-auto my-auto ps-0">
+                                    Изменить
+                                </div>
+                            </div>
+                        </button>
+                    </div>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
+
 </div>

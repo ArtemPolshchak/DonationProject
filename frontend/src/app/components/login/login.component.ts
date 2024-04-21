@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatCard, MatCardContent, MatCardModule, MatCardTitle} from "@angular/material/card";
 import {NgIf} from "@angular/common";
@@ -10,6 +10,7 @@ import {StorageService} from "../../services/storage.service";
 import {ServerService} from "../../services/server.service";
 import {MatDialogContent} from "@angular/material/dialog";
 import {ToasterService} from "../../services/toaster.service";
+import {AuthService} from "../../services/auth.service";
 
 
 @Component({
@@ -32,52 +33,54 @@ import {ToasterService} from "../../services/toaster.service";
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss'
 })
-export class LoginComponent {
-    form: FormGroup;
+export class LoginComponent implements OnInit {
     error: string | null = null;
+    form: FormGroup = this.fb.group({
+        email: ['', Validators.required],
+        password: ['', Validators.required]
+    });
 
     constructor(private fb: FormBuilder,
                 private loginService: LoginService,
                 private serverService: ServerService,
                 private router: Router,
-                private toasterService: ToasterService
+                private toasterService: ToasterService,
+                private authService: AuthService,
     ) {
-        this.form = this.fb.group({
-            email: ['', Validators.required],
-            password: ['', Validators.required]
-        });
+    }
+
+    ngOnInit(): void {
+        this.authService.isLoggedIn() ? this.redirectBasedOnRole() : {};
     }
 
     submit() {
         if (this.form.valid) {
             this.loginService.login(this.form.value).subscribe({
                 next: (response) => {
-                    StorageService.watchToken().subscribe({
-                        next: () => this.getServerList()
-                    })
                     StorageService.addToken(response.token);
+                    this.setServersToStorage();
                 },
                 error: (err) => {
-                    this.error = err.message;
+                    this.toasterService.openSnackBar(err);
                 }
             })
         }
     }
 
-    private getServerList(): void {
-        this.serverService.getAll().subscribe({
+    private setServersToStorage() {
+        return this.serverService.getAll().subscribe({
             next: (data) => {
                 StorageService.addServers(JSON.stringify(data.content));
-                this.redirectBasedOnRole(StorageService.getUser()?.role)
+                this.redirectBasedOnRole()
             },
             error: (err) => {
-                console.error(err);
+                this.toasterService.openSnackBar(err);
             },
         });
     }
 
-    private redirectBasedOnRole(role: string | undefined): void {
-        switch (role) {
+    private redirectBasedOnRole(): void {
+        switch (StorageService.getUser()?.role) {
             case 'ADMIN':
                 this.router.navigateByUrl('/dashboard');
                 break;
@@ -87,10 +90,6 @@ export class LoginComponent {
             default:
                 this.router.navigateByUrl('/app-guest-page');
         }
-    }
-
-    openSnackBar(message: string) {
-        this.toasterService.openSnackBar(message);
     }
 }
 

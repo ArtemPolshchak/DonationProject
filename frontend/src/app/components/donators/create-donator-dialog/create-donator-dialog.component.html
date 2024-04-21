@@ -1,7 +1,7 @@
 <header class="dialog-header">
     <h2 class="dialog-header-title">Добавить нового донатора</h2>
 </header>
-<mat-dialog-content>
+<mat-dialog-content class="dialog-content">
     <mat-card class="card-container">
         <mat-card-content>
             <mat-form-field class="input-field" appearance="outline">
@@ -14,8 +14,8 @@
     </mat-card>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-action-buttons" align="center">
-    <button class="dialog-button" mat-button mat-dialog-close>Отменить</button>
-    <button class="dialog-button" mat-button (click)="createDonator()" [disabled]="!emailControl.valid" mat-dialog-close>Сохранить</button>
+    <button class="button dialog-button" mat-flat-button mat-dialog-close>Отменить</button>
+    <button class="button dialog-button" mat-flat-button (click)=" emailControl.valid ? createDonator() : {}">Сохранить</button>
 </mat-dialog-actions>
 
 

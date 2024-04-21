@@ -1,11 +1,7 @@
-:host {
-  display: flex;
-}
-
 .login-form {
-  position: absolute;
-  top: 45%;
-  left: 50%;
+  position: fixed;
+  top: 45vh;
+  left: 50vw;
   transform: translate(-50%, -50%);
   width: 30%;
 }

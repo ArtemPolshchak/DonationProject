@@ -1,11 +1,13 @@
-<div>
-    <!-- MENU SIDEBAR-->
-    <div *ngIf="authService.isLoggedIn()">
+<button *ngIf="!authService.isGuest() && authService.isLoggedIn()" mat-icon-button class="menu-button" (click)="snav.toggle()">
+    <mat-icon>menu</mat-icon>
+</button>
+<mat-sidenav-container style="overflow: unset">
+    <mat-sidenav #snav mode="side" disableClose opened="{{!authService.isGuest() && authService.isLoggedIn()}}" class="menu-sidebar">
         <app-sidebar></app-sidebar>
-    </div>
-    <!-- PAGE CONTAINER-->
-    <div>
+    </mat-sidenav>
+
+    <mat-sidenav-content style="overflow: unset">
         <router-outlet></router-outlet>
-    </div>
-</div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
 

@@ -13,29 +13,3 @@
   height: 100%;
   margin-bottom: 20px;
 }
-
-.dialog-button {
-  width: 20%;
-  min-width: fit-content;
-  border-radius: 4px;
-  border: 1px solid #c5ccd4;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 10px 16px;
-  cursor: pointer;
-  user-select: none;
-  margin-right: 16px;
-  letter-spacing: 1.25px;
-
-  & img {
-    margin-right: 12px;
-  }
-
-  &:last-child {
-    margin-right: 0;
-  }
-
-  &:hover {
-    background-color: #41556466;
-  }
-}

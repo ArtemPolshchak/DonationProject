@@ -42,9 +42,9 @@
             </mat-card-content>
         </mat-card>
     </mat-dialog-content>
-    <mat-dialog-actions align="center">
-        <button class="dialog-button" mat-button mat-dialog-close>ЗАКРЫТЬ</button>
-        <button class="dialog-button" mat-button (click)="isFormValid() ? updateServer() : {}">СОХРАНИТЬ</button>
+    <mat-dialog-actions class="dialog-action-buttons" align="center">
+        <button class="button dialog-button" mat-flat-button mat-dialog-close>ЗАКРЫТЬ</button>
+        <button class="button dialog-button" mat-flat-button (click)="isFormValid() ? updateServer() : {}">СОХРАНИТЬ</button>
     </mat-dialog-actions>
 </div>
 

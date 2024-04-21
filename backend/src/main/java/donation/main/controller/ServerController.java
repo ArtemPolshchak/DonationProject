@@ -64,7 +64,7 @@ public class ServerController {
     }
 
     @Operation(summary = "update donator bonuses for servers")
-    @PatchMapping("/donator-bonuses/{donatorId}")
+    @PatchMapping("api/servers/donators/{donatorId}/bonus")
     public ResponseEntity<Void> updateDonatorServerBonuses(@PathVariable Long donatorId,
                                                            @RequestBody List<DonatorBonusOnServer> dto) {
         serverService.updateDonatorServerBonuses(dto, donatorId);
@@ -78,7 +78,7 @@ public class ServerController {
     }
 
     @Operation(summary = "get all bonuses from all servers for Donator by donatorID")
-    @GetMapping("/donator-bonuses/{donatorId}")
+    @GetMapping("/donators/{donatorId}/bonus")
     public ResponseEntity<List<DonatorBonusOnServer>> getDonatorsBonusesOnServers(@PathVariable Long donatorId) {
         return ResponseEntity.status(HttpStatus.OK).body(serverService.findAllBonusesOnServersByDonatorId(donatorId));
     }

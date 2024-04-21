@@ -55,8 +55,8 @@
     </mat-dialog-content>
 
     <mat-dialog-actions class="dialog-action-buttons" align="center">
-        <button class="dialog-button" mat-button mat-dialog-close>Отменить</button>
-        <button class="dialog-button" type="submit" mat-button
+        <button class="button dialog-button" mat-flat-button mat-dialog-close>Отменить</button>
+        <button class="button dialog-button" type="submit" mat-flat-button
                 (click)="isFormValid() ? proceedUser() : {}">{{data ? 'Обновить' : 'Создать'}}</button>
     </mat-dialog-actions>
 </div>

@@ -1,137 +1,146 @@
-<div class="page-header">
-    <h1 class="page-header-title">Заявки</h1>
-</div>
-<div class="page-navbar">
-    <div class="search">
-        <input type="text" name="search" class="search-input" placeholder="Почта донатора" matInput
-               [(ngModel)]="donatorsMail">
-        <input type="button" class="search-button" value="ПОИСК" (click)="applyFilterSortSearch()">
-    </div>
-    <div class="search">
-        <select class="form-select" aria-label="Сорт" [(ngModel)]="sortState"
-                (change)="applyFilterSortSearch()">
-            <option selected disabled hidden>СОРТИРОВКА</option>
-            <option value="dateCreated,asc">Сортировка по дате от старых к новым</option>
-            <option value="dateCreated,desc">Сортировка по дате от новых к старым</option>
-        </select>
-    </div>
-</div>
 <div class="page-container">
-    <div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
-        <div class="item" ngbAccordionItem="{{transaction.id}}">
-            <div ngbAccordionHeader style="display: flex; align-items: center">
-                <div class="button cancel-button" style="padding-bottom: 2px; padding-left: 12px; padding-right: 12px"
-                     colorsAnimation="popup"
-                     [hideTextInput]="hideTextInput"
-                     [hideColorPicker]="hideColorPicker"
-                     [palette]="colors"
-                     ngx-colors-trigger
-                     (close)="updateTransactionColor($event, transaction)">
-                    <mat-icon fontIcon="palette" [ngStyle]="{'color':'#425565'}"></mat-icon>
-                </div>
-                <button ngbAccordionButton [ngStyle]="{'background-color': transaction.color}">
-                    <div style="width: 100%;  display: flex; align-items: center; justify-content: space-between">
+
+    <div class="page-header">
+        <h1 class="page-header-title">Заявки</h1>
+    </div>
+
+    <div class="page-navbar">
+        <div class="search">
+            <input type="text" name="search" class="search-input" placeholder="Почта донатора" matInput
+                   [(ngModel)]="donatorsMail">
+            <input type="button" class="search-button" value="ПОИСК" (click)="applyFilterSortSearch()">
+        </div>
+        <div class="form-select-group">
+            <select class="form-select" aria-label="Сорт" [(ngModel)]="sortState"
+                    (change)="applyFilterSortSearch()">
+                <option selected disabled hidden>СОРТИРОВКА</option>
+                <option value="dateCreated,asc">Сортировка по дате от старых к новым</option>
+                <option value="dateCreated,desc">Сортировка по дате от новых к старым</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div ngbAccordion *ngFor="let transaction of transactions" #accordion="ngbAccordion">
+            <div class="item" ngbAccordionItem="{{transaction.id}}">
+                <div ngbAccordionHeader class="item-header">
+                    <div class="button icon-button"
+                         colorsAnimation="popup"
+                         [hideTextInput]="hideTextInput"
+                         [hideColorPicker]="hideColorPicker"
+                         [palette]="colors"
+                         ngx-colors-trigger
+                         (close)="updateTransactionColor($event, transaction)">
+                        <mat-icon fontIcon="palette" [ngStyle]="{'color':'#425565'}"></mat-icon>
+                    </div>
+                    <button ngbAccordionButton [ngStyle]="{'background-color': transaction.color}">
+                        <div class="item-header-button">
                         <span *ngIf="transaction.dateCreated">
                             Дата: <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</strong>
                         </span>
-                        <span *ngIf="transaction.serverName">
+                            <span *ngIf="transaction.serverName">
                             Сервер: <strong>{{ transaction.serverName}}</strong>
                         </span>
-                        <span *ngIf="transaction.donatorEmail">
+                            <span *ngIf="transaction.donatorEmail">
                             Почта: <strong>{{transaction.donatorEmail}}</strong>
                         </span>
-                        <span *ngIf="transaction.paymentMethod">
+                            <span *ngIf="transaction.paymentMethod">
                         Способ оплаты: <strong>{{transaction.paymentMethod}}</strong>
                     </span>
-                        <span *ngIf="transaction.totalAmount">
+                            <span *ngIf="transaction.totalAmount">
                             Общая сумма Доната: <strong>{{transaction.totalAmount | currency: 'USD'}}</strong>
                         </span>
-                    </div>
-                </button>
-                <div class="button cancel-button" (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">
-                    <div class="row">
-                        <div class="col-auto pe-0">
-                            <img src="assets/images/cancel.svg" alt="">
                         </div>
-                        <div class="col-auto my-auto ps-0">
-                            ОТМЕНИТЬ
+                    </button>
+                    <div class="button cancel-button"
+                         (click)="confirmTransaction(transaction, TransactionState.CANCELLED)">
+                        <div class="row">
+                            <div class="col-auto pe-0">
+                                <img src="assets/images/cancel.svg" alt="">
+                            </div>
+                            <div class="col-auto my-auto ps-0">
+                                ОТМЕНИТЬ
+                            </div>
+                        </div>
+                    </div>
+                    <div class="button" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">
+                        <div class="row">
+                            <div class="col-auto pe-0">
+                                <img src="assets/images/confirm.svg" alt="">
+                            </div>
+                            <div class="col-auto my-auto ps-0">
+                                ПОДТВЕРДИТЬ
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="button" (click)="confirmTransaction(transaction, TransactionState.COMPLETED)">
-                    <div class="row">
-                        <div class="col-auto pe-0">
-                            <img src="assets/images/confirm.svg" alt="">
-                        </div>
-                        <div class="col-auto my-auto ps-0">
-                            ПОДТВЕРДИТЬ
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div ngbAccordionCollapse>
-                <div ngbAccordionBody style="display: flex; align-items: center; justify-content: center">
-                    <div class="transaction-container">
+                <div ngbAccordionCollapse>
+                    <div ngbAccordionBody class="item-body">
                         <div class="image-container">
                             <img #image [src]="transaction.imagePreview ? transaction.imagePreview : NO_IMG_PATH"
                                  alt="img"
                                  width="100%" style="cursor:pointer"
                                  (click)="transaction.imagePreview ? openImageDialog(transaction.id) : {}"/>
                         </div>
-                        <div style="width: 100%; padding-left: 40px; padding-right: 40px;  display: flex; justify-content: start">
-                            <mat-card style="margin-right: 12px; width: 30%">
-                                <mat-card-content>
-                                    <div>
-                                        Кто создал: <strong>{{transaction.createdBy}}</strong>
-                                    </div>
-                                    <div>
-                                        Дата
-                                        создания:<strong>{{transaction.dateCreated | date: 'dd MMMM yyyy, HH:mm'}}</strong>
-                                    </div>
-                                    <div>
-                                        Комментарий: <strong>{{transaction.comment}}</strong>
-                                    </div>
-                                    <mat-form-field appearance="outline"
-                                                    style="margin-top: 12px; margin-bottom: -20px; width: max-content; max-width: 100%">
-                                        <mat-label>Бонус Админа</mat-label>
-                                        <input matInput [(ngModel)]="transaction.adminBonus"
-                                               [disabled]="transaction.state === TransactionState.CANCELLED">
-                                    </mat-form-field>
-                                </mat-card-content>
-                            </mat-card>
-                            <mat-card style="margin-right: 12px; width: 30%">
-                                <mat-card-content>
-                                    <div>
-                                        Бонус сервера: <strong>{{transaction.serverBonusPercentage}}%</strong>
-                                    </div>
-                                    <div>
-                                        Персональный бонус: <strong>{{transaction.personalBonusPercentage}}%</strong>
-                                    </div>
-                                    <div>
-                                        Сумма доната: <strong>{{transaction.contributionAmount  | number: '1.2-2' }}</strong>
-                                    </div>
-                                    <div>
-                                        Сумма к зачислению: <strong>{{Number(transaction.totalAmount) + Number(transaction.adminBonus)  | number: '1.2-2'}}</strong>
-                                    </div>
-                                    <div>
-                                        Способ оплаты: <strong>{{transaction.paymentMethod}}</strong>
-                                    </div>
-                                </mat-card-content>
-                            </mat-card>
-                        </div>
-                    </div>
+                        <mat-card class="item-body-card">
+                            <mat-card-content>
+                                <p>
+                                    Кто создал: <strong>{{transaction.createdBy}}</strong>
+                                </p>
+                                <p>
+                                    Дата
+                                    создания:<strong>{{transaction.dateCreated | date: 'dd MMMM yyyy, HH:mm'}}</strong>
+                                </p>
+                                <p>
+                                    Комментарий: <strong>{{transaction.comment}}</strong>
+                                </p>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card class="item-body-card">
+                            <mat-card-content>
+                                <p>
+                                    Способ оплаты: <strong>{{transaction.paymentMethod}}</strong>
+                                </p>
+                                <p>
+                                    Сумма доната:
+                                    <strong>{{transaction.contributionAmount  | number: '1.2-2' }}</strong>
+                                </p>
+                                <p>
+                                    Сумма к зачислению:
+                                    <strong>{{Number(transaction.totalAmount) + Number(transaction.adminBonus)  | number: '1.2-2'}}</strong>
+                                </p>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card class="item-body-card">
+                            <mat-card-content>
+                                <p>
+                                    Бонус сервера: <strong>{{transaction.serverBonusPercentage}}%</strong>
+                                </p>
+                                <p>
+                                    Персональный бонус: <strong>{{transaction.personalBonusPercentage}}
+                                    %</strong>
+                                </p>
+                                <mat-form-field appearance="outline"
+                                                style="margin-bottom: -20px; width: max-content; max-width: 100%">
+                                    <mat-label>Бонус Админа</mat-label>
+                                    <input matInput [(ngModel)]="transaction.adminBonus"
+                                           [disabled]="transaction.state === TransactionState.CANCELLED">
+                                </mat-form-field>
+                            </mat-card-content>
+                        </mat-card>
 
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="paginator-container">
-    <mat-paginator [length]="totalElements"
-                   [pageSize]="pageSize"
-                   [pageSizeOptions]="[5, 10, 25, 100]"
-                   [showFirstLastButtons]="true"
-                   (page)="onPageChange($event)">
-    </mat-paginator>
+    <div class="paginator-container">
+        <mat-paginator [length]="totalElements"
+                       [pageSize]="pageSize"
+                       [pageSizeOptions]="[5, 10, 25, 100]"
+                       [showFirstLastButtons]="true"
+                       (page)="onPageChange($event)">
+        </mat-paginator>
+    </div>
 </div>

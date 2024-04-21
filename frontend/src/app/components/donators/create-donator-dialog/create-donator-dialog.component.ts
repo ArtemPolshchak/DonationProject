@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Inject, Output} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {MatCard, MatCardContent} from "@angular/material/card";
@@ -12,8 +12,7 @@ import {
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {NgIf} from "@angular/common";
-import {LoadDonatorBonus} from "../../../common/load-donator-bonus";
-import {CreateDonator, DonatorService} from "../../../services/donator.service";
+import {DonatorService} from "../../../services/donator.service";
 import {ToasterService} from "../../../services/toaster.service";
 
 @Component({
@@ -54,22 +53,14 @@ export class CreateDonatorDialogComponent {
     }
 
     createDonator(): void {
-        const inputValue: string | null = this.emailControl.value;
-        if (inputValue !== null) {
-            this.email = inputValue;
-            const newDonator: CreateDonator = {
-                email: this.email
-            };
-            this.donatorService.createDonator(newDonator).subscribe({
-                next: (response) => {
-                    this.response.emit(response);
-                    this.openSnackBar("Донатор успешно добавлен");
-                },
-                error: (error) => {
-                    this.openSnackBar("Произошла ошибка при добавления Донатора");
-                }
-            });
-        }
+        this.donatorService.createDonator({email: this.email}).subscribe({
+            next: (response) => {
+                this.response.emit(response);
+                this.openSnackBar("Донатор успешно добавлен");
+            },
+            error: () => this.openSnackBar("Произошла ошибка при добавления Донатора"),
+            complete: () => this.dialogRef.close()
+        });
     }
 
     openSnackBar(message: string) {

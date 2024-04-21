@@ -31,7 +31,7 @@ public interface ServerRepository extends JpaRepository<ServerEntity, Long> {
     @Query("SELECT new donation.main.dto.donatorsdto.DonatorBonusDto("
             + "KEY(s.donatorsBonuses).id, "
             + "KEY(s.donatorsBonuses).email as email, "
-            + "VALUE(s.donatorsBonuses)) "
+            + "VALUE(s.donatorsBonuses) as personalBonus) "
             + "FROM ServerEntity s WHERE s.id = :id AND LOWER(KEY(s.donatorsBonuses).email) "
             + "LIKE LOWER(CONCAT('%', :email, '%'))")
     List<DonatorBonusDto> getBonusesByServerIdAndDonatorsEmail(
