@@ -1,3 +1,20 @@
-body{
-  display: -ms-flexbox;
+.menu-button {
+  transform: scale(0.9);
+  color: #415564;
+  position: fixed;
+  top: 4px;
+  left: 4px;
+  z-index: 9999;
+}
+
+.menu-button:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)
+}
+
+.menu-sidebar {
+  width: fit-content;
+  position: fixed;
+  bottom: 0;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), 0 0 10px rgba(0, 0, 0, 0.14), 0 0 14px rgba(0, 0, 0, 0.12);
+  background: #9CACBB;
 }

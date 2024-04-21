@@ -18,7 +18,7 @@
         </div>
     </header>
 
-    <mat-dialog-content>
+    <mat-dialog-content class="dialog-content">
         <mat-card>
             <mat-card-content>
                 <mat-form-field class="input-field" appearance="outline">
@@ -77,8 +77,8 @@
     </mat-dialog-content>
 
     <mat-dialog-actions class="dialog-action-buttons" align="center">
-        <button class="dialog-button" mat-button (click)="onCancel()">Отменить</button>
-        <button class="dialog-button" mat-button (click)="isFormValid() ? proceedTransaction() : {}">
+        <button class="button dialog-button" mat-flat-button (click)="onCancel()">Отменить</button>
+        <button class="button dialog-button" mat-flat-button (click)="isFormValid() ? proceedTransaction() : {}">
             {{data.transaction ? 'Обновить' : 'Создать'}}
         </button>
     </mat-dialog-actions>

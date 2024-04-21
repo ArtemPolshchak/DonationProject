@@ -42,9 +42,9 @@ export abstract class StorageService {
         return undefined;
     }
 
-    static getServers() {
+    static getServers(): Server[]{
         const serversData = this.storage.getItem(SERVERS_KEY);
-        return serversData ? JSON.parse(this.storage.getItem(SERVERS_KEY)!) : serversData;
+        return serversData ? JSON.parse(this.storage.getItem(SERVERS_KEY)!) : [];
     }
 
     static watchServers() {

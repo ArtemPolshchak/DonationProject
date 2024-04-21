@@ -1,31 +1,20 @@
-<aside class="menu-sidebar d-none d-lg-block">
-    <div class="logo">
-        <ng-container *ngIf="!authService.isGuest()">
-        <a routerLink="/donations">
-            <img src="assets/images/logo.png" alt="Logo" class="img-responsive">
-        </a>
-        </ng-container>
-    </div>
-    <div class="menu-sidebar-content js-scrollbar1">
-        <nav class="navbar-sidebar">
-            <mat-button-toggle-group appearance="legacy" vertical="true">
-                <ng-container *ngFor="let item of menuItems | keyvalue">
-                    <mat-button-toggle *ngIf="!authService.isGuest()" routerLink="/{{item.key}}">
-                        {{ item.value.toUpperCase()}}
-                    </mat-button-toggle>
-                </ng-container>
-            </mat-button-toggle-group>
-        </nav>
-    </div>
-    <div class="logout-button" (click)="logout()">
-        <div class="row">
-            <div class="col-auto pe-0">
-                <img src="assets/images/logout-button.svg" alt="">
-            </div>
-            <div class="col-auto my-auto ps-0">
-                Выйти
-            </div>
+<div class="logo">
+    <img src="assets/images/logo.png" alt="Logo" class="img-responsive">
+</div>
+<div class="sidebar-content">
+    <mat-button-toggle-group appearance="legacy" vertical="true">
+        <mat-button-toggle *ngFor="let item of menuItems | keyvalue" routerLink="/{{item.key}}">
+            {{ item.value.toUpperCase()}}
+        </mat-button-toggle>
+    </mat-button-toggle-group>
+</div>
+<div class="logout-button" (click)="logout()">
+    <div class="row">
+        <div class="col-auto pe-0">
+            <img src="assets/images/logout-button.svg" alt="">
+        </div>
+        <div class="col-auto my-auto ps-0">
+            Выйти
         </div>
     </div>
-<!--    <button class="logout-button" mat-button (click)="logout()">Logout</button>-->
-</aside>
+</div>

@@ -1,3 +1,11 @@
+.main-content {
+  margin-top: 10px;
+}
+
+.item {
+  margin-bottom: 4px;
+}
+
 .image-container {
   border: solid #8e8e8e;
   height: 100px;
@@ -8,24 +16,14 @@
   overflow: hidden;
 }
 
-.item {
-  margin-top: 8px;
-}
-
 .image-container img {
   object-fit: cover;
 }
 
 .update-button {
   background-color: transparent;
-  width: fit-content;
   max-width: fit-content;
-  border-radius: 8px;
-  cursor: pointer;
-  user-select: none;
-  display: flex;
-  justify-content: center;
-  margin: -8px 0px -8px -8px;
+  margin: -8px 6px -8px -8px;
   & img {
     margin: 8px;
   }
@@ -97,7 +95,3 @@ h2 {
 .amounts-block {
   width: calc(40% - 5px);
 }
-
-
-
-

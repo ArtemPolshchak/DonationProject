@@ -2,7 +2,13 @@ import {Component, EventEmitter, Inject, OnInit} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {MatCard, MatCardContent} from "@angular/material/card";
-import {MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent} from "@angular/material/dialog";
+import {
+    MAT_DIALOG_DATA,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogContent,
+    MatDialogRef
+} from "@angular/material/dialog";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/autocomplete";
@@ -44,14 +50,14 @@ export class DonatorBonusDialogComponent implements OnInit {
     response = new EventEmitter()
     serverControl = new FormControl<Server | null>(null, Validators.required);
     contributionControl = new FormControl('', [
-        Validators.required,
-        Validators.pattern(/\d/)
+        Validators.required
     ]);
 
     constructor(
         private serverService: ServerService,
         private toasterService: ToasterService,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public data: any,
+        private dialogRef: MatDialogRef<DonatorBonusDialogComponent>
     ) {
         this.servers = data.servers;
         this.donatorId = data.donatorId;
@@ -67,14 +73,14 @@ export class DonatorBonusDialogComponent implements OnInit {
     }
 
     setupBonus() {
-        let personalBonus = Number(this.contributionControl.value!);
         this.serverService.createDonatorsBonusOnServer(this.serverControl.value!.id,
-            this.donatorId, {personalBonus: personalBonus}).subscribe({
+            this.donatorId, {personalBonus: +this.contributionControl.value!}).subscribe({
             next: (response) => {
                 this.openSnackBar("Бонус успешно добавлен")
                 this.response.emit(response);
             },
-            error: (err) => this.openSnackBar("Ошибка при создании бонуса: " + err.message)
+            error: (err) => this.openSnackBar("Ошибка при создании бонуса: " + err.message),
+            complete: () => this.dialogRef.close()
         });
     }
 

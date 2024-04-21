@@ -1,9 +1,9 @@
-<header class="header">
-    <h2 class="title">ИЗМЕНИТЬ ПЕРСОНАЛЬНЫЙ БОНУС</h2>
+<header class="dialog-header">
+    <h2 class="dialog-header-title">ИЗМЕНИТЬ ПЕРСОНАЛЬНЫЙ БОНУС</h2>
+    <h2 class="dialog-header-title">{{donator.email}}</h2>
 </header>
-<mat-dialog-content>
-    <h4>Почта: {{donator.email}}</h4>
-    <mat-card class="card-container">
+<mat-dialog-content class="dialog-content">
+    <mat-card>
         <mat-card-content>
             <mat-form-field class="input-field" appearance="outline">
                 <mat-label>Персональный бонус %</mat-label>
@@ -15,8 +15,8 @@
         </mat-card-content>
     </mat-card>
 </mat-dialog-content>
-<mat-dialog-actions align="start">
-    <button class="cancel-button" mat-button mat-dialog-close>Отменить</button>
-    <button class="ok-button" mat-button (click)="saveBonus()" [disabled]="!isFormValid()" mat-dialog-close>Изменить бонус</button>
+<mat-dialog-actions  class="dialog-action-buttons" align="center">
+    <button class="button dialog-button" mat-flat-button mat-dialog-close>Отменить</button>
+    <button class="button dialog-button" mat-flat-button (click)="contributionControl.valid ? saveBonus() : {}">Сохранить</button>
 </mat-dialog-actions>
 

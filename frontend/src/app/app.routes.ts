@@ -8,7 +8,7 @@ import {LoginComponent} from "./components/login/login.component";
 import {hasRoleGuard} from "./services/auth.service";
 import {Role} from "./enums/role";
 import {DonatorStoryComponent} from "./components/donators/donator-story/donator-story.component";
-import {DonatorBonusOnServer} from "./components/donator-bonus-on-server/donator-bonus-on-server.component";
+import {DonatorBonusOnServer} from "./components/server/donator-bonus-on-server/donator-bonus-on-server.component";
 import {PageNotFoundComponent} from "./components/page-not-found/page-not-found.component";
 import {GuestPageComponent} from "./components/guest-page/guest-page.component";
 

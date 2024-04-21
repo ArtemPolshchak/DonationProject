@@ -6,9 +6,9 @@ import {NgForOf} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {SetupBonusDialogComponent} from "./setup-bonus-dialog/setup-bonus-dialog.component";
-import {DonatorBonus} from "../../common/donatorBonus";
-import {ServerService} from "../../services/server.service";
-import {ToasterService} from "../../services/toaster.service";
+import {DonatorBonus} from "../../../common/donatorBonus";
+import {ServerService} from "../../../services/server.service";
+import {ToasterService} from "../../../services/toaster.service";
 
 @Component({
     selector: 'app-donator-bonus-on-server',
@@ -19,7 +19,7 @@ import {ToasterService} from "../../services/toaster.service";
         MatPaginator,
         NgForOf
     ],
-    templateUrl: 'donator-bonus-on-server.component.html',
+    templateUrl: './donator-bonus-on-server.component.html',
     styleUrl: './donator-bonus-on-server.component.scss'
 })
 export class DonatorBonusOnServer implements OnInit {

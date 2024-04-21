@@ -1,58 +1,63 @@
-<div class="dialog-header">
-    <h2 class="dialog-header-title">БОНУСЫ СЕРВЕРА</h2>
-    <div class="button" (click)="addBonus()">
-        <div class="row">
-            <div class="col-auto pe-0">
-                <img src="assets/images/add.svg" alt="">
-            </div>
-            <div class="col-auto my-auto ps-0">
-                ДОБАВИТЬ
+<div>
+    <div class="dialog-header">
+        <h2 class="dialog-header-title">БОНУСЫ СЕРВЕРА</h2>
+    </div>
+    <div mat-dialog-content [formGroup]="bonusesForm">
+        <div formArrayName="bonuses">
+
+            <div class="bonuses-row" *ngFor="let bonus of bonuses.controls; let i = index" [formGroupName]="i">
+
+                <mat-form-field appearance="outline">
+                    <mat-label>БОНУС ОТ $</mat-label>
+                    <input matInput placeholder="From" type="number" formControlName="from">
+                    <mat-error *ngIf="bonuses.controls[i].get('from')?.errors?.['pattern']">Only digits allowed
+                    </mat-error>
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline">
+                    <mat-label>БОНУС ДО $</mat-label>
+                    <input matInput placeholder="To" type="number" formControlName="to">
+                    <mat-error *ngIf="bonuses.controls[i].get('to')?.errors?.['pattern']">Only digits allowed
+                    </mat-error>
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline">
+                    <mat-label>ПРОЦЕНТ БОНУСА %</mat-label>
+                    <input matInput placeholder="Percentage" type="number" formControlName="percentage">
+                    <mat-error *ngIf="bonuses.controls[i].get('percentage')?.errors?.['pattern']">Only digits allowed
+                    </mat-error>
+                    <mat-error
+                            *ngIf="bonuses.controls[i].get('percentage')?.errors?.['min'] || bonuses.controls[i].get('percentage')?.errors?.['max']">
+                        Percentage must be between 1 and 100
+                    </mat-error>
+                </mat-form-field>
+
+                <div class="dialog-button-container">
+                    <button class="button" mat-flat-button *ngIf="i !== 0" (click)="removeBonus(i)">
+                        <div class="row">
+                            <div class="col-auto pe-0">
+                                <img src="assets/images/trash.svg" alt="">
+                            </div>
+                        </div>
+                    </button>
+                    <button class="button" mat-flat-button *ngIf="i === 0" (click)="addBonus()">
+                        <div class="row">
+                            <div class="col-auto pe-0">
+                                <img src="assets/images/add.svg" alt="">
+                            </div>
+                        </div>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+
+    <mat-dialog-actions class="dialog-action-buttons" align="center">
+        <button class="button dialog-button" mat-flat-button mat-dialog-close>ЗАКРЫТЬ</button>
+        <button class="button dialog-button" mat-flat-button [disabled]="isButtonDisabled()" (click)="save()">
+            СОХРАНИТЬ
+        </button>
+    </mat-dialog-actions>
 </div>
-<div mat-dialog-content [formGroup]="bonusesForm">
-    <div formArrayName="bonuses">
-
-        <div *ngFor="let bonus of bonuses.controls; let i = index" [formGroupName]="i"
-             style="display: flex; justify-content: space-between">
-
-            <mat-form-field appearance="outline">
-                <mat-label>БОНУС ОТ $</mat-label>
-                <input matInput placeholder="From" type="number" formControlName="from">
-                <mat-error *ngIf="bonuses.controls[i].get('from')?.errors?.['pattern']">Only digits allowed</mat-error>
-            </mat-form-field>
-
-
-            <mat-form-field appearance="outline">
-                <mat-label>БОНУС ДО $</mat-label>
-                <input matInput placeholder="To" type="number" formControlName="to">
-                <mat-error *ngIf="bonuses.controls[i].get('to')?.errors?.['pattern']">Only digits allowed</mat-error>
-            </mat-form-field>
-
-
-            <mat-form-field appearance="outline">
-                <mat-label>ПРОЦЕНТ БОНУСА %</mat-label>
-                <input matInput placeholder="Percentage" type="number" formControlName="percentage">
-                <mat-error *ngIf="bonuses.controls[i].get('percentage')?.errors?.['pattern']">Only digits allowed
-                </mat-error>
-                <mat-error
-                        *ngIf="bonuses.controls[i].get('percentage')?.errors?.['min'] || bonuses.controls[i].get('percentage')?.errors?.['max']">
-                    Percentage must be between 1 and 100
-                </mat-error>
-            </mat-form-field>
-
-
-            <button mat-icon-button *ngIf="i !== 0" (click)="removeBonus(i)">
-                <mat-icon>close</mat-icon>
-            </button>
-        </div>
-    </div>
-</div>
-
-<mat-dialog-actions align="center">
-    <button class="dialog-button" mat-button mat-dialog-close>ЗАКРЫТЬ</button>
-    <button class="dialog-button" mat-button [disabled]="isButtonDisabled()" (click)="save()">СОХРАНИТЬ</button>
-</mat-dialog-actions>
-
-

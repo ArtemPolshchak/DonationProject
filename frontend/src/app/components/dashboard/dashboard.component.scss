@@ -1,5 +1,53 @@
+.main-content {
+  margin-top: 10px;
+}
+
 .item {
-  margin-top: 8px;
+  margin-bottom: 4px;
+
+  .item-header{
+    display: flex;
+    align-items: center;
+  }
+
+  .item-header-button{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .item-body{
+    width: 100%;
+    margin: 0;
+    padding-left: 4%;
+    padding-right: 4%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.6vmin;
+
+    .image-container {
+      border: solid #8e8e8e;
+      width: 12%;
+      display: flex;
+      justify-content: center;
+      object-fit: cover;
+      overflow: hidden;
+      max-height: 12%;
+    }
+
+    .image-container img {
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    .item-body-card{
+      height: 100%;
+      width: 20vw;
+      overflow: hidden;
+    }
+  }
 }
 
 .button {
@@ -7,7 +55,7 @@
   margin-left: 0;
   background-color: rgba(183, 190, 198, 0.56);
   &:hover {
-    background-color: rgba(65, 85, 100, 0.6);
+    background-color: #41556466;
   }
 }
 
@@ -17,55 +65,8 @@
   margin-left: 12px;
 }
 
-.image-container {
-  border: solid #8e8e8e;
-  width: 20vh;
-  display: flex;
-  justify-content: center;
-  object-fit: cover;
-  overflow: hidden;
-  margin-left: 20px;
-  max-height: 20vh;
-}
-
-.image-container img {
-  object-fit: cover;
-}
-
-h2 {
-  background: #f5f5f5;
-  border: 1px solid #ddd;
-  padding: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  border-radius: 6px;
-  margin-bottom: 15px;
-
-
-  &:nth-child(4n+1) strong {
-    font-weight: bold;
-  }
-}
-
-.secondary-button {
-  flex: none;
-  width: 120px;
-}
-
-
-.transaction-container {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.info-block {
-  width: calc(40% - 5px);
-  margin-bottom: 10px;
-}
-
-.amounts-block {
-  width: calc(40% - 5px);
-  margin-bottom: 10px;
+.icon-button {
+  background-color: rgba(255, 255, 255, 0);
+  margin: 0 12px 0 12px;
+  padding: 8px 12px 2px 12px;
 }

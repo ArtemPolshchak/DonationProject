@@ -14,9 +14,9 @@ import {MatInput} from "@angular/material/input";
 import {MatOption} from "@angular/material/autocomplete";
 import {MatSelect} from "@angular/material/select";
 import {NgForOf, NgIf} from "@angular/common";
-import {ServerService} from "../../../services/server.service";
-import {ToasterService} from "../../../services/toaster.service";
-import {DonatorBonus} from "../../../common/donatorBonus";
+import {ServerService} from "../../../../services/server.service";
+import {ToasterService} from "../../../../services/toaster.service";
+import {DonatorBonus} from "../../../../common/donatorBonus";
 
 @Component({
     selector: 'app-setup-bonus-dialog',
@@ -78,13 +78,12 @@ export class SetupBonusDialogComponent implements OnInit {
             this.serverId, this.donator.id, {personalBonus: Number(this.contributionControl.value!)})
             .subscribe({
                 next: () => {
-                    this.dialogRef.close()
                     this.openSnackBar("Бонус успешно изменен")
                 },
                 error: (error) => {
                     this.openSnackBar("Произошла ошибка")
-                    console.error('Error updating bonus', error);
-                }
+                },
+                complete: () => this.dialogRef.close()
             });
     }
 

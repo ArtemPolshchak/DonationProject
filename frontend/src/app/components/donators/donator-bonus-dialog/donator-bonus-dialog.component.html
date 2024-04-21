@@ -2,12 +2,13 @@
     <h2 class="dialog-header-title">Установить персональный бонус</h2>
 </header>
 
-<mat-dialog-content>
-    <mat-card class="card-container">
+<mat-dialog-content class="dialog-content">
+    <mat-card>
         <mat-card-content>
             <mat-form-field class="input-field" appearance="outline">
                 <mat-label>Персональный бонус %</mat-label>
-                <input matInput [formControl]="contributionControl" [defaultValue]=""/>
+                <input matInput type="number" [formControl]="contributionControl" [defaultValue]=""/>
+                <mat-error *ngIf="contributionControl.hasError('required')">Field required</mat-error>
             </mat-form-field>
             <mat-form-field class="input-field" appearance="outline">
                 <mat-label>Виберите Сервер</mat-label>
@@ -21,9 +22,8 @@
 </mat-dialog-content>
 
 <mat-dialog-actions class="dialog-action-buttons" align="center">
-    <button class="dialog-button" mat-flat-button mat-dialog-close>Отменить</button>
-    <button class="dialog-button" mat-flat-button (click)="setupBonus()" [disabled]="!isFormValid()"
-            mat-dialog-close>
+    <button class="button dialog-button" mat-flat-button mat-dialog-close>Отменить</button>
+    <button class="button dialog-button" mat-flat-button (click)=" isFormValid() ? setupBonus() : {}">
         Сохранить
     </button>
 </mat-dialog-actions>
