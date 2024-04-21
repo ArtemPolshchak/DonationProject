@@ -13,22 +13,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyJoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.SoftDelete;
-import org.hibernate.annotations.SoftDeleteType;
-import org.hibernate.type.TrueFalseConverter;
-
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
+import org.hibernate.type.TrueFalseConverter;
 
 @Entity
 @Table(name = "servers")
@@ -52,6 +48,12 @@ public class ServerEntity {
 
     @Column(name = "server_user_name", nullable = false)
     private String serverUserName;
+
+    @Column(name = "public_key", nullable = false)
+    private String publicKey;
+
+    @Column(name = "secret_key", nullable = false)
+    private String secretKey;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "servers_donators_bonuses", joinColumns = @JoinColumn(name = "server_id", referencedColumnName = "id"))

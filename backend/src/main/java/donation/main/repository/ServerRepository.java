@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import donation.main.dto.donatorsdto.DonatorBonusDto;
+import donation.main.dto.donatorsdto.DonatorBonusOnServer;
 import donation.main.dto.serverdto.ServerDto;
 import donation.main.dto.serverdto.ServerIdNameDto;
 import donation.main.entity.ServerEntity;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -41,8 +43,29 @@ public interface ServerRepository extends JpaRepository<ServerEntity, Long> {
             + " s.serverName as serverName, "
             + " s.serverUrl as serverUrl, "
             + "s.serverUserName as serverUserName, "
-            + " s.serverPassword as serverPassword) FROM ServerEntity s WHERE s.id = :id ")
+            + " s.serverPassword as serverPassword, "
+            + "s.publicKey as publicKey,"
+            + "s.secretKey as secretKey) FROM ServerEntity s WHERE s.id = :id ")
     Optional<ServerDto> findServerById(Long id);
 
     void deleteServerEntityById(Long id);
+
+    @Query("SELECT NEW donation.main.dto.donatorsdto.DonatorBonusOnServer(s.id, s.serverName, COALESCE(VALUE(b), 0)) "
+            + "FROM ServerEntity s LEFT JOIN s.donatorsBonuses b "
+            + "ON KEY(b).id = :donatorId "
+            + "GROUP BY s.id, s.serverName, b")
+    List<DonatorBonusOnServer> findAllBonusesFromServersByDonatorId(@Param("donatorId") Long donatorId);
+
+    @Modifying()
+    @Query(nativeQuery = true, value = "INSERT INTO servers_donators_bonuses (server_id, donator_id, donators_bonuses, deleted) "
+            + "VALUES(:serverId, :donatorId, :bonus,'F') "
+            + "ON CONFLICT (server_id, donator_id) "
+            + "DO UPDATE SET donators_bonuses = :bonus")
+    void updateDonatorServerBonuses(Long donatorId, Long serverId, int bonus);
+
+    @Modifying()
+    @Query(nativeQuery = true, value = "DELETE FROM servers_donators_bonuses "
+            + "WHERE server_id = :serverId "
+            + "AND donator_id = :donatorId")
+    void deleteDonatorServerBonuses(Long donatorId, Long serverId);
 }

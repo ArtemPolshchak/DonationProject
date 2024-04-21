@@ -6,6 +6,7 @@ import {HttpClientService} from "./http-client.service";
 import {LoadDonatorBonus} from "../common/load-donator-bonus";
 import {HttpMethod} from "../enums/http-method";
 import {HttpClient} from "@angular/common/http";
+import {DonatorsBonusesFromAllServers} from "../common/donators-bonuses-from-all-servers";
 
 @Injectable({
     providedIn: 'root'
@@ -20,6 +21,16 @@ export class ServerService {
         const params = this.httpClient
             .getHttpParams({page: pageNumber, size: pageSize, sort: sort});
         return this.httpClient.fetch<GetServerResponse>(url, true, params)
+    }
+
+    public getAllDonatorsBonusesFromAllServers(donatorId: number) {
+        const url: string = `api/servers/donators/${donatorId}/bonus`;
+        return this.httpClient.fetch<DonatorsBonusesFromAllServers[]>( url, true)
+    }
+
+    public updateAllDonatorsBonusesFromAllServers(bonuses: DonatorsBonusesFromAllServers[], donatorId: number) {
+        const url: string = `api/servers/donators/${donatorId}/bonus`;
+        return this.httpClient.load<DonatorsBonusesFromAllServers[]>(HttpMethod.PATCH, url, true, bonuses);
     }
 
     public create(newServer: ServerDto) {
@@ -60,6 +71,7 @@ export class ServerService {
     }
 }
 
+
 export interface DonatorsBonusResponse {
     id: number;
     email: string;
@@ -89,4 +101,6 @@ export interface ServerDto {
     serverUrl: string;
     serverUserName: string;
     serverPassword: string;
+    publicKey: string;
+    secretKey: string;
 }

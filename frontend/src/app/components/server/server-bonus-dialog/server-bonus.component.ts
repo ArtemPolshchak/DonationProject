@@ -24,6 +24,7 @@ import {MatIcon} from "@angular/material/icon";
 import {ServerBonusService} from "../../../services/server-bonus.service";
 import {ServerBonuses} from "../../../common/server-bonuses";
 import {ToasterService} from "../../../services/toaster.service";
+import {MatCard, MatCardContent} from "@angular/material/card";
 
 
 function noOverlapBonusValidator(): ValidatorFn {
@@ -115,7 +116,9 @@ function validBonusRangeValidator(): ValidatorFn {
         MatIconButton,
         MatIcon,
         MatDialogClose,
-        MatError
+        MatError,
+        MatCard,
+        MatCardContent
     ],
     templateUrl: './server-bonus.component.html',
     styleUrl: './server-bonus.component.scss'

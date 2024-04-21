@@ -2,10 +2,10 @@
     <div class="dialog-header">
         <h2 class="dialog-header-title">БОНУСЫ СЕРВЕРА</h2>
     </div>
-    <div mat-dialog-content [formGroup]="bonusesForm">
-        <div formArrayName="bonuses">
 
-            <div class="bonuses-row" *ngFor="let bonus of bonuses.controls; let i = index" [formGroupName]="i">
+    <mat-dialog-content class="dialog-content" [formGroup]="bonusesForm">
+        <mat-card formArrayName="bonuses">
+            <mat-card-content class="bonuses-row" *ngFor="let bonus of bonuses.controls; let i = index" [formGroupName]="i">
 
                 <mat-form-field appearance="outline">
                     <mat-label>БОНУС ОТ $</mat-label>
@@ -14,14 +14,12 @@
                     </mat-error>
                 </mat-form-field>
 
-
                 <mat-form-field appearance="outline">
                     <mat-label>БОНУС ДО $</mat-label>
                     <input matInput placeholder="To" type="number" formControlName="to">
                     <mat-error *ngIf="bonuses.controls[i].get('to')?.errors?.['pattern']">Only digits allowed
                     </mat-error>
                 </mat-form-field>
-
 
                 <mat-form-field appearance="outline">
                     <mat-label>ПРОЦЕНТ БОНУСА %</mat-label>
@@ -50,9 +48,9 @@
                         </div>
                     </button>
                 </div>
-            </div>
-        </div>
-    </div>
+            </mat-card-content>
+        </mat-card>
+    </mat-dialog-content>
 
     <mat-dialog-actions class="dialog-action-buttons" align="center">
         <button class="button dialog-button" mat-flat-button mat-dialog-close>ЗАКРЫТЬ</button>

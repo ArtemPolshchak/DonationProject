@@ -63,6 +63,18 @@ export class SetupServerDialogComponent implements OnInit {
         ]
     );
 
+    publicKeyControl = new FormControl('',
+        [Validators.required,
+            Validators.pattern(/^\S+$/)
+        ]
+    );
+
+    secretKeyControl = new FormControl('',
+        [Validators.required,
+            Validators.pattern(/^\S+$/)
+        ]
+    );
+
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         private toasterService: ToasterService,
@@ -93,6 +105,8 @@ export class SetupServerDialogComponent implements OnInit {
                     serverUrl: this.serverUrlControl.value!,
                     serverUserName: this.serverUserNameControl.value!,
                     serverPassword: this.serverPasswordControl.value!,
+                    publicKey: this.publicKeyControl.value!,
+                    secretKey: this.secretKeyControl.value!
                 };
 
                 this.serverService.updateServerById(this.serverId, newServer).subscribe({
@@ -118,6 +132,8 @@ export class SetupServerDialogComponent implements OnInit {
                 this.serverUrlControl.setValue(data.serverUrl);
                 this.serverUserNameControl.setValue(data.serverUserName);
                 this.serverPasswordControl.setValue(data.serverPassword);
+                this.publicKeyControl.setValue(data.publicKey);
+                this.secretKeyControl.setValue(data.secretKey);
             }
         });
     }
@@ -135,7 +151,9 @@ export class SetupServerDialogComponent implements OnInit {
         return this.serverNameControl.valid
             && this.serverUrlControl.valid
             && this.serverUserNameControl.valid
-            && this.serverPasswordControl.valid;
+            && this.serverPasswordControl.valid
+            && this.publicKeyControl.valid
+            && this.secretKeyControl.valid;
     }
 
     openSnackBar(message: string) {

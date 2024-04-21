@@ -1,20 +1,14 @@
 <div>
     <header class="dialog-header">
-        <h2 class="dialog-header-title">Создать заявку</h2>
-        <div class="btn">
-            <mat-icon
-                    aria-hidden="false"
-                    aria-label="Example home icon"
-                    fontIcon="palette"
-                    colorsAnimation="popup"
-                    [hideTextInput]="hideTextInput"
-                    [hideColorPicker]="hideColorPicker"
-                    [palette]="colors"
-                    [style.color]="color"
-                    ngx-colors-trigger
-                    style="display: inline-block; margin:5px;"
-                    (change)="color = $event">
-            </mat-icon>
+        <h2 class="dialog-header-title">{{data.transaction ? 'Изменить' : 'Создать'}} заявку</h2>
+        <div class="button icon-button"
+             colorsAnimation="popup"
+             [hideTextInput]="hideTextInput"
+             [hideColorPicker]="hideColorPicker"
+             [palette]="colors"
+             ngx-colors-trigger
+             (change)="color = $event">
+            <mat-icon class="icon" fontIcon="palette" [ngStyle]="{'color': color, 'transform': 'scale(1.3)'}"></mat-icon>
         </div>
     </header>
 
