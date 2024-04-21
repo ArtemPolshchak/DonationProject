@@ -64,7 +64,7 @@ public class ServerController {
     }
 
     @Operation(summary = "update donator bonuses for servers")
-    @PatchMapping("api/servers/donators/{donatorId}/bonus")
+    @PatchMapping("/donators/{donatorId}/bonus")
     public ResponseEntity<Void> updateDonatorServerBonuses(@PathVariable Long donatorId,
                                                            @RequestBody List<DonatorBonusOnServer> dto) {
         serverService.updateDonatorServerBonuses(dto, donatorId);

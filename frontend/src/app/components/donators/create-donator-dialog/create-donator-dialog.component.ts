@@ -53,14 +53,16 @@ export class CreateDonatorDialogComponent {
     }
 
     createDonator(): void {
-        this.donatorService.createDonator({email: this.email}).subscribe({
-            next: (response) => {
-                this.response.emit(response);
-                this.openSnackBar("Донатор успешно добавлен");
-            },
-            error: () => this.openSnackBar("Произошла ошибка при добавления Донатора"),
-            complete: () => this.dialogRef.close()
-        });
+        if (this.emailControl.value !== null) {
+            this.donatorService.createDonator({email: this.emailControl.value}).subscribe({
+                next: (response) => {
+                    this.response.emit(response);
+                    this.openSnackBar("Донатор успешно добавлен");
+                },
+                error: () => this.openSnackBar("Произошла ошибка при добавления Донатора"),
+                complete: () => this.dialogRef.close()
+            });
+        }
     }
 
     openSnackBar(message: string) {
