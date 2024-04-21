@@ -53,8 +53,7 @@ export class CreateDonatorDialogComponent {
     }
 
     createDonator(): void {
-        if (this.emailControl.value !== null) {
-            this.donatorService.createDonator({email: this.emailControl.value}).subscribe({
+            this.donatorService.createDonator({email: this.emailControl.value!}).subscribe({
                 next: (response) => {
                     this.response.emit(response);
                     this.openSnackBar("Донатор успешно добавлен");
@@ -62,7 +61,7 @@ export class CreateDonatorDialogComponent {
                 error: () => this.openSnackBar("Произошла ошибка при добавления Донатора"),
                 complete: () => this.dialogRef.close()
             });
-        }
+
     }
 
     openSnackBar(message: string) {

@@ -22,6 +22,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {StorageService} from "../../../services/storage.service";
 import {ToasterService} from "../../../services/toaster.service";
 import {PaymentMethod} from "../../../enums/payment-method";
+import {NO_IMG_PATH} from "../../../enums/app-constans";
 
 @Component({
     selector: 'app-donatorstory',
@@ -133,8 +134,9 @@ export class DonatorStoryComponent implements OnInit {
 
     openImageDialog(transactionId: number) {
         this.dialog.open(OpenImageDialogComponent, {
-            width: '50%',
             data: transactionId,
         });
     }
+
+    protected readonly NO_IMG_PATH = NO_IMG_PATH;
 }

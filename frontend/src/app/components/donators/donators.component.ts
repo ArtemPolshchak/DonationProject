@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {DonatorService} from "../../services/donator.service";
 import {Donator} from "../../common/donator";
-import {NgForOf, NgStyle} from "@angular/common";
+import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatIcon} from "@angular/material/icon";
@@ -41,6 +41,7 @@ import {TransactionState} from "../../enums/transaction-state";
         NgStyle,
         MatOption,
         MatSelect,
+        NgIf,
     ],
     templateUrl: './donators.component.html',
     styleUrl: './donators.component.scss'
