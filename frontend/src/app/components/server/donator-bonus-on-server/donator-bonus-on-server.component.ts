@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {MatInput} from "@angular/material/input";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {SetupBonusDialogComponent} from "./setup-bonus-dialog/setup-bonus-dialog.component";
@@ -10,7 +10,7 @@ import {DonatorBonus} from "../../../common/donatorBonus";
 import {ServerService} from "../../../services/server.service";
 import {ToasterService} from "../../../services/toaster.service";
 import {MatIcon} from "@angular/material/icon";
-import {MatMiniFabButton} from "@angular/material/button";
+import {MatIconButton, MatMiniFabButton} from "@angular/material/button";
 
 @Component({
     selector: 'app-donator-bonus-on-server',
@@ -21,7 +21,9 @@ import {MatMiniFabButton} from "@angular/material/button";
         MatPaginator,
         NgForOf,
         MatIcon,
-        MatMiniFabButton
+        MatMiniFabButton,
+        MatIconButton,
+        NgIf
     ],
     templateUrl: './donator-bonus-on-server.component.html',
     styleUrl: './donator-bonus-on-server.component.scss'
@@ -32,7 +34,7 @@ export class DonatorBonusOnServer implements OnInit {
     pageNumber: number = 0;
     pageSize: number = 5;
     totalElements: number = 0;
-    donatorsMail?: string;
+    donatorMails?: string;
     ascOrder: string = "asc";
     descOrder: string = "desc";
     defaultSortField: string = "email"
@@ -64,12 +66,14 @@ export class DonatorBonusOnServer implements OnInit {
 
     search(): void {
         this.serverService.searchDonatorsByEmailContains(
-            this.serverId, this.donatorsMail, this.pageNumber, this.pageSize, this.sortState)
+            this.serverId, this.donatorMails, this.pageNumber, this.pageSize, this.sortState)
             .subscribe((data) => {
                 this.donatorBonus = data.content;
                 this.totalElements = data.totalElements;
             });
     }
+
+
 
     onPageChange(event: PageEvent): void {
         this.pageNumber = event.pageIndex;
@@ -78,11 +82,7 @@ export class DonatorBonusOnServer implements OnInit {
     }
 
     applySearch(): void {
-        if (this.donatorsMail && this.donatorsMail.trim() !== '') {
-            this.search();
-        } else {
-            this.search();
-        }
+        this.search();
     }
 
     openSnackBar(message: string) {

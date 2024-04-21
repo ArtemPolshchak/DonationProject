@@ -28,13 +28,13 @@
     font-size: 1.6vmin;
 
     .image-container {
-      border: solid #8e8e8e;
-      width: 12%;
+      border: 1px solid #8e8e8e;
+      height: 100px;
+      width: 100px;
       display: flex;
       justify-content: center;
       object-fit: cover;
       overflow: hidden;
-      max-height: 12%;
     }
 
     .image-container img {

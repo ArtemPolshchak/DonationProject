@@ -17,10 +17,17 @@
 
     <div class="page-navbar">
         <div class="search">
-            <input type="text" name="search" class="search-input" placeholder="Почта донатора" matInput
-                   [(ngModel)]="donatorsMail">
+            <form class="search-input">
+                <input matInput type="text" name="search" [(ngModel)]="donatorMails" placeholder="Почта донатора">
+                <button mat-icon-button *ngIf="donatorMails" (click)="donatorMails=''; applySearch()">
+                    <div class="col-auto pe-0">
+                        <img src="assets/images/search-refresh.svg" alt="">
+                    </div>
+                </button>
+            </form>
             <input type="button" class="search-button" value="ПОИСК" (click)="applySearch()">
         </div>
+
 
         <div class="table-header">
             <table>

@@ -41,7 +41,7 @@ export class ServerService {
     public searchDonatorsByEmailContains(serverId: number, email?: string, pageNumber?: number, pageSize?: number, sort?: string) {
         const url: string = `api/servers/${serverId}/donators/search`;
         const params = this.httpClient
-            .getHttpParams({page: pageNumber, size: pageSize, sort: sort, email: email});
+            .getHttpParams({page: pageNumber, size: pageSize, sort: sort, donatorMails: email});
         return this.httpClient.fetch<GetDonatorBonuses>(url, true, params);
     }
 
