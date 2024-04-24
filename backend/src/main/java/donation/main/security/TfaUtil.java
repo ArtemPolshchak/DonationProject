@@ -30,9 +30,6 @@ public class TfaUtil {
             BitMatrix matrix = new MultiFormatWriter()
                     .encode(getBarCode(account, key), BarcodeFormat.QR_CODE, qrWidth, qrHeight);
             MatrixToImageWriter.writeToStream(matrix, "png", out);
-            try (FileOutputStream outt = new FileOutputStream("./qr.png")) {
-                MatrixToImageWriter.writeToStream(matrix, "png", outt);
-            }
             return ImageProcessor.BASE64_IMG_PREFIX + Base64.getEncoder().encodeToString(out.toByteArray());
         } catch (Exception e) {
             throw new TfaQrCodeGenerationException("Can't create QR code for " + account + " user! ", e);
