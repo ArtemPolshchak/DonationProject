@@ -13,7 +13,7 @@ import {PageNotFoundComponent} from "./components/page-not-found/page-not-found.
 import {GuestPageComponent} from "./components/guest-page/guest-page.component";
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: "full", },
+    { path: '', redirectTo: 'login', pathMatch: "full" },
     { path: 'login', component: LoginComponent },
     {
         path: 'dashboard',

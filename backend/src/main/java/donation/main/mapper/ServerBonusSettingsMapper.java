@@ -1,7 +1,7 @@
 package donation.main.mapper;
 
 import donation.main.config.MapperConfig;
-import donation.main.dto.serverbonusdto.ServerBonusDto;
+import donation.main.dto.server.ServerBonusDto;
 import donation.main.entity.ServerBonusSettingsEntity;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

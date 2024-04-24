@@ -8,7 +8,7 @@
         <div class="search">
             <form class="search-input">
                 <input matInput type="text" name="search" [(ngModel)]="donatorsMail" placeholder="Почта донатора">
-                <button  mat-icon-button *ngIf="donatorsMail" (click)="donatorsMail=''; applyFilterSortSearch()">
+                <button  *ngIf="donatorsMail" (click)="donatorsMail=''; applyFilterSortSearch()">
                     <div class="col-auto pe-0">
                         <img src="assets/images/search-refresh.svg" alt="">
                     </div>

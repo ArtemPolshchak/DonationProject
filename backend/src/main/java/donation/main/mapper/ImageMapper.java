@@ -2,9 +2,8 @@ package donation.main.mapper;
 
 import java.nio.charset.StandardCharsets;
 import donation.main.config.MapperConfig;
-import donation.main.dto.transactiondto.ImageResponseDto;
+import donation.main.dto.transaction.ImageResponseDto;
 import donation.main.entity.ImageEntity;
-import donation.main.util.ImageProcessor;
 import org.mapstruct.Mapper;
 
 @Mapper(config = MapperConfig.class)
@@ -26,6 +25,6 @@ public interface ImageMapper {
     }
 
     default String byteArrayToBase64(byte[] image) {
-        return new String(image);
+        return new String(image, StandardCharsets.UTF_8);
     }
 }

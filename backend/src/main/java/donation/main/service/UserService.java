@@ -1,8 +1,8 @@
 package donation.main.service;
 
-import donation.main.dto.userdto.UserCreateRequestDto;
-import donation.main.dto.userdto.UserResponseDto;
-import donation.main.dto.userdto.UserUpdateRequestDto;
+import donation.main.dto.user.UserCreateRequestDto;
+import donation.main.dto.user.UserResponseDto;
+import donation.main.dto.user.UserUpdateRequestDto;
 import donation.main.entity.UserEntity;
 import donation.main.enumeration.Role;
 import donation.main.exception.UnauthorizedActionException;

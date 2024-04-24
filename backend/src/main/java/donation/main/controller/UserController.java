@@ -1,9 +1,9 @@
 package donation.main.controller;
 
-import donation.main.dto.userdto.UserCreateRequestDto;
+import donation.main.dto.user.UserCreateRequestDto;
 import jakarta.validation.Valid;
-import donation.main.dto.userdto.UserResponseDto;
-import donation.main.dto.userdto.UserUpdateRequestDto;
+import donation.main.dto.user.UserResponseDto;
+import donation.main.dto.user.UserUpdateRequestDto;
 import donation.main.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

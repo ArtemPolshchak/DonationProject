@@ -4,14 +4,12 @@ import {MatCard, MatCardContent, MatCardModule, MatCardTitle} from "@angular/mat
 import {NgIf} from "@angular/common";
 import {MatInput, MatInputModule} from "@angular/material/input";
 import {MatButton, MatButtonModule} from "@angular/material/button";
-import {LoginService} from "../../services/login.service";
 import {Router} from "@angular/router";
-import {StorageService} from "../../services/storage.service";
-import {ServerService} from "../../services/server.service";
-import {MatDialogContent} from "@angular/material/dialog";
+import {MatDialog, MatDialogContent} from "@angular/material/dialog";
 import {ToasterService} from "../../services/toaster.service";
 import {AuthService} from "../../services/auth.service";
-
+import {MfaDialogComponent} from "./mfa-dialoog/mfa-dialog.component";
+import {QrCodeDialogComponent} from "./qr-code-dialog/qr-code-dialog.component";
 
 @Component({
     selector: 'app-login',
@@ -35,61 +33,41 @@ import {AuthService} from "../../services/auth.service";
 })
 export class LoginComponent implements OnInit {
     error: string | null = null;
-    form: FormGroup = this.fb.group({
-        email: ['', Validators.required],
+    loginForm: FormGroup = this.fb.group({
+        username: ['', Validators.required],
         password: ['', Validators.required]
     });
 
     constructor(private fb: FormBuilder,
-                private loginService: LoginService,
-                private serverService: ServerService,
                 private router: Router,
                 private toasterService: ToasterService,
                 private authService: AuthService,
+                private dialog: MatDialog,
     ) {
     }
 
     ngOnInit(): void {
-        this.authService.isLoggedIn() ? this.redirectBasedOnRole() : {};
+        this.authService.isLoggedIn() ? this.authService.redirectBasedOnRole() : {};
     }
 
     submit() {
-        if (this.form.valid) {
-            this.loginService.login(this.form.value).subscribe({
+        if (this.loginForm.valid) {
+            this.authService.login(this.loginForm.value).subscribe({
                 next: (response) => {
-                    StorageService.addToken(response.token);
-                    this.setServersToStorage();
+                    response ? this.dialog.open(QrCodeDialogComponent, {
+                            data: {
+                                qrCodeImg: response.qrCode,
+                                username: this.loginForm.get('username')?.value,
+                            }
+                        })
+                        : this.dialog.open(MfaDialogComponent, {
+                            data: this.loginForm.get('username')?.value
+                        })
                 },
                 error: (err) => {
-                    this.toasterService.openSnackBar(err);
+                    this.toasterService.openSnackBar(err.message);
                 }
             })
         }
     }
-
-    private setServersToStorage() {
-        return this.serverService.getAll().subscribe({
-            next: (data) => {
-                StorageService.addServers(JSON.stringify(data.content));
-                this.redirectBasedOnRole()
-            },
-            error: (err) => {
-                this.toasterService.openSnackBar(err);
-            },
-        });
-    }
-
-    private redirectBasedOnRole(): void {
-        switch (StorageService.getUser()?.role) {
-            case 'ADMIN':
-                this.router.navigateByUrl('/dashboard');
-                break;
-            case 'MODERATOR':
-                this.router.navigateByUrl('/donations');
-                break;
-            default:
-                this.router.navigateByUrl('/app-guest-page');
-        }
-    }
 }
-
