@@ -1,9 +1,9 @@
 <div class="login-form">
     <h1 class="login-title">Login</h1>
-    <form [formGroup]="form" (ngSubmit)="submit()">
+    <form [formGroup]="loginForm" (ngSubmit)="submit()">
         <p>
             <mat-form-field class="login-field" appearance="outline">
-                <input type="text" matInput placeholder="Email" formControlName="email">
+                <input type="text" matInput placeholder="Email/Username" formControlName="username">
             </mat-form-field>
         </p>
         <p>
@@ -12,6 +12,6 @@
             </mat-form-field>
         </p>
         <p *ngIf="error" class="error">{{ error }}</p>
-        <button class="dialog-button">Login</button>
+        <button class="login-button">Login</button>
     </form>
 </div>

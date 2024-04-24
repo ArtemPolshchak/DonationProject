@@ -1,0 +1,61 @@
+<div>
+    <header class="dialog-header">
+        <h2 class="dialog-header-title">Two-Factor Authentication</h2>
+    </header>
+    <mat-dialog-content class="dialog-content">
+        <mat-card>
+            <mat-card-content align="center">
+                <div *ngIf="errorMessage" class="alert alert-primary" role="alert">
+                    {{errorMessage}}
+                </div>
+                <form [formGroup]="totpForm">
+                    <div class="input mb-3">
+                        <label class="mb-2">Enter 6-digit code from 2FA application</label>
+                        <div class="d-flex justify-content-center">
+                            <input type="tel" autofocus class="form-control small-input" formControlName="totp_digit1"
+                                   id="pincode-1"
+                                   maxlength="1" pattern="[\d]{1}" tabindex="1" placeholder="·" autocomplete="off"
+                                   (keydown)="numberOnly($event, 'totp_digit1')"
+                                   (keydown.backspace)="clearOnBackspace('totp_digit1')"
+                                   (keyup)="moveToNextElement('totp_digit1','pincode-2')">
+                            <input type="tel" class="form-control small-input" formControlName="totp_digit2"
+                                   id="pincode-2"
+                                   maxlength="1" pattern="[\d]{1}" tabindex="2" placeholder="·" autocomplete="off"
+                                   (keydown)="numberOnly($event, 'totp_digit2')"
+                                   (keydown.backspace)="clearOnBackspace('totp_digit2', 'pincode-1')"
+                                   (keyup)="moveToNextElement('totp_digit2','pincode-3')">
+                            <input type="tel" class="form-control small-input" formControlName="totp_digit3"
+                                   id="pincode-3"
+                                   maxlength="1" pattern="[\d]*" tabindex="3" placeholder="·" autocomplete="off"
+                                   (keydown)="numberOnly($event, 'totp_digit3')"
+                                   (keydown.backspace)="clearOnBackspace('totp_digit3', 'pincode-2')"
+                                   (keyup)="moveToNextElement('totp_digit3','pincode-4')">
+                            <input type="tel" class="form-control small-input" formControlName="totp_digit4"
+                                   id="pincode-4"
+                                   maxlength="1" pattern="[\d]*" tabindex="4" placeholder="·" autocomplete="off"
+                                   (keydown)="numberOnly($event, 'totp_digit4')"
+                                   (keydown.backspace)="clearOnBackspace('totp_digit4', 'pincode-3')"
+                                   (keyup)="moveToNextElement('totp_digit4','pincode-5')">
+                            <input type="tel" class="form-control small-input" formControlName="totp_digit5"
+                                   id="pincode-5"
+                                   maxlength="1" pattern="[\d]*" tabindex="5" placeholder="·" autocomplete="off"
+                                   (keydown)="numberOnly($event, 'totp_digit5')"
+                                   (keydown.backspace)="clearOnBackspace('totp_digit5','pincode-4')"
+                                   (keyup)="moveToNextElement('totp_digit5','pincode-6')">
+                            <input type="tel" class="form-control small-input" formControlName="totp_digit6"
+                                   id="pincode-6"
+                                   maxlength="1" pattern="[\d]*" tabindex="6" placeholder="·" autocomplete="off"
+                                   (keydown)="numberOnly($event, 'totp_digit6')"
+                                   (keydown.backspace)="clearOnBackspace('totp_digit6', 'pincode-5')">
+                        </div>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </mat-dialog-content>
+    <mat-dialog-actions class="dialog-action-buttons" align="center">
+        <button class="button dialog-button" mat-flat-button mat-dialog-close>CANCEL</button>
+        <button id="submit" class="button dialog-button" mat-flat-button (click)="verifyTotp()">SUBMIT
+        </button>
+    </mat-dialog-actions>
+</div>

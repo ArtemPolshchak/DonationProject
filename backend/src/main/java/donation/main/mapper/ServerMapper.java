@@ -1,10 +1,9 @@
 package donation.main.mapper;
 
 import donation.main.config.MapperConfig;
-import donation.main.dto.serverdto.ServerDto;
-import donation.main.dto.serverdto.ServerIdNameDto;
+import donation.main.dto.server.ServerDto;
+import donation.main.dto.server.ServerIdNameDto;
 import donation.main.entity.ServerEntity;
-import org.apache.catalina.Server;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

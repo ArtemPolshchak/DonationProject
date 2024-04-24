@@ -2,12 +2,12 @@ package donation.main.service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
-import donation.main.dto.donatorsdto.DonatorBonusDto;
-import donation.main.dto.donatorsdto.DonatorBonusOnServer;
-import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
-import donation.main.dto.serverdto.ServerDto;
-import donation.main.dto.serverdto.ServerIdNameDto;
+import donation.main.dto.donator.CreateDonatorBonusOnServer;
+import donation.main.dto.donator.DonatorBonusDto;
+import donation.main.dto.donator.DonatorBonusOnServer;
+import donation.main.dto.donator.UpdateDonatorsBonusOnServer;
+import donation.main.dto.server.ServerDto;
+import donation.main.dto.server.ServerIdNameDto;
 import donation.main.entity.DonatorEntity;
 import donation.main.entity.ServerBonusSettingsEntity;
 import donation.main.entity.ServerEntity;

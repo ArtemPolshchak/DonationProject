@@ -1,14 +1,13 @@
 package donation.main.service;
 
-import donation.main.dto.donatorsdto.CreateDonatorDto;
-import donation.main.dto.donatorsdto.DonatorTotalDonationsView;
+import donation.main.dto.donator.CreateDonatorDto;
+import donation.main.dto.donator.DonatorTotalDonationsView;
 import donation.main.entity.DonatorEntity;
 import donation.main.exception.EmailNotFoundException;
 import donation.main.exception.UserNotFoundException;
 import donation.main.externaldb.service.ExternalDonatorService;
 import donation.main.mapper.DonatorMapper;
 import donation.main.repository.DonatorRepository;
-import donation.main.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

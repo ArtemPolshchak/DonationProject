@@ -1,6 +1,6 @@
 package donation.main.controller;
 
-import donation.main.dto.serverbonusdto.ServerBonusDto;
+import donation.main.dto.server.ServerBonusDto;
 import donation.main.entity.ServerBonusSettingsEntity;
 import donation.main.service.ServerBonusSettingsService;
 import io.swagger.v3.oas.annotations.Operation;

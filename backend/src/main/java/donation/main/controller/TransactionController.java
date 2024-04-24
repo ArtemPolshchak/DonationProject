@@ -1,11 +1,11 @@
 package donation.main.controller;
 
 import jakarta.validation.Valid;
-import donation.main.dto.transactiondto.RequestTransactionDto;
-import donation.main.dto.transactiondto.ImageResponseDto;
-import donation.main.dto.transactiondto.TransactionConfirmRequestDto;
-import donation.main.dto.transactiondto.TransactionResponseDto;
-import donation.main.dto.transactiondto.TransactionSpecDto;
+import donation.main.dto.transaction.RequestTransactionDto;
+import donation.main.dto.transaction.ImageResponseDto;
+import donation.main.dto.transaction.TransactionConfirmRequestDto;
+import donation.main.dto.transaction.TransactionResponseDto;
+import donation.main.dto.transaction.TransactionSpecDto;
 import donation.main.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
