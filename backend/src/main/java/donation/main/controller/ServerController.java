@@ -1,11 +1,11 @@
 package donation.main.controller;
 
-import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
-import donation.main.dto.donatorsdto.DonatorBonusDto;
-import donation.main.dto.donatorsdto.DonatorBonusOnServer;
-import donation.main.dto.donatorsdto.UpdateDonatorsBonusOnServer;
-import donation.main.dto.serverdto.ServerDto;
-import donation.main.dto.serverdto.ServerIdNameDto;
+import donation.main.dto.donator.CreateDonatorBonusOnServer;
+import donation.main.dto.donator.DonatorBonusDto;
+import donation.main.dto.donator.DonatorBonusOnServer;
+import donation.main.dto.donator.UpdateDonatorsBonusOnServer;
+import donation.main.dto.server.ServerDto;
+import donation.main.dto.server.ServerIdNameDto;
 import donation.main.entity.ServerEntity;
 import donation.main.service.ServerService;
 import io.swagger.v3.oas.annotations.Operation;

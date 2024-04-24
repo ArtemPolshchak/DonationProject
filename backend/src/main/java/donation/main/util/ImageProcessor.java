@@ -12,8 +12,8 @@ import donation.main.exception.ImageConversionException;
 import org.springframework.core.convert.ConversionFailedException;
 
 public class ImageProcessor {
+    public static final String BASE64_IMG_PREFIX = "data:image/png;base64,";
     private static final int SMALL_SIDE_MAX_SIZE = 100;
-    private static final String BASE64_IMG_PREFIX = "data:image/png;base64,";
 
     private ImageProcessor() {
     }

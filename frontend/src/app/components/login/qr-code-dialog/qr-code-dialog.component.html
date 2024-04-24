@@ -1,0 +1,25 @@
+<div>
+    <header class="dialog-header">
+        <h2 class="dialog-header-title">2FA SETUP</h2>
+    </header>
+
+    <mat-dialog-content class="dialog-content">
+        <mat-card class="qr-code-container">
+            <mat-card-content>
+                <img class="qr-code-img" src="{{qrCodeImg}}" alt="QR">
+            </mat-card-content>
+        </mat-card>
+        <mat-card>
+            <mat-card-content align="center">
+                Scan QR code with
+                <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+                   target="_blank" rel="noopener noreferrer"> Google Authenticator</a>
+            </mat-card-content>
+        </mat-card>
+    </mat-dialog-content>
+    <mat-dialog-actions class="dialog-action-buttons" align="center">
+        <button class="button dialog-button" mat-flat-button mat-dialog-close>CANCEL</button>
+        <button class="button dialog-button" mat-flat-button (click)="next()" mat-dialog-close>NEXT</button>
+    </mat-dialog-actions>
+</div>
+

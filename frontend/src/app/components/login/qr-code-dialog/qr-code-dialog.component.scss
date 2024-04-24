@@ -1,0 +1,20 @@
+.qr-code-container {
+
+  height: 50vh;
+  mat-card-content {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+  }
+}
+
+.qr-code-img {
+  object-fit: contain;
+}
+
+mat-card {
+  margin-bottom: 8px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

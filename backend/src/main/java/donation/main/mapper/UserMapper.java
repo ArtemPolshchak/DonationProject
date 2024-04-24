@@ -1,10 +1,10 @@
 package donation.main.mapper;
 
 import donation.main.config.MapperConfig;
-import donation.main.dto.userdto.UserCreateRequestDto;
-import donation.main.dto.userdto.SignInRequestDto;
-import donation.main.dto.userdto.UserResponseDto;
-import donation.main.dto.userdto.UserUpdateRequestDto;
+import donation.main.dto.user.UserCreateRequestDto;
+import donation.main.dto.auth.LoginRequestDto;
+import donation.main.dto.user.UserResponseDto;
+import donation.main.dto.user.UserUpdateRequestDto;
 import donation.main.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -15,7 +15,7 @@ public interface UserMapper {
 
     UserEntity update(@MappingTarget UserEntity entity, UserUpdateRequestDto dto);
 
-    UserEntity toEntity(SignInRequestDto dto);
+    UserEntity toEntity(LoginRequestDto dto);
 
     UserResponseDto toDto(UserEntity entity);
 }

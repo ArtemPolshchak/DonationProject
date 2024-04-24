@@ -1,8 +1,8 @@
 package donation.main.mapper;
 
 import donation.main.config.MapperConfig;
-import donation.main.dto.transactiondto.RequestTransactionDto;
-import donation.main.dto.transactiondto.TransactionResponseDto;
+import donation.main.dto.transaction.RequestTransactionDto;
+import donation.main.dto.transaction.TransactionResponseDto;
 import donation.main.entity.TransactionEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,6 +1,6 @@
 package donation.main.service;
 
-import donation.main.dto.serverbonusdto.ServerBonusDto;
+import donation.main.dto.server.ServerBonusDto;
 import donation.main.entity.ServerBonusSettingsEntity;
 import donation.main.entity.ServerEntity;
 import donation.main.exception.InvalidBonusRangeException;

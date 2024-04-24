@@ -41,6 +41,12 @@ public class UserEntity implements UserDetails {
     @Column(name = "email", columnDefinition = "VARCHAR(100)", unique = true, nullable = false)
     private String email;
 
+    @Column(name = "tfa_key", columnDefinition = "VARCHAR(32)", unique = true)
+    private String tfaKey;
+
+    @Column(name = "is_tfa_active", nullable = false)
+    private boolean isTfaActive = false;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role =  Role.GUEST;

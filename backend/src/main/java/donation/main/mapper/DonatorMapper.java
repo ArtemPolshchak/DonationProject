@@ -1,8 +1,8 @@
 package donation.main.mapper;
 
 import donation.main.config.MapperConfig;
-import donation.main.dto.donatorsdto.CreateDonatorBonusOnServer;
-import donation.main.dto.donatorsdto.CreateDonatorDto;
+import donation.main.dto.donator.CreateDonatorBonusOnServer;
+import donation.main.dto.donator.CreateDonatorDto;
 import donation.main.entity.DonatorEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

@@ -1,7 +1,7 @@
 package donation.main.controller;
 
-import donation.main.dto.donatorsdto.CreateDonatorDto;
-import donation.main.dto.donatorsdto.DonatorTotalDonationsView;
+import donation.main.dto.donator.CreateDonatorDto;
+import donation.main.dto.donator.DonatorTotalDonationsView;
 import donation.main.entity.DonatorEntity;
 import donation.main.service.DonatorService;
 import io.swagger.v3.oas.annotations.Operation;
