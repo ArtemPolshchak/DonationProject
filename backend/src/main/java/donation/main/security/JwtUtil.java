@@ -18,10 +18,10 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtil {
-    @Value("${token.signing.key}")
-    private String jwtSigningKey;
+    @Value("${security.jwt.secret}")
+    private String secretKey;
 
-    @Value("${token.expiration}")
+    @Value("${security.jwt.expiration}")
     private long tokenExpiration;
 
     public String extractUserEmail(String token) {
@@ -70,7 +70,7 @@ public class JwtUtil {
     }
 
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtSigningKey);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

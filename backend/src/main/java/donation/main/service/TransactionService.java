@@ -86,7 +86,7 @@ public class TransactionService {
     }
 
     public TransactionResponseDto changeState(Long id, TransactionConfirmRequestDto dto) {
-        if (!authService.hasAdminPermission()) {
+        if (!authService.isAdmin()) {
             throw new AccessForbiddenException("Access forbidden. Admin permissions required");
         }
         TransactionEntity transaction = getById(id);

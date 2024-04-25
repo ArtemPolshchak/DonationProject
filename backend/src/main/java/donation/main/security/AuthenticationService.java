@@ -20,11 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-
     private final JwtUtil jwtUtil;
     private final TfaUtil tfaUtil;
     private final UserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
+    private final EncryptorUtil encryptor;
 
     @Transactional
     public Optional<LoginResponseDto> login(LoginRequestDto request) throws AuthenticationException {
@@ -35,8 +35,7 @@ public class AuthenticationService {
         UserEntity user = (UserEntity) authenticate.getPrincipal();
         if (!user.isTfaActive()) {
             GoogleAuthenticatorKey authKey = tfaUtil.createAuthKey();
-            user.setTfaKey(authKey.getKey());
-            System.out.println(user.getTfaKey());
+            user.setTfaKey(encryptor.encrypt(authKey.getKey()));
             String base64QRCode = tfaUtil.createBase64QRCode(user.getEmail(), authKey);
             return Optional.of(new LoginResponseDto(base64QRCode));
         }
@@ -46,7 +45,7 @@ public class AuthenticationService {
     @Transactional
     public JwtAuthResponseDto totpVerification(MfaVerificationRequestDto dto) throws AuthenticationException {
         UserEntity user = (UserEntity) userDetailsService.loadUserByUsername(dto.username());
-        tfaUtil.validateCode(dto.code(), user.getTfaKey());
+        tfaUtil.validateCode(dto.code(), encryptor.decrypt(user.getTfaKey()));
         user.setTfaActive(true);
         return new JwtAuthResponseDto(jwtUtil.generateToken(user));
     }
@@ -59,7 +58,7 @@ public class AuthenticationService {
         return Optional.of(user);
     }
 
-    public boolean hasAdminPermission() {
+    public boolean isAdmin() {
         return getAuthenticatedUser()
                 .map(authenticatedUser -> authenticatedUser.getAuthorities().stream()
                         .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN")))

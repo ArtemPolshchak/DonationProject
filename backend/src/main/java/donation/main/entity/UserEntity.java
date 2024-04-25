@@ -35,13 +35,13 @@ public class UserEntity implements UserDetails {
     @Column(name = "username", columnDefinition = "VARCHAR(50)", unique = true, nullable = false)
     private String username;
 
-    @Column(name = "password", columnDefinition = "VARCHAR(100)", nullable = false)
+    @Column(name = "password", columnDefinition = "VARCHAR(255)", nullable = false)
     private String password;
 
     @Column(name = "email", columnDefinition = "VARCHAR(100)", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "tfa_key", columnDefinition = "VARCHAR(32)", unique = true)
+    @Column(name = "tfa_key", columnDefinition = "VARCHAR(255)", unique = true)
     private String tfaKey;
 
     @Column(name = "is_tfa_active", nullable = false)
