@@ -1,5 +1,6 @@
 package donation.main.controller;
 
+import donation.main.dto.auth.MfaVerificationRequestDto;
 import donation.main.dto.user.UserCreateRequestDto;
 import jakarta.validation.Valid;
 import donation.main.dto.user.UserResponseDto;

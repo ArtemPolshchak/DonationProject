@@ -14,6 +14,7 @@ public record UserUpdateRequestDto(
         @Size(min = 5, max = 50)
         String password,
         String repeatedPassword,
+        boolean isTfaActive,
         Role role
 ) {
 }

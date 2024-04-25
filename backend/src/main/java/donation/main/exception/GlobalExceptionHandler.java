@@ -1,11 +1,10 @@
-package donation.main.controller;
+package donation.main.exception;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.HashMap;
 import java.util.Map;
 import donation.main.exception.AccessForbiddenException;
+import donation.main.exception.ApplicationException;
 import donation.main.exception.EmailNotFoundException;
 import donation.main.exception.ErrorResponse;
 import donation.main.exception.InvalidBonusRangeException;
@@ -18,6 +17,7 @@ import donation.main.exception.TransactionNotFoundException;
 import donation.main.exception.UnauthorizedActionException;
 import donation.main.exception.UserNotFoundException;
 import donation.main.exception.UserWithDataExistsException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class ExceptionHandlingControllerAdvice {
+@Slf4j
+public class GlobalExceptionHandler {
 
     private static final String MESSAGE = "message";
 
@@ -54,6 +55,12 @@ public class ExceptionHandlingControllerAdvice {
             }
         });
         return ResponseEntity.of(getProblemDetail(HttpStatus.BAD_REQUEST, errors)).build();
+    }
+
+    @ExceptionHandler({ ApplicationException.class })
+    public ResponseEntity<Object> handleApplicationException(final ApplicationException ex) {
+        log.error("Handle ApplicationException", ex);
+        return ResponseEntity.of(getProblemDetail(ex.getStatus(), ex.getMessage())).build();
     }
 
     @ExceptionHandler(ErrorResponse.class)
@@ -150,6 +157,12 @@ public class ExceptionHandlingControllerAdvice {
 
     private ProblemDetail getProblemDetail(HttpStatus status, Map<String, String> errors) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, errors.toString());
+        problemDetail.setProperty("timestamp", LocalDateTime.now());
+        return problemDetail;
+    }
+
+    private ProblemDetail getProblemDetail(HttpStatus status, String detail) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, detail);
         problemDetail.setProperty("timestamp", LocalDateTime.now());
         return problemDetail;
     }
