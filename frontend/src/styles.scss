@@ -296,7 +296,8 @@ table {
   background-color: transparent;
   display: flex;
   justify-content: center;
-  width: 50%;
+  width: auto;
+  height: 100%;
 
   &:hover {
     background-color: #41556466;

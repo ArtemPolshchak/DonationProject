@@ -94,7 +94,7 @@ public class TransactionService {
         setAdminBonus(transaction, dto.adminBonus());
         transaction = transaction.toBuilder()
                 .dateApproved(LocalDateTime.now())
-                .approvedByUser(userService.getCurrentUser()).build();
+                .approvedByUser(authService.getAuthenticatedUser()).build();
         return transactionMapper.toDto(transactionRepository.save(transaction));
     }
 
@@ -113,8 +113,7 @@ public class TransactionService {
     }
 
     private TransactionEntity updateTransactionFields(TransactionEntity transaction, RequestTransactionDto dto) {
-        UserEntity user = authService.getAuthenticatedUser().orElseThrow(() ->
-                new UserNotFoundException("Unable to retrieve user information from Security Context."));
+        UserEntity user = authService.getAuthenticatedUser();
         setPreviewImage(transaction, dto.image());
         ServerEntity server = serverService.findById(dto.serverId());
         DonatorEntity donator = donatorService.getByEmailOrCreate(dto.donatorEmail());

@@ -1,8 +1,7 @@
 package donation.main.controller;
 
-import donation.main.dto.auth.MfaVerificationRequestDto;
-import donation.main.dto.user.UserCreateRequestDto;
 import jakarta.validation.Valid;
+import donation.main.dto.user.UserCreateRequestDto;
 import donation.main.dto.user.UserResponseDto;
 import donation.main.dto.user.UserUpdateRequestDto;
 import donation.main.service.UserService;
@@ -56,6 +55,11 @@ public class UserController {
             @PathVariable Long id,
             @RequestBody @Valid UserUpdateRequestDto dto) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.update(id, dto));
+    }
+
+    @PatchMapping("/{id}/tfa")
+    public void resetTfa(@PathVariable Long id) {
+        userService.resetTfaByUserId(id);
     }
 
     @Operation(summary = "soft delete user by id")

@@ -25,6 +25,7 @@
                     <th>Почта Пользователя</th>
                     <th>Имя Пользователя</th>
                     <th>Роль Пользователя</th>
+                    <th>TFA</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -40,11 +41,17 @@
                 <td> {{ user.username }}</td>
                 <td> {{ user.role }}</td>
                 <td>
+                    {{ user.isTfaActive ? 'ACTIVE' : 'INACTIVE' }}
+                    <button class="off-button" mat-icon-button *ngIf="user.isTfaActive" (click)="tfaReset(user)">
+                        <img src="assets/images/off.svg" alt="">
+                    </button>
+                </td>
+                <td>
                     <div class="buttons-container">
                         <button class="button table-button" (click)="openUpdateUserDialog(user)">
                             <div class="row">
                                 <div class="col-auto pe-0">
-                                    <img src="assets/images/update.svg" alt="">
+                                    <img src="assets/images/user-edit.svg" alt="">
                                 </div>
                                 <div class="col-auto my-auto ps-0">
                                     Изменить

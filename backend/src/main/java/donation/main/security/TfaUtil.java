@@ -26,7 +26,7 @@ public class TfaUtil {
     private int qrWidth = 500;
 
     @Value("${company.name}")
-    private String companyName ;
+    private String companyName;
 
     public String createBase64QRCode(String account, GoogleAuthenticatorKey key) {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {

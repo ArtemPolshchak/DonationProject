@@ -7,7 +7,10 @@ import donation.main.dto.auth.LoginRequestDto;
 import donation.main.dto.auth.LoginResponseDto;
 import donation.main.dto.auth.MfaVerificationRequestDto;
 import donation.main.entity.UserEntity;
+import donation.main.exception.ApplicationException;
+import donation.main.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -50,18 +53,17 @@ public class AuthenticationService {
         return new JwtAuthResponseDto(jwtUtil.generateToken(user));
     }
 
-    public Optional<UserEntity> getAuthenticatedUser() {
+    public UserEntity getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof UserEntity user)) {
-            return Optional.empty();
+            throw new ApplicationException(HttpStatus.FORBIDDEN,
+                    "Can't find match user authentication in SecurityContextHolder");
         }
-        return Optional.of(user);
+        return user;
     }
 
     public boolean isAdmin() {
-        return getAuthenticatedUser()
-                .map(authenticatedUser -> authenticatedUser.getAuthorities().stream()
-                        .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN")))
-                .orElse(false);
+        return getAuthenticatedUser().getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN"));
     }
 }

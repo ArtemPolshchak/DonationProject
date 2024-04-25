@@ -5,6 +5,7 @@ export class User {
     username!: string;
     email!: string;
     role!: Role;
+    isTfaActive!: boolean;
     password?: string;
     repeatedPassword?: string;
 }

@@ -2,8 +2,11 @@
   padding: 16px 0 16px 0;
 }
 
-.table-button {
+.off-button {
+  transform: scale(0.8);
+  margin-left: -8px;
+
   & img {
-    transform: scale(0.7);
+    transform: scale(0.9);
   }
 }
