@@ -14,6 +14,7 @@ import donation.main.exception.TfaQrCodeGenerationException;
 import donation.main.exception.TotpAuthenticationException;
 import donation.main.util.ImageProcessor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
@@ -23,16 +24,15 @@ public class TfaUtil {
     private final GoogleAuthenticator gAuth;
     private int qrHeight = 500;
     private int qrWidth = 500;
-    private String companyName = "Company";
+
+    @Value("${company.name}")
+    private String companyName ;
 
     public String createBase64QRCode(String account, GoogleAuthenticatorKey key) {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             BitMatrix matrix = new MultiFormatWriter()
                     .encode(getBarCode(account, key), BarcodeFormat.QR_CODE, qrWidth, qrHeight);
             MatrixToImageWriter.writeToStream(matrix, "png", out);
-            try (FileOutputStream outt = new FileOutputStream("./qr.png")) {
-                MatrixToImageWriter.writeToStream(matrix, "png", outt);
-            }
             return ImageProcessor.BASE64_IMG_PREFIX + Base64.getEncoder().encodeToString(out.toByteArray());
         } catch (Exception e) {
             throw new TfaQrCodeGenerationException("Can't create QR code for " + account + " user! ", e);
