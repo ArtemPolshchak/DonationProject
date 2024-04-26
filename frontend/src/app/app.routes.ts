@@ -39,7 +39,7 @@ export const routes: Routes = [
         }
     },
     {
-        path: 'donator-story/:id/:email/:totalDonations',
+        path: 'donator-story/:id',
         component: DonatorStoryComponent,
         canActivate: [hasRoleGuard],
         data: {

@@ -29,8 +29,7 @@ import {MatIconButton, MatMiniFabButton} from "@angular/material/button";
     styleUrl: './donator-bonus-on-server.component.scss'
 })
 export class DonatorBonusOnServer implements OnInit {
-    donatorBonus: DonatorBonus[] = [];
-    donator!: DonatorBonus;
+    donatorBonuses: DonatorBonus[] = [];
     pageNumber: number = 0;
     pageSize: number = 5;
     totalElements: number = 0;
@@ -41,6 +40,7 @@ export class DonatorBonusOnServer implements OnInit {
     sortOrder: string = this.descOrder;
     sortState: string = this.defaultSortField + ',' + this.sortOrder;
     serverId!: number;
+    serverName!: string;
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -53,6 +53,7 @@ export class DonatorBonusOnServer implements OnInit {
 
         this.route.params.subscribe(params => {
             this.serverId = +params['id'];
+            this.serverName = params['serverName'];
         });
     }
 
@@ -68,12 +69,17 @@ export class DonatorBonusOnServer implements OnInit {
         this.serverService.searchDonatorsByEmailContains(
             this.serverId, this.donatorMails, this.pageNumber, this.pageSize, this.sortState)
             .subscribe((data) => {
-                this.donatorBonus = data.content;
+                this.donatorBonuses = data.content;
                 this.totalElements = data.totalElements;
             });
     }
 
-
+    goToDonatorStory(donatorId: number, donatoorEmail: string, serverName: number): void {
+            this.router.navigate(['/donator-story', donatorId, {
+                email: donatoorEmail,
+                serverName: serverName,
+            }]);
+    }
 
     onPageChange(event: PageEvent): void {
         this.pageNumber = event.pageIndex;

@@ -78,13 +78,17 @@
         <table>
             <tbody>
             <tr *ngFor="let donator of donators">
-                <td> {{ donator.email }}</td>
+                <td>
+                    <a class="email-ref" (click)="goToDonatorStory(donator.id, donator.email)">
+                        {{ donator.email }}
+                    </a>
+                </td>
                 <td> {{ donator.totalCompletedTransactions }}</td>
                 <td> {{ donator.totalDonations }}</td>
                 <td>
                     <div class="buttons-container">
                         <div class="button table-button"
-                             (click)="goToDonatorStory(donator.id, donator.email, donator.totalDonations)">
+                             (click)="goToDonatorStory(donator.id, donator.email)">
                             <div class="row">
                                 <div class="col-auto pe-0">
                                     <img src="assets/images/history.svg" alt="">
