@@ -11,7 +11,7 @@
                 <input type="password" matInput placeholder="Password" formControlName="password">
             </mat-form-field>
         </p>
-        <p *ngIf="error" class="error">{{ error }}</p>
+        <div *ngIf="error" class="alert alert-primary" role="alert" align="center">{{ error }}</div>
         <button class="login-button">Login</button>
     </form>
 </div>
