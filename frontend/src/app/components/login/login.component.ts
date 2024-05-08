@@ -4,7 +4,6 @@ import {MatCard, MatCardContent, MatCardModule, MatCardTitle} from "@angular/mat
 import {NgIf} from "@angular/common";
 import {MatInput, MatInputModule} from "@angular/material/input";
 import {MatButton, MatButtonModule} from "@angular/material/button";
-import {Router} from "@angular/router";
 import {MatDialog, MatDialogContent} from "@angular/material/dialog";
 import {ToasterService} from "../../services/toaster.service";
 import {AuthService} from "../../services/auth.service";
@@ -32,14 +31,13 @@ import {QrCodeDialogComponent} from "./qr-code-dialog/qr-code-dialog.component";
     styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
-    error: string | null = null;
+    error?: string;
     loginForm: FormGroup = this.fb.group({
         username: ['', Validators.required],
         password: ['', Validators.required]
     });
 
     constructor(private fb: FormBuilder,
-                private router: Router,
                 private toasterService: ToasterService,
                 private authService: AuthService,
                 private dialog: MatDialog,
@@ -52,6 +50,7 @@ export class LoginComponent implements OnInit {
 
     submit() {
         if (this.loginForm.valid) {
+            this.error = '';
             this.authService.login(this.loginForm.value).subscribe({
                 next: (response) => {
                     response ? this.dialog.open(QrCodeDialogComponent, {
@@ -65,6 +64,7 @@ export class LoginComponent implements OnInit {
                         })
                 },
                 error: (err) => {
+                    this.error = 'Wrong login or password!'
                     this.toasterService.openSnackBar(err.message);
                 }
             })

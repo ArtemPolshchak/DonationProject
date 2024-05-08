@@ -260,6 +260,16 @@ table {
     padding: 0 8px 0 8px;
     text-align: left;
     font-size: 14px;
+
+    .email-ref {
+      text-decoration: none;
+      color: black;
+      cursor: pointer;
+
+      &:hover {
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.73), 0 0 14px rgba(0, 0, 0, 0.51);
+      }
+    }
   }
 
   tr:nth-child(odd) {
@@ -296,7 +306,8 @@ table {
   background-color: transparent;
   display: flex;
   justify-content: center;
-  width: 50%;
+  width: auto;
+  height: 100%;
 
   &:hover {
     background-color: #41556466;

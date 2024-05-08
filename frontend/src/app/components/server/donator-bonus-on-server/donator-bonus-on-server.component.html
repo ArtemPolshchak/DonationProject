@@ -61,12 +61,16 @@
     <div class="main-content">
         <table>
             <tbody>
-            <tr *ngFor="let donator of donatorBonus">
-                <td> {{ donator.email  }} </td>
-                <td> {{ donator.personalBonus + "%" }}</td>
+            <tr *ngFor="let donatorBonus of donatorBonuses">
+                <td>
+                    <a class="email-ref" (click)="goToDonatorStory(donatorBonus.id, donatorBonus.email, serverId)">
+                        {{ donatorBonus.email }}
+                    </a>
+                </td>
+                <td> {{ donatorBonus.personalBonus + "%" }}</td>
                 <td>
                     <div class="buttons-container">
-                        <button class="button table-button" (click)="openSetupBonusDialog(donator)">
+                        <button class="button table-button" (click)="openSetupBonusDialog(donatorBonus)">
                             <div class="col-auto pe-0">
                                 <img src="assets/images/edit.svg" alt="">
                             </div>

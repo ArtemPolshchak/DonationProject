@@ -52,7 +52,6 @@ export class DonatorsComponent implements OnInit {
     pageNumber: number = 0;
     pageSize: number = 25;
     totalElements: number = 0;
-    selectedItem: any;
     donatorsMail?: string;
     ascOrder: string = "asc";
     descOrder: string = "desc";
@@ -78,12 +77,10 @@ export class DonatorsComponent implements OnInit {
         this.getAll();
     }
 
-    goToDonatorStory(donatorId: number, email: string, totalDonations?: number): void {
-        if (typeof totalDonations !== 'undefined') {
-            this.router.navigate(['/donator-story', donatorId, email, totalDonations]);
-        } else {
-            console.error('Total donations is undefined.');
-        }
+    goToDonatorStory(donatorId: number, email: string): void {
+            this.router.navigate(['/donator-story', donatorId, {
+                email: email,
+            }]);
     }
 
     sort(sortField: string) {

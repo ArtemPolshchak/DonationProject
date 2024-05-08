@@ -14,6 +14,7 @@ import donation.main.exception.TfaQrCodeGenerationException;
 import donation.main.exception.TotpAuthenticationException;
 import donation.main.util.ImageProcessor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,9 @@ public class TfaUtil {
     private final GoogleAuthenticator gAuth;
     private int qrHeight = 500;
     private int qrWidth = 500;
-    private String companyName = "Company";
+
+    @Value("${company.name}")
+    private String companyName;
 
     public String createBase64QRCode(String account, GoogleAuthenticatorKey key) {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {

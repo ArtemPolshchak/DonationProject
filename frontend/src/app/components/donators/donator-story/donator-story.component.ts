@@ -21,7 +21,6 @@ import {OpenImageDialogComponent} from "../../open-image-dialog/open-image-dialo
 import {MatDialog} from "@angular/material/dialog";
 import {StorageService} from "../../../services/storage.service";
 import {ToasterService} from "../../../services/toaster.service";
-import {PaymentMethod} from "../../../enums/payment-method";
 import {NO_IMG_PATH} from "../../../enums/app-constans";
 
 @Component({
@@ -56,13 +55,11 @@ export class DonatorStoryComponent implements OnInit {
     totalDonations!: number;
     sortState: string = 'dateCreated,desc';
     state: string[] = [TransactionState.COMPLETED];
-    selectedServer: string = '';
+    selectedServerName!: string;
     servers: Server[] = [];
     pageNumber: number = 0;
     pageSize: number = 10;
     totalElements: number = 0;
-    paymentMethod: string = "";
-
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
     constructor(
@@ -78,14 +75,13 @@ export class DonatorStoryComponent implements OnInit {
         this.route.params.subscribe(params => {
             this.donatorId = +params['id'];
             this.email = params['email'];
-            this.totalDonations = +params['totalDonations'];
-            this.paymentMethod = params['paymentMethod'];
+            this.selectedServerName = params['serverName'] ? params['serverName'] :'';
             this.servers = StorageService.getServers()
             if (this.servers.length === 0) {
                 StorageService.watchServers().subscribe({
                     next: (response) => {
                         this.servers = response
-                        this.getDonatorTransactions();
+                        this.getDonatorTransactions()
                     }
                 })
             } else {
@@ -104,10 +100,6 @@ export class DonatorStoryComponent implements OnInit {
         this.getDonatorTransactions();
     }
 
-    openSnackBar(message: string) {
-        this.toasterService.openSnackBar(message);
-    }
-
     getDonatorTransactions(): void {
         this.transactionService
             .getAllWithSearch(
@@ -116,12 +108,13 @@ export class DonatorStoryComponent implements OnInit {
                 this.sortState,
                 this.state,
                 undefined,
-                this.selectedServer ? [this.selectedServer] : [],
+                this.selectedServerName ? [this.selectedServerName] : [],
                 this.email,
-
             )
             .subscribe(data => {
                 this.transactions = data.content;
+                this.totalDonations = this.transactions
+                    .reduce((sum, t) => sum + t.contributionAmount, 0)
                 this.totalElements = data.totalElements;
             });
     }

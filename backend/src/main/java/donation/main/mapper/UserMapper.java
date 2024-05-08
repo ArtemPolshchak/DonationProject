@@ -7,6 +7,7 @@ import donation.main.dto.user.UserResponseDto;
 import donation.main.dto.user.UserUpdateRequestDto;
 import donation.main.entity.UserEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class)
@@ -17,5 +18,6 @@ public interface UserMapper {
 
     UserEntity toEntity(LoginRequestDto dto);
 
+    @Mapping(target = "isTfaActive", source = "tfaActive")
     UserResponseDto toDto(UserEntity entity);
 }

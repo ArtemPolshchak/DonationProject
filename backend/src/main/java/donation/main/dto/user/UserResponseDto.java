@@ -6,6 +6,6 @@ public record UserResponseDto(
         Long id,
         String username,
         String email,
-        Role role
-) {
+        Role role,
+        boolean isTfaActive) {
 }

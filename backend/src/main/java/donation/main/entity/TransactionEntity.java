@@ -21,6 +21,7 @@ import jakarta.persistence.Table;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import donation.main.enumeration.TransactionState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -110,4 +111,17 @@ public class TransactionEntity {
     @Column(name = "color")
     @Builder.Default
     private Color color = Color.decode("#f5f5f5");
+
+    @Override
+    public String toString() {
+        return dateCreated.format(DateTimeFormatter.ofPattern("HH:mm MM.dd.yyyy"))
+                + System.lineSeparator()
+                + "Server: " + server.getServerName()
+                + System.lineSeparator()
+                + "Donator email: " + donator.getEmail()
+                + System.lineSeparator()
+                + "Payment system: " + paymentMethod
+                + System.lineSeparator()
+                + "Contribution amount: " + contributionAmount;
+    }
 }

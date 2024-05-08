@@ -86,8 +86,10 @@ export class ServerComponent implements OnInit {
         });
     }
 
-    goToDonatorBonusOnServer(serverId: number): void {
-        this.router.navigate(['./donator-bonus-on-server', serverId]);
+    goToDonatorBonusOnServer(server: Server): void {
+        this.router.navigate(['./donator-bonus-on-server', server.id, {
+            serverName: server.serverName,
+        }]);
     }
 
     updateButtonStatus(): void {

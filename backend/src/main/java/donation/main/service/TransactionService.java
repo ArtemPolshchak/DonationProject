@@ -2,6 +2,8 @@ package donation.main.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.SortedSet;
 import donation.main.dto.transaction.ImageResponseDto;
 import donation.main.dto.transaction.RequestTransactionDto;
@@ -17,7 +19,6 @@ import donation.main.enumeration.TransactionState;
 import donation.main.exception.AccessForbiddenException;
 import donation.main.exception.InvalidTransactionState;
 import donation.main.exception.TransactionNotFoundException;
-import donation.main.exception.UserNotFoundException;
 import donation.main.mapper.ImageMapper;
 import donation.main.mapper.TransactionMapper;
 import donation.main.repository.ImageRepository;
@@ -41,7 +42,7 @@ public class TransactionService {
     private final DonatorService donatorService;
     private final ServerService serverService;
     private final TransactionStateManager transactionStateManager;
-    private final UserService userService;
+    private final NotificationService notificationService;
     private final AuthenticationService authService;
     private final ImageRepository imageRepository;
     private final ImageMapper imageMapper;
@@ -52,7 +53,9 @@ public class TransactionService {
         //donatorService.validateDonatorEmail(dto.donatorEmail());
         TransactionEntity transaction = transactionMapper.toEntity(dto);
         transaction = updateTransactionFields(transaction, dto);
-        return transactionMapper.toDto(transactionRepository.save(transaction));
+        TransactionEntity savedTransaction = transactionRepository.save(transaction);
+        notificationService.sendMessage(composeMessage(savedTransaction));
+        return transactionMapper.toDto(savedTransaction);
     }
 
     @Transactional
@@ -86,7 +89,7 @@ public class TransactionService {
     }
 
     public TransactionResponseDto changeState(Long id, TransactionConfirmRequestDto dto) {
-        if (!authService.hasAdminPermission()) {
+        if (!authService.isAdmin()) {
             throw new AccessForbiddenException("Access forbidden. Admin permissions required");
         }
         TransactionEntity transaction = getById(id);
@@ -94,8 +97,12 @@ public class TransactionService {
         setAdminBonus(transaction, dto.adminBonus());
         transaction = transaction.toBuilder()
                 .dateApproved(LocalDateTime.now())
-                .approvedByUser(userService.getCurrentUser()).build();
+                .approvedByUser(authService.getAuthenticatedUser()).build();
         return transactionMapper.toDto(transactionRepository.save(transaction));
+    }
+
+    private String composeMessage(TransactionEntity savedTransaction) {
+        return "New donation received!" + System.lineSeparator() + savedTransaction;
     }
 
     private void setAdminBonus(TransactionEntity transaction, BigDecimal adminBonus) {
@@ -113,8 +120,7 @@ public class TransactionService {
     }
 
     private TransactionEntity updateTransactionFields(TransactionEntity transaction, RequestTransactionDto dto) {
-        UserEntity user = authService.getAuthenticatedUser().orElseThrow(() ->
-                new UserNotFoundException("Unable to retrieve user information from Security Context."));
+        UserEntity user = authService.getAuthenticatedUser();
         setPreviewImage(transaction, dto.image());
         ServerEntity server = serverService.findById(dto.serverId());
         DonatorEntity donator = donatorService.getByEmailOrCreate(dto.donatorEmail());

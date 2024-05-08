@@ -1,12 +1,9 @@
 package donation.main.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.security.core.AuthenticationException;
 
-@ResponseStatus(value = HttpStatus.FORBIDDEN)
-public class UnauthorizedActionException extends RuntimeException {
+public class UnauthorizedActionException extends AuthenticationException {
     public UnauthorizedActionException(String message) {
         super(message);
     }
-
 }

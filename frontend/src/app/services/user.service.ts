@@ -26,6 +26,11 @@ export class UserService {
         const url: string = `api/users/${user.id}`
         return this.httpClient.load<User>(HttpMethod.PATCH, url, true, user);
     }
+
+     public tfaReset(id: number) {
+         const url: string = `api/users/${id}/tfa`
+         return this.httpClient.load<User>(HttpMethod.PATCH, url, true);
+    }
 }
 
 interface GetUsersResponse {
