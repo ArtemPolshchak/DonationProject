@@ -2,8 +2,6 @@ package donation.main.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.SortedSet;
 import donation.main.dto.transaction.ImageResponseDto;
 import donation.main.dto.transaction.RequestTransactionDto;
@@ -88,16 +86,17 @@ public class TransactionService {
         return imageRepository.findByTransactionId(id).map(imageMapper::toDto).orElse(null);
     }
 
+    @Transactional
     public TransactionResponseDto changeState(Long id, TransactionConfirmRequestDto dto) {
+        // TODO: 09.05.2024 This check is not necessary
         if (!authService.isAdmin()) {
             throw new AccessForbiddenException("Access forbidden. Admin permissions required");
         }
         TransactionEntity transaction = getById(id);
         setState(transaction, dto.state());
         setAdminBonus(transaction, dto.adminBonus());
-        transaction = transaction.toBuilder()
-                .dateApproved(LocalDateTime.now())
-                .approvedByUser(authService.getAuthenticatedUser()).build();
+        transaction.setDateApproved(LocalDateTime.now());
+        transaction.setApprovedByUser(authService.getAuthenticatedUser());
         return transactionMapper.toDto(transactionRepository.save(transaction));
     }
 

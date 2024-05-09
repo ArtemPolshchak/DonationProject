@@ -91,12 +91,12 @@ public class TransactionEntity {
     private BigDecimal adminBonus = ZERO;
 
     //todo set user from security context
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "approved_by_user_id")
     private UserEntity approvedByUser;
 
     //todo set user from security context
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "created_by_user_id")
     private UserEntity createdByUser;
 
