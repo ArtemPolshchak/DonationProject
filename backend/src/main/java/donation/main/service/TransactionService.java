@@ -88,7 +88,7 @@ public class TransactionService {
 
     @Transactional
     public TransactionResponseDto changeState(Long id, TransactionConfirmRequestDto dto) {
-        // TODO: 09.05.2024 This check is not necessary
+        //todo: 09.05.2024 This check is not necessary
         if (!authService.isAdmin()) {
             throw new AccessForbiddenException("Access forbidden. Admin permissions required");
         }
