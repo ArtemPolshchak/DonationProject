@@ -18,7 +18,7 @@ export class UserService {
     }
 
     public create(user: User) {
-        const url: string = `api/users/sign-up`
+        const url: string = `api/users`
         return this.httpClient.load<User>(HttpMethod.POST, url, true, user);
     }
 
