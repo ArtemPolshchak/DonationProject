@@ -49,8 +49,7 @@ public class ServerEntity {
     @Column(name = "server_user_name", nullable = false)
     private String serverUserName;
 
-    @Column(name = "server_id")
-    //todo add nullable false after creante new db
+    @Column(name = "server_id", unique = true, nullable = false)
     private int serverId;
 
     @Column(name = "public_key", nullable = false)
