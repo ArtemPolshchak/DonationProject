@@ -63,6 +63,14 @@ export class SetupServerDialogComponent implements OnInit {
         ]
     );
 
+    serverIdControl = new FormControl('',
+        [
+            Validators.required,
+            Validators.pattern(/^[0-9]+$/), // Проверка, что значение состоит только из цифр
+            Validators.min(1) // Проверка, что значение больше нуля
+        ]
+    );
+
     publicKeyControl = new FormControl('',
         [Validators.required,
             Validators.pattern(/^\S+$/)
@@ -105,6 +113,7 @@ export class SetupServerDialogComponent implements OnInit {
                     serverUrl: this.serverUrlControl.value!,
                     serverUserName: this.serverUserNameControl.value!,
                     serverPassword: this.serverPasswordControl.value!,
+                    serverId: parseInt(this.serverIdControl.value!),
                     publicKey: this.publicKeyControl.value!,
                     secretKey: this.secretKeyControl.value!
                 };
@@ -132,6 +141,7 @@ export class SetupServerDialogComponent implements OnInit {
                 this.serverUrlControl.setValue(data.serverUrl);
                 this.serverUserNameControl.setValue(data.serverUserName);
                 this.serverPasswordControl.setValue(data.serverPassword);
+                this.serverIdControl.setValue((data.serverId.toString()));
                 this.publicKeyControl.setValue(data.publicKey);
                 this.secretKeyControl.setValue(data.secretKey);
             }
@@ -152,6 +162,7 @@ export class SetupServerDialogComponent implements OnInit {
             && this.serverUrlControl.valid
             && this.serverUserNameControl.valid
             && this.serverPasswordControl.valid
+            && this.serverIdControl.valid
             && this.publicKeyControl.valid
             && this.secretKeyControl.valid;
     }

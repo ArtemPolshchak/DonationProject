@@ -19,6 +19,9 @@ public interface ServerMapper {
     @Mapping(source = "serverUrl", target = "serverUrl")
     @Mapping(source = "serverUserName", target = "serverUserName")
     @Mapping(source = "serverPassword", target = "serverPassword")
+    @Mapping(source = "serverId", target = "serverId")
+    @Mapping(source = "publicKey", target = "publicKey")
+    @Mapping(source = "secretKey", target = "secretKey")
     ServerDto toDto(ServerDto entity);
 
     ServerEntity toEntity(ServerIdNameDto dto);

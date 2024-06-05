@@ -43,6 +43,7 @@ public interface ServerRepository extends JpaRepository<ServerEntity, Long> {
             + " s.serverUrl as serverUrl, "
             + "s.serverUserName as serverUserName, "
             + " s.serverPassword as serverPassword, "
+            + " s.serverId as serverId, "
             + "s.publicKey as publicKey,"
             + "s.secretKey as secretKey) FROM ServerEntity s WHERE s.id = :id ")
     Optional<ServerDto> findServerById(Long id);
