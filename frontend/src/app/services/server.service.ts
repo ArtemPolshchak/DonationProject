@@ -101,6 +101,7 @@ export interface ServerDto {
     serverUrl: string;
     serverUserName: string;
     serverPassword: string;
+    serverId: number;
     publicKey: string;
     secretKey: string;
 }
