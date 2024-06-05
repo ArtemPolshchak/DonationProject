@@ -6,7 +6,13 @@
         <mat-card>
             <mat-card-content>
                 <mat-form-field class="input-field" appearance="outline">
-                    <mat-label>Имя сервера</mat-label>
+                    <mat-label>serverId</mat-label>
+                    <input matInput [formControl]="serverIdControl" [defaultValue]="">
+                    <mat-error *ngIf="serverIdControl.hasError('required')">Поле обязательно к заполнению
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="input-field" appearance="outline">
+                    <mat-label>Server Name</mat-label>
                     <input matInput [formControl]="serverNameControl" [defaultValue]="">
                     <mat-error *ngIf="serverNameControl.hasError('required')">Поле обязательно к заполнению</mat-error>
                 </mat-form-field>
