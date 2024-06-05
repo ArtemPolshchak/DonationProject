@@ -21,6 +21,7 @@ import jakarta.persistence.Table;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import donation.main.enumeration.TransactionState;
 import lombok.AllArgsConstructor;
@@ -56,7 +57,7 @@ public class TransactionEntity {
 
     @Column(name = "date_created", nullable = false)
     @Builder.Default
-    private LocalDateTime dateCreated = LocalDateTime.now();
+    private LocalDateTime dateCreated = LocalDateTime.now(ZoneId.of("Europe/Kiev"));
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private ImageEntity image;

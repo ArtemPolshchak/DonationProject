@@ -2,6 +2,7 @@ package donation.main.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.SortedSet;
 import donation.main.dto.transaction.ImageResponseDto;
 import donation.main.dto.transaction.RequestTransactionDto;
@@ -95,7 +96,7 @@ public class TransactionService {
         TransactionEntity transaction = getById(id);
         setState(transaction, dto.state());
         setAdminBonus(transaction, dto.adminBonus());
-        transaction.setDateApproved(LocalDateTime.now());
+        transaction.setDateApproved(LocalDateTime.now(ZoneId.of("Europe/Kiev")));
         transaction.setApprovedByUser(authService.getAuthenticatedUser());
         return transactionMapper.toDto(transactionRepository.save(transaction));
     }
