@@ -19,7 +19,7 @@
         <div class="search">
             <form class="search-input">
                 <input matInput type="text" name="search" [(ngModel)]="donatorsMail" placeholder="Почта донатора">
-                <button  mat-icon-button *ngIf="donatorsMail" (click)="donatorsMail=''; applyFilterSortSearch()">
+                <button mat-icon-button *ngIf="donatorsMail" (click)="donatorsMail=''; applyFilterSortSearch()">
                     <div class="col-auto pe-0">
                         <img src="assets/images/search-refresh.svg" alt="">
                     </div>
@@ -69,19 +69,22 @@
                     </button>
                     <button ngbAccordionButton>
                     <span *ngIf="transaction.dateCreated">
-                        Дата: <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy'}}</strong>
+                        Дата: <strong>{{ transaction.dateCreated | date: 'dd MMMM yyyy' }}</strong>
                     </span>
-                        <span *ngIf="transaction.serverName">
-                        Сервер: <strong>{{ transaction.serverName}}</strong>
+                    <span>
+                        <strong>{{ transaction.state }}</strong>
+                    </span>
+                    <span *ngIf="transaction.serverName">
+                        Сервер: <strong>{{ transaction.serverName }}</strong>
                     </span>
                         <span *ngIf="transaction.donatorEmail">
-                        Почта: <strong>{{transaction.donatorEmail}}</strong>
+                        Почта: <strong>{{ transaction.donatorEmail }}</strong>
                     </span>
                         <span *ngIf="transaction.paymentMethod">
-                        Способ оплаты: <strong>{{transaction.paymentMethod}}</strong>
+                        Способ оплаты: <strong>{{ transaction.paymentMethod }}</strong>
                     </span>
                         <span *ngIf="transaction.totalAmount">
-                        Общая сумма Доната: <strong>{{transaction.totalAmount | currency: 'USD'}}</strong>
+                        Общая сумма Доната: <strong>{{ transaction.totalAmount | currency: 'USD' }}</strong>
                     </span>
                     </button>
                 </h2>
@@ -97,39 +100,40 @@
 
                             <div class="info-block">
                                 <div>
-                                    Кто создал: <strong>{{transaction.createdBy}}</strong> (Дата создания
-                                    <strong>{{transaction.dateCreated | date: 'dd MMMM yyyy, HH:mm'}})</strong>
+                                    Кто создал: <strong>{{ transaction.createdBy }}</strong> (Дата создания
+                                    <strong>{{ transaction.dateCreated | date: 'dd MMMM yyyy, HH:mm' }})</strong>
                                 </div>
                                 <div>
-                                    Кто подтвердил: <strong>{{transaction.approvedBy}}</strong> (Дата подтверждения
-                                    <strong>{{transaction.dateApproved | date: 'dd MMMM yyyy, HH:mm'}})</strong>
+                                    Кто подтвердил: <strong>{{ transaction.approvedBy }}</strong> (Дата подтверждения
+                                    <strong>{{ transaction.dateApproved | date: 'dd MMMM yyyy, HH:mm' }})</strong>
                                 </div>
                                 <div>
-                                    Комментарий: <strong>{{transaction.comment}}</strong>
+                                    Комментарий: <strong>{{ transaction.comment }}</strong>
                                 </div>
                                 <div>
-                                    Состояние заявки: <strong>{{transaction.state}}</strong>
+                                    Состояние заявки: <strong>{{ transaction.state }}</strong>
                                 </div>
                             </div>
 
                             <div class="amounts-block">
                                 <div>
-                                    Бонус сервера: <strong>{{transaction.serverBonusPercentage}}%</strong>
+                                    Бонус сервера: <strong>{{ transaction.serverBonusPercentage }}%</strong>
                                 </div>
                                 <div>
-                                    Персональный бонус: <strong>{{transaction.personalBonusPercentage}}%</strong>
+                                    Персональный бонус: <strong>{{ transaction.personalBonusPercentage }}%</strong>
                                 </div>
                                 <div>
-                                    Бонысы Админа: <strong>{{transaction.adminBonus | number: '1.2-2'}}</strong>
+                                    Бонысы Админа: <strong>{{ transaction.adminBonus | number: '1.2-2' }}</strong>
                                 </div>
                                 <div>
-                                    Сумма доната: <strong>{{transaction.contributionAmount | number: '1.2-2'}}</strong>
+                                    Сумма доната:
+                                    <strong>{{ transaction.contributionAmount | number: '1.2-2' }}</strong>
                                 </div>
                                 <div>
-                                    Сумма к зачислению: <strong>{{transaction.totalAmount | number: '1.2-2'}}</strong>
+                                    Сумма к зачислению: <strong>{{ transaction.totalAmount | number: '1.2-2' }}</strong>
                                 </div>
                                 <div>
-                                    Способ оплаты: <strong>{{transaction.paymentMethod}}</strong>
+                                    Способ оплаты: <strong>{{ transaction.paymentMethod }}</strong>
                                 </div>
 
                             </div>
