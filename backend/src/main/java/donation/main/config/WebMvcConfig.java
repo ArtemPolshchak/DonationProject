@@ -34,6 +34,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
             }
         };
     }
+
     @Bean
     public WebClient webClient() {
         return WebClient.builder().build();

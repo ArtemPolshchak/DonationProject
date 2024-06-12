@@ -65,7 +65,7 @@ public class ApiServiceImpl implements ApiService {
                 + "\",\"value\":\"" + value + "\"}" + secretKey);
 
         String url = externalApiUrl + "/users/update-balance";
-        String requestBody = "sid=" + serverId +"&public_key=" + publicKey
+        String requestBody = "sid=" + serverId + "&public_key=" + publicKey
                 + "&email=" + email +  "&value="
                 + value + "&hash=" + hash;
         return webClient.post()
