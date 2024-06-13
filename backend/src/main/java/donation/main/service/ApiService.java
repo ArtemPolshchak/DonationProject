@@ -5,7 +5,9 @@ public interface ApiService {
 
     String getMd5(String data);
 
-    Mono<String> getBalance(String email);
+    Mono<String> getBalance(String email, int serverId);
 
     Mono<String> updateBalance(String email, int value);
+
+    Mono<String> getDonator(String email);
 }

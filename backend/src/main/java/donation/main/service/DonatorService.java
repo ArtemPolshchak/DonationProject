@@ -53,8 +53,10 @@ public class DonatorService {
 
     //todo this method temporarily turned off. forbidden for delete
     public void validateDonatorEmail(String donatorEmail) {
+
         if (!externalDonatorService.existsByEmail(donatorEmail)) {
             throw new EmailNotFoundException("Donator with the email does not exist:", donatorEmail);
         }
+
     }
 }

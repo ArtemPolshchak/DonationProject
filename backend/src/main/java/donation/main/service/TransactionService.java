@@ -50,6 +50,7 @@ public class TransactionService {
     public TransactionResponseDto create(RequestTransactionDto dto) {
         //todo I temporoarily turn off the validation of external DB
         //donatorService.validateDonatorEmail(dto.donatorEmail());
+
         TransactionEntity transaction = transactionMapper.toEntity(dto);
         transaction = updateTransactionFields(transaction, dto);
         TransactionEntity savedTransaction = transactionRepository.save(transaction);
