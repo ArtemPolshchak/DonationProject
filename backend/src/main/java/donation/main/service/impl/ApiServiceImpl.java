@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import donation.main.service.ApiService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 import java.math.BigInteger;
@@ -48,6 +50,34 @@ public class ApiServiceImpl implements ApiService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public Mono<Boolean> existsByEmail(String email) {
+        String hash = getMd5("{\"email\":\"" + email
+                + "\",\"public_key\":\"" + publicKey
+                + "\"}" + secretKey);
+
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("public_key", publicKey);
+        queryParams.add("email", email);
+        queryParams.add("hash", hash);
+
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("https")
+                        .host("api.mmoweb.biz")
+                        .path("/v1/Control/users/balance")
+                        .queryParams(queryParams)
+                        .build())
+                .retrieve()
+                .toBodilessEntity()
+                .map(response -> true)
+                .onErrorResume(WebClientResponseException.class, ex -> {
+                    if (ex.getStatusCode() == HttpStatus.LOCKED) {
+                        return Mono.just(false);
+                    }
+                    return Mono.error(ex);
+                });
     }
 
     @Override

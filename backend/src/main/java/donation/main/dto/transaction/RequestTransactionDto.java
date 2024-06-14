@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 public record RequestTransactionDto(
         @NotEmpty
         String donatorEmail,
-        @DecimalMin("1")
         BigDecimal contributionAmount,
         String image,
         String comment,

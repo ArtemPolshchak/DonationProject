@@ -6,7 +6,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 export class ToasterService {
 
-  durationInSeconds: number = 5;
+  durationInSeconds: number = 10;
   constructor(
       private _snackBar: MatSnackBar
   ) { }

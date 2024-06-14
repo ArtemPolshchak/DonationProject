@@ -52,7 +52,7 @@ export class TransactionDialog implements OnInit {
     paymentControl = new FormControl(PaymentMethod.PAYPAL, Validators.required);
     serverControl = new FormControl<Server | null>(null, Validators.required);
     contributionControl = new FormControl('',
-        [Validators.required, Validators.pattern(/^\d+$/)]
+        [Validators.required, Validators.pattern(/^-?\d+$/)]
     )
     emailControl = new FormControl('',
         [Validators.required,

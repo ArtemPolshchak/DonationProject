@@ -5,20 +5,20 @@ import donation.main.dto.donator.DonatorTotalDonationsView;
 import donation.main.entity.DonatorEntity;
 import donation.main.exception.EmailNotFoundException;
 import donation.main.exception.UserNotFoundException;
-import donation.main.externaldb.service.ExternalDonatorService;
 import donation.main.mapper.DonatorMapper;
 import donation.main.repository.DonatorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
 public class DonatorService {
     private final DonatorRepository donatorRepository;
     private final DonatorMapper donatorMapper;
-    private final ExternalDonatorService externalDonatorService;
+    private final ApiService apiService;
 
     public Page<DonatorEntity> findAll(Pageable pageable) {
         return donatorRepository.findAll(pageable);
@@ -34,7 +34,7 @@ public class DonatorService {
     }
 
     private DonatorEntity getById(Long id) {
-       return donatorRepository.findById(id)
+        return donatorRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Can't find Donator by id " + id));
     }
 
@@ -51,12 +51,15 @@ public class DonatorService {
                 .orElseGet(() -> donatorRepository.save(DonatorEntity.builder().email(email).build()));
     }
 
-    //todo this method temporarily turned off. forbidden for delete
     public void validateDonatorEmail(String donatorEmail) {
-
-        if (!externalDonatorService.existsByEmail(donatorEmail)) {
-            throw new EmailNotFoundException("Donator with the email does not exist:", donatorEmail);
-        }
-
+        apiService.existsByEmail(donatorEmail)
+                .flatMap(exists -> {
+                    if (!exists) {
+                        return Mono.error(
+                                new EmailNotFoundException("Donator with the email does not exist:", donatorEmail));
+                    }
+                    return Mono.empty();
+                })
+                .block();
     }
 }

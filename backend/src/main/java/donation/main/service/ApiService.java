@@ -10,4 +10,6 @@ public interface ApiService {
     Mono<String> updateBalance(String email, int value);
 
     Mono<String> getDonator(String email);
+
+    Mono<Boolean> existsByEmail(String email);
 }
