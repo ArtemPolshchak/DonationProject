@@ -124,17 +124,24 @@ public class TransactionService {
         setPreviewImage(transaction, dto.image());
         ServerEntity server = serverService.findById(dto.serverId());
         DonatorEntity donator = donatorService.getByEmailOrCreate(dto.donatorEmail());
-        BigDecimal donatorBonus = server.getDonatorsBonuses().getOrDefault(donator, BigDecimal.ZERO);
+
+        BigDecimal donatorBonus = calculateDonatorBonus(server, donator, dto.contributionAmount());
         BigDecimal serverBonus = getServerBonus(dto.contributionAmount(), server);
         BigDecimal totalBonus = donatorBonus.add(serverBonus);
         BigDecimal totalAmount = getTotalAmount(dto.contributionAmount(), totalBonus);
-        return transaction.toBuilder().donator(donator)
+        return transaction.toBuilder()
+                .donator(donator)
                 .createdByUser(user)
                 .server(server)
                 .totalAmount(totalAmount)
                 .personalBonusPercentage(donatorBonus)
                 .serverBonusPercentage(serverBonus)
                 .build();
+    }
+
+    private BigDecimal calculateDonatorBonus(ServerEntity server, DonatorEntity donator, BigDecimal contributionAmount) {
+        BigDecimal donatorBonus = server.getDonatorsBonuses().getOrDefault(donator, BigDecimal.ZERO);
+        return (contributionAmount.compareTo(BigDecimal.ZERO) < 0) ? BigDecimal.ZERO : donatorBonus;
     }
 
     private void setPreviewImage(TransactionEntity transaction, String image) {
